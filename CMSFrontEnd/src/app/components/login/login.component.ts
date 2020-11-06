@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { PageURLs } from '@enums';
+
 
 @Component({
   selector: 'cms-login',
@@ -14,7 +16,7 @@ export class LoginComponent implements OnInit {
   }
 
   handleSignIn(): void {
-    this.router.navigate([]);
+    this.router.navigate([PageURLs.MainMenu]);
   }
 
 }

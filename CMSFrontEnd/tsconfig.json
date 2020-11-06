@@ -1,7 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
@@ -16,8 +16,8 @@
       "dom"
     ],
     "paths": {
-      "@cms-enums": [
-        "app/shared/*"
+      "@enums": [
+        "libs/enums/src",
       ]
     }
   },
