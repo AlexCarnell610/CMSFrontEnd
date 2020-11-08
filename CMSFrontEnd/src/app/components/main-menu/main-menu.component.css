@@ -1,0 +1,78 @@
+.menu-button-icon {
+    width: 100px;
+    
+}
+.container {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+}
+
+.menu-icon {
+    margin-top: 20px;
+    width: 10vw;
+}
+
+.medicine-menu-icon {
+    margin-top: 50px;
+    margin-bottom: 10px;
+    width: 5vw;
+}
+
+.menu-title {
+    font-size: 10vw;
+}
+
+.menu-buttons-toolbar {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    flex: 1 1 auto;
+}
+
+.menu-buttons-toolbar-icon {
+    display: flex;
+    justify-content: left;
+    text-align: center;
+    flex: 1 1 auto;
+}
+
+.menu-buttons-group {
+    width: 50vw;
+}
+
+.menu-buttons {
+    font-size: clamp(10px, 2vw, 2vw);
+    min-width: min-content;
+    width: fit-content;
+    height: fit-content;
+}
+
+.menu-button-text {
+    white-space: nowrap;
+}
+
+.cow-data-button img{
+    max-width: 200px;
+}
+
+.cow-data-button {
+    margin: 50px;
+    flex: 1 1 auto;
+    flex-flow: column wrap;
+}
+
+.main-menu-group {
+    position: relative;
+    box-sizing: border-box;
+    align-items: center;
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.main-menu-group button {
+    
+}
+
