@@ -1,15 +1,13 @@
+import { Animal } from '@cms-interfaces';
 import { Action } from '@ngrx/store';
 
 export enum AnimalActionTypes {
-    LoadAnimalDataType = '[Load] Load Data',
-    LoadAnimalDataSuccessType = '[Load] Load Data Success'
+    LoadAnimalDataType = '[Load] Load Data'
 }
 
 export class LoadAnimalData implements Action {
     readonly type = AnimalActionTypes.LoadAnimalDataType;
+    constructor(public payload: {animals: Animal[]}){}
 }
 
-export class LoadAnimalDataSuccess implements Action {
-    readonly type = AnimalActionTypes.LoadAnimalDataSuccessType;
-    constructor(public payload: number[]){}
-}
+export type AnimalActions = LoadAnimalData 

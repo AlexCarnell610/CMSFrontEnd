@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PageURLs } from '@cms-enums';
 import { Store } from '@ngrx/store';
-import { LoadAnimalData } from 'libs/ngrx/src/lib/actions/src/animal.actions';
 
 
 @Component({
@@ -19,7 +18,7 @@ export class LoginComponent implements OnInit {
 
   handleSignIn(): void {
     this.router.navigate([PageURLs.MainMenu]);
-    this.store.dispatch(new LoadAnimalData);
+    // this.store.dispatch(new LoadAnimalData())
   }
 
 }

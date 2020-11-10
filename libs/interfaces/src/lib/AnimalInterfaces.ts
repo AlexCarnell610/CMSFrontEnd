@@ -21,7 +21,6 @@ export interface Animal {
 }
 
 export interface AI {
-    animal: Animal,
     aiDate: moment.Moment,
     bull: Bull,
     sweeperBull: boolean,
@@ -30,20 +29,17 @@ export interface AI {
 }
 
 export interface CalvingStats {
-    animal: Animal,
     characteristic: string,
     weighting: number,
     value: number
 }
 
 export interface CalvingHistory {
-    animal: Animal,
     averageGestation: number,
     numberOfCalves: number
 }
 
 export interface AnimalWeight {
-    animal: Animal,
     weightDate: moment.Moment,
     weight: number,
     isInitial: boolean,
