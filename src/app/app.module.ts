@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { reducers } from '@cms-ngrx/reducers';
@@ -9,7 +10,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { MainMenuComponent } from './components/main-menu/main-menu.component';
-
 
 @NgModule({
   declarations: [
@@ -27,7 +27,8 @@ import { MainMenuComponent } from './components/main-menu/main-menu.component';
       }
     }),
     EffectsModule.forRoot([]),
-    environment.production ? [] : StoreDevtoolsModule.instrument()
+    environment.production ? [] : StoreDevtoolsModule.instrument(),
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

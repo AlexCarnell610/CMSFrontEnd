@@ -22,20 +22,26 @@
       "@cms-interfaces": [
         "libs/interfaces/src"
       ],
-      "@cms-ngrx/effects":[
+      "@cms-ngrx/effects": [
         "libs/ngrx/src/lib/effects"
       ],
-      "@cms-ngrx/reducers":[
+      "@cms-ngrx/reducers": [
         "libs/ngrx/src/lib/reducers"
       ],
-      "@cms-ngrx/selectors":[
+      "@cms-ngrx/selectors": [
         "libs/ngrx/src/lib/selectors"
       ],
-      "@cms-ngrx/actions":[
+      "@cms-ngrx/actions": [
         "libs/ngrx/src/lib/actions"
       ],
       "@cms-ngrx": [
         "libs/ngrx/src"
+      ],
+      "@cms-services/http": [
+        "libs/services/httpServices"
+      ],
+      "@cms-services": [
+        "libs/services/services"
       ]
     }
   },
