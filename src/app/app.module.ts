@@ -5,6 +5,7 @@ import { reducers } from '@cms-ngrx/reducers';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { AnimalEffects } from 'libs/ngrx/src/lib/effects/src/animal.effects';
 import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -26,7 +27,7 @@ import { MainMenuComponent } from './components/main-menu/main-menu.component';
         strictActionImmutability: true
       }
     }),
-    EffectsModule.forRoot([]),
+    EffectsModule.forRoot([AnimalEffects]),
     environment.production ? [] : StoreDevtoolsModule.instrument(),
     HttpClientModule
   ],

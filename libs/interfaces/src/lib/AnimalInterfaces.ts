@@ -7,17 +7,25 @@ export interface Bull {
     name: string
 }
 
-export interface Animal {
+export interface BaseAnimal {
     tagNumber: string,
-    managementTag: string,
-    dam: Animal,
-    sire: Bull,
     birthDate: moment.Moment,
-    gender: Gender,
+    managementTag: string,
+    gender: Gender
+}
+
+export interface Dam extends BaseAnimal{
+    damTag: string,
+    sireTag:string
+}
+
+export interface Animal extends BaseAnimal {
+    dam?: BaseAnimal,
+    sire?: Bull,
     ai?: AI[],
-    calvingStats?: CalvingStats[],
+    calvingStats?: CalvingStat[],
     calvingHistory?: CalvingHistory[],
-    weightData: AnimalWeight[]
+    weightData?: AnimalWeight[]
 }
 
 export interface AI {
@@ -25,13 +33,14 @@ export interface AI {
     bull: Bull,
     sweeperBull: boolean,
     heatDate: moment.Moment,
-    year: number
+    year: number,
+    id: number
 }
 
-export interface CalvingStats {
+export interface CalvingStat {
     characteristic: string,
     weighting: number,
-    value: number
+    score: number
 }
 
 export interface CalvingHistory {
