@@ -10,7 +10,7 @@ export class MappingService {
     constructor(){}
 
     public importAnimalData(animalData: Object){
-        console.error("TRIGGERED");
+        // console.error("TRIGGERED");
             let mappedAnimals: Animal[] = [];
             
             for(let value of Object.values<any>(animalData)) {                                

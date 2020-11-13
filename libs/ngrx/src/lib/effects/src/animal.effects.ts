@@ -25,7 +25,7 @@ export class AnimalEffects {
       ofType(AnimalActionTypes.RetrieveAnimalDataType),
       switchMap(() => {
         this.loadingPaneService.loadingState = true;
-        return this.httpService.getAllData().pipe(
+        return this.httpService.getOfflineData().pipe(
           map((animals) => {
             // console.error("IN EFFECT",animals);
             return new LoadAnimalData({ animals });
