@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { PageURLs } from '@cms-enums';
 
 @Component({
   selector: 'cms-main-menu',
@@ -7,10 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainMenuComponent implements OnInit {
 
-  constructor() { }
+  constructor(private readonly router: Router) { }
 
   ngOnInit(): void {
     
+  }
+
+  public weightScreen(): void{
+    this.router.navigate([PageURLs.Weight]);
   }
 
 }

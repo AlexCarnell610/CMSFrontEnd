@@ -21,9 +21,7 @@
     width: 7vw;
 }
 
-.menu-title {
-    font-size: min(10vw, 70pt);
-}
+
 
 .menu-buttons {
     font-size: clamp(10pt, 2vw, 20pt);

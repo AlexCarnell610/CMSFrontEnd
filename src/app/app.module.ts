@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -10,13 +11,13 @@ import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
-import { MainMenuComponent } from './components/main-menu/main-menu.component';
+import { MainMenuModule } from './components/main-menu/main-menu.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    MainMenuComponent
+    
   ],
   imports: [
     BrowserModule,
@@ -29,7 +30,9 @@ import { MainMenuComponent } from './components/main-menu/main-menu.component';
     }),
     EffectsModule.forRoot([AnimalEffects]),
     environment.production ? [] : StoreDevtoolsModule.instrument(),
-    HttpClientModule
+    HttpClientModule,
+    MainMenuModule,
+    CommonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

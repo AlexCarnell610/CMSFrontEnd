@@ -1,0 +1,15 @@
+<h1 class="page-title text-center">Animal Weights</h1>
+
+<div class="container" *ngIf="(animals$ | async) as animals">
+  <div class="row">
+    <div class="col">
+        <ul class="list-group">
+            <button class="list-group-item list-group-item-action animal-button" *ngFor="let animal of animals" (click)="selectAnimal(animal)">{{animal.tagNumber}} &nbsp;{{animal.managementTag}}
+            </button>
+            <!-- <button class="list-group-item list-group-item-action active">I am an animal
+            </button> -->
+        </ul>
+    </div>
+    <div class="col" *ngIf="selectedAnimal">{{selectedAnimal.managementTag}}</div>
+  </div>
+</div>
