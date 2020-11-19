@@ -6,25 +6,25 @@
 
 .menu-icon {
     margin-top: 20px;
-    width: 10vw;
+    width: 8.5vw;
 }
 
 .medicine-menu-icon {
     margin-top: 20px;
     margin-bottom: 10px;
-    width: 5vw;
+    width: 3.5vw;
 }
 
 .user-menu-icon {
     margin-top: 20px;
     margin-bottom: 10px;
-    width: 7vw;
+    width: 5vw;
 }
 
 
 
 .menu-buttons {
-    font-size: clamp(10pt, 2vw, 20pt);
+    font-size: clamp(10pt, 2vw, 15pt);
     min-width: min-content;
     width: fit-content;
     height: fit-content;

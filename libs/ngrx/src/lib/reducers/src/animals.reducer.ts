@@ -2,8 +2,8 @@ import { Animal } from '@cms-interfaces';
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { createFeatureSelector } from '@ngrx/store';
 import {
-    AnimalActions,
-    AnimalActionTypes
+  AnimalActions,
+  AnimalActionTypes
 } from '../../actions/src/animal.actions';
 export interface AnimalState extends EntityState<Animal> {
   //additional stuff here
@@ -23,8 +23,6 @@ export function animalReducer(
 ): AnimalState {
   switch (action.type) {
     case AnimalActionTypes.LoadAnimalDataType: {
-      console.error(action.payload.animals);
-
       return animalAdapter.setAll(action.payload.animals, state);
     }
     case AnimalActionTypes.RetrieveAnimalDataType: {

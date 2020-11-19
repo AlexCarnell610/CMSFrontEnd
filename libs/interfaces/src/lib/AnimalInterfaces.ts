@@ -20,12 +20,12 @@ export interface Dam extends BaseAnimal{
 }
 
 export interface Animal extends BaseAnimal {
-    dam?: BaseAnimal,
-    sire?: Bull,
-    ai?: AI[],
-    calvingStats?: CalvingStat[],
-    calvingHistory?: CalvingHistory[],
-    weightData?: AnimalWeight[]
+    dam: BaseAnimal,
+    sire: Bull,
+    ai: AI[],
+    calvingStats: CalvingStat[],
+    calvingHistory: CalvingHistory[],
+    weightData: AnimalWeight[]
 }
 
 export interface AI {

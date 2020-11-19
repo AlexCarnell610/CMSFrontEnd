@@ -1,5 +1,14 @@
 .animal-button{
-    max-width: 330px;
-    font-size: clamp(10pt, 2vw, 16px);
+    max-width: 300px;
+    font-size: clamp(9pt, 2vw, 16px);
     min-width: min-content;
 }
+
+/* .list-group{
+   
+        max-height: 300px;
+        margin-bottom: 10px;
+        overflow:scroll;
+        -webkit-overflow-scrolling: touch;
+    
+} */

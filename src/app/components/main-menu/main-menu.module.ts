@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ChartsModule } from 'ng2-charts';
+import { WeightComponent } from './cattle-components/weight/weight.component';
 import { MainMenuComponent } from './main-menu.component';
 import { MainMenuRoutingModule } from './main-menu.routing';
-import { WeightComponent } from './cattle-components/weight/weight.component';
 
 
 
@@ -10,7 +12,9 @@ import { WeightComponent } from './cattle-components/weight/weight.component';
   declarations: [MainMenuComponent, WeightComponent],
   imports: [
     CommonModule,
-    MainMenuRoutingModule
+    MainMenuRoutingModule,
+    ChartsModule,
+    ReactiveFormsModule
   ], 
   exports: [
     MainMenuComponent

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { reducers } from '@cms-ngrx/reducers';
 import { EffectsModule } from '@ngrx/effects';
@@ -32,6 +33,8 @@ import { MainMenuModule } from './components/main-menu/main-menu.module';
     environment.production ? [] : StoreDevtoolsModule.instrument(),
     HttpClientModule,
     MainMenuModule,
+    FormsModule,
+    ReactiveFormsModule,
     CommonModule
   ],
   providers: [],

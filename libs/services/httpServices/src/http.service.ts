@@ -14,14 +14,12 @@ export class HttpService {
   public getAllData(): Observable<any>{
     
       return this.http.get('/api/animals').pipe(map(response => {
-        console.error("asdasdasdasd",JSON.stringify(response));
         return this.mappingService.importAnimalData(response);
       }))
   }
 
   public getOfflineData(): Observable<any> {
     return this.http.get('/assets/data.json').pipe(map(response => {
-      console.error("asdasdasdasd",response);
       return this.mappingService.importAnimalData(response);
     }))
   }
