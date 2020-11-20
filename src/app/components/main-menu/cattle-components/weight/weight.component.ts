@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Modals } from '@cms-enums';
 import { Animal } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx/reducers';
 import { select, Store } from '@ngrx/store';
 import { ChartDataSets } from 'chart.js';
 import { selectAll } from 'libs/ngrx/src/lib/reducers/src/animals.reducer';
 import { Label } from 'ng2-charts';
+import { NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 
@@ -26,7 +28,8 @@ export class WeightComponent implements OnInit {
 
   constructor(
     private store: Store<RootState>,
-    private readonly fb: FormBuilder
+    private readonly fb: FormBuilder,
+    private modalService: NgxSmartModalService
   ) {}
 
   public animals$: Observable<Animal[]>;
@@ -39,7 +42,8 @@ export class WeightComponent implements OnInit {
     this.trackSearch();
   }
 
-  public selectAnimal(animal: Animal) {    
+  public selectAnimal(animal: Animal) {  
+    
     if (animal !== this.selectedAnimal) {
       this.selectedAnimal = animal;
       this.chartWeights = [
@@ -70,8 +74,11 @@ export class WeightComponent implements OnInit {
   }
 
   public showAll(){
+    this.modalService.get(Modals.Weight).open();  
     this.animals$.pipe(take(1)).subscribe(animals => this.searchedAnimals$.next(animals))
   }
 
-  public edit(animal: Animal, index: number) {}
+  public edit(animal: Animal, index: number) {
+    this.modalService.get(Modals.Weight).open();  
+  }
 }

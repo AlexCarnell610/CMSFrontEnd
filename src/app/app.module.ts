@@ -8,11 +8,13 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AnimalEffects } from 'libs/ngrx/src/lib/effects/src/animal.effects';
+import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { MainMenuModule } from './components/main-menu/main-menu.module';
+import { ModalsModule } from './components/modals/modals.module';
 
 @NgModule({
   declarations: [
@@ -35,9 +37,11 @@ import { MainMenuModule } from './components/main-menu/main-menu.module';
     MainMenuModule,
     FormsModule,
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
+    NgxSmartModalModule.forRoot(),
+    ModalsModule
   ],
-  providers: [],
+  providers: [  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
