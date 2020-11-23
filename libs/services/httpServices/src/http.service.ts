@@ -11,7 +11,7 @@ export class HttpService {
 
   constructor(private http: HttpClient, private mappingService: MappingService) { }
 
-  public getAllData(): Observable<any>{
+  public getAnimalData(): Observable<any>{
     
       return this.http.get('/api/animals').pipe(map(response => {
         return this.mappingService.importAnimalData(response);

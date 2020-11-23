@@ -74,7 +74,6 @@ export class WeightComponent implements OnInit {
   }
 
   public showAll(){
-    this.modalService.get(Modals.Weight).open();  
     this.animals$.pipe(take(1)).subscribe(animals => this.searchedAnimals$.next(animals))
   }
 
