@@ -20,14 +20,13 @@ export class AnimalEffects {
     actions$.pipe(tap((action) => console.error(action)));
   }
 
-  $retrieveData = createEffect(() =>
+  $retrieveAnimalData = createEffect(() =>
     this.actions$.pipe(
       ofType(AnimalActionTypes.RetrieveAnimalDataType),
       switchMap(() => {
         this.loadingPaneService.loadingState = true;
-        return this.httpService.getOfflineData().pipe(
+        return this.httpService.getAnimalData().pipe(
           map((animals) => {
-            // console.error("IN EFFECT",animals);
             return new LoadAnimalData({ animals });
           })
         );
