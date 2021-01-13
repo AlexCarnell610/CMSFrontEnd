@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChartsModule } from 'ng2-charts';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { ModalsModule } from '../modals/modals.module';
@@ -18,7 +19,8 @@ import { MainMenuRoutingModule } from './main-menu.routing';
     ChartsModule,
     ReactiveFormsModule,
     NgxSmartModalModule.forChild(),
-    ModalsModule
+    ModalsModule,
+    NgbModule
   ], 
   exports: [
     MainMenuComponent

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'cms-root',
@@ -7,4 +8,6 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'CMSFrontEnd';
+  constructor(ngbConfig: NgbTooltipConfig){
+  }
 }

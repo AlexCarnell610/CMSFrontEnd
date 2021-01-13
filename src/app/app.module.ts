@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { reducers } from '@cms-ngrx/reducers';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -39,7 +40,9 @@ import { ModalsModule } from './components/modals/modals.module';
     ReactiveFormsModule,
     CommonModule,
     NgxSmartModalModule.forRoot(),
-    ModalsModule
+    ModalsModule,
+    // NgbModule,
+    NgbTooltipModule
   ],
   providers: [  ],
   bootstrap: [AppComponent]

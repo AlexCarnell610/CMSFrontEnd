@@ -19,4 +19,8 @@ export class MainMenuComponent implements OnInit {
     this.router.navigate([PageURLs.Weight]);
   }
 
+  public logout(): void{
+    this.router.navigate([PageURLs.Login])
+  }
+
 }

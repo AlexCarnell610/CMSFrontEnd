@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Modals } from '@cms-enums';
+import { Router } from '@angular/router';
+import { Modals, PageURLs } from '@cms-enums';
 import { Animal } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx/reducers';
 import { select, Store } from '@ngrx/store';
@@ -29,7 +30,8 @@ export class WeightComponent implements OnInit {
   constructor(
     private store: Store<RootState>,
     private readonly fb: FormBuilder,
-    private modalService: NgxSmartModalService
+    private modalService: NgxSmartModalService,
+    private readonly router: Router
   ) {}
 
   public animals$: Observable<Animal[]>;
@@ -71,6 +73,10 @@ export class WeightComponent implements OnInit {
         this.searchedAnimals$.next([]);
       }
     })
+  }
+
+  public backToMain() {
+this.router.navigate([PageURLs.MainMenu]);
   }
 
   public showAll(){
