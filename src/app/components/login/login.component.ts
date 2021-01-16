@@ -33,7 +33,6 @@ export class LoginComponent implements OnInit {
 
   signOut(){
     this.authService.loginWithPopup();
-   
   }
 
 }

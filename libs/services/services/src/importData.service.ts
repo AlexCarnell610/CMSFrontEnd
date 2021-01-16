@@ -32,6 +32,7 @@ export class MappingService {
     private convertWeightData(weightData: any[]): AnimalWeight[] {
         return weightData.map(weight => {
             return {
+                id: weight.id,
                 weightDate: this.convertDate(weight.weight_date),
                 isInitial: weight.is_initial_weight,
                 isSale: weight.is_sale_date,

@@ -49,6 +49,7 @@ export interface CalvingHistory {
 }
 
 export interface AnimalWeight {
+    id: string,
     weightDate: moment.Moment,
     weight: number,
     isInitial: boolean,

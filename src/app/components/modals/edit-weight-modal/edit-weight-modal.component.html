@@ -1,4 +1,12 @@
 <ngx-smart-modal #weightModal identifier="weightModal">
-    <h1>Edit Weight</h1>
-    <p>Selected animal: <span style="font-style: italic;">Not implemented</span></p>
+  <div *ngIf="($animal | async) as animal">
+
+    <h4>Edit Weight for <strong>{{animal.tagNumber}}</strong></h4>
+    <div class="input-group mb-3">
+      <select class="custom-select" id="inputGroupSelect01">
+        <option selected>Select weight to edit</option>
+        <option *ngFor="let weight of animal.weightData" value="weight.id">{{weight.weight}}</option>
+      </select>
+    </div>
+  </div>
   </ngx-smart-modal>

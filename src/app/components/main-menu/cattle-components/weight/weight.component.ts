@@ -76,7 +76,7 @@ export class WeightComponent implements OnInit {
   }
 
   public backToMain() {
-this.router.navigate([PageURLs.MainMenu]);
+    this.router.navigate([PageURLs.MainMenu]);
   }
 
   public showAll(){
@@ -84,6 +84,8 @@ this.router.navigate([PageURLs.MainMenu]);
   }
 
   public edit(animal: Animal, index: number) {
-    this.modalService.get(Modals.Weight).open();  
+    // this.modalService.setModalData(animal, Modals.Weight);
+    this.modalService.getModal(Modals.Weight).setData(animal).open();
+    // this.modalService.get(Modals.Weight).open();  
   }
 }
