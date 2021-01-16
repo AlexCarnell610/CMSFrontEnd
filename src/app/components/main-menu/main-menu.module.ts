@@ -9,8 +9,6 @@ import { WeightComponent } from './cattle-components/weight/weight.component';
 import { MainMenuComponent } from './main-menu.component';
 import { MainMenuRoutingModule } from './main-menu.routing';
 
-
-
 @NgModule({
   declarations: [MainMenuComponent, WeightComponent],
   imports: [

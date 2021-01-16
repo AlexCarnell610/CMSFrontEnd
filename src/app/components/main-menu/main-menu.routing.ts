@@ -6,7 +6,7 @@ import { MainMenuComponent } from './main-menu.component';
 const routes: Routes = [
     {
         path: '',
-        component: MainMenuComponent
+        component: MainMenuComponent,
     },
     {
         path: 'weight',

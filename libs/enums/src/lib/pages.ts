@@ -1,5 +1,6 @@
 export enum PageURLs {
     MainMenu = 'main-menu',
     Login = 'login',
-    Weight = 'weight'
+    Weight = 'weight',
+    Logout = 'logout'
 }

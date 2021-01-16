@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '@auth0/auth0-angular';
 import { PageURLs } from '@cms-enums';
 
 @Component({
@@ -9,18 +10,20 @@ import { PageURLs } from '@cms-enums';
 })
 export class MainMenuComponent implements OnInit {
 
-  constructor(private readonly router: Router) { }
+  constructor(private readonly router: Router, private readonly auth: AuthService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    
+    this.auth.getAccessTokenSilently().subscribe(token => console.error(token)
+    )
   }
 
   public weightScreen(): void{
-    this.router.navigate([PageURLs.Weight]);
+    this.router.navigate([PageURLs.Weight], {relativeTo: this.route});
   }
 
   public logout(): void{
-    this.router.navigate([PageURLs.Login])
+    this.auth.logout({returnTo: "http://" + document.location.host + '/' + PageURLs.Login});
+    // this.router.navigate([PageURLs.Logout])
   }
 
 }

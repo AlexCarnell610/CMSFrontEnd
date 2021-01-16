@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
 import { reducers } from '@cms-ngrx/reducers';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { EffectsModule } from '@ngrx/effects';
@@ -14,13 +15,14 @@ import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
-import { MainMenuModule } from './components/main-menu/main-menu.module';
+import { LogoutComponent } from './components/logout/logout.component';
 import { ModalsModule } from './components/modals/modals.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
+    LogoutComponent,
     
   ],
   imports: [
@@ -35,16 +37,24 @@ import { ModalsModule } from './components/modals/modals.module';
     EffectsModule.forRoot([AnimalEffects]),
     environment.production ? [] : StoreDevtoolsModule.instrument(),
     HttpClientModule,
-    MainMenuModule,
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
     NgxSmartModalModule.forRoot(),
     ModalsModule,
-    // NgbModule,
-    NgbTooltipModule
+    NgbTooltipModule,
+    AuthModule.forRoot({
+      ...environment.auth,
+      httpInterceptor: {
+        allowedList: ['/api/*']
+      }      
+    })
   ],
-  providers: [  ],
+  providers: [ {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthHttpInterceptor,
+    multi: true
+  } ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

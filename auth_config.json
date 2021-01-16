@@ -1,0 +1,6 @@
+{
+    "domain": "cattle-management-system.eu.auth0.com",
+    "clientId": "HkkCv3GXyrOhjDwK4y7evcP757A22BPS",
+    "audience": "https://cmsBackend.com",
+    "serverUrl": "http://cmsbackend.api/"
+}
