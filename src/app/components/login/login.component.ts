@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
 import { PageURLs } from '@cms-enums';
 import { Store } from '@ngrx/store';
-import { RetrieveAnimalData } from 'libs/ngrx/src/lib/actions/src/animal.actions';
 
 
 @Component({
@@ -25,7 +24,6 @@ export class LoginComponent implements OnInit {
   }
 
   handleSignIn(): void {
-    this.store.dispatch(new RetrieveAnimalData());
     this.router.navigate([PageURLs.MainMenu]);
     // this.importService.importAnimalData();
     
