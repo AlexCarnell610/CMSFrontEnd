@@ -30,6 +30,7 @@ export class AppComponent implements OnInit {
     this.auth.isAuthenticated$.subscribe(authed => {
       if (authed) {
         //could do something with sessoin storage to stop redownloading data on refresh
+        //would need marker to mark session data as old
         this.store.dispatch(new RetrieveAnimalData());
       }
     })
