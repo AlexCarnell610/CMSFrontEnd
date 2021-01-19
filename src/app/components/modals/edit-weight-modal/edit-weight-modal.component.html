@@ -1,12 +1,54 @@
 <ngx-smart-modal #weightModal identifier="weightModal">
-  <div *ngIf="($animal | async) as animal">
+  <div *ngIf="animal">
+    <h4 class="text-center">
+      Edit Weight for <strong>{{ animal.tagNumber }}</strong>
+    </h4>
+    <div [formGroup]="editWeightForm" class="mb-3 mt-2" style="width:fit-content; margin-left: 25%;">
 
-    <h4>Edit Weight for <strong>{{animal.tagNumber}}</strong></h4>
-    <div class="input-group mb-3">
-      <select class="custom-select" id="inputGroupSelect01">
-        <option selected>Select weight to edit</option>
-        <option *ngFor="let weight of animal.weightData" value="weight.id">{{weight.weight}}</option>
-      </select>
+      <div class="input-group mb-3">
+        <select
+        class="custom-select"
+        id="inputGroupSelect01"
+        (change)="weightSelected($event.target.value)"
+        >
+        <option selected value="invalid">Select weight to edit</option>
+        <option
+        *ngFor="let weight of animal.weightData"
+        value="{{ weight.id }}"
+        >
+        {{ weight.weightDate | date: "dd/MM/yyyy" }} - {{ weight.weight }} Kg
+      </option>
+    </select>
+  </div>
+  
+  <div class="form-group">
+    <label for="newWeight">Enter new weight</label>
+    <div class="input-group">
+      
+      <input
+      formControlName="weight"
+      class="form-control"
+      type="text"
+      name="weight"
+      />
+      <div class="input-group-append">
+        <span class="input-group-text">Kg</span>
+      </div>
     </div>
   </div>
-  </ngx-smart-modal>
+  
+  <div class="form-group">
+    <label for="newDate">Enter new date</label>
+    <input
+    formControlName="date"
+    class="form-control"
+    type="date"
+    name="date"
+    id="newDate"
+    />
+  </div>
+  <button class="btn btn-success mr-3" (click)="saveChanges()">Save Changes</button>
+  <button class="btn btn-danger" (click)="closeModal()">Close</button>
+</div>
+</div>
+</ngx-smart-modal>

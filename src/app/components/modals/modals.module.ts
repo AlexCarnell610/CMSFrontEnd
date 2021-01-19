@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { EditWeightModalComponent } from './edit-weight-modal/edit-weight-modal.component';
 
@@ -9,7 +10,8 @@ import { EditWeightModalComponent } from './edit-weight-modal/edit-weight-modal.
   declarations: [EditWeightModalComponent],
   imports: [
     CommonModule,
-    NgxSmartModalModule.forChild()
+    NgxSmartModalModule.forChild(),
+    ReactiveFormsModule
   ],
   exports:[
     EditWeightModalComponent, CommonModule, NgxSmartModalModule
