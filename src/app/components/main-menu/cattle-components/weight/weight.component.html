@@ -5,7 +5,7 @@
   <h1 class="page-title cms-flex-item">Animal Weights</h1>
 </div>
   
-<div class="container" *ngIf="(searchedAnimals$ | async) as animals">
+<div class="container mb-3" *ngIf="(searchedAnimals$ | async) as animals">
   <div class="row" [formGroup]="searchBarGroup">
     <div class="col" >
       <ul class="list-group">
@@ -18,7 +18,7 @@
           <span class="badge badge-primary badge-pill" (click)="edit(animal, i)">Edit Weights</span>
         </button>
         
-        <button class="list-group-item list-group-item-action animal-button" (click)="showAll()">Show All</button>
+        <!-- <button class="list-group-item list-group-item-action animal-button" (click)="showAll()">Show All</button> -->
         <!-- <button class="list-group-item list-group-item-action active">I am an animal
             </button> -->
       </ul>

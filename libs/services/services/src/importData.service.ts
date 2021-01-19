@@ -10,7 +10,6 @@ export class MappingService {
     constructor(){}
 
     public importAnimalData(animalData: Object){
-        // console.error("TRIGGERED");
             let mappedAnimals: Animal[] = [];
             
             for(let value of Object.values<any>(animalData)) {                                
@@ -30,15 +29,27 @@ export class MappingService {
             return mappedAnimals;
     }
     private convertWeightData(weightData: any[]): AnimalWeight[] {
-        return weightData.map(weight => {
-            return {
-                id: weight.id,
-                weightDate: this.convertDate(weight.weight_date),
-                isInitial: weight.is_initial_weight,
-                isSale: weight.is_sale_date,
-                weight: weight.weight
-            }
-        })
+        return weightData.map(weight => this.convertWeight(weight)
+        //     {
+        //     return {
+        //         id: weight.id,
+        //         weightDate: this.convertDate(weight.weight_date),
+        //         isInitial: weight.is_initial_weight,
+        //         isSale: weight.is_sale_date,
+        //         weight: weight.weight
+        //     }
+        // }
+        )
+    }
+
+    public convertWeight(weight: any): AnimalWeight {
+        return {
+            id: weight.id,
+            weightDate: this.convertDate(weight.weight_date),
+            isInitial: weight.is_initial_weight,
+            isSale: weight.is_sale_date,
+            weight: weight.weight
+        }
     }
     private convertBull(sire: any): Bull {
         return {

@@ -24,7 +24,7 @@ export class AnimalEffects {
     this.actions$.pipe(
       ofType(AnimalActionTypes.RetrieveAnimalDataType),
       switchMap(() => {
-        this.loadingPaneService.loadingState = true;
+        this.loadingPaneService.setLoadingState(true);
         return this.httpService.getAnimalData().pipe(
           map((animals) => {
             return new LoadAnimalData({ animals });
@@ -35,7 +35,7 @@ export class AnimalEffects {
   );
 
   $loadData = createEffect(()=> this.actions$.pipe(ofType(AnimalActionTypes.LoadAnimalDataType), switchMap(() => {
-    this.loadingPaneService.loadingState = false;
+    this.loadingPaneService.setLoadingState(false);
     return of(new LoadAnimalsFinished());
   })))
 }

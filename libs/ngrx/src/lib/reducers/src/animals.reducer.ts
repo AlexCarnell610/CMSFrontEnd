@@ -28,6 +28,9 @@ export function animalReducer(
     case AnimalActionTypes.RetrieveAnimalDataType: {
       return state;
     }
+    case AnimalActionTypes.UpdateAnimalWeightType: {
+      return animalAdapter.updateOne(action.payload.weightUpdate, state)
+    }
     default: {
       return state;
     }

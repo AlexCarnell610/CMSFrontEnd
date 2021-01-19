@@ -12,13 +12,16 @@ export class LoadingPaneService {
     //   state ? this.modalService.getModal(Modals.Weight).open() : this.modalService.getModal(Modals.Weight).close()
     // })
    }
+  private _loadingState: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  private _isLoadingState: BehaviorSubject<boolean> = new BehaviorSubject(false);
-
-  public set loadingState(state: boolean){
+  public setLoadingState(state: boolean){
     // sessionStorage.setItem("FUCK", "FUCK");
-    this._isLoadingState.next(state);
+    this._loadingState.next(state);
     // console.warn("Loading", this._isLoadingState.value);
+  }
+
+  public get currentLoadingState(): BehaviorSubject<boolean>{
+    return this._loadingState
   }
 
 }

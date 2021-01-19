@@ -10,7 +10,6 @@ import { selectAll } from 'libs/ngrx/src/lib/reducers/src/animals.reducer';
 import { Label } from 'ng2-charts';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'cms-weight',
@@ -37,26 +36,37 @@ export class WeightComponent implements OnInit {
   public animals$: Observable<Animal[]>;
   public searchedAnimals$: BehaviorSubject<Animal[]> = new BehaviorSubject([]);
   public selectedAnimal: Animal;
+  public $selectedAnimal: BehaviorSubject<Animal> = new BehaviorSubject(null);
 
   ngOnInit(): void {
+    // this.store.dispatch(new RetrieveAnimalData());
     this.searchBarGroup = this.fb.group({ searchBar: this.fb.control([]) });
     this.animals$ = this.store.pipe(select(selectAll));
     this.trackSearch();
+    this.updateGraph();
+    this.searchBarGroup.get('searchBar').setValue('');
   }
 
-  public selectAnimal(animal: Animal) {  
-    
-    if (animal !== this.selectedAnimal) {
-      this.selectedAnimal = animal;
-      this.chartWeights = [
-        {
-          data: animal.weightData.map((weight) => weight.weight),
-          label: animal.tagNumber,
-        },
-      ];
-      this.chartLabels = animal.weightData.map((weight) =>
+  private updateGraph() {  
+    this.$selectedAnimal.subscribe(animal => {
+
+      if (animal) {
+        this.chartWeights = [
+          {
+            data: animal.weightData.map((weight) => weight.weight),
+            label: animal.tagNumber,
+          },
+        ];
+        this.chartLabels = animal.weightData.map((weight) =>
         weight.weightDate.format('L')
-      );
+        );
+      }
+    })
+    }
+
+  public selectAnimal(selectedAnimal: Animal) {
+    if (selectedAnimal.tagNumber !== this.$selectedAnimal.getValue()?.tagNumber) {
+      this.searchedAnimals$.subscribe(animals => this.$selectedAnimal.next(animals.find(animal => animal.tagNumber == selectedAnimal.tagNumber)));
     }
   }
 
@@ -65,12 +75,11 @@ export class WeightComponent implements OnInit {
   }
 
   private trackSearch() {
-    // this.animals$.pipe(take(1)).subscribe(animals => this.searchedAnimals$.next(animals.slice(0,5)))
     combineLatest([this.searchBarValChange, this.animals$]).subscribe(([value, animals]: [string, Animal[]]) => {
       if(value.length > 2){
         this.searchedAnimals$.next(animals.filter(animal => animal.tagNumber.toLowerCase().includes(value.toLowerCase())))
       } else {
-        this.searchedAnimals$.next([]);
+        this.searchedAnimals$.next(animals);
       }
     })
   }
@@ -79,13 +88,7 @@ export class WeightComponent implements OnInit {
     this.router.navigate([PageURLs.MainMenu]);
   }
 
-  public showAll(){
-    this.animals$.pipe(take(1)).subscribe(animals => this.searchedAnimals$.next(animals))
-  }
-
   public edit(animal: Animal, index: number) {
-    // this.modalService.setModalData(animal, Modals.Weight);
     this.modalService.getModal(Modals.Weight).setData(animal).open();
-    // this.modalService.get(Modals.Weight).open();  
   }
 }

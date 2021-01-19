@@ -5,7 +5,8 @@ import { Animal, AnimalWeight } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx/reducers';
 import { HttpService } from '@cms-services/http';
 import { Store } from '@ngrx/store';
-import { RetrieveAnimalData } from 'libs/ngrx/src/lib/actions/src/animal.actions';
+import { UpdateAnimalWeight } from 'libs/ngrx/src/lib/actions/src/animal.actions';
+import { LoadingPaneService } from 'libs/services/services/src/loading-pane.service';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { Subscription } from 'rxjs';
 
@@ -29,7 +30,8 @@ export class EditWeightModalComponent
     private readonly modalService: NgxSmartModalService,
     private store: Store<RootState>,
     private fb: FormBuilder,
-    private httpService: HttpService
+    private httpService: HttpService,
+    private loadingService: LoadingPaneService
   ) {}
 
   ngOnInit(): void {
@@ -37,7 +39,6 @@ export class EditWeightModalComponent
       weight: this.fb.control([]),
       date: this.fb.control([]),
     });
-    this.store.dispatch(new RetrieveAnimalData());
   }
 
   ngAfterViewInit() {
@@ -72,6 +73,7 @@ export class EditWeightModalComponent
   saveChanges() {
     
     if (this.selectedWeight && this.valuesChanged()) {
+      this.loadingService.setLoadingState(true);
       console.log("send update");
       
       const weightUpdate = {
@@ -82,13 +84,34 @@ export class EditWeightModalComponent
         .updateWeight(Number.parseInt(this.selectedWeight.id), weightUpdate)
         .subscribe((res) => {
           console.warn(res);
+          console.warn(this.animal);
+          let index = this.getSelectedIndex();
+          let update = this.animal.weightData.slice();
+          
+          update.splice(index, 1, res);
+
+          console.info(update)
+          
+          this.store.dispatch(new UpdateAnimalWeight({
+            weightUpdate: {
+              id: this.animal.tagNumber,
+              changes: {
+                weightData: update
+              }
+            }
+          }))
+          this.loadingService.setLoadingState(false);
         });
       this.updateForm();
+     
     }
-    
   }
 
-  private valuesChanged(){
+  private getSelectedIndex(): number{
+    return this.animal.weightData.findIndex(weight => weight?.id === this.selectedWeight.id)
+  }
+
+  private valuesChanged(): boolean{
     const weightInput = this.editWeightForm.controls[FormControls.Weight];
     const dateInput = this.editWeightForm.controls[FormControls.Date];
     const formattedDate = this.selectedWeight.weightDate.format('YYYY-MM-DD');
