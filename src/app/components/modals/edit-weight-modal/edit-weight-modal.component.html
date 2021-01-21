@@ -56,9 +56,10 @@
     <input type="radio" name="animalWeight" class="form-check-input" id="isInitialRadio">
     <label for="isInitialRadio" class="form-check-radio"> &nbsp; Is initial weight?</label>
   </div>
-  <button class="btn btn-success mr-3" (click)="saveChanges()">Save Changes</button>
-  <button class="btn btn-danger" (click)="closeModal()">Close</button>
+  <button class="btn btn-success mr-3" (click)="saveChanges()"
+  ngbPopover="Update Success!" #p="ngbPopover" placement="bottom" popoverClass="update-success" triggers="manual">Save Changes</button>
+  <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
 </div>
-<ngb-alert #updateSuccess *ngIf="showSuccess" type="success" (close)="showSuccess=false">Updated Successfully</ngb-alert>
 </div>
 </ngx-smart-modal>
+

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAlertModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { EditWeightModalComponent } from './edit-weight-modal/edit-weight-modal.component';
 
@@ -13,7 +13,8 @@ import { EditWeightModalComponent } from './edit-weight-modal/edit-weight-modal.
     CommonModule,
     NgxSmartModalModule.forChild(),
     ReactiveFormsModule,
-    NgbAlertModule
+    NgbAlertModule,
+    NgbPopoverModule
   ],
   exports:[
     EditWeightModalComponent, CommonModule, NgxSmartModalModule

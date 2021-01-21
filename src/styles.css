@@ -46,6 +46,7 @@ body{
   -webkit-animation:spin 2s linear infinite;
   -moz-animation:spin 2s linear infinite;
   animation:spin 2s linear infinite;
+  z-index: 999999;
 }
 @-moz-keyframes spin { 
   0% { -moz-transform: rotate(0deg); }
@@ -59,4 +60,11 @@ body{
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.update-success {
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  font-size: 125%;
 }

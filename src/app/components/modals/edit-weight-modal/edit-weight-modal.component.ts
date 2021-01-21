@@ -4,7 +4,7 @@ import { Modals } from '@cms-enums';
 import { Animal, AnimalWeight } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx/reducers';
 import { HttpService } from '@cms-services/http';
-import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
+import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { UpdateAnimalWeight } from 'libs/ngrx/src/lib/actions/src/animal.actions';
 import { LoadingPaneService } from 'libs/services/services/src/loading-pane.service';
@@ -24,7 +24,8 @@ enum FormControls {
 export class EditWeightModalComponent
   implements OnInit, AfterViewInit, OnDestroy {
   @Input() animal: Animal = null;
-  @ViewChild('updateSuccess', {static: false}) updateSuccMessage: NgbAlert;
+  @ViewChild('p') popover: NgbPopover;
+  // @ViewChild('updateSuccess', {static: false}) updateSuccMessage: NgbAlert;
   private subs: Subscription = new Subscription();
   public editWeightForm: FormGroup = new FormGroup({});
   private selectedWeight: AnimalWeight = null;
@@ -79,6 +80,7 @@ export class EditWeightModalComponent
       this.httpService
         .updateWeight(Number.parseInt(this.selectedWeight.id), weightUpdate)
         .subscribe((res) => {
+          this.popover.open();
           console.warn(res);
           console.warn(this.animal);
           let index = this.getSelectedIndex();
@@ -102,7 +104,8 @@ export class EditWeightModalComponent
           this.showSuccess = true;
           timer(3000).subscribe(() => {
             console.warn("CLOSE NOW PLS")
-            this.updateSuccMessage.close()
+            // this.updateSuccMessage.close()
+            this.popover.close();
           })
           this.loadingService.setLoadingState(false);
         });
