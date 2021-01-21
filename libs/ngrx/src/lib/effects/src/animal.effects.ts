@@ -3,9 +3,10 @@ import { HttpService } from '@cms-services/http';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { LoadingPaneService } from 'libs/services/services/src/loading-pane.service';
 import { of } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import {
   AnimalActionTypes,
+  HTTPError,
   LoadAnimalData,
   LoadAnimalsFinished
 } from '../../actions/src/animal.actions';
@@ -28,6 +29,9 @@ export class AnimalEffects {
         return this.httpService.getAnimalData().pipe(
           map((animals) => {
             return new LoadAnimalData({ animals });
+          }), catchError(err => {
+            // this.loadingPaneService.setLoadingState(false);
+            return of(new HTTPError(err));
           })
         );
       })
@@ -37,5 +41,10 @@ export class AnimalEffects {
   $loadData = createEffect(()=> this.actions$.pipe(ofType(AnimalActionTypes.LoadAnimalDataType), switchMap(() => {
     this.loadingPaneService.setLoadingState(false);
     return of(new LoadAnimalsFinished());
-  })))
+  })));
+
+  $httpError = createEffect(() => this.actions$.pipe(ofType(AnimalActionTypes.HTTPErrorType), map((action: any) => {
+    this.loadingPaneService.setLoadingState(false);
+    console.error("An error has occured",action.payload)
+  })), {dispatch: false})
 }

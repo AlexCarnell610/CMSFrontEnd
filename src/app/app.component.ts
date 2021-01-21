@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { RootState } from '@cms-ngrx/reducers';
+import { NgbAlertConfig, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { RetrieveAnimalData } from 'libs/ngrx/src/lib/actions/src/animal.actions';
 import { LoadingPaneService } from 'libs/services/services/src/loading-pane.service';
@@ -15,7 +16,9 @@ export class AppComponent implements OnInit {
   constructor(
     public auth: AuthService,
     public loadingService: LoadingPaneService,
-    private readonly store: Store<RootState>
+    private readonly store: Store<RootState>,
+    ngbAlertConfig: NgbAlertConfig,
+    ngbTooltipConf: NgbTooltipConfig
   ) {
     // router.events.subscribe(event => console.error(event))
     // auth.isLoading$.subscribe((loading) => {
@@ -24,6 +27,7 @@ export class AppComponent implements OnInit {
     // auth.error$.subscribe((error) => {
     //   console.error('AUTTHTHTHTHTHHTHT', error);
     // });
+  ngbAlertConfig.dismissible = false
   }
 
   ngOnInit(){

@@ -7,11 +7,12 @@
 
       <div class="input-group mb-3">
         <select
+        formControlName="weightSelect"
         class="custom-select"
         id="inputGroupSelect01"
-        (change)="weightSelected($event.target.value)"
+        
         >
-        <option selected value="invalid">Select weight to edit</option>
+        <option value="invalid">Select weight to edit</option>
         <option
         *ngFor="let weight of animal.weightData"
         value="{{ weight.id }}"
@@ -47,8 +48,17 @@
     id="newDate"
     />
   </div>
+  <div class="form-check">
+    <input type="radio" name="animalWeight" class="form-check-input" id="isSaleRadio">
+    <label for="isSaleRadio" class="form-check-label">&nbsp; Is sale weight?</label>
+  </div>
+  <div class="form-check">
+    <input type="radio" name="animalWeight" class="form-check-input" id="isInitialRadio">
+    <label for="isInitialRadio" class="form-check-radio"> &nbsp; Is initial weight?</label>
+  </div>
   <button class="btn btn-success mr-3" (click)="saveChanges()">Save Changes</button>
   <button class="btn btn-danger" (click)="closeModal()">Close</button>
 </div>
+<ngb-alert #updateSuccess *ngIf="showSuccess" type="success" (close)="showSuccess=false">Updated Successfully</ngb-alert>
 </div>
 </ngx-smart-modal>

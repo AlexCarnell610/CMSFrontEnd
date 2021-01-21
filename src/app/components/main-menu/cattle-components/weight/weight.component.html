@@ -15,12 +15,8 @@
           (click)="selectAnimal(animal)"
         >
           {{ animal.tagNumber }}
-          <span class="badge badge-primary badge-pill" (click)="edit(animal, i)">Edit Weights</span>
+          <span class="badge badge-primary badge-pill" (click)="edit()">Edit Weights</span>
         </button>
-        
-        <!-- <button class="list-group-item list-group-item-action animal-button" (click)="showAll()">Show All</button> -->
-        <!-- <button class="list-group-item list-group-item-action active">I am an animal
-            </button> -->
       </ul>
     </div>
     <div class="col" *ngIf="chartWeights.length > 0">
@@ -42,4 +38,4 @@
 
 </div>
 
-<cms-edit-weight-modal></cms-edit-weight-modal>
+<cms-edit-weight-modal [animal] ="selectedAnimal"></cms-edit-weight-modal>

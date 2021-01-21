@@ -31,6 +31,9 @@ export function animalReducer(
     case AnimalActionTypes.UpdateAnimalWeightType: {
       return animalAdapter.updateOne(action.payload.weightUpdate, state)
     }
+    case AnimalActionTypes.HTTPErrorType: {
+      return state;
+    }
     default: {
       return state;
     }

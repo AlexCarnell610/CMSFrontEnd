@@ -7,6 +7,7 @@ export enum AnimalActionTypes {
   RetrieveAnimalDataType = '[Load] Retrieve Data',
   LoadAnimalsFinishedType = '[Load] Load Finished',
   UpdateAnimalWeightType = '[Update] Weight or Date',
+  HTTPErrorType = '[HTTP] Error'
 }
 
 export class LoadAnimalData implements Action {
@@ -28,8 +29,14 @@ export class UpdateAnimalWeight implements Action {
   constructor(public payload: { weightUpdate: Update<Animal> }) {}
 }
 
+export class HTTPError implements Action {
+  readonly type = AnimalActionTypes.HTTPErrorType;
+  constructor(public payload: {error: any}){}
+}
+
 export type AnimalActions =
   | LoadAnimalData
   | RetrieveAnimalData
   | LoadAnimalsFinished
-  | UpdateAnimalWeight;
+  | UpdateAnimalWeight
+  | HTTPError;

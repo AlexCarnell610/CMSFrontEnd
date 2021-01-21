@@ -51,6 +51,7 @@ export class WeightComponent implements OnInit {
     this.$selectedAnimal.subscribe(animal => {
 
       if (animal) {
+        this.selectedAnimal = animal
         this.chartWeights = [
           {
             data: animal.weightData.map((weight) => weight.weight),
@@ -88,7 +89,7 @@ export class WeightComponent implements OnInit {
     this.router.navigate([PageURLs.MainMenu]);
   }
 
-  public edit(animal: Animal, index: number) {
-    this.modalService.getModal(Modals.Weight).setData(animal).open();
+  public edit() {
+    this.modalService.getModal(Modals.Weight).open();
   }
 }
