@@ -5,7 +5,7 @@
     </h4>
     <div [formGroup]="editWeightForm" class="mb-3 mt-2" style="width:fit-content; margin-left: 25%;">
 
-      <div class="input-group mb-3">
+      <div class="input-group mb-3 mt-3">
         <select
         formControlName="weightSelect"
         class="custom-select"
@@ -49,13 +49,18 @@
     />
   </div>
   <div class="form-check">
-    <input type="radio" name="animalWeight" class="form-check-input" id="isSaleRadio">
+    <input formControlName="weightType" value='isSale'type="radio" name="weightType" class="form-check-input" id="isSaleRadio">
     <label for="isSaleRadio" class="form-check-label">&nbsp; Is sale weight?</label>
   </div>
   <div class="form-check">
-    <input type="radio" name="animalWeight" class="form-check-input" id="isInitialRadio">
-    <label for="isInitialRadio" class="form-check-radio"> &nbsp; Is initial weight?</label>
+    <input formControlName="weightType" value="isIntermediate" type="radio" name="weightType" class="form-check-input" id="isIntermediate">
+    <label for="isIntermediate" class="form-check-label"> &nbsp; Is intermediate weight?</label>
   </div>
+  <div class="form-check mb-3">
+    <input formControlName="weightType" value='isInitial' type="radio" name="weightType" class="form-check-input" id="isInitialRadio">
+    <label for="isInitialRadio" class="form-check-label"> &nbsp; Is initial weight?</label>
+  </div>
+  
   <button class="btn btn-success mr-3" (click)="saveChanges()"
   ngbPopover="Update Success!" #p="ngbPopover" placement="bottom" popoverClass="update-success" triggers="manual">Save Changes</button>
   <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>

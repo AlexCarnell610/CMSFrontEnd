@@ -65,6 +65,9 @@ body{
 .update-success {
   color: #155724;
   background-color: #d4edda;
-  border-color: #c3e6cb;
   font-size: 125%;
+}
+
+.update-success .arrow::after {
+  border-bottom-color: #d4edda;
 }

@@ -52,6 +52,10 @@ export interface AnimalWeight {
     id: string,
     weightDate: moment.Moment,
     weight: number,
+    weightType: AnimalWeightType
+}
+
+export interface AnimalWeightType {
     isInitial: boolean,
     isSale: boolean
 }

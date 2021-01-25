@@ -4,6 +4,12 @@
     min-width: min-content;
 }
 
+.add-weight-button {
+    font-size: clamp(9pt, 2vw, 16px);
+    width: auto; 
+    display: block;
+}
+
 /* .list-group{
    
         max-height: 300px;

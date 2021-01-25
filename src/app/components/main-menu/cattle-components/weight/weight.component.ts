@@ -37,6 +37,7 @@ export class WeightComponent implements OnInit {
   public searchedAnimals$: BehaviorSubject<Animal[]> = new BehaviorSubject([]);
   public selectedAnimal: Animal;
   public $selectedAnimal: BehaviorSubject<Animal> = new BehaviorSubject(null);
+  public isAddMode = false;
 
   ngOnInit(): void {
     // this.store.dispatch(new RetrieveAnimalData());
@@ -45,6 +46,11 @@ export class WeightComponent implements OnInit {
     this.trackSearch();
     this.updateGraph();
     this.searchBarGroup.get('searchBar').setValue('');
+  }
+
+  public openAddModal(){
+    this.isAddMode = true;
+    this.modalService.get(Modals.Weight).open();
   }
 
   private updateGraph() {  
@@ -90,6 +96,7 @@ export class WeightComponent implements OnInit {
   }
 
   public edit() {
+    this.isAddMode = false;
     this.modalService.getModal(Modals.Weight).open();
   }
 }

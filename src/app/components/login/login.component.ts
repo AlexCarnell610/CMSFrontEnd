@@ -16,7 +16,6 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.isAuthenticated$.subscribe(authenticated => {
-      console.error("authenticated", authenticated)
       if (authenticated) {
         this.handleSignIn();
       }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
 import { PageURLs } from '@cms-enums';
@@ -8,14 +8,9 @@ import { PageURLs } from '@cms-enums';
   templateUrl: './main-menu.component.html',
   styleUrls: ['./main-menu.component.css']
 })
-export class MainMenuComponent implements OnInit {
+export class MainMenuComponent {
 
   constructor(private readonly router: Router, private readonly auth: AuthService, private route: ActivatedRoute) { }
-
-  ngOnInit(): void {
-    this.auth.getAccessTokenSilently().subscribe(token => console.error(token)
-    )
-  }
 
   public weightScreen(): void{
     this.router.navigate([PageURLs.Weight], {relativeTo: this.route});
