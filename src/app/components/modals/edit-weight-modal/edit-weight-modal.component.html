@@ -43,13 +43,18 @@
           <div class="input-group-append">
             <span class="input-group-text">Kg</span>
           </div>
-          <div class="invalid-tooltip">
-            <span *ngIf="weight.errors">uh oh</span>
+          <div class="invalid-feedback">
+            <!-- <div *ngIf="weight.errors">
+              <span *ngIf="weight.errors.required">This field is required. </span>
+              <span *ngIf="weight.errors.min">Value should be more than 10Kg. </span>
+              <span *ngIf="weight.errors.max">Value should be less than 1000Kg. </span>
+            </div> -->
+            <cms-form-errors [errors]="weight.errors"></cms-form-errors>
           </div>
         </div>
       </div>
 
-      <div class="form-group">
+      <div class="form-group" [ngClass]="{ 'was-validated': !date.valid && date.dirty }">
         <label for="newDate">Enter new date</label>
         <input
           formControlName="date"
@@ -57,9 +62,13 @@
           type="date"
           name="date"
           id="newDate"
+          required
         />
+        <div class="invalid-feedback">
+          <cms-form-errors [errors]="date.errors"></cms-form-errors>
+        </div>
       </div>
-      <div class="form-check">
+      <div class="form-check" [ngClass]="{ 'was-validated': !weightType.valid && weightType.dirty }">
         <input
           formControlName="weightType"
           value="isSale"
@@ -67,12 +76,13 @@
           name="weightType"
           class="form-check-input"
           id="isSaleRadio"
+          required
         />
         <label for="isSaleRadio" class="form-check-label"
           >&nbsp; Is sale weight?</label
         >
       </div>
-      <div class="form-check">
+      <div class="form-check" [ngClass]="{ 'was-validated': !weightType.valid && weightType.dirty }">
         <input
           formControlName="weightType"
           value="isIntermediate"
@@ -80,12 +90,13 @@
           name="weightType"
           class="form-check-input"
           id="isIntermediate"
+          required
         />
-        <label for="isIntermediate" class="form-check-label">
+        <label for="isIntermediate" class="form-check-label" >
           &nbsp; Is intermediate weight?</label
         >
       </div>
-      <div class="form-check mb-3">
+      <div class="form-check mb-3" [ngClass]="{ 'was-validated': !weightType.valid && weightType.dirty }">
         <input
           formControlName="weightType"
           value="isInitial"
@@ -93,10 +104,15 @@
           name="weightType"
           class="form-check-input"
           id="isInitialRadio"
+          required
         />
         <label for="isInitialRadio" class="form-check-label">
           &nbsp; Is initial weight?</label
         >
+        <div class="invalid-feedback">
+
+          <cms-form-errors [errors]="weightType.errors" [isRadio]="true"></cms-form-errors>
+        </div>
       </div>
 
       <button

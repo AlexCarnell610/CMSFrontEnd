@@ -4,11 +4,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgbAlertModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { EditWeightModalComponent } from './edit-weight-modal/edit-weight-modal.component';
+import { FormErrorsComponent } from './form-errors/form-errors.component';
 
 
 
 @NgModule({
-  declarations: [EditWeightModalComponent],
+  declarations: [EditWeightModalComponent, FormErrorsComponent],
   imports: [
     CommonModule,
     NgxSmartModalModule.forChild(),

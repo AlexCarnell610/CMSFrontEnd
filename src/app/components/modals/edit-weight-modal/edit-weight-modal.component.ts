@@ -41,7 +41,6 @@ export class EditWeightModalComponent
   @Input() animal: Animal = null;
   @Input() isAddMode = false;
   @ViewChild('p') popover: NgbPopover;
-  // @ViewChild('updateSuccess', {static: false}) updateSuccMessage: NgbAlert;
   private subs: Subscription = new Subscription();
   public editWeightForm: FormGroup = new FormGroup({});
   private selectedWeight: AnimalWeight = null;
@@ -65,7 +64,20 @@ export class EditWeightModalComponent
     });
     
     this.weight.valueChanges.subscribe(w => {
+      console.warn(this.weight.errors);
+      
       console.warn("Condition", !!(this.weight.value && this.weight.errors));
+      
+    })
+    this.date.valueChanges.subscribe(w => {
+      console.warn(this.date.errors);
+      console.warn(this.date.value);
+      
+      console.warn(!this.date.valid && this.date.dirty );
+      
+    })
+    this.weightType.valueChanges.subscribe(w => {
+      console.warn("type", this.weightType.errors);
       
     })
 
@@ -112,6 +124,9 @@ export class EditWeightModalComponent
           });
       } else {
         console.error(this.weight.errors);
+        this.weight.markAsDirty();
+        this.date.markAsDirty();
+        this.weightType.markAsDirty();
       }
     } else {
       if (this.selectedWeight && this.valuesEdited()) {
@@ -235,6 +250,14 @@ export class EditWeightModalComponent
 
   get weight(){
     return this.editWeightForm.get(FormControls.Weight)
+  }
+
+  get date(){
+    return this.editWeightForm.get(FormControls.Date)
+  }
+
+  get weightType(){
+    return this.editWeightForm.get(FormControls.WeightType)
   }
 
   ngOnDestroy() {

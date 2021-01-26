@@ -1,0 +1,8 @@
+<div *ngIf="errors && !isRadio">
+    <span *ngIf="errors.required">This field is required. </span>
+    <span *ngIf="errors.min">Value should be more than {{errors.min.min}}Kg. </span>
+    <span *ngIf="errors.max">Value should be less than {{errors.max.max}}Kg. </span>
+  </div>
+  <div *ngIf="errors && isRadio">
+    <span *ngIf="errors.required">Please select one. </span>
+  </div>
