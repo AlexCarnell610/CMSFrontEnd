@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --proxy-config src/proxy.conf.json",
-    "startMobile": "ng serve --proxy-config src/proxy.conf.json --host 0.0.0.0",
+    "start": "ng serve --proxy-config src/proxy.conf.json --host 0.0.0.0",
+    "startMobile": "ng serve --proxy-config src/proxy.conf.json --host 0.0.0.0 --ssl true --ssl-key ssl/server.key --ssl-cert ssl/server.crt",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",

@@ -16,13 +16,14 @@
         >
           {{ animal.tagNumber }}
           <span class="badge badge-primary badge-pill" (click)="edit()">Edit Weights</span>
+          <span class="badge badge-success badge-pill ml-1" (click)="openAddModal()">Add Weights</span>
         </button>
       </ul>
     </div>
-    <div class="col">
+    <!-- <div class="col">
       <button class="btn btn-success mx-auto add-weight-button" (click)="openAddModal()">Add Weights</button>
-    </div>
-    <div class="col-5" >
+    </div> -->
+    <div class="col" >
       <div class="chart-wrapper" *ngIf="chartWeights.length > 0">
         <canvas
           baseChart

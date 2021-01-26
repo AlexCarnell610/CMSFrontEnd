@@ -26,7 +26,7 @@ export class AnimalEffects {
       ofType(AnimalActionTypes.RetrieveAnimalDataType),
       switchMap(() => {
         this.loadingPaneService.setLoadingState(true);
-        return this.httpService.getOfflineData().pipe(
+        return this.httpService.getAnimalData().pipe(
           map((animals) => {
             return new LoadAnimalData({ animals });
           }), catchError(err => {
@@ -47,4 +47,6 @@ export class AnimalEffects {
     this.loadingPaneService.setLoadingState(false);
     console.error("An error has occured",action.payload)
   })), {dispatch: false})
+
+  // $updateWeight = createEffect(() => this.actions$.pipe(ofType(/)))
 }

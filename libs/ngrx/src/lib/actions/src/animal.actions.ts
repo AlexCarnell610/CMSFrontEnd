@@ -1,4 +1,4 @@
-import { Animal } from '@cms-interfaces';
+import { Animal, AnimalWeight } from '@cms-interfaces';
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
 
@@ -7,6 +7,7 @@ export enum AnimalActionTypes {
   RetrieveAnimalDataType = '[Load] Retrieve Data',
   LoadAnimalsFinishedType = '[Load] Load Finished',
   UpdateAnimalWeightType = '[Update] Weight or Date',
+  AddAnimalWeightType = '[Add] Animal Weight',
   HTTPErrorType = '[HTTP] Error'
 }
 
@@ -29,6 +30,11 @@ export class UpdateAnimalWeight implements Action {
   constructor(public payload: { weightUpdate: Update<Animal> }) {}
 }
 
+export class AddAnimalWeight implements Action {
+  readonly type = AnimalActionTypes.AddAnimalWeightType;
+  constructor(public payload: {newWeight: AnimalWeight, id: string}){}
+}
+
 export class HTTPError implements Action {
   readonly type = AnimalActionTypes.HTTPErrorType;
   constructor(public payload: {error: any}){}
@@ -39,4 +45,5 @@ export type AnimalActions =
   | RetrieveAnimalData
   | LoadAnimalsFinished
   | UpdateAnimalWeight
+  | AddAnimalWeight
   | HTTPError;

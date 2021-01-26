@@ -1,70 +1,118 @@
-<ngx-smart-modal #weightModal identifier="weightModal">
+<ngx-smart-modal  #weightModal identifier="weightModal">
   <div *ngIf="animal">
     <h4 class="text-center">
-      Edit Weight for <strong>{{ animal.tagNumber }}</strong>
+      {{ isAddMode ? "Add" : "Edit" }} Weight for
+      <strong>{{ animal.tagNumber }}</strong>
     </h4>
-    <div [formGroup]="editWeightForm" class="mb-3 mt-2" style="width:fit-content; margin-left: 25%;">
-
-      <div class="input-group mb-3 mt-3">
+    <form
+      [formGroup]="editWeightForm"
+      class="mb-3 mt-2"
+      style="width: fit-content; margin-left: 25%"
+    >
+      <div *ngIf="!isAddMode" class="input-group mb-3 mt-3">
         <select
-        formControlName="weightSelect"
-        class="custom-select"
-        id="inputGroupSelect01"
-        
+          formControlName="weightSelect"
+          class="custom-select"
+          id="inputGroupSelect01"
         >
-        <option value="invalid">Select weight to edit</option>
-        <option
-        *ngFor="let weight of animal.weightData"
-        value="{{ weight.id }}"
-        >
-        {{ weight.weightDate | date: "dd/MM/yyyy" }} - {{ weight.weight }} Kg
-      </option>
-    </select>
-  </div>
-  
-  <div class="form-group">
-    <label for="newWeight">Enter new weight</label>
-    <div class="input-group">
-      
-      <input
-      formControlName="weight"
-      class="form-control"
-      type="text"
-      name="weight"
-      />
-      <div class="input-group-append">
-        <span class="input-group-text">Kg</span>
+          <option value="invalid">Select weight to edit</option>
+          <option
+            *ngFor="let weight of animal.weightData"
+            value="{{ weight.id }}"
+          >
+            {{ weight.weightDate | date: "dd/MM/yyyy" }} -
+            {{ weight.weight }} Kg
+          </option>
+        </select>
       </div>
-    </div>
-  </div>
-  
-  <div class="form-group">
-    <label for="newDate">Enter new date</label>
-    <input
-    formControlName="date"
-    class="form-control"
-    type="date"
-    name="date"
-    id="newDate"
-    />
-  </div>
-  <div class="form-check">
-    <input formControlName="weightType" value='isSale'type="radio" name="weightType" class="form-check-input" id="isSaleRadio">
-    <label for="isSaleRadio" class="form-check-label">&nbsp; Is sale weight?</label>
-  </div>
-  <div class="form-check">
-    <input formControlName="weightType" value="isIntermediate" type="radio" name="weightType" class="form-check-input" id="isIntermediate">
-    <label for="isIntermediate" class="form-check-label"> &nbsp; Is intermediate weight?</label>
-  </div>
-  <div class="form-check mb-3">
-    <input formControlName="weightType" value='isInitial' type="radio" name="weightType" class="form-check-input" id="isInitialRadio">
-    <label for="isInitialRadio" class="form-check-label"> &nbsp; Is initial weight?</label>
-  </div>
-  
-  <button class="btn btn-success mr-3" (click)="saveChanges()"
-  ngbPopover="Update Success!" #p="ngbPopover" placement="bottom" popoverClass="update-success" triggers="manual">Save Changes</button>
-  <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
-</div>
-</div>
-</ngx-smart-modal>
 
+      <div class="form-group weight-modal-form">
+        <label for="newWeight">Enter new weight</label>
+        <div
+          class="input-group"
+          [ngClass]="{ 'was-validated': !weight.valid && weight.dirty }"
+        >
+          <input
+            formControlName="weight"
+            class="form-control"
+            type="number"
+            step="10"
+            name="weight"
+            required
+          />
+          <div class="input-group-append">
+            <span class="input-group-text">Kg</span>
+          </div>
+          <div class="invalid-tooltip">
+            <span *ngIf="weight.errors">uh oh</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="newDate">Enter new date</label>
+        <input
+          formControlName="date"
+          class="form-control"
+          type="date"
+          name="date"
+          id="newDate"
+        />
+      </div>
+      <div class="form-check">
+        <input
+          formControlName="weightType"
+          value="isSale"
+          type="radio"
+          name="weightType"
+          class="form-check-input"
+          id="isSaleRadio"
+        />
+        <label for="isSaleRadio" class="form-check-label"
+          >&nbsp; Is sale weight?</label
+        >
+      </div>
+      <div class="form-check">
+        <input
+          formControlName="weightType"
+          value="isIntermediate"
+          type="radio"
+          name="weightType"
+          class="form-check-input"
+          id="isIntermediate"
+        />
+        <label for="isIntermediate" class="form-check-label">
+          &nbsp; Is intermediate weight?</label
+        >
+      </div>
+      <div class="form-check mb-3">
+        <input
+          formControlName="weightType"
+          value="isInitial"
+          type="radio"
+          name="weightType"
+          class="form-check-input"
+          id="isInitialRadio"
+        />
+        <label for="isInitialRadio" class="form-check-label">
+          &nbsp; Is initial weight?</label
+        >
+      </div>
+
+      <button
+        class="btn btn-success mr-3"
+        (click)="saveChanges()"
+        ngbPopover="Update Success!"
+        #p="ngbPopover"
+        placement="bottom"
+        popoverClass="update-success"
+        triggers="manual"
+      >
+        Save Changes
+      </button>
+      <button type="button" class="btn btn-danger" (click)="closeModal()">
+        Close
+      </button>
+    </form>
+  </div>
+</ngx-smart-modal>

@@ -1,5 +1,5 @@
 .animal-button{
-    max-width: 300px;
+    max-width: 400px;
     font-size: clamp(9pt, 2vw, 16px);
     min-width: min-content;
 }

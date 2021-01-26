@@ -36,4 +36,9 @@ export class HttpService {
       .patch(`${HttpUrls.PatchWeight}/${id}`, { ...update })
       .pipe(map((res) => this.mappingService.convertWeight(res)));
   }
+
+  public addWeight(animalId, weight): any {
+    return this.http.put(`${HttpUrls.PutWeight}/${animalId}`, {...weight})
+     .pipe(map(res => this.mappingService.convertWeight(res)))
+  }
 }

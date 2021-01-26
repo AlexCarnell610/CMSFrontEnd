@@ -5,6 +5,7 @@ import { NgbAlertConfig, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { RetrieveAnimalData } from 'libs/ngrx/src/lib/actions/src/animal.actions';
 import { LoadingPaneService } from 'libs/services/services/src/loading-pane.service';
+import * as Moment from 'moment';
 
 @Component({
   selector: 'cms-root',
@@ -31,6 +32,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(){
+    Moment.locale('en-gb');
+    // this.auth.logout()
     this.auth.isAuthenticated$.subscribe(authed => {
       if (authed) {
         //could do something with sessoin storage to stop redownloading data on refresh
