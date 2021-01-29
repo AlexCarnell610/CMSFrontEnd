@@ -16,6 +16,10 @@ export class MainMenuComponent {
     this.router.navigate([PageURLs.Weight], {relativeTo: this.route});
   }
 
+  public animalScreen(): void {
+    this.router.navigate([PageURLs.Animals], {relativeTo: this.route})
+  }
+
   public logout(): void{
     this.auth.logout({returnTo: "https://" + document.location.host + '/' + PageURLs.Login});
     // this.router.navigate([PageURLs.Logout])

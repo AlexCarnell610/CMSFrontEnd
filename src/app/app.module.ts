@@ -17,7 +17,6 @@ import { AppComponent } from './app.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
-import { ModalsModule } from './components/modals/modals.module';
 
 @NgModule({
   declarations: [
@@ -43,7 +42,6 @@ import { ModalsModule } from './components/modals/modals.module';
     ReactiveFormsModule,
     CommonModule,
     NgxSmartModalModule.forRoot(),
-    ModalsModule,
     NgbTooltipModule,
     AuthModule.forRoot({
       ...environment.auth,

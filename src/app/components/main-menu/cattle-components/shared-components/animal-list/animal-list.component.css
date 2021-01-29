@@ -1,0 +1,10 @@
+.animal-button{
+    max-width: 450px;
+    font-size: clamp(9.5pt, 2vw, 17px);
+    min-width: min-content;
+}
+
+.badge-pill{
+    font-size: 90%;
+    font-weight: 600;
+}

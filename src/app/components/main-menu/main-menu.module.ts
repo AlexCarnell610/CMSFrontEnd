@@ -6,12 +6,13 @@ import { ChartsModule } from 'ng2-charts';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { ModalsModule } from '../modals/modals.module';
 import { AnimalComponent } from './cattle-components/animal/animal.component';
+import { AnimalListComponent } from './cattle-components/shared-components/animal-list/animal-list.component';
 import { WeightComponent } from './cattle-components/weight/weight.component';
 import { MainMenuComponent } from './main-menu.component';
 import { MainMenuRoutingModule } from './main-menu.routing';
 
 @NgModule({
-  declarations: [MainMenuComponent, WeightComponent, AnimalComponent],
+  declarations: [MainMenuComponent, WeightComponent, AnimalComponent,AnimalListComponent],
   imports: [
     CommonModule,
     MainMenuRoutingModule,
@@ -22,7 +23,7 @@ import { MainMenuRoutingModule } from './main-menu.routing';
     NgbModule
   ], 
   exports: [
-    // MainMenuComponent
+    MainMenuComponent
   ]
 })
 export class MainMenuModule { }

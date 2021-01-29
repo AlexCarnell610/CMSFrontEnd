@@ -1,8 +1,8 @@
-.animal-button{
+/* .animal-button{
     max-width: 450px;
     font-size: clamp(9.5pt, 2vw, 17px);
     min-width: min-content;
-}
+} */
 
 .cms-sticky {
     position: sticky;
@@ -15,7 +15,7 @@
     max-width: 400px;
 }
 
-.badge-pill{
+/* .badge-pill{
     font-size: 90%;
     font-weight: 600;
-}
+} */
