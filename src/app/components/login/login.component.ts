@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
   constructor(private readonly store: Store<{}>, private readonly router:Router, private readonly authService: AuthService) { }
 
   ngOnInit(): void {
+    // this.authService.logout()
     this.authService.isAuthenticated$.subscribe(authenticated => {
       if (authenticated) {
         this.handleSignIn();
@@ -30,6 +31,7 @@ export class LoginComponent implements OnInit {
 
   signOut(){
     this.authService.loginWithPopup();
+    // this.authService.loginWithRedirect({redirect_uri: `https://${window.location.host}/${PageURLs.Login}`});
   }
 
 }

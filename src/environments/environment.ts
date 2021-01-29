@@ -1,13 +1,14 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
+import { PageURLs } from '@cms-enums';
 import { audience, clientId, domain } from '../../auth_config.json';
 export const environment = {
   production: false,
   auth: {
     domain,
     clientId,
-    redirectUri: "http://localhost:4200/login",
+    redirectUri: `https://${window.location.host}/${PageURLs.Login}`,
     audience
   }
 };

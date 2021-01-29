@@ -17,7 +17,6 @@ export class LoadingPaneService {
   public setLoadingState(state: boolean){
     // sessionStorage.setItem("FUCK", "FUCK");
     this._loadingState.next(state);
-    // console.warn("Loading", this._isLoadingState.value);
   }
 
   public get currentLoadingState(): BehaviorSubject<boolean>{

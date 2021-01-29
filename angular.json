@@ -272,6 +272,46 @@
           }
         }
       }
+    },
+    "validators": {
+      "projectType": "library",
+      "root": "libs/validators",
+      "sourceRoot": "libs/validators/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "libs/validators/tsconfig.lib.json",
+            "project": "libs/validators/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/validators/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/validators/src/test.ts",
+            "tsConfig": "libs/validators/tsconfig.spec.json",
+            "karmaConfig": "libs/validators/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/validators/tsconfig.lib.json",
+              "libs/validators/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "CMSFrontEnd"

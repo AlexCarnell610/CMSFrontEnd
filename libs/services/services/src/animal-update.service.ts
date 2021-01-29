@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Animal, AnimalWeight } from '@cms-interfaces';
+import { AddAnimalWeight, UpdateAnimalWeight } from '@cms-ngrx/actions';
 import { RootState } from '@cms-ngrx/reducers';
 import { Store } from '@ngrx/store';
-import { AddAnimalWeight, UpdateAnimalWeight } from 'libs/ngrx/src/lib/actions/src/animal.actions';
-import { HttpService } from '../httpServices/src/http.service';
+import { HttpService } from '../../httpServices/src/http.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,6 @@ export class AnimalUpdateService {
       this.httpService
         .updateWeight(Number.parseInt(weightId), weightUpdate)
         .subscribe((res) => {
-          // this.popover.open();
           let update = animal.weightData.slice();
 
           update.splice(index, 1, res);
@@ -32,15 +31,6 @@ export class AnimalUpdateService {
               },
             })
           );
-          // this.editWeightForm
-          //   .get(FormControls.WeightSelect)
-          //   .setValue('invalid');
-          //   this.selectedWeight = null;
-          // this.showSuccess = true;
-          // timer(3000).subscribe(() => {
-          //   this.popover.close();
-          // });
-          // this.loadingService.setLoadingState(false);
           resolve(true);
         });
     })    

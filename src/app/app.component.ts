@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
+import { RetrieveAnimalData } from '@cms-ngrx/actions';
 import { RootState } from '@cms-ngrx/reducers';
+import { LoadingPaneService, ScreenSizeService } from '@cms-services';
 import { NgbAlertConfig, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
-import { RetrieveAnimalData } from 'libs/ngrx/src/lib/actions/src/animal.actions';
-import { LoadingPaneService } from 'libs/services/services/src/loading-pane.service';
 import * as Moment from 'moment';
 
 @Component({
@@ -19,21 +19,13 @@ export class AppComponent implements OnInit {
     public loadingService: LoadingPaneService,
     private readonly store: Store<RootState>,
     ngbAlertConfig: NgbAlertConfig,
-    ngbTooltipConf: NgbTooltipConfig
+    ngbTooltipConf: NgbTooltipConfig,
+    private readonly screenSizeService: ScreenSizeService
   ) {
-    // router.events.subscribe(event => console.error(event))
-    // auth.isLoading$.subscribe((loading) => {
-    //   console.warn(loading);
-    // });
-    // auth.error$.subscribe((error) => {
-    //   console.error('AUTTHTHTHTHTHHTHT', error);
-    // });
   ngbAlertConfig.dismissible = false
   }
-
-  ngOnInit(){
+  ngOnInit(){    
     Moment.locale('en-gb');
-    // this.auth.logout()
     this.auth.isAuthenticated$.subscribe(authed => {
       if (authed) {
         //could do something with sessoin storage to stop redownloading data on refresh
@@ -42,4 +34,8 @@ export class AppComponent implements OnInit {
       }
     })
   }
+  @HostListener('window:resize', ['$event'])
+   resize(event){
+    this.screenSizeService.screenWidth = event.currentTarget.innerWidth
+   }
 }

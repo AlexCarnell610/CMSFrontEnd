@@ -1,27 +1,21 @@
 .animal-button{
-    max-width: 400px;
-    font-size: clamp(9pt, 2vw, 16px);
+    max-width: 450px;
+    font-size: clamp(9.5pt, 2vw, 17px);
     min-width: min-content;
 }
-
-.add-weight-button {
-    font-size: clamp(9pt, 2vw, 16px);
-    width: auto; 
-    display: block;
-}
-
-/* .list-group{
-   
-        max-height: 300px;
-        margin-bottom: 10px;
-        overflow:scroll;
-        -webkit-overflow-scrolling: touch;
-    
-} */
 
 .cms-sticky {
     position: sticky;
     position: -webkit-sticky;
     top: 0;
     right: 0;
+}
+
+.small-screen-graph{
+    max-width: 400px;
+}
+
+.badge-pill{
+    font-size: 90%;
+    font-weight: 600;
 }

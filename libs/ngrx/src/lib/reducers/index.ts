@@ -24,5 +24,6 @@ import { animalReducer, AnimalState } from './src/animals.reducer';
 
 
 
+export * from './src/animals.reducer';
 export * from './src/reducers.module';
 

@@ -20,7 +20,7 @@
         </button>
       </ul>
     </div>
-    <div class="col" >
+    <div *ngIf="!screenSize.isSmallScreen" class="col" >
       <div class="chart-wrapper cms-sticky" *ngIf="chartWeights.length > 0">
         <canvas
           baseChart
@@ -36,7 +36,23 @@
       </div>
     </div>
   </div>
-
+  <div class="row mt-3">
+  <div *ngIf="screenSize.isSmallScreen" class="col" >
+    <div class="chart-wrapper small-screen-graph" *ngIf="chartWeights.length > 0">
+      <canvas
+        baseChart
+        [datasets]="chartWeights"
+        [labels]="chartLabels"
+        [options]="chartOptions"
+        [colors]=""
+        [legend]="showLegend"
+        [chartType]="chartType"
+        [plugins]="chartPlugins"
+      >
+      </canvas>
+    </div>
+  </div>
+</div>
 </div>
 
 <cms-edit-weight-modal [isAddMode]="isAddMode" [animal] ="selectedAnimal"></cms-edit-weight-modal>

@@ -7,15 +7,17 @@
     <form
       [formGroup]="editWeightForm"
       class="mb-3 mt-2"
-      style="width: fit-content; margin-left: 25%"
+      style="max-width: 250px; margin: 25%"
     >
-      <div *ngIf="!isAddMode" class="input-group mb-3 mt-3">
+      <div *ngIf="!isAddMode" class="input-group mb-3 mt-3"  [ngClass]="{ 'was-validated': weightSelect.touched && !weightSelect.valid }">
+        {{weightType.errors?.select}}
         <select
           formControlName="weightSelect"
           class="custom-select"
-          id="inputGroupSelect01"
+          id="weightSelect"
+          required
         >
-          <option value="invalid">Select weight to edit</option>
+          <option value="">Select weight to edit</option>
           <option
             *ngFor="let weight of animal.weightData"
             value="{{ weight.id }}"
@@ -24,6 +26,9 @@
             {{ weight.weight }} Kg
           </option>
         </select>
+        <div class="invalid-feedback">
+          <cms-form-errors [errors]="weightSelect.errors" [isRadio]="true"></cms-form-errors>
+        </div>
       </div>
 
       <div class="form-group weight-modal-form">
@@ -44,11 +49,6 @@
             <span class="input-group-text">Kg</span>
           </div>
           <div class="invalid-feedback">
-            <!-- <div *ngIf="weight.errors">
-              <span *ngIf="weight.errors.required">This field is required. </span>
-              <span *ngIf="weight.errors.min">Value should be more than 10Kg. </span>
-              <span *ngIf="weight.errors.max">Value should be less than 1000Kg. </span>
-            </div> -->
             <cms-form-errors [errors]="weight.errors"></cms-form-errors>
           </div>
         </div>
@@ -110,7 +110,6 @@
           &nbsp; Is initial weight?</label
         >
         <div class="invalid-feedback">
-
           <cms-form-errors [errors]="weightType.errors" [isRadio]="true"></cms-form-errors>
         </div>
       </div>

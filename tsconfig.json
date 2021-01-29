@@ -43,6 +43,9 @@
       ],
       "@cms-services": [
         "libs/services/services"
+      ],
+      "@cms-validators":[
+        "libs/validators"
       ]
     }
   },

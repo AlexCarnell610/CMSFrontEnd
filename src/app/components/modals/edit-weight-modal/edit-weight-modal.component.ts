@@ -10,11 +10,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Modals } from '@cms-enums';
 import { Animal, AnimalWeight, AnimalWeightType } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx/reducers';
+import { AnimalUpdateService, LoadingPaneService } from '@cms-services';
 import { HttpService } from '@cms-services/http';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
-import { AnimalUpdateService } from 'libs/services/services/animal-update.service';
-import { LoadingPaneService } from 'libs/services/services/src/loading-pane.service';
 import * as Moment from 'moment';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { Subscription, timer } from 'rxjs';
@@ -57,38 +56,16 @@ export class EditWeightModalComponent
 
   ngOnInit(): void {
     this.editWeightForm = this.fb.group({
-      weightSelect: this.fb.control([]),
+      weightSelect: this.fb.control([], Validators.required),
       weight: this.fb.control([], {validators: [Validators.required, Validators.min(10), Validators.max(1000)], updateOn: 'blur'}),
       date: this.fb.control([], Validators.required),
       weightType: this.fb.control([], Validators.required),
     });
-    
-    this.weight.valueChanges.subscribe(w => {
-      console.warn(this.weight.errors);
-      
-      console.warn("Condition", !!(this.weight.value && this.weight.errors));
-      
-    })
-    this.date.valueChanges.subscribe(w => {
-      console.warn(this.date.errors);
-      console.warn(this.date.value);
-      
-      console.warn(!this.date.valid && this.date.dirty );
-      
-    })
-    this.weightType.valueChanges.subscribe(w => {
-      console.warn("type", this.weightType.errors);
-      
-    })
 
-    this.editWeightForm.get(FormControls.WeightSelect).setValue('invalid');
+
+    this.editWeightForm.get(FormControls.WeightSelect).setValue('');
 
     this.trackWeightSelectChanges();
-    this.editWeightForm
-      .get(FormControls.WeightSelect)
-      .valueChanges.subscribe((val) => {
-        console.warn(val);
-      });
   }
 
   ngAfterViewInit() {
@@ -98,6 +75,14 @@ export class EditWeightModalComponent
       this.clearForm();
       this.selectedWeight = null;
     });
+
+    weightModal.onOpenFinished.subscribe(() => {
+      if (this.isAddMode) {
+        this.weightSelect.disable()
+      } else {
+        this.weightSelect.enable()
+      }
+    })
   }
 
   closeModal() {
@@ -105,8 +90,7 @@ export class EditWeightModalComponent
   }
 
   saveChanges() {
-    // console.warn(this.animal.weightData[0].weightDate.format('L'))
-    // console.warn("exists",this.weightDateExists());
+    this.editWeightForm.markAllAsTouched()
     if (this.isAddMode) {
       if (this.editWeightForm.valid && !this.weightDateExists()) {
         this.loadingService.setLoadingState(true);
@@ -129,7 +113,8 @@ export class EditWeightModalComponent
         this.weightType.markAsDirty();
       }
     } else {
-      if (this.selectedWeight && this.valuesEdited()) {
+      
+      if (this.editWeightForm.valid && this.valuesEdited()) {
         this.loadingService.setLoadingState(true);
         const weightUpdate = {
           weight: this.editWeightForm.controls[FormControls.Weight].value,
@@ -149,9 +134,13 @@ export class EditWeightModalComponent
             this.handleSuccessPopover();
             this.editWeightForm
               .get(FormControls.WeightSelect)
-              .setValue('invalid');
+              .setValue('');
             this.selectedWeight = null;
           });
+      } else {
+        this.weight.markAsDirty();
+        this.date.markAsDirty();
+        this.weightType.markAsDirty();
       }
     }
   }
@@ -195,7 +184,7 @@ export class EditWeightModalComponent
     this.editWeightForm
       .get(FormControls.WeightSelect)
       .valueChanges.subscribe((value) => {
-        if (value !== 'invalid') {
+        if (value !== '') {
           this.selectedWeight = this.animal.weightData.find(
             (animalWeight) => animalWeight.id == value
           );
@@ -243,7 +232,7 @@ export class EditWeightModalComponent
 
   private clearForm() {
     this.editWeightForm.reset(
-      { weight: '', date: '', weightSelect: 'invalid', weightType: '' },
+      { weight: '', date: '', weightSelect: '', weightType: '' },
       { emitEvent: false }
     );
   }
@@ -258,6 +247,10 @@ export class EditWeightModalComponent
 
   get weightType(){
     return this.editWeightForm.get(FormControls.WeightType)
+  }
+
+  get weightSelect(){
+    return this.editWeightForm.get(FormControls.WeightSelect)
   }
 
   ngOnDestroy() {

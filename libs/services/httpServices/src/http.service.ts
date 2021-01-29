@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HttpUrls } from '@cms-enums';
 import { AnimalWeight } from '@cms-interfaces';
-import { MappingService } from 'libs/services/services/src/importData.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { MappingService } from '../../../services/services/src/importData.service';
 
 @Injectable({
   providedIn: 'root',

@@ -11,7 +11,6 @@ export class FormErrorsComponent implements OnInit {
   constructor() { }
   @Input() errors: ValidationErrors;
   @Input() isRadio: boolean = false
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {  }
 
 }

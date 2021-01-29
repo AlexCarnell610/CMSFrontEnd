@@ -3,10 +3,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Modals, PageURLs } from '@cms-enums';
 import { Animal } from '@cms-interfaces';
-import { RootState } from '@cms-ngrx/reducers';
+import { RootState, selectAll } from '@cms-ngrx/reducers';
+import { ScreenSizeService } from '@cms-services';
 import { select, Store } from '@ngrx/store';
 import { ChartDataSets } from 'chart.js';
-import { selectAll } from 'libs/ngrx/src/lib/reducers/src/animals.reducer';
 import { Label } from 'ng2-charts';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
@@ -27,10 +27,11 @@ export class WeightComponent implements OnInit {
   public searchBarGroup: FormGroup = new FormGroup({});
 
   constructor(
-    private store: Store<RootState>,
+    private readonly store: Store<RootState>,
     private readonly fb: FormBuilder,
-    private modalService: NgxSmartModalService,
-    private readonly router: Router
+    private readonly modalService: NgxSmartModalService,
+    private readonly router: Router,
+    public readonly screenSize: ScreenSizeService
   ) {}
 
   public animals$: Observable<Animal[]>;
@@ -81,12 +82,16 @@ export class WeightComponent implements OnInit {
     return this.searchBarGroup.get('searchBar').valueChanges
   }
 
+  private getSearchedAnimals(animals: Animal[],  value: string): Animal[]{
+    return animals.filter(animal => animal.tagNumber.toLowerCase().includes(value.toLowerCase()))
+  }
+
   private trackSearch() {
-    combineLatest([this.searchBarValChange, this.animals$]).subscribe(([value, animals]: [string, Animal[]]) => {
+    combineLatest([this.searchBarValChange, this.animals$, this.screenSize.isSmallScreenObs()]).subscribe(([value, animals, isSmall]: [string, Animal[], boolean]) => {
       if(value.length > 2){
-        this.searchedAnimals$.next(animals.filter(animal => animal.tagNumber.toLowerCase().includes(value.toLowerCase())))
+        this.searchedAnimals$.next(isSmall ? this.getSearchedAnimals(animals, value).slice(0,5) : this.getSearchedAnimals(animals, value))
       } else {
-        this.searchedAnimals$.next(animals);
+        this.searchedAnimals$.next(isSmall ? animals.slice(0,5) : animals);
       }
     })
   }

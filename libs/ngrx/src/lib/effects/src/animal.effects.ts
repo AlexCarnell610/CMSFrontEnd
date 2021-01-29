@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import { LoadingPaneService } from '@cms-services';
 import { HttpService } from '@cms-services/http';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { LoadingPaneService } from 'libs/services/services/src/loading-pane.service';
 import { of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import {

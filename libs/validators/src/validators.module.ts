@@ -7,4 +7,4 @@ import { NgModule } from '@angular/core';
   imports: [CommonModule
   ]
 })
-export class ServicesModule { }
+export class ValidatorsModule { }

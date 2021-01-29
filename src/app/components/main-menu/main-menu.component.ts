@@ -17,7 +17,7 @@ export class MainMenuComponent {
   }
 
   public logout(): void{
-    this.auth.logout({returnTo: "http://" + document.location.host + '/' + PageURLs.Login});
+    this.auth.logout({returnTo: "https://" + document.location.host + '/' + PageURLs.Login});
     // this.router.navigate([PageURLs.Logout])
   }
 
