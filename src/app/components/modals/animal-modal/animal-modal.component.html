@@ -1,0 +1,52 @@
+<ngx-smart-modal #animalModal identifier="animalModal">
+  <div *ngIf="animal || isAddMode">
+    <h4 class="text-center">
+      {{ isAddMode ? "Add Animal" : "Edit " }}
+      <strong>{{isAddMode ? "": animal?.tagNumber }}</strong>
+    </h4>
+    <form [formGroup]="animalForm" style="max-width: 250px; margin-left: 25%; margin-right: 25%;">
+        <div class="form-group">
+            <label for="newTagNumber">Enter tag number</label>
+            <input class="form-control" type="text" name="tag" id="newTagNumber">
+        </div>
+        <div class="form-group">
+          <label for="birthDate">Enter birth date</label>
+          <input type="date" class="form-control" name="dateOfBirth" id="dateOfBirth">
+        </div>
+        <div class="form-group">
+          <label for="dams">Select dam</label>
+          <select class="custom-select" name="dams" id="dams">
+            <!-- <option value=""></option> -->
+            <option value="yes">the dams</option>
+          </select>
+        </div>
+        <div class="form-group">
+<label for="sire">Select sire</label>
+          <select class="custom-select" name="sire" id="sire">
+            <option value=""></option>
+            <option value="yes">the sires</option>
+          </select>
+        </div>
+        <div class="form-check">
+            <input type="radio" class="form-check-input" value="isMale" name="gender" id="isMaleRadio">
+            <label for="isMaleRadio">Male</label>
+        </div>
+        <div class="form-check">
+          <input type="radio" class="form-check-input" value="isFemale" name="gender" id="isFemaleRadio">
+          <label for="isFemaleRadio">Female</label>
+        </div>
+        <!-- <div class="form-group">
+          <button class="btn btn-primary">Add AI History</button>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary">Add Calving History</button>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary">Add Weight Data</button>
+        </div> -->
+        <button class="btn btn-success">Save</button>
+    <button class="btn btn-danger ml-3">Cancel</button>
+    </form>
+    
+  </div>
+</ngx-smart-modal>

@@ -15,10 +15,11 @@
     (click)="selectAnimal(i)"
   >
     {{ animal.tagNumber }}
-    <span class="badge badge-primary badge-pill" (click)="openEditModal()"
+    <span class="badge badge-primary badge-pill align-self-center" (click)="openEditModal()"
       >Edit {{ pillButtonText }}</span
     >
-    <span class="badge badge-success badge-pill ml-1" (click)="openAddModal()"
+    <span *ngIf="getPillButtonText() === 'Animal'"></span>
+    <span *ngIf="getPillButtonText() !== 'Animal'" class="badge badge-success badge-pill ml-1" (click)="openAddModal()"
       >Add {{ pillButtonText }}</span
     >
   </button>

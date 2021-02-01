@@ -1,1 +1,51 @@
-<p>animal works!</p>
+<div class="cms-container">
+  <span class="cms-flex-item">
+    <span
+      (click)="backToMain()"
+      class="fas fa-arrow-left ml-5"
+      placement="right"
+      ngbTooltip="Back to Main Menu"
+    ></span>
+  </span>
+  <h1 class="page-title cms-flex-item">Animals</h1>
+</div>
+<div class="container mb-3 mt-3">
+  <button class="btn btn-success mb-3 cms-sticky" (click)="addAnimal()">Add Animal</button>
+  <div class="row">
+    <div class="col">
+      <cms-animal-list [page]="pageName" (add)="addAnimal()" (edit)="editAnimal()" (animalSelected)="animalSelected($event)"></cms-animal-list>
+    </div>
+    <div class="col">
+      <div class="card cms-sticky" *ngIf="selectedAnimal">
+        <div class="card-header">
+          <strong>Tag number - {{selectedAnimal.tagNumber}}</strong>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <strong>Gender - </strong> {{selectedAnimal.gender}}
+          </li>
+          <li class="list-group-item">
+            <strong>Date of Birth - </strong>{{selectedAnimal.birthDate | date: 'dd MMM yyyy'}}
+          </li>
+          <li class="list-group-item">
+            <strong>Dam - </strong>{{selectedAnimal.dam.tagNumber}}
+            <button class="btn btn-primary btn-sm" (click)="viewDam()">View Dam</button>
+          </li>
+          <li class="list-group-item">
+            <strong>Sire - </strong>{{selectedAnimal.sire.name}}
+            <ul style="list-style-type: none;">
+              <li >
+                {{selectedAnimal.sire.tagNumber}}
+              </li>
+              <li >
+                {{selectedAnimal.sire.breed}}
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<cms-animal-modal [animal]="selectedAnimal" [isAddMode]="isAdd"></cms-animal-modal>

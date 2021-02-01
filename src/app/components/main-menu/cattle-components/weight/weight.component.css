@@ -4,12 +4,7 @@
     min-width: min-content;
 } */
 
-.cms-sticky {
-    position: sticky;
-    position: -webkit-sticky;
-    top: 0;
-    right: 0;
-}
+
 
 .small-screen-graph{
     max-width: 400px;

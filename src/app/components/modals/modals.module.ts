@@ -3,13 +3,14 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgbAlertModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
-import { EditWeightModalComponent } from './edit-weight-modal/edit-weight-modal.component';
+import { AnimalModalComponent } from './animal-modal/animal-modal.component';
 import { FormErrorsComponent } from './form-errors/form-errors.component';
+import { EditWeightModalComponent } from './weight-modal/weight-modal.component';
 
-
+const MODALS = [EditWeightModalComponent,AnimalModalComponent]
 
 @NgModule({
-  declarations: [EditWeightModalComponent, FormErrorsComponent],
+  declarations: [ FormErrorsComponent, ...MODALS],
   imports: [
     CommonModule,
     NgxSmartModalModule.forChild(),
@@ -18,7 +19,7 @@ import { FormErrorsComponent } from './form-errors/form-errors.component';
     NgbPopoverModule
   ],
   exports:[
-    EditWeightModalComponent, CommonModule, NgxSmartModalModule
+    ...MODALS, CommonModule, NgxSmartModalModule
   ]
 })
 export class ModalsModule { }
