@@ -52,8 +52,6 @@ export class AnimalListComponent implements OnInit {
   }
 
   public selectAnimal(index: number) {
-    console.warn('hello');
-
     if (this.getAnimal(index).tagNumber !== this.currentAnimal?.tagNumber) {
       this.currentAnimal = this.getAnimal(index);
       this.currentIndex = index;
@@ -61,10 +59,12 @@ export class AnimalListComponent implements OnInit {
     }
   }
 
-  private getPillButtonText(): string {
+  public getPillButtonText(): string {
     switch (this.page) {
       case PageURLs.Weight:
         return 'Weights';
+      case PageURLs.Animals:
+        return 'Animal';
       default:
         return '';
     }
