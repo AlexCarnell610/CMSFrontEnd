@@ -1,0 +1,15 @@
+.modal-content {
+    max-width: 250px; margin-left: 25%;
+}
+
+.weight-modal-form {
+    max-width: fit-content;
+
+}
+
+form > div > *{
+    max-width: 250px;
+    flex-basis: 0;
+}
+
+

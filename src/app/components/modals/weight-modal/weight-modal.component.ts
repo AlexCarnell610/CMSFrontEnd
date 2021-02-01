@@ -31,9 +31,9 @@ enum RadioValues {
   Intermediate = 'isIntermediate',
 }
 @Component({
-  selector: 'cms-edit-weight-modal',
-  templateUrl: './edit-weight-modal.component.html',
-  styleUrls: ['./edit-weight-modal.component.css'],
+  selector: 'cms-weight-modal',
+  templateUrl: './weight-modal.component.html',
+  styleUrls: ['./weight-modal.component.css'],
 })
 export class EditWeightModalComponent
   implements OnInit, AfterViewInit, OnDestroy {
