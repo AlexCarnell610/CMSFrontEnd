@@ -59,3 +59,7 @@ export interface AnimalWeightType {
     isInitial: boolean,
     isSale: boolean
 }
+
+export function isBull(animal: Animal | Bull): animal is Bull {
+    return 'name' in animal;
+}

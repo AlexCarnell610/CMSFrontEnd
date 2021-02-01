@@ -5,6 +5,12 @@
 body{
     background-color:#f5f5f5;
 }
+.cms-sticky {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  right: 0;
+}
 
 .form-center {
     height: 100%;
