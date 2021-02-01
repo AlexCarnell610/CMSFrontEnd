@@ -7,10 +7,10 @@
     <form
       [formGroup]="editWeightForm"
       class="mb-3 mt-2"
-      style="max-width: 250px; margin-left: 25%; margin-right: 25%;" 
+      style="max-width: 250px; margin: 25%"
     >
-    
       <div *ngIf="!isAddMode" class="input-group mb-3 mt-3"  [ngClass]="{ 'was-validated': weightSelect.touched && !weightSelect.valid }">
+        {{weightType.errors?.select}}
         <select
           formControlName="weightSelect"
           class="custom-select"
