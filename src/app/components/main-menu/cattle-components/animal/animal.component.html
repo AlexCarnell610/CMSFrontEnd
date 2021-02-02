@@ -31,14 +31,14 @@
             <strong>Dam - </strong>{{selectedAnimal.dam.tagNumber}}
             <button class="btn btn-primary btn-sm" (click)="viewDam()">View Dam</button>
           </li>
-          <li class="list-group-item">
-            <strong>Sire - </strong>{{selectedAnimal.sire.name}}
+          <li class="list-group-item" *ngIf="($sire | async) as sire">
+            <strong>Sire - </strong>{{sire.name}}
             <ul style="list-style-type: none;">
               <li >
-                {{selectedAnimal.sire.tagNumber}}
+                {{sire.tagNumber}}
               </li>
               <li >
-                {{selectedAnimal.sire.breed}}
+                {{sire.breed}}
               </li>
             </ul>
           </li>

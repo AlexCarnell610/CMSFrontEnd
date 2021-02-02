@@ -1,10 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PageURLs } from '@cms-enums';
-import { Animal } from '@cms-interfaces';
-import { RootState, selectAll } from '@cms-ngrx';
+import { age, Animal } from '@cms-interfaces';
+import { RootState } from '@cms-ngrx';
+import { selectAll } from '@cms-ngrx/animal';
 import { ScreenSizeService } from '@cms-services';
 import { select, Store } from '@ngrx/store';
+import * as moment from 'moment';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 
 @Component({
@@ -44,6 +46,8 @@ export class AnimalListComponent implements OnInit {
   }
 
   public openAddModal() {
+    console.warn(age(moment().year(2019).month(6)));
+    
     this.add.emit(null);
   }
 

@@ -3,8 +3,8 @@ import * as moment from 'moment';
 
 export interface Bull {
     tagNumber: string,
-    breed?: string,
-    name?: string
+    breed: string,
+    name: string
 }
 
 export const bull: Bull = {
@@ -37,7 +37,7 @@ export interface Animal extends BaseAnimal {
 
 export interface AI {
     aiDate: moment.Moment,
-    bull: Bull,
+    bull: {tagNumber: string},
     sweeperBull: boolean,
     heatDate: moment.Moment,
     year: number,

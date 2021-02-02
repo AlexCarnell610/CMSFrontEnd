@@ -1,5 +1,6 @@
 import { Bull } from '@cms-interfaces';
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
+import { createFeatureSelector } from '@ngrx/store';
 import { BullActions, BullActionTypes } from './bull.actions';
 
 
@@ -68,9 +69,13 @@ export function bullReducer(
   }
 }
 
+const getBullState = createFeatureSelector<BullState>(
+  bullsFeatureKey
+)
+
 export const {
   selectIds,
   selectEntities,
   selectAll,
   selectTotal,
-} = adapter.getSelectors();
+} = adapter.getSelectors(getBullState);

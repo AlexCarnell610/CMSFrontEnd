@@ -5,6 +5,8 @@ import {
   AnimalActions,
   AnimalActionTypes
 } from './animal.actions';
+
+const animalFeatureKey = 'animal';
 export interface AnimalState extends EntityState<Animal> {
 }
 
@@ -47,7 +49,7 @@ export function animalReducer(
 }
 
 const getAnimalState = createFeatureSelector<AnimalState>(
-    'animal'
+    animalFeatureKey
 )
 
 export const {

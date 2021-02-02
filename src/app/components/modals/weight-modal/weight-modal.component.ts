@@ -9,7 +9,7 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Modals } from '@cms-enums';
 import { Animal, AnimalWeight, AnimalWeightType } from '@cms-interfaces';
-import { RootState } from '@cms-ngrx/reducers';
+import { RootState } from '@cms-ngrx';
 import { AnimalUpdateService, LoadingPaneService } from '@cms-services';
 import { HttpService } from '@cms-services/http';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';

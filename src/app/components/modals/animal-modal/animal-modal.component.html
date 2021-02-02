@@ -1,10 +1,11 @@
 <ngx-smart-modal #animalModal identifier="animalModal">
   <div *ngIf="animal || isAddMode">
-    <h4 class="text-center">
+    <h2 class="text-center">
       {{ isAddMode ? "Add Animal" : "Edit " }}
       <strong>{{isAddMode ? "": animal?.tagNumber }}</strong>
-    </h4>
-    <form [formGroup]="animalForm" style="max-width: 250px; margin-left: 25%; margin-right: 25%;">
+    </h2>
+    <div class="cms-form">
+    <form [formGroup]="animalForm">
         <div class="form-group">
             <label for="newTagNumber">Enter tag number</label>
             <input class="form-control" type="text" name="tag" id="newTagNumber">
@@ -44,9 +45,9 @@
         <div class="form-group">
           <button class="btn btn-primary">Add Weight Data</button>
         </div> -->
-        <button class="btn btn-success">Save</button>
+        <button class="btn btn-success">Save {{isAddMode ? "Animal" : "Changes"}}</button>
     <button class="btn btn-danger ml-3">Cancel</button>
     </form>
-    
+  </div>
   </div>
 </ngx-smart-modal>
