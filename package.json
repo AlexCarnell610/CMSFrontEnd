@@ -26,6 +26,7 @@
     "@ng-bootstrap/ng-bootstrap": "^8.0.3",
     "@ngrx/effects": "^10.0.1",
     "@ngrx/entity": "^10.0.1",
+    "@ngrx/schematics": "^10.1.2",
     "@ngrx/store": "^10.0.1",
     "@ngrx/store-devtools": "^10.0.1",
     "@nrwl/angular": "^10.3.2",

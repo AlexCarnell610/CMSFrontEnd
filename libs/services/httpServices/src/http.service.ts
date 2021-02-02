@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HttpUrls } from '@cms-enums';
-import { AnimalWeight } from '@cms-interfaces';
+import { Animal, AnimalWeight, Bull } from '@cms-interfaces';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MappingService } from '../../../services/services/src/importData.service';
@@ -15,12 +15,20 @@ export class HttpService {
     private mappingService: MappingService
   ) {}
 
-  public getAnimalData(): Observable<any> {
+  public getAnimalData(): Observable<Animal[]> {
     return this.http.get(HttpUrls.Animals).pipe(
       map((response) => {
         return this.mappingService.importAnimalData(response);
       })
     );
+  }
+
+  public getBullData():Observable<Bull[]>{
+    return this.http.get(HttpUrls.Bulls).pipe(
+      map((response) => {
+        return this.mappingService.convertBulls(response);
+      })
+    )
   }
 
   public getOfflineData(): Observable<any> {

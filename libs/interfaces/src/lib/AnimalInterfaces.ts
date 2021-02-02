@@ -3,8 +3,14 @@ import * as moment from 'moment';
 
 export interface Bull {
     tagNumber: string,
-    breed: string,
-    name: string
+    breed?: string,
+    name?: string
+}
+
+export const bull: Bull = {
+    tagNumber: "TAGNUMBER",
+    breed: "DAVE",
+    name: "GARY"
 }
 
 export interface BaseAnimal {
@@ -27,6 +33,7 @@ export interface Animal extends BaseAnimal {
     calvingHistory: CalvingHistory[],
     weightData: AnimalWeight[]
 }
+
 
 export interface AI {
     aiDate: moment.Moment,
@@ -60,6 +67,14 @@ export interface AnimalWeightType {
     isSale: boolean
 }
 
+export function isCow(animal: Animal | Bull): animal is Animal {
+    return 'weightData' in animal;
+}
+
 export function isBull(animal: Animal | Bull): animal is Bull {
     return 'name' in animal;
+}
+
+export function age(birthDate: moment.Moment): number{
+    return moment().diff(birthDate, 'year', true);
 }

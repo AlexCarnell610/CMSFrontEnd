@@ -12,6 +12,11 @@ body{
   right: 0;
 }
 
+.cms-form{
+  width: 60%;
+  margin: auto;
+}
+
 .form-center {
     height: 100%;
     display: flex;

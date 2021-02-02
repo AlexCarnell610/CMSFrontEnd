@@ -4,23 +4,21 @@ import { createFeatureSelector } from '@ngrx/store';
 import {
   AnimalActions,
   AnimalActionTypes
-} from '../../actions/src/animal.actions';
+} from './animal.actions';
 export interface AnimalState extends EntityState<Animal> {
-  //additional stuff here
 }
 
 export const animalAdapter: EntityAdapter<Animal> = createEntityAdapter<Animal>({
   selectId: (animal) => animal.tagNumber,
 });
 
-export const initialState: AnimalState = animalAdapter.getInitialState({
-  //additional stuff here
+export const initialAnimalState: AnimalState = animalAdapter.getInitialState({
 });
 
 export function animalReducer(
-  state = initialState,
+  state = initialAnimalState,
   action: AnimalActions
-): AnimalState {
+): AnimalState { 
   switch (action.type) {
     case AnimalActionTypes.LoadAnimalDataType: {
       return animalAdapter.setAll(action.payload.animals, state);
@@ -38,10 +36,10 @@ export function animalReducer(
       const weightData = state.entities[action.payload.id].weightData.slice()
       weightData.push(action.payload.newWeight);
       const id = action.payload.id
-    return animalAdapter.updateOne({id, 
-      changes: {...state.entities[id], weightData }
-    }, state);
-  }
+      return animalAdapter.updateOne({id, 
+        changes: {...state.entities[id], weightData }
+      }, state);
+    }
     default: {
       return state;
     }

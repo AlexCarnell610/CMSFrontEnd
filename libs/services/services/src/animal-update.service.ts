@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Animal, AnimalWeight } from '@cms-interfaces';
-import { AddAnimalWeight, UpdateAnimalWeight } from '@cms-ngrx/actions';
-import { RootState } from '@cms-ngrx/reducers';
+import { RootState } from '@cms-ngrx';
+import { AddAnimalWeight, UpdateAnimalWeight } from '@cms-ngrx/animal';
+import { HttpService } from '@cms-services/http';
 import { Store } from '@ngrx/store';
-import { HttpService } from '../../httpServices/src/http.service';
 
 @Injectable({
   providedIn: 'root'

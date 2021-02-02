@@ -1,7 +1,8 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
-import { RetrieveAnimalData } from '@cms-ngrx/actions';
-import { RootState } from '@cms-ngrx/reducers';
+import { RootState } from '@cms-ngrx';
+import { RetrieveAnimalData } from '@cms-ngrx/animal';
+import { RetreieveBullData } from '@cms-ngrx/bull';
 import { LoadingPaneService, ScreenSizeService } from '@cms-services';
 import { NgbAlertConfig, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
@@ -31,6 +32,7 @@ export class AppComponent implements OnInit {
         //could do something with sessoin storage to stop redownloading data on refresh
         //would need marker to mark session data as old
         this.store.dispatch(new RetrieveAnimalData());
+        this.store.dispatch(new RetreieveBullData());
       }
     })
   }
