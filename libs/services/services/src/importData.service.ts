@@ -38,7 +38,7 @@ export class MappingService {
             ? []
             : this.convertCalvingStats(value.calving_stat),
         dam: this.convertDam(value.dam),
-        sire: value.sire.tag_number,
+        sire: {tagNumber: value.sire.tag_number},
         weightData: this.convertWeightData(value.weight_data),
       });
     }

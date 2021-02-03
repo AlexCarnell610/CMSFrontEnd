@@ -1,12 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PageURLs } from '@cms-enums';
-import { age, Animal } from '@cms-interfaces';
+import { Animal } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { selectAll } from '@cms-ngrx/animal';
 import { ScreenSizeService } from '@cms-services';
 import { select, Store } from '@ngrx/store';
-import * as moment from 'moment';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 
 @Component({
@@ -40,14 +39,9 @@ export class AnimalListComponent implements OnInit {
     this.trackSearch();
     this.searchBarGroup.get('searchBar').setValue('');
     this.pillButtonText = this.getPillButtonText();
-    this.animals$.subscribe((ani) => {
-      console.warn('animals', ani);
-    });
   }
 
-  public openAddModal() {
-    console.warn(age(moment().year(2019).month(6)));
-    
+  public openAddModal() {    
     this.add.emit(null);
   }
 

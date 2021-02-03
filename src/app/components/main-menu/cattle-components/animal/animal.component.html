@@ -16,7 +16,7 @@
       <cms-animal-list [page]="pageName" (add)="addAnimal()" (edit)="editAnimal()" (animalSelected)="animalSelected($event)"></cms-animal-list>
     </div>
     <div class="col">
-      <div class="card cms-sticky" *ngIf="selectedAnimal">
+      <div class="card cms-sticky" *ngIf="($selectedAnimal | async) as selectedAnimal">
         <div class="card-header">
           <strong>Tag number - {{selectedAnimal.tagNumber}}</strong>
         </div>

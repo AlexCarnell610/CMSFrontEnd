@@ -27,7 +27,7 @@ export interface Dam extends BaseAnimal{
 
 export interface Animal extends BaseAnimal {
     dam: BaseAnimal,
-    sire: Bull,
+    sire: {tagNumber: string},
     ai: AI[],
     calvingStats: CalvingStat[],
     calvingHistory: CalvingHistory[],

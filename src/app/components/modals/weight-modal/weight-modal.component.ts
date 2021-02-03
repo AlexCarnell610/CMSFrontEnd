@@ -62,8 +62,7 @@ export class EditWeightModalComponent
       weightType: this.fb.control([], Validators.required),
     });
 
-
-    this.editWeightForm.get(FormControls.WeightSelect).setValue('');
+    this.weightSelect.setValue('');
 
     this.trackWeightSelectChanges();
   }
@@ -138,6 +137,7 @@ export class EditWeightModalComponent
             this.selectedWeight = null;
           });
       } else {
+        this.weightSelect.markAsDirty();
         this.weight.markAsDirty();
         this.date.markAsDirty();
         this.weightType.markAsDirty();
@@ -181,9 +181,8 @@ export class EditWeightModalComponent
   }
 
   private trackWeightSelectChanges(): void {
-    this.editWeightForm
-      .get(FormControls.WeightSelect)
-      .valueChanges.subscribe((value) => {
+    this.weightSelect.valueChanges.subscribe((value) => {
+      this.markAsClean();
         if (value !== '') {
           this.selectedWeight = this.animal.weightData.find(
             (animalWeight) => animalWeight.id == value
@@ -193,6 +192,12 @@ export class EditWeightModalComponent
           this.clearForm();
         }
       });
+  }
+
+  private markAsClean(){
+    this.weight.markAsPristine();
+    this.date.markAsPristine();
+    this.weightType.markAsPristine()
   }
 
   private getSelectedIndex(): number {

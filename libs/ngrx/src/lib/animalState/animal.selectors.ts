@@ -20,10 +20,8 @@ export const getAnimalByTag = createSelector(
 export const getDams = createSelector(
     selectAll,
     (animals: Animal[]) => {
-        return animals.filter(animal => {
-            console.warn(age(animal.birthDate));
-            return animal.gender === Gender.Female && age(animal.birthDate) > 2
-        })
+        return animals.filter(animal =>  animal.gender === Gender.Female && age(animal.birthDate) > 2
+        )
     }
 )
 

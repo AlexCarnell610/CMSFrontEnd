@@ -7,7 +7,7 @@ import { getAnimalByTag } from '@cms-ngrx/animal';
 import { selectBullByTag } from '@cms-ngrx/bull';
 import { select, Store } from '@ngrx/store';
 import { NgxSmartModalService } from 'ngx-smart-modal';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
   selector: 'cms-animal',
@@ -17,6 +17,7 @@ import { Observable } from 'rxjs';
 export class AnimalComponent implements OnInit {
   public pageName = PageURLs.Animals;
   public selectedAnimal: Animal = null;
+  public $selectedAnimal: BehaviorSubject<Animal> = new BehaviorSubject(null);
   public isAdd: boolean;
   public $sire: Observable<Bull>;
 
@@ -27,11 +28,7 @@ export class AnimalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.selectedAnimal) {
-      console.warn("HERE");
-      //subscirbe to selected animal changes and then should work
-      this.$sire = this.store.pipe(select(selectBullByTag, {tagNumber: this.selectedAnimal.sire.tagNumber}))
-    }
+    this.trackSire();
   }
 
   public backToMain() {
@@ -51,6 +48,7 @@ export class AnimalComponent implements OnInit {
   public animalSelected(event) {
     // console.warn(event);
     //this needs to turn into a behaviour subject then it should work
+    this.$selectedAnimal.next(event);
     this.selectedAnimal = event;
   }
   public isntBull(animal): boolean {
@@ -65,5 +63,13 @@ export class AnimalComponent implements OnInit {
       .subscribe((dam) => {
         this.selectedAnimal = dam;
       });
+  }
+
+  private trackSire(){
+    this.$selectedAnimal.subscribe(animal => {
+      if (animal) {
+        this.$sire = this.store.pipe(select(selectBullByTag, {tagNumber: animal.sire.tagNumber}))
+      }
+    })
   }
 }

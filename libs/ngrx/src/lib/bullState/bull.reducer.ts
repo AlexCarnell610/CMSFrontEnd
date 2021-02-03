@@ -4,7 +4,7 @@ import { createFeatureSelector } from '@ngrx/store';
 import { BullActions, BullActionTypes } from './bull.actions';
 
 
-export const bullsFeatureKey = 'bulls';
+export const bullsFeatureKey = 'bull';
 
 export interface BullState extends EntityState<Bull> {
   // additional entities state properties
