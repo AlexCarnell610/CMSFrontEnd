@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Animal, AnimalWeight } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
-import { AddAnimalWeight, UpdateAnimalWeight } from '@cms-ngrx/animal';
+import { AddAnimal, AddAnimalWeight, UpdateAnimalWeight } from '@cms-ngrx/animal';
 import { HttpService } from '@cms-services/http';
 import { Store } from '@ngrx/store';
 
@@ -45,6 +45,18 @@ export class AnimalUpdateService {
             id: animalId,
             newWeight: res
           })
+        )
+        resolve(true);
+      })
+    })
+  }
+
+  public addAnimal(animal: Animal){
+    return new Promise(resolve => {
+      this.httpService.addAnimal(animal).subscribe(res => {
+        console.warn("ADD ANIMAL RESPONSE", res);
+        this.store.dispatch(
+          new AddAnimal({animal: res})
         )
         resolve(true);
       })

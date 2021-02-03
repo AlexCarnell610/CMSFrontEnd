@@ -42,6 +42,9 @@ export function animalReducer(
         changes: {...state.entities[id], weightData }
       }, state);
     }
+    case AnimalActionTypes.AddAnimalType: {
+      return animalAdapter.addOne(action.payload.animal, state)
+    }
     default: {
       return state;
     }

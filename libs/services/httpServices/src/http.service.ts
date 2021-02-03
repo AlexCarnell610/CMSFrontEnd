@@ -23,12 +23,12 @@ export class HttpService {
     );
   }
 
-  public getBullData():Observable<Bull[]>{
+  public getBullData(): Observable<Bull[]> {
     return this.http.get(HttpUrls.Bulls).pipe(
       map((response) => {
         return this.mappingService.convertBulls(response);
       })
-    )
+    );
   }
 
   public getOfflineData(): Observable<any> {
@@ -45,8 +45,15 @@ export class HttpService {
       .pipe(map((res) => this.mappingService.convertWeight(res)));
   }
 
-  public addWeight(animalId, weight): any {
-    return this.http.put(`${HttpUrls.PutWeight}/${animalId}`, {...weight})
-     .pipe(map(res => this.mappingService.convertWeight(res)))
+  public addWeight(animalId, weight): Observable<AnimalWeight> {
+    return this.http
+      .put(`${HttpUrls.PutWeight}/${animalId}`, { ...weight })
+      .pipe(map((res) => this.mappingService.convertWeight(res)));
+  }
+
+  public addAnimal(animal: Animal): Observable<any> {
+    return this.http
+      .post(HttpUrls.PostAnimal, animal)
+      .pipe(map((res) => this.mappingService.importAnimalData([res])[0]));
   }
 }

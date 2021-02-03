@@ -8,9 +8,12 @@ import { ValidationErrors } from '@angular/forms';
 })
 export class FormErrorsComponent implements OnInit {
 
-  constructor() { }
+  constructor() {}
   @Input() errors: ValidationErrors;
   @Input() isRadio: boolean = false
-  ngOnInit(): void {  }
+  ngOnInit(): void { 
+    console.warn(this.errors);
+    
+   }
 
 }

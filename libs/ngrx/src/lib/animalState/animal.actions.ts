@@ -8,12 +8,18 @@ export enum AnimalActionTypes {
   LoadAnimalsFinishedType = '[Load] Load Finished',
   UpdateAnimalWeightType = '[Update] Weight or Date',
   AddAnimalWeightType = '[Add] Animal Weight',
-  HTTPErrorType = '[HTTP] Error'
+  AddAnimalType = '[Add] Animal',
+  HTTPErrorType = '[HTTP] Error',
 }
 
 export class LoadAnimalData implements Action {
   readonly type = AnimalActionTypes.LoadAnimalDataType;
   constructor(public payload: { animals: Animal[] }) {}
+}
+
+export class AddAnimal implements Action {
+  readonly type = AnimalActionTypes.AddAnimalType;
+  constructor(public payload: { animal: Animal }) {}
 }
 
 export class RetrieveAnimalData implements Action {
@@ -32,12 +38,12 @@ export class UpdateAnimalWeight implements Action {
 
 export class AddAnimalWeight implements Action {
   readonly type = AnimalActionTypes.AddAnimalWeightType;
-  constructor(public payload: {newWeight: AnimalWeight, id: string}){}
+  constructor(public payload: { newWeight: AnimalWeight; id: string }) {}
 }
 
 export class HTTPError implements Action {
   readonly type = AnimalActionTypes.HTTPErrorType;
-  constructor(public payload: {error: any}){}
+  constructor(public payload: { error: any }) {}
 }
 
 export type AnimalActions =
@@ -46,4 +52,5 @@ export type AnimalActions =
   | LoadAnimalsFinished
   | UpdateAnimalWeight
   | AddAnimalWeight
+  | AddAnimal
   | HTTPError;

@@ -12,6 +12,7 @@ import { Animal, AnimalWeight, AnimalWeightType } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { AnimalUpdateService, LoadingPaneService } from '@cms-services';
 import { HttpService } from '@cms-services/http';
+import { dateValidator } from '@cms-validators';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import * as Moment from 'moment';
@@ -58,7 +59,7 @@ export class EditWeightModalComponent
     this.editWeightForm = this.fb.group({
       weightSelect: this.fb.control([], Validators.required),
       weight: this.fb.control([], {validators: [Validators.required, Validators.min(10), Validators.max(1000)], updateOn: 'blur'}),
-      date: this.fb.control([], Validators.required),
+      date: this.fb.control([], [Validators.required, dateValidator()]),
       weightType: this.fb.control([], Validators.required),
     });
 
@@ -84,6 +85,14 @@ export class EditWeightModalComponent
     })
   }
 
+  public getCSSClassForDate() {
+    if (this.date.invalid && this.date.dirty) {
+      return 'is-invalid';
+    } else if (this.date.valid && this.date.dirty) {
+      return 'is-valid';
+    }
+  }
+
   closeModal() {
     this.modalService.get(Modals.Weight).close();
   }
@@ -94,8 +103,8 @@ export class EditWeightModalComponent
       if (this.editWeightForm.valid && !this.weightDateExists()) {
         this.loadingService.setLoadingState(true);
         const weight: AnimalWeight = {
-          weight: this.editWeightForm.get(FormControls.Weight).value,
-          weightDate: this.editWeightForm.get(FormControls.Date).value,
+          weight: this.weight.value,
+          weightDate: this.date.value,
           weightType: this.getWeightType(),
         };
         this.updateService
@@ -116,8 +125,8 @@ export class EditWeightModalComponent
       if (this.editWeightForm.valid && this.valuesEdited()) {
         this.loadingService.setLoadingState(true);
         const weightUpdate = {
-          weight: this.editWeightForm.controls[FormControls.Weight].value,
-          date: this.editWeightForm.controls[FormControls.Date].value,
+          weight: this.weight.value,
+          date: this.date.value,
           ...this.getWeightType(),
         };
 
@@ -146,7 +155,7 @@ export class EditWeightModalComponent
   }
 
   private weightDateExists(): boolean{
-    const weightDate = Moment(this.editWeightForm.get(FormControls.Date).value)
+    const weightDate = Moment(this.date.value)
     return this.animal.weightData.findIndex(weight => {
       return weight.weightDate.format('L') === weightDate.format('L');
     }) !== -1
@@ -162,12 +171,11 @@ export class EditWeightModalComponent
   }
 
   private getWeightType(): AnimalWeightType {
-    const weightType = this.editWeightForm.get(FormControls.WeightType).value;
     let output: AnimalWeightType = {
       isSale: false,
       isInitial: false,
     };
-    switch (weightType) {
+    switch (this.weight.value) {
       case RadioValues.Initial:
         output.isInitial = true;
         break;
@@ -207,15 +215,13 @@ export class EditWeightModalComponent
   }
 
   private valuesEdited(): boolean {
-    const weightInput = this.editWeightForm.controls[FormControls.Weight];
-    const dateInput = this.editWeightForm.controls[FormControls.Date];
     const initialDate = this.selectedWeight.weightDate.format('YYYY-MM-DD');
     const weightTypeInput = this.getWeightType();
-
+   
     return (
-      this.selectedWeight.weight !== weightInput.value ||
-      initialDate !== dateInput.value ||
-      this.selectedWeight.weightType !== weightTypeInput
+      this.selectedWeight.weight !== this.weight.value ||
+      initialDate !== this.date.value ||
+      !!this.selectedWeight.weightType !== !!weightTypeInput
     );
   }
 

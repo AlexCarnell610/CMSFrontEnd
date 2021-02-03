@@ -55,7 +55,7 @@
         </div>
       </div>
       
-      <div class="form-group" [ngClass]="{ 'was-validated': date.dirty }">
+      <div class="form-group">
         <label for="newDate">Enter new date</label>
         <input
         formControlName="date"
@@ -63,7 +63,7 @@
         type="date"
         name="date"
         id="newDate"
-        required
+        [ngClass]="getCSSClassForDate()"
         />
         <div class="invalid-feedback">
           <cms-form-errors [errors]="date.errors"></cms-form-errors>

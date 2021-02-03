@@ -1,4 +1,5 @@
-import { FormControl, ValidatorFn } from "@angular/forms";
+import { AbstractControl, FormControl, ValidatorFn } from "@angular/forms";
+import * as moment from 'moment';
 
 export function yes(){
     return "ok";
@@ -16,3 +17,15 @@ export const selectValidator: ValidatorFn = (control: FormControl) => {
         }
     }
 }
+
+export function dateValidator(): ValidatorFn {
+    console.warn("CALLED");
+    
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      if (moment().diff(moment(control.value), 'days',true) < 0) {
+        return {date: true};
+      } else {
+        return null;
+      }
+    };
+  }

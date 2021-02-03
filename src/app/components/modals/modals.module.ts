@@ -7,10 +7,10 @@ import { AnimalModalComponent } from './animal-modal/animal-modal.component';
 import { FormErrorsComponent } from './form-errors/form-errors.component';
 import { EditWeightModalComponent } from './weight-modal/weight-modal.component';
 
-const MODALS = [EditWeightModalComponent,AnimalModalComponent]
+const MODALS = [EditWeightModalComponent,AnimalModalComponent, FormErrorsComponent]
 
 @NgModule({
-  declarations: [ FormErrorsComponent, ...MODALS],
+  declarations: [...MODALS],
   imports: [
     CommonModule,
     NgxSmartModalModule.forChild(),
@@ -20,6 +20,6 @@ const MODALS = [EditWeightModalComponent,AnimalModalComponent]
   ],
   exports:[
     ...MODALS, CommonModule, NgxSmartModalModule
-  ]
+  ],
 })
 export class ModalsModule { }

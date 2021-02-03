@@ -6,7 +6,10 @@
     </h2>
     <div class="cms-form">
       <form [formGroup]="animalForm">
-        <div class="form-group" [ngClass]="{ 'was-validated': tagNumber.dirty}">
+        <div *ngIf="isAddMode"
+          class="form-group"
+          [ngClass]="{ 'was-validated': tagNumber.dirty }"
+        >
           <label for="newTagNumber">Enter tag number</label>
           <input
             formControlName="newTagNumber"
@@ -20,21 +23,25 @@
             <cms-form-errors [errors]="tagNumber.errors"></cms-form-errors>
           </div>
         </div>
-        <div class="form-group" [ngClass]="{'was-validated': dob.dirty}">
+        <div class="form-group">
           <label for="birthDate">Enter birth date</label>
           <input
             formControlName="dob"
             type="date"
             class="form-control"
+            [ngClass]="getCSSClassForDOB()"
             name="dateOfBirth"
             id="dateOfBirth"
-            required
           />
           <div class="invalid-feedback">
             <cms-form-errors [errors]="dob.errors"></cms-form-errors>
           </div>
         </div>
-        <div class="form-group" [ngClass]="{'was-validated': dam.dirty}" *ngIf="($dams | async) as dams">
+        <div
+          class="form-group"
+          [ngClass]="{ 'was-validated': dam.dirty }"
+          *ngIf="$dams | async as dams"
+        >
           <label for="dams">Select dam</label>
           <select
             class="custom-select"
@@ -44,7 +51,7 @@
             required
           >
             <option value=""></option>
-            <option *ngFor="let dam of dams" value="{{dam.tagNumber}}">
+            <option *ngFor="let dam of dams" value="{{ dam.tagNumber }}">
               {{ dam.tagNumber }}
             </option>
           </select>
@@ -52,7 +59,11 @@
             <cms-form-errors [errors]="dam.errors"></cms-form-errors>
           </div>
         </div>
-        <div class="form-group" [ngClass]="{'was-validated': sire.dirty}" *ngIf="($sires | async) as sires">
+        <div
+          class="form-group"
+          [ngClass]="{ 'was-validated': sire.dirty }"
+          *ngIf="$sires | async as sires"
+        >
           <label for="sire">Select sire</label>
           <select
             class="custom-select"
@@ -62,7 +73,7 @@
             required
           >
             <option value=""></option>
-            <option *ngFor="let sire of sires" value="{{sire.tagNumber}}">
+            <option *ngFor="let sire of sires" value="{{ sire.tagNumber }}">
               {{ sire.name }}
             </option>
           </select>
@@ -70,38 +81,52 @@
             <cms-form-errors [errors]="sire.errors"></cms-form-errors>
           </div>
         </div>
-        <div class="form-check" [ngClass]="{'was-validated': gender.dirty}">
+        <div class="form-check" [ngClass]="{ 'was-validated': gender.dirty }">
           <input
             formControlName="gender"
             type="radio"
             class="form-check-input"
-            value="isMale"
+            value="M"
             name="gender"
             id="isMaleRadio"
             required
           />
           <label class="form-check-label" for="isMaleRadio">Male</label>
         </div>
-        <div class="form-check mb-3" [ngClass]="{'was-validated': gender.dirty}">
+        <div
+          class="form-check mb-3"
+          [ngClass]="{ 'was-validated': gender.dirty }"
+        >
           <input
             formControlName="gender"
             type="radio"
             class="form-check-input"
-            value="isFemale"
+            value="F"
             name="gender"
             id="isFemaleRadio"
             required
           />
           <label class="form-check-label" for="isFemaleRadio">Female</label>
           <div class="invalid-feedback">
-            <cms-form-errors [errors]="gender.errors" [isRadio]="true"></cms-form-errors>
+            <cms-form-errors
+              [errors]="gender.errors"
+              [isRadio]="true"
+            ></cms-form-errors>
           </div>
         </div>
-        <button class="btn btn-success" (click)="save()">
+        <button
+          class="btn btn-success"
+          (click)="save()"
+          ngbPopover="{{isAddMode ? 'Animal Saved' : 'Animal Updated'}}"
+          #p="ngbPopover"
+          placement="bottom"
+          popoverClass="update-success"
+          triggers="manual"
+        >
           Save {{ isAddMode ? "Animal" : "Changes" }}
         </button>
         <button class="btn btn-danger ml-3" (click)="closeModal()">
-          Cancel
+          Close
         </button>
       </form>
     </div>
