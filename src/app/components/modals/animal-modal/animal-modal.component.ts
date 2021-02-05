@@ -37,6 +37,10 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
   public animalForm: FormGroup = new FormGroup({});
   public $dams: Observable<Animal[]>;
   public $sires: Observable<Bull[]>;
+  public saveResult: { message: string; success: boolean } = {
+    message: '',
+    success: true,
+  };
 
   constructor(
     private readonly fb: FormBuilder,
@@ -57,27 +61,47 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
   }
 
   public save() {
-    this.markAllAsDirty();
-    if (this.animalForm.valid && this.isAddMode) {
-      this.loadingService.setLoadingState(true);
-      const newAnimal: Animal = {
-        ai: [],
-        birthDate: this.dob.value,
-        calvingHistory: [],
-        calvingStats: [],
-        dam: this.dam.value,
-        gender: this.gender.value,
-        managementTag: 'null',
-        sire: this.sire.value,
-        tagNumber: this.tagNumber.value,
-        weightData: [],
-      };
-      this.animalUpdateService.addAnimal(newAnimal).then(() => {
-        this.clearForm();
-        this.loadingService.setLoadingState(false);
-        this.handleSuccessPopover();
-      });
+    if (this.isAddMode) {
+      this.markAllAsDirty();
+      if (this.handlePopoverErrors()) {
+        this.loadingService.setLoadingState(true);
+        const newAnimal: Animal = {
+          ai: [],
+          birthDate: this.dob.value,
+          calvingHistory: [],
+          calvingStats: [],
+          dam: this.dam.value,
+          gender: this.gender.value,
+          managementTag: 'null',
+          sire: this.sire.value,
+          tagNumber: this.tagNumber.value,
+          weightData: [],
+        };
+        this.animalUpdateService.addAnimal(newAnimal).then(() => {
+          this.saveResult.message = 'Animal Saved';
+          this.saveResult.success = true;
+
+          this.clearForm();
+          this.loadingService.setLoadingState(false);
+          this.handlePopover(1000);
+        });
+      }
+    } else {
+      this.tagNumber.disable();
+      if (this.handlePopoverErrors()) {
+        const animalUpdate = {
+            birthDate: this.dob.value,
+            dam: this.dam.value,
+            sire: this.sire.value,
+            gender: this.gender.value
+        }
+        this.animalUpdateService.updateAnimal(this.animal.tagNumber, animalUpdate)
+      }
     }
+  }
+
+  public getCSSForPopover() {
+    return this.saveResult.success ? 'update-success' : 'update-error';
   }
 
   public getCSSClassForDOB() {
@@ -90,6 +114,32 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
 
   public closeModal() {
     this.modals.get(Modals.Animal).close();
+  }
+
+  private handlePopoverErrors() {
+    if (this.animalForm.valid) {
+      if (!this.valuesChanged()) {
+        this.saveResult.message = 'No changes made';
+        this.saveResult.success = false;
+        this.handlePopover(3000);
+        return false;
+      }
+      return true;
+    } else {
+      this.saveResult.message = 'Please fix errors';
+      this.saveResult.success = false;
+      this.handlePopover(3000);
+      return false;
+    }
+  }
+
+  private valuesChanged(): boolean {
+    return (
+      this.animal?.sire.tagNumber !== this.sire.value ||
+      this.animal?.dam.tagNumber !== this.dam.value ||
+      this.animal?.birthDate.format('yyyy-MM-DD') !== this.dob.value ||
+      this.animal?.gender !== this.gender.value
+    );
   }
 
   private setData() {
@@ -116,10 +166,16 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
     this.dam.setValue('');
   }
 
-  private handleSuccessPopover() {
+  private handlePopover(time: number) {
+    this.popover.popoverClass = this.getCSSForPopover();
+    this.popover.ngbPopover = this.saveResult.message;
+
     this.popover.open();
-    timer(3000).subscribe(() => {
+    timer(time).subscribe(() => {
       this.popover.close();
+      if (this.saveResult.success) {
+        this.closeModal();
+      }
     });
   }
 
@@ -137,8 +193,9 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
       this.clearForm();
     });
     animalModal.onOpenFinished.subscribe(() => {
+      this.animalForm.enable();
       this.setData();
-    })
+    });
   }
 
   private clearForm() {

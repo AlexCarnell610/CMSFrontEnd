@@ -12,8 +12,13 @@ body{
   right: 0;
 }
 
+.badge-pill{
+    font-size: 90%;
+    font-weight: 600;
+}
+
 .cms-form{
-  width: 60%;
+  width: 75%;
   margin: auto;
 }
 
@@ -34,7 +39,6 @@ body{
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  /* justify-content: space-around; */
   align-items: center;
 }
 .cms-flex-item{
@@ -47,7 +51,6 @@ body{
 }
 
 .loading-spinner {
-  /* transform: scaleX(-1); */
   position: absolute;
   top: 50%;
   left: 50%;
@@ -81,4 +84,14 @@ body{
 
 .update-success .arrow::after {
   border-bottom-color: #d4edda;
+}
+
+.update-error {
+  color: #721c24;
+  background-color: #f8d7da;
+  font-size: 125%;
+}
+
+.update-error .arrow::after {
+  border-bottom-color: #f8d7da;
 }

@@ -50,11 +50,15 @@ export class AnimalListComponent implements OnInit {
   }
 
   public selectAnimal(index: number) {
-    if (this.getAnimal(index).tagNumber !== this.currentAnimal?.tagNumber) {
+    if (this.page === PageURLs.Animals) {
+      this.currentIndex = index;
+      this.animalSelected.emit(this.getAnimal(index));
+    } else {
+      if (this.getAnimal(index).tagNumber !== this.currentAnimal?.tagNumber) {
       this.currentAnimal = this.getAnimal(index);
       this.currentIndex = index;
       this.animalSelected.emit(this.getAnimal(index));
-    }
+    }}
   }
 
   public getPillButtonText(): string {
@@ -74,6 +78,8 @@ export class AnimalListComponent implements OnInit {
       this.animals$,
       this.screenSize.isSmallScreenObs(),
     ]).subscribe(([value, animals, isSmall]: [string, Animal[], boolean]) => {
+      console.warn("animals",animals);
+      
       if (value.length > 2) {
         this.searchedAnimals$.next(
           isSmall
@@ -82,6 +88,8 @@ export class AnimalListComponent implements OnInit {
         );
         this.animalSelected.emit(this.getAnimal(this.currentIndex));
       } else {
+        console.warn("Else", this.getAnimal(this.currentIndex));
+        
         this.searchedAnimals$.next(isSmall ? animals.slice(0, 5) : animals);
         this.animalSelected.emit(this.getAnimal(this.currentIndex));
       }

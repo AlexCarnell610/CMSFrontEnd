@@ -115,7 +115,6 @@ export class EditWeightModalComponent
             this.handleSuccessPopover();
           });
       } else {
-        console.error(this.weight.errors);
         this.weight.markAsDirty();
         this.date.markAsDirty();
         this.weightType.markAsDirty();

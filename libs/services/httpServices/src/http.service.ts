@@ -51,9 +51,14 @@ export class HttpService {
       .pipe(map((res) => this.mappingService.convertWeight(res)));
   }
 
-  public addAnimal(animal: Animal): Observable<any> {
+  public addAnimal(animal: Animal): Observable<Animal> {
     return this.http
-      .post(HttpUrls.PostAnimal, animal)
+      .post(HttpUrls.Animal, animal)
       .pipe(map((res) => this.mappingService.importAnimalData([res])[0]));
+  }
+
+  public updateAnimal(tagNumber: string, update): Observable<Animal>{
+    return this.http.patch(`${HttpUrls.Animal}/${tagNumber}`, {...update})
+    .pipe(map((res) => this.mappingService.importAnimalData([res])[0]));
   }
 }

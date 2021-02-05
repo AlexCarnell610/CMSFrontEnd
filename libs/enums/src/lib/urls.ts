@@ -4,5 +4,5 @@ export enum HttpUrls{
     OfflineAnimals = '/assets/data.json',
     PatchWeight = '/api/weight',
     PutWeight = '/api/weight',
-    PostAnimal = '/api/animal'
+    Animal = '/api/animal'
 }

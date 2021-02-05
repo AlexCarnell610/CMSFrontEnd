@@ -9,7 +9,6 @@ import * as moment from 'moment';
 export class DobValidatorDirective implements Validator{
 
   validate(control: AbstractControl): ValidationErrors | null {
-    console.warn("CALLED");
     
       if (moment().diff(moment(control.value), 'days') < 0) {
         return { dob: 'DOB cant be in the future' };

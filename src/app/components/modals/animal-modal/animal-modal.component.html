@@ -40,7 +40,7 @@
         <div
           class="form-group"
           [ngClass]="{ 'was-validated': dam.dirty }"
-          *ngIf="$dams | async as dams"
+          *ngIf="($dams | async) as dams"
         >
           <label for="dams">Select dam</label>
           <select
@@ -62,7 +62,7 @@
         <div
           class="form-group"
           [ngClass]="{ 'was-validated': sire.dirty }"
-          *ngIf="$sires | async as sires"
+          *ngIf="($sires | async) as sires"
         >
           <label for="sire">Select sire</label>
           <select
@@ -117,10 +117,9 @@
         <button
           class="btn btn-success"
           (click)="save()"
-          ngbPopover="{{isAddMode ? 'Animal Saved' : 'Animal Updated'}}"
+          ngbPopover
           #p="ngbPopover"
           placement="bottom"
-          popoverClass="update-success"
           triggers="manual"
         >
           Save {{ isAddMode ? "Animal" : "Changes" }}

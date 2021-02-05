@@ -3,12 +3,13 @@ import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
 
 export enum AnimalActionTypes {
-  LoadAnimalDataType = '[Load] Load Data',
-  RetrieveAnimalDataType = '[Load] Retrieve Data',
-  LoadAnimalsFinishedType = '[Load] Load Finished',
-  UpdateAnimalWeightType = '[Update] Weight or Date',
-  AddAnimalWeightType = '[Add] Animal Weight',
-  AddAnimalType = '[Add] Animal',
+  LoadAnimalDataType = '[Animal] Load Data',
+  RetrieveAnimalDataType = '[Animal] Retrieve Data',
+  LoadAnimalsFinishedType = '[Animal] Load Finished',
+  UpdateAnimalWeightType = '[Animal] Update Weight or Date',
+  AddAnimalWeightType = '[Animal] Add Weight',
+  AddAnimalType = '[Animal] Add Animal',
+  UpdateAnimalType = '[Animal] Update Animal',
   HTTPErrorType = '[HTTP] Error',
 }
 
@@ -20,6 +21,11 @@ export class LoadAnimalData implements Action {
 export class AddAnimal implements Action {
   readonly type = AnimalActionTypes.AddAnimalType;
   constructor(public payload: { animal: Animal }) {}
+}
+
+export class UpdateAnimal implements Action {
+  readonly type = AnimalActionTypes.UpdateAnimalType;
+  constructor(public payload: Update<Animal> ) {}
 }
 
 export class RetrieveAnimalData implements Action {
@@ -53,4 +59,5 @@ export type AnimalActions =
   | UpdateAnimalWeight
   | AddAnimalWeight
   | AddAnimal
+  | UpdateAnimal
   | HTTPError;

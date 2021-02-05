@@ -10,9 +10,10 @@ import { AnimalListComponent } from './cattle-components/shared-components/anima
 import { WeightComponent } from './cattle-components/weight/weight.component';
 import { MainMenuComponent } from './main-menu.component';
 import { MainMenuRoutingModule } from './main-menu.routing';
+import { AnimalDisplayComponent } from './cattle-components/animal/animal-display/animal-display.component';
 
 @NgModule({
-  declarations: [MainMenuComponent, WeightComponent, AnimalComponent,AnimalListComponent],
+  declarations: [MainMenuComponent, WeightComponent, AnimalComponent,AnimalListComponent, AnimalDisplayComponent],
   imports: [
     CommonModule,
     MainMenuRoutingModule,

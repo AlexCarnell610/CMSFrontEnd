@@ -45,6 +45,9 @@ export function animalReducer(
     case AnimalActionTypes.AddAnimalType: {
       return animalAdapter.addOne(action.payload.animal, state)
     }
+    case AnimalActionTypes.UpdateAnimalType: {
+      return animalAdapter.updateOne(action.payload, state);
+    }
     default: {
       return state;
     }
