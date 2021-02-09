@@ -4,8 +4,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
-import { AnimalEffects } from '@cms-ngrx';
-import { reducers } from '@cms-ngrx/reducers';
+import { reducers } from '@cms-ngrx';
+import { AnimalEffects } from '@cms-ngrx/animal';
+import { BullEffects } from '@cms-ngrx/bull';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
@@ -23,8 +24,7 @@ import { LogoutComponent } from './components/logout/logout.component';
     AppComponent,
     LoginComponent,
     LogoutComponent,
-    FooterComponent,
-    
+    FooterComponent   
   ],
   imports: [
     BrowserModule,
@@ -35,7 +35,7 @@ import { LogoutComponent } from './components/logout/logout.component';
         strictActionImmutability: true
       }
     }),
-    EffectsModule.forRoot([AnimalEffects]),
+    EffectsModule.forRoot([AnimalEffects, BullEffects]),
     environment.production ? [] : StoreDevtoolsModule.instrument(),
     HttpClientModule,
     FormsModule,

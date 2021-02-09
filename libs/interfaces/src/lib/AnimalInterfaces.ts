@@ -7,6 +7,12 @@ export interface Bull {
     name: string
 }
 
+export const bull: Bull = {
+    tagNumber: "TAGNUMBER",
+    breed: "DAVE",
+    name: "GARY"
+}
+
 export interface BaseAnimal {
     tagNumber: string,
     birthDate: moment.Moment,
@@ -21,16 +27,17 @@ export interface Dam extends BaseAnimal{
 
 export interface Animal extends BaseAnimal {
     dam: BaseAnimal,
-    sire: Bull,
+    sire: {tagNumber: string},
     ai: AI[],
     calvingStats: CalvingStat[],
     calvingHistory: CalvingHistory[],
     weightData: AnimalWeight[]
 }
 
+
 export interface AI {
     aiDate: moment.Moment,
-    bull: Bull,
+    bull: {tagNumber: string},
     sweeperBull: boolean,
     heatDate: moment.Moment,
     year: number,
@@ -60,6 +67,14 @@ export interface AnimalWeightType {
     isSale: boolean
 }
 
+export function isCow(animal: Animal | Bull): animal is Animal {
+    return 'weightData' in animal;
+}
+
 export function isBull(animal: Animal | Bull): animal is Bull {
     return 'name' in animal;
+}
+
+export function age(birthDate: moment.Moment): number{
+    return moment().diff(birthDate, 'year', true);
 }

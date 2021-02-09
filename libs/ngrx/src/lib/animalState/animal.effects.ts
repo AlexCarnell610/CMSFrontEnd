@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { LoadingPaneService } from '@cms-services';
 import { HttpService } from '@cms-services/http';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { LoadingPaneService } from '../../../../services/services/src/loading-pane.service';
 import {
   AnimalActionTypes,
   HTTPError,
   LoadAnimalData,
   LoadAnimalsFinished
-} from '../../actions/src/animal.actions';
+} from './animal.actions';
 
 @Injectable()
 export class AnimalEffects {
@@ -29,7 +29,8 @@ export class AnimalEffects {
         return this.httpService.getAnimalData().pipe(
           map((animals) => {
             return new LoadAnimalData({ animals });
-          }), catchError(err => {
+          }),
+          catchError((err) => {
             // this.loadingPaneService.setLoadingState(false);
             return of(new HTTPError(err));
           })
@@ -38,15 +39,27 @@ export class AnimalEffects {
     )
   );
 
-  $loadData = createEffect(()=> this.actions$.pipe(ofType(AnimalActionTypes.LoadAnimalDataType), switchMap(() => {
-    this.loadingPaneService.setLoadingState(false);
-    return of(new LoadAnimalsFinished());
-  })));
+  $loadData = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AnimalActionTypes.LoadAnimalDataType),
+      switchMap(() => {
+        this.loadingPaneService.setLoadingState(false);
+        return of(new LoadAnimalsFinished());
+      })
+    )
+  );
 
-  $httpError = createEffect(() => this.actions$.pipe(ofType(AnimalActionTypes.HTTPErrorType), map((action: any) => {
-    this.loadingPaneService.setLoadingState(false);
-    console.error("An error has occured",action.payload)
-  })), {dispatch: false})
+  $httpError = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AnimalActionTypes.HTTPErrorType),
+        map((action: any) => {
+          this.loadingPaneService.setLoadingState(false);
+          console.error('An error has occured', action.payload);
+        })
+      ),
+    { dispatch: false }
+  );
 
   // $updateWeight = createEffect(() => this.actions$.pipe(ofType(/)))
 }

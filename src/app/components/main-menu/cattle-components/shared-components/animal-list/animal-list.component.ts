@@ -2,7 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PageURLs } from '@cms-enums';
 import { Animal } from '@cms-interfaces';
-import { RootState, selectAll } from '@cms-ngrx';
+import { RootState } from '@cms-ngrx';
+import { selectAll } from '@cms-ngrx/animal';
 import { ScreenSizeService } from '@cms-services';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
@@ -38,9 +39,6 @@ export class AnimalListComponent implements OnInit {
     this.trackSearch();
     this.searchBarGroup.get('searchBar').setValue('');
     this.pillButtonText = this.getPillButtonText();
-    this.animals$.subscribe((ani) => {
-      console.warn('animals', ani);
-    });
   }
 
   public openAddModal() {
@@ -52,10 +50,15 @@ export class AnimalListComponent implements OnInit {
   }
 
   public selectAnimal(index: number) {
-    if (this.getAnimal(index).tagNumber !== this.currentAnimal?.tagNumber) {
-      this.currentAnimal = this.getAnimal(index);
+    if (this.page === PageURLs.Animals) {
       this.currentIndex = index;
       this.animalSelected.emit(this.getAnimal(index));
+    } else {
+      if (this.getAnimal(index).tagNumber !== this.currentAnimal?.tagNumber) {
+        this.currentAnimal = this.getAnimal(index);
+        this.currentIndex = index;
+        this.animalSelected.emit(this.getAnimal(index));
+      }
     }
   }
 

@@ -15,37 +15,15 @@
     <div class="col">
       <cms-animal-list [page]="pageName" (add)="addAnimal()" (edit)="editAnimal()" (animalSelected)="animalSelected($event)"></cms-animal-list>
     </div>
-    <div class="col">
-      <div class="card cms-sticky" *ngIf="selectedAnimal">
-        <div class="card-header">
-          <strong>Tag number - {{selectedAnimal.tagNumber}}</strong>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">
-            <strong>Gender - </strong> {{selectedAnimal.gender}}
-          </li>
-          <li class="list-group-item">
-            <strong>Date of Birth - </strong>{{selectedAnimal.birthDate | date: 'dd MMM yyyy'}}
-          </li>
-          <li class="list-group-item">
-            <strong>Dam - </strong>{{selectedAnimal.dam.tagNumber}}
-            <button class="btn btn-primary btn-sm" (click)="viewDam()">View Dam</button>
-          </li>
-          <li class="list-group-item">
-            <strong>Sire - </strong>{{selectedAnimal.sire.name}}
-            <ul style="list-style-type: none;">
-              <li >
-                {{selectedAnimal.sire.tagNumber}}
-              </li>
-              <li >
-                {{selectedAnimal.sire.breed}}
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </div>
+    <div *ngIf="!screenService.isSmallScreen" class="col">
+      <cms-animal-display [$selectedAnimal]="$selectedAnimal" (editAnimal)="editAnimal($event)"></cms-animal-display>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col" *ngIf="screenService.isSmallScreen">
+      <cms-animal-display [$selectedAnimal]="$selectedAnimal" (editAnimal)="editAnimal($event)"></cms-animal-display>
     </div>
   </div>
 </div>
 
-<cms-animal-modal [animal]="selectedAnimal" [isAddMode]="isAdd"></cms-animal-modal>
+<cms-animal-modal [animal]="$selectedAnimal | async" [isAddMode]="isAdd"></cms-animal-modal>

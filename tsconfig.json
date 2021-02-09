@@ -17,26 +17,26 @@
       "dom"
     ],
     "paths": {
+      "rxjs": [
+        "node_modules/rxjs"
+      ],
+      "rxjs/*": [
+        "node_modules/rxjs/*"
+      ],
       "@cms-enums": [
         "libs/enums/src"
       ],
       "@cms-interfaces": [
         "libs/interfaces/src"
       ],
-      "@cms-ngrx/effects": [
-        "libs/ngrx/src/lib/effects"
+      "@cms-ngrx/animal": [
+        "libs/ngrx/src/lib/animalState"
       ],
-      "@cms-ngrx/reducers": [
-        "libs/ngrx/src/lib/reducers"
-      ],
-      "@cms-ngrx/selectors": [
-        "libs/ngrx/src/lib/selectors"
-      ],
-      "@cms-ngrx/actions": [
-        "libs/ngrx/src/lib/actions"
+      "@cms-ngrx/bull": [
+        "libs/ngrx/src/lib/bullState"
       ],
       "@cms-ngrx": [
-        "libs/ngrx/src"
+        "libs/ngrx/src/lib"
       ],
       "@cms-services/http": [
         "libs/services/httpServices"

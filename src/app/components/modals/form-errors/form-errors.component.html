@@ -2,6 +2,8 @@
     <span *ngIf="errors.required">This field is required. </span>
     <span *ngIf="errors.min">Value should be more than {{errors.min.min}}Kg. </span>
     <span *ngIf="errors.max">Value should be less than {{errors.max.max}}Kg. </span>
+    <span *ngIf="errors.pattern">Should follow the pattern: "UK" followed by 12 numbers.</span>
+    <span *ngIf="errors.date">Date can't be in the future.</span>
   </div>
   <div *ngIf="errors && isRadio">
     <span *ngIf="errors.required">Please select one. </span>

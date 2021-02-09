@@ -1,52 +1,133 @@
 <ngx-smart-modal #animalModal identifier="animalModal">
   <div *ngIf="animal || isAddMode">
-    <h4 class="text-center">
+    <h2 class="text-center">
       {{ isAddMode ? "Add Animal" : "Edit " }}
-      <strong>{{isAddMode ? "": animal?.tagNumber }}</strong>
-    </h4>
-    <form [formGroup]="animalForm" style="max-width: 250px; margin-left: 25%; margin-right: 25%;">
-        <div class="form-group">
-            <label for="newTagNumber">Enter tag number</label>
-            <input class="form-control" type="text" name="tag" id="newTagNumber">
+      <strong>{{ isAddMode ? "" : animal?.tagNumber }}</strong>
+    </h2>
+    <div class="cms-form">
+      <form [formGroup]="animalForm">
+        <div *ngIf="isAddMode"
+          class="form-group"
+          [ngClass]="{ 'was-validated': tagNumber.dirty }"
+        >
+          <label for="newTagNumber">Enter tag number</label>
+          <input
+            formControlName="newTagNumber"
+            class="form-control"
+            type="text"
+            name="tag"
+            id="newTagNumber"
+            pattern="^UK\d{12}$"
+          />
+          <div class="invalid-feedback">
+            <cms-form-errors [errors]="tagNumber.errors"></cms-form-errors>
+          </div>
         </div>
         <div class="form-group">
           <label for="birthDate">Enter birth date</label>
-          <input type="date" class="form-control" name="dateOfBirth" id="dateOfBirth">
+          <input
+            formControlName="dob"
+            type="date"
+            class="form-control"
+            [ngClass]="getCSSClassForDOB()"
+            name="dateOfBirth"
+            id="dateOfBirth"
+          />
+          <div class="invalid-feedback">
+            <cms-form-errors [errors]="dob.errors"></cms-form-errors>
+          </div>
         </div>
-        <div class="form-group">
+        <div
+          class="form-group"
+          [ngClass]="{ 'was-validated': dam.dirty }"
+          *ngIf="($dams | async) as dams"
+        >
           <label for="dams">Select dam</label>
-          <select class="custom-select" name="dams" id="dams">
-            <!-- <option value=""></option> -->
-            <option value="yes">the dams</option>
-          </select>
-        </div>
-        <div class="form-group">
-<label for="sire">Select sire</label>
-          <select class="custom-select" name="sire" id="sire">
+          <select
+            class="custom-select"
+            name="dams"
+            id="dams"
+            formControlName="dam"
+            required
+          >
             <option value=""></option>
-            <option value="yes">the sires</option>
+            <option *ngFor="let dam of dams" value="{{ dam.tagNumber }}">
+              {{ dam.tagNumber }}
+            </option>
           </select>
+          <div class="invalid-feedback">
+            <cms-form-errors [errors]="dam.errors"></cms-form-errors>
+          </div>
         </div>
-        <div class="form-check">
-            <input type="radio" class="form-check-input" value="isMale" name="gender" id="isMaleRadio">
-            <label for="isMaleRadio">Male</label>
+        <div
+          class="form-group"
+          [ngClass]="{ 'was-validated': sire.dirty }"
+          *ngIf="($sires | async) as sires"
+        >
+          <label for="sire">Select sire</label>
+          <select
+            class="custom-select"
+            name="sire"
+            id="sire"
+            formControlName="sire"
+            required
+          >
+            <option value=""></option>
+            <option *ngFor="let sire of sires" value="{{ sire.tagNumber }}">
+              {{ sire.name }}
+            </option>
+          </select>
+          <div class="invalid-feedback">
+            <cms-form-errors [errors]="sire.errors"></cms-form-errors>
+          </div>
         </div>
-        <div class="form-check">
-          <input type="radio" class="form-check-input" value="isFemale" name="gender" id="isFemaleRadio">
-          <label for="isFemaleRadio">Female</label>
+        <div class="form-check" [ngClass]="{ 'was-validated': gender.dirty }">
+          <input
+            formControlName="gender"
+            type="radio"
+            class="form-check-input"
+            value="M"
+            name="gender"
+            id="isMaleRadio"
+            required
+          />
+          <label class="form-check-label" for="isMaleRadio">Male</label>
         </div>
-        <!-- <div class="form-group">
-          <button class="btn btn-primary">Add AI History</button>
+        <div
+          class="form-check mb-3"
+          [ngClass]="{ 'was-validated': gender.dirty }"
+        >
+          <input
+            formControlName="gender"
+            type="radio"
+            class="form-check-input"
+            value="F"
+            name="gender"
+            id="isFemaleRadio"
+            required
+          />
+          <label class="form-check-label" for="isFemaleRadio">Female</label>
+          <div class="invalid-feedback">
+            <cms-form-errors
+              [errors]="gender.errors"
+              [isRadio]="true"
+            ></cms-form-errors>
+          </div>
         </div>
-        <div class="form-group">
-          <button class="btn btn-primary">Add Calving History</button>
-        </div>
-        <div class="form-group">
-          <button class="btn btn-primary">Add Weight Data</button>
-        </div> -->
-        <button class="btn btn-success">Save</button>
-    <button class="btn btn-danger ml-3">Cancel</button>
-    </form>
-    
+        <button
+          class="btn btn-success"
+          (click)="save()"
+          ngbPopover
+          #p="ngbPopover"
+          placement="bottom"
+          triggers="manual"
+        >
+          Save {{ isAddMode ? "Animal" : "Changes" }}
+        </button>
+        <button class="btn btn-danger ml-3" (click)="closeModal()">
+          Close
+        </button>
+      </form>
+    </div>
   </div>
 </ngx-smart-modal>

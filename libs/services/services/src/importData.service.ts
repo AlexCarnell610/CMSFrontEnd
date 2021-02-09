@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import {
-    AI,
-    Animal,
-    AnimalWeight,
-    Bull,
-    CalvingHistory,
-    CalvingStat,
-    Dam
+  AI,
+  Animal,
+  AnimalWeight,
+  Bull,
+  CalvingHistory,
+  CalvingStat,
+  Dam
 } from '@cms-interfaces';
 import * as moment from 'moment';
 
@@ -16,7 +16,7 @@ import * as moment from 'moment';
 export class MappingService {
   constructor() {}
 
-  public importAnimalData(animalData: Object) {
+  public importAnimalData(animalData: Object): Animal[] {
     let mappedAnimals: Animal[] = [];
 
     for (let value of Object.values<any>(animalData)) {
@@ -38,27 +38,37 @@ export class MappingService {
             ? []
             : this.convertCalvingStats(value.calving_stat),
         dam: this.convertDam(value.dam),
-        sire: this.convertBull(value.sire),
+        sire: {tagNumber: value.sire.tag_number},
         weightData: this.convertWeightData(value.weight_data),
       });
     }
+    
     return mappedAnimals;
   }
+
+  public convertBulls(bullData: Object): Bull[]{
+    const convertedBulls: Bull[] = [];
+    for (let value of Object.values<any>(bullData)) {
+      convertedBulls.push(this.convertBull(value));
+    }
+    return convertedBulls;
+  }
+
   private convertWeightData(weightData: any[]): AnimalWeight[] {
     return weightData.map(
       (weight) => this.convertWeight(weight)
     );
   }
 
-  public convertWeight(weight: any): AnimalWeight {
+  public convertWeight(weight: any): AnimalWeight {  
     return {
       id: weight.id,
       weightDate: this.convertDate(weight.weight_date),
       weightType: {
-        isInitial: weight.is_initial_weight,
-        isSale: weight.is_sale_weight,
+        isInitial: weight.is_initial_weight === 1 || weight.is_initial_weight ? true : false,
+        isSale: weight.is_sale_weight === 1 || weight.is_sale_weight ? true : false,
       },
-      weight: weight.weight,
+      weight: weight.weight
     };
   }
   private convertBull(sire: any): Bull {
@@ -104,8 +114,8 @@ export class MappingService {
       return {
         aiDate: this.convertDate(aiOccurence.ai_date),
         bull: {
-          breed: aiOccurence.bull.breed,
-          name: aiOccurence.bull.name,
+          // breed: aiOccurence.bull.breed,
+          // name: aiOccurence.bull.name,
           tagNumber: aiOccurence.bull.tag_number,
         },
         heatDate: this.convertDate(aiOccurence.heat_date),

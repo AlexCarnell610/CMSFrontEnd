@@ -1,0 +1,31 @@
+<div class="card" *ngIf="($selectedAnimal | async) as selectedAnimal" [ngClass]="getCSS()">
+    <div class="card-header d-flex justify-content-between">
+      <strong>Tag number - {{selectedAnimal.tagNumber}}</strong>
+      <span class="badge badge-primary badge-pill align-self-center" (click)="openEditModal()"
+      >Edit Animal</span
+    >
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <strong>Gender - </strong> {{selectedAnimal.gender}}
+      </li>
+      <li class="list-group-item">
+        <strong>Date of Birth - </strong>{{selectedAnimal.birthDate | date: 'dd MMM yyyy'}}
+      </li>
+      <li class="list-group-item">
+        <strong>Dam - </strong>{{selectedAnimal.dam.tagNumber}}
+        <button class="btn btn-primary btn-sm ml-2" (click)="viewDam()">View Dam</button>
+      </li>
+      <li class="list-group-item" *ngIf="($sire | async) as sire">
+        <strong>Sire - </strong>{{sire.name}}
+        <ul style="list-style-type: none;">
+          <li >
+            {{sire.tagNumber}}
+          </li>
+          <li >
+            {{sire.breed}}
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>

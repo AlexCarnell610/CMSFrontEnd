@@ -1,31 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Modals, PageURLs } from '@cms-enums';
-import { Animal, isBull } from '@cms-interfaces';
-import { RootState } from '@cms-ngrx';
-import { select, Store } from '@ngrx/store';
-import { getAnimalByTag } from 'libs/ngrx/src/lib/selectors/src/animal.selectors';
+import { Animal, Bull, isBull } from '@cms-interfaces';
+import { ScreenSizeService } from '@cms-services';
 import { NgxSmartModalService } from 'ngx-smart-modal';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
   selector: 'cms-animal',
   templateUrl: './animal.component.html',
   styleUrls: ['./animal.component.css'],
 })
-export class AnimalComponent implements OnInit {
+export class AnimalComponent {
   public pageName = PageURLs.Animals;
-  public selectedAnimal: Animal = null;
+  public $selectedAnimal: BehaviorSubject<Animal> = new BehaviorSubject(null);
   public isAdd: boolean;
+  public $sire: Observable<Bull>;
 
   constructor(
     private readonly router: Router,
     private readonly modalService: NgxSmartModalService,
-    private readonly store: Store<RootState>
+    public readonly screenService: ScreenSizeService
   ) {}
-
-  ngOnInit(): void {
-    
-  }
+  
 
   public backToMain() {
     this.router.navigate([PageURLs.MainMenu]);
@@ -36,26 +33,18 @@ export class AnimalComponent implements OnInit {
     this.modalService.get(Modals.Animal).open();
   }
 
-  public editAnimal() {
+  public editAnimal(animal:Animal = null) {
     this.isAdd = false;
+    if (animal) {
+      this.$selectedAnimal.next(animal);
+    }
     this.modalService.get(Modals.Animal).open();
   }
 
   public animalSelected(event) {
-    console.warn(event);
-    this.selectedAnimal = event;
+    this.$selectedAnimal.next(event);
   }
   public isntBull(animal): boolean {
     return !isBull(animal);
-  }
-
-  public viewDam() {
-    this.store
-      .pipe(
-        select(getAnimalByTag, { tagNumber: this.selectedAnimal.dam.tagNumber })
-      )
-      .subscribe((dam) => {
-        this.selectedAnimal = dam;
-      });
   }
 }
