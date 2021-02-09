@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { EditWeightModalComponent } from './weight-modal.component';
 
+import { EditWeightModalComponent } from './edit-weight-modal.component';
 
 describe('EditWeightModalComponent', () => {
   let component: EditWeightModalComponent;
