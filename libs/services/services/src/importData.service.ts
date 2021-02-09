@@ -60,13 +60,13 @@ export class MappingService {
     );
   }
 
-  public convertWeight(weight: any): AnimalWeight {    
+  public convertWeight(weight: any): AnimalWeight {  
     return {
       id: weight.id,
       weightDate: this.convertDate(weight.weight_date),
       weightType: {
-        isInitial: weight.is_initial_weight === 1 ? true : false,
-        isSale: weight.is_sale_weight === 1 ? true : false,
+        isInitial: weight.is_initial_weight === 1 || weight.is_initial_weight ? true : false,
+        isSale: weight.is_sale_weight === 1 || weight.is_sale_weight ? true : false,
       },
       weight: weight.weight
     };
