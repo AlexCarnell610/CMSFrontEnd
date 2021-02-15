@@ -1,31 +1,74 @@
-<div class="card" *ngIf="($selectedAnimal | async) as selectedAnimal" [ngClass]="getCSS()">
-    <div class="card-header d-flex justify-content-between">
-      <strong>Tag number - {{selectedAnimal.tagNumber}}</strong>
-      <span class="badge badge-primary badge-pill align-self-center" (click)="openEditModal()"
+<div
+  class="card"
+  *ngIf="$selectedAnimal | async as selectedAnimal"
+  [ngClass]="getCSS()"
+>
+  <div class="card-header d-flex justify-content-between">
+    <strong>Tag number - {{ selectedAnimal.tagNumber }}</strong>
+    <span
+      class="badge badge-info badge-pill align-self-center"
+      (click)="openEditModal()"
       >Edit Animal</span
     >
-    </div>
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item">
-        <strong>Gender - </strong> {{selectedAnimal.gender}}
-      </li>
-      <li class="list-group-item">
-        <strong>Date of Birth - </strong>{{selectedAnimal.birthDate | date: 'dd MMM yyyy'}}
-      </li>
-      <li class="list-group-item">
-        <strong>Dam - </strong>{{selectedAnimal.dam.tagNumber}}
-        <button class="btn btn-primary btn-sm ml-2" (click)="viewDam()">View Dam</button>
-      </li>
-      <li class="list-group-item" *ngIf="($sire | async) as sire">
-        <strong>Sire - </strong>{{sire.name}}
-        <ul style="list-style-type: none;">
-          <li >
-            {{sire.tagNumber}}
-          </li>
-          <li >
-            {{sire.breed}}
-          </li>
-        </ul>
-      </li>
-    </ul>
   </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      <strong>Gender - </strong> {{ selectedAnimal.gender }}
+    </li>
+    <li class="list-group-item">
+      <strong>Date of Birth - </strong
+      >{{ selectedAnimal.birthDate | date: "dd MMM yyyy" }}
+    </li>
+    <li class="list-group-item">
+      <strong>Dam - </strong>{{ selectedAnimal.dam.tagNumber }}
+    </li>
+    <li
+      class="list-group-item d-flex justify-content-between"
+      [formGroup]="notesGroup"
+    >
+      <div class="flex-shrink-0">
+        <strong>Notes -&nbsp;</strong>
+        <button
+          *ngIf="!selectedAnimal.notes && !isEditNotes"
+          class="btn btn-success btn-sm"
+          (click)="editNotes()"
+        >
+          Add Notes
+        </button>
+      </div>
+      <div *ngIf="!isEditNotes">
+        {{ selectedAnimal.notes }}
+      </div>
+      <textarea
+        *ngIf="isEditNotes"
+        formControlName="notes"
+        class="flex-fill mr-1"
+        style="height: 81px; resize: none"
+      ></textarea>
+      <span
+        *ngIf="selectedAnimal.notes || isEditNotes"
+        class="d-flex flex-column ml-auto justify-content-center"
+      >
+        <span
+          class="badge badge-pill"
+          [ngClass]="getCSSForNotesEdit()"
+          (click)="editNotes()"
+          >{{ !isEditNotes ? "Edit Notes" : "Save Changes" }}</span
+        >
+        <span
+          *ngIf="isEditNotes"
+          class="badge badge-pill badge-danger mt-1 cms-notes-edit"
+          (click)="cancelEdit()"
+          >Cancel Edit</span
+        >
+      </span>
+    </li>
+    <li class="list-group-item" *ngIf="$sire | async as sire">
+      <strong>Sire - </strong>{{ sire.name }}
+      <ul style="list-style-type: none">
+        <li>&nbsp;{{ sire.tagNumber }}</li>
+        <li>&nbsp;{{ sire.breed }}</li>
+      </ul>
+    </li>
+  </ul>
+</div>

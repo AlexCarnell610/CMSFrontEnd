@@ -34,7 +34,6 @@ export class AnimalListComponent implements OnInit {
 
   ngOnInit(): void {
     this.searchBarGroup = this.fb.group({ searchBar: this.fb.control([]) });
-    this.searchBarGroup.get('searchBar').setValue('');
     this.animals$ = this.store.pipe(select(selectAll));
     this.trackSearch();
     this.searchBarGroup.get('searchBar').setValue('');
@@ -54,8 +53,11 @@ export class AnimalListComponent implements OnInit {
       this.currentIndex = index;
       this.animalSelected.emit(this.getAnimal(index));
     } else {
-      if (this.getAnimal(index).tagNumber !== this.currentAnimal?.tagNumber) {
-        this.currentAnimal = this.getAnimal(index);
+      if (
+        this.getAnimal(index).tagNumber !==
+        this.getAnimal(this.currentIndex)?.tagNumber
+      ) {
+        // this.currentAnimal = this.getAnimal(index);
         this.currentIndex = index;
         this.animalSelected.emit(this.getAnimal(index));
       }
@@ -71,6 +73,12 @@ export class AnimalListComponent implements OnInit {
       default:
         return '';
     }
+  }
+
+  public getCSSForButton(animal: Animal) {
+    return animal.tagNumber === this.getSelectedAnimal()?.tagNumber
+      ? 'active'
+      : '';
   }
 
   private trackSearch() {
@@ -105,5 +113,9 @@ export class AnimalListComponent implements OnInit {
 
   private getAnimal(index: number) {
     return this.searchedAnimals$.value[index];
+  }
+
+  private getSelectedAnimal() {
+    return this.getAnimal(this.currentIndex);
   }
 }

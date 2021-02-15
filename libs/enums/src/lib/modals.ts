@@ -1,4 +1,5 @@
 export enum Modals {
-    Weight = 'weightModal',
-    Animal = 'animalModal'
+  Weight = 'weightModal',
+  Animal = 'animalModal',
+  Warning = 'warningModal',
 }

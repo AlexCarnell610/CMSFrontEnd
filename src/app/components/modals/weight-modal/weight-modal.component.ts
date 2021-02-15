@@ -4,26 +4,25 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Modals } from '@cms-enums';
 import { Animal, AnimalWeight, AnimalWeightType } from '@cms-interfaces';
-import { RootState } from '@cms-ngrx';
 import { AnimalUpdateService, LoadingPaneService } from '@cms-services';
-import { HttpService } from '@cms-services/http';
-import { dateValidator } from '@cms-validators';
+import { dateValidator, weighDateValidator } from '@cms-validators';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
-import { Store } from '@ngrx/store';
-import * as Moment from 'moment';
+import { WarningService } from 'libs/services/services/src/warning.service';
+import * as moment from 'moment';
 import { NgxSmartModalService } from 'ngx-smart-modal';
-import { Subscription, timer } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, timer } from 'rxjs';
 
 enum FormControls {
   Weight = 'weight',
   Date = 'date',
   WeightSelect = 'weightSelect',
   WeightType = 'weightType',
+  AnimalControl = 'animalControl',
 }
 
 enum RadioValues {
@@ -45,39 +44,27 @@ export class EditWeightModalComponent
   public editWeightForm: FormGroup = new FormGroup({});
   private selectedWeight: AnimalWeight = null;
   public showSuccess = false;
+  public saveResult: { message: string; success: boolean } = {
+    message: '',
+    success: true,
+  };
 
   constructor(
     private readonly modalService: NgxSmartModalService,
-    private store: Store<RootState>,
     private fb: FormBuilder,
-    private httpService: HttpService,
     private loadingService: LoadingPaneService,
-    private updateService: AnimalUpdateService
+    private updateService: AnimalUpdateService,
+    private readonly warningService: WarningService
   ) {}
 
   ngOnInit(): void {
-    this.editWeightForm = this.fb.group({
-      weightSelect: this.fb.control([], Validators.required),
-      weight: this.fb.control([], {
-        validators: [
-          Validators.required,
-          Validators.min(10),
-          Validators.max(1000),
-        ],
-        updateOn: 'blur',
-      }),
-      date: this.fb.control([], [Validators.required, dateValidator()]),
-      weightType: this.fb.control([], Validators.required),
-    });
-
-    this.weightSelect.setValue('');
-
+    this.setUpForm();
     this.trackWeightSelectChanges();
   }
 
   ngAfterViewInit() {
     const weightModal = this.modalService.get(Modals.Weight);
-    weightModal.onCloseFinished.subscribe(() => {
+    weightModal.onAnyCloseEventFinished.subscribe(() => {
       weightModal.removeData();
       this.clearForm();
       this.selectedWeight = null;
@@ -89,7 +76,18 @@ export class EditWeightModalComponent
       } else {
         this.weightSelect.enable();
       }
+      this.animalControl.setValue(this.animal);
+      this.animalControl.updateValueAndValidity();
+      this.date.updateValueAndValidity();
     });
+  }
+
+  public getCSSForRadio() {
+    if (this.weightType.invalid && this.weightType.dirty) {
+      return 'is-invalid';
+    } else if (this.weightType.valid && this.weightType.dirty) {
+      return 'is-valid';
+    }
   }
 
   public getCSSClassForDate() {
@@ -100,65 +98,89 @@ export class EditWeightModalComponent
     }
   }
 
-  closeModal() {
+  public closeModal() {
     this.modalService.get(Modals.Weight).close();
   }
 
-  saveChanges() {
+  public saveChanges() {
     this.editWeightForm.markAllAsTouched();
-    if (this.isAddMode) {
-      if (this.editWeightForm.valid && !this.weightDateExists()) {
-        this.loadingService.setLoadingState(true);
-        const weight: AnimalWeight = {
-          weight: this.weight.value,
-          weightDate: this.date.value,
-          weightType: this.getWeightType(),
-        };
-        this.updateService
-          .addAnimalWeight(this.animal.tagNumber, weight)
-          .then(() => {
-            this.loadingService.setLoadingState(false);
-            this.clearForm();
-            this.handleSuccessPopover();
-          });
+    this.handlePopoverErrors().subscribe((canContinue) => {
+      if (this.isAddMode) {
+        if (canContinue) {
+          this.loadingService.setLoadingState(true);
+          const weight: AnimalWeight = {
+            weight: this.weight.value,
+            weightDate: this.date.value,
+            weightType: this.getWeightType(),
+          };
+          this.updateService
+            .addAnimalWeight(this.animal.tagNumber, weight)
+            .then(() => {
+              this.loadingService.setLoadingState(false);
+              this.clearForm();
+              this.handleSuccessPopover();
+            });
+        } else {
+          this.markAllAsDirty();
+        }
       } else {
-        this.weight.markAsDirty();
-        this.date.markAsDirty();
-        this.weightType.markAsDirty();
-      }
-    } else {
-      if (this.editWeightForm.valid && this.valuesEdited()) {
-        this.loadingService.setLoadingState(true);
-        const weightUpdate = {
-          weight: this.weight.value,
-          date: this.date.value,
-          ...this.getWeightType(),
-        };
+        if (canContinue) {
+          this.loadingService.setLoadingState(true);
+          const weightUpdate = {
+            weight: this.weight.value,
+            date: this.date.value,
+            ...this.getWeightType(),
+          };
 
-        this.updateService
-          .updateAnimalWeight(
-            this.selectedWeight.id,
-            weightUpdate,
-            this.animal,
-            this.getSelectedIndex()
-          )
-          .then(() => {
-            this.loadingService.setLoadingState(false);
-            this.handleSuccessPopover();
-            this.editWeightForm.get(FormControls.WeightSelect).setValue('');
-            this.selectedWeight = null;
-          });
-      } else {
-        this.weightSelect.markAsDirty();
-        this.weight.markAsDirty();
-        this.date.markAsDirty();
-        this.weightType.markAsDirty();
+          this.updateService
+            .updateAnimalWeight(
+              this.selectedWeight.id,
+              weightUpdate,
+              this.animal,
+              this.getSelectedIndex()
+            )
+            .then(() => {
+              this.loadingService.setLoadingState(false);
+              this.handleSuccessPopover();
+              this.clearForm();
+            });
+        } else {
+          this.markAllAsDirty();
+        }
       }
-    }
+    });
+  }
+
+  private setUpForm() {
+    this.editWeightForm = this.fb.group(
+      {
+        animalControl: null,
+        weightSelect: this.fb.control([], Validators.required),
+        weight: this.fb.control([], {
+          validators: [
+            Validators.required,
+            Validators.min(10),
+            Validators.max(1000),
+          ],
+          updateOn: 'blur',
+        }),
+        date: this.fb.control([], [Validators.required, dateValidator()]),
+        weightType: this.fb.control([], Validators.required),
+      },
+      { validators: weighDateValidator() }
+    );
+    this.weightSelect.setValue('');
+  }
+
+  private markAllAsDirty() {
+    this.weightSelect.markAsDirty();
+    this.weight.markAsDirty();
+    this.date.markAsDirty();
+    this.weightType.markAsDirty();
   }
 
   private weightDateExists(): boolean {
-    const weightDate = Moment(this.date.value);
+    const weightDate = moment(this.date.value);
     return (
       this.animal.weightData.findIndex((weight) => {
         return weight.weightDate.format('L') === weightDate.format('L');
@@ -167,18 +189,77 @@ export class EditWeightModalComponent
   }
 
   private handleSuccessPopover() {
+    this.saveResult.message = 'Weight Saved';
+    this.saveResult.success = true;
+    this.handlePopover(2000);
+  }
+
+  private handlePopoverErrors(): Observable<boolean> {
+    const output = new BehaviorSubject(null);
+    if (!this.isAddMode && this.editWeightForm.valid) {
+      if (!this.valuesEdited()) {
+        this.saveResult.message = 'No changes made';
+        this.saveResult.success = false;
+        this.handlePopover(3000);
+        output.next(false);
+      }
+    } else {
+      if (
+        this.editWeightForm.valid &&
+        !this.weightDateExists() &&
+        this.weightDateDiff() <= 2
+      ) {
+        output.next(true);
+      } else if (this.weightDateExists()) {
+        this.warningService
+          .show({
+            header: 'There is already a weight recorded on that day',
+          })
+          .subscribe((result) => {
+            output.next(result);
+          });
+      } else if (this.weightDateDiff() > 2) {
+        this.warningService
+          .show({
+            header: `The date you entered is more than 2 months ago.`,
+          })
+          .subscribe((result) => {
+            output.next(result);
+          });
+      } else {
+        this.saveResult.message = 'Please fix errors';
+        this.saveResult.success = false;
+        this.handlePopover(3000);
+        output.next(false);
+      }
+    }
+    return output;
+  }
+
+  private weightDateDiff(): number {
+    return moment().diff(moment(this.date.value), 'months', true);
+  }
+
+  private handlePopover(time: number) {
+    this.popover.popoverClass = this.getCSSForPopover();
+    this.popover.ngbPopover = this.saveResult.message;
+
     this.popover.open();
-    timer(3000).subscribe(() => {
+    timer(time).subscribe(() => {
       this.popover.close();
     });
   }
 
+  public getCSSForPopover() {
+    return this.saveResult.success ? 'update-success' : 'update-error';
+  }
+
   private getWeightType(): AnimalWeightType {
     let output: AnimalWeightType = {
-      isSale: false,
       isInitial: false,
+      isSale: false,
     };
-    
+
     switch (this.weightType.value) {
       case RadioValues.Initial:
         output.isInitial = true;
@@ -219,13 +300,15 @@ export class EditWeightModalComponent
   }
 
   private valuesEdited(): boolean {
-    const initialDate = this.selectedWeight.weightDate.format('YYYY-MM-DD');
+    const initialDate = this.selectedWeight?.weightDate.format('YYYY-MM-DD');
     const weightTypeInput = this.getWeightType();
 
     return (
-      this.selectedWeight.weight !== this.weight.value ||
+      this.selectedWeight?.weight !== this.weight.value ||
       initialDate !== this.date.value ||
-      this.selectedWeight.weightType !== weightTypeInput
+      (this.selectedWeight?.weightType.isInitial !==
+        weightTypeInput.isInitial &&
+        this.selectedWeight?.weightType.isSale !== weightTypeInput.isSale)
     );
   }
 
@@ -246,6 +329,7 @@ export class EditWeightModalComponent
   }
 
   private clearForm() {
+    this.selectedWeight = null;
     this.editWeightForm.reset(
       { weight: '', date: '', weightSelect: '', weightType: '' },
       { emitEvent: false }
@@ -266,6 +350,10 @@ export class EditWeightModalComponent
 
   get weightSelect() {
     return this.editWeightForm.get(FormControls.WeightSelect);
+  }
+
+  get animalControl() {
+    return this.editWeightForm.get(FormControls.AnimalControl);
   }
 
   ngOnDestroy() {

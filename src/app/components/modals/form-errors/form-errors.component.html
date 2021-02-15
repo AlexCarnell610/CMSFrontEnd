@@ -1,10 +1,39 @@
 <div *ngIf="errors && !isRadio">
-    <span *ngIf="errors.required">This field is required. </span>
-    <span *ngIf="errors.min">Value should be more than {{errors.min.min}}Kg. </span>
-    <span *ngIf="errors.max">Value should be less than {{errors.max.max}}Kg. </span>
-    <span *ngIf="errors.pattern">Should follow the pattern: "UK" followed by 12 numbers.</span>
-    <span *ngIf="errors.date">Date can't be in the future.</span>
-  </div>
-  <div *ngIf="errors && isRadio">
-    <span *ngIf="errors.required">Please select one. </span>
-  </div>
+  <span *ngIf="errors.required">This field is required. </span>
+  <span *ngIf="errors.min"
+    >Value should be more than {{ errors.min.min }}Kg.
+  </span>
+  <span *ngIf="errors.max"
+    >Value should be less than {{ errors.max.max }}Kg.
+  </span>
+  <span *ngIf="errors.pattern"
+    >Should follow the pattern: "UK" followed by 12 numbers.</span
+  >
+  <span *ngIf="errors.date">Date can't be in the future.</span>
+  <span *ngIf="errors.initialBeforeInter"
+    >Initial date should be before first intermediate date
+    <strong>{{ errors.initialBeforeInter }}</strong></span
+  >
+  <span *ngIf="errors.initialBeforeSale">
+    Initial weight should be before the sale date:
+    <strong>{{ errors.initialBeforeSale }}</strong></span
+  >
+  <span *ngIf="errors.intermediateDate"
+    >Intermediate must be <strong>between</strong> initial weigh date
+    <strong>{{ errors.intermediateDate.initialDate }}</strong> and sale date
+    <strong>{{ errors.intermediateDate.saleDate }}</strong></span
+  >
+  <span *ngIf="errors.saleAfterInter">
+    Sale date should be after last intermediate date:
+    <strong>{{ errors.saleAfterInter }}</strong></span
+  >
+  <span *ngIf="errors.saleAfterInitial">
+    Sale date should be after initial date:
+    <strong>{{ errors.saleAfterInitial }}</strong></span
+  >
+</div>
+<div *ngIf="errors && isRadio">
+  <span *ngIf="errors.required">Please select one. </span>
+  <span *ngIf="errors.saleWeightExists">Sale weight already set. </span>
+  <span *ngIf="errors.initialWeightExists">Initial weight already set. </span>
+</div>

@@ -1,4 +1,4 @@
-<ngx-smart-modal #animalModal identifier="animalModal">
+<ngx-smart-modal justify-content-center #animalModal identifier="animalModal">
   <div *ngIf="animal || isAddMode">
     <h2 class="text-center">
       {{ isAddMode ? "Add Animal" : "Edit " }}
@@ -6,7 +6,8 @@
     </h2>
     <div class="cms-form">
       <form [formGroup]="animalForm">
-        <div *ngIf="isAddMode"
+        <div
+          *ngIf="isAddMode"
           class="form-group"
           [ngClass]="{ 'was-validated': tagNumber.dirty }"
         >
@@ -40,7 +41,7 @@
         <div
           class="form-group"
           [ngClass]="{ 'was-validated': dam.dirty }"
-          *ngIf="($dams | async) as dams"
+          *ngIf="$dams | async as dams"
         >
           <label for="dams">Select dam</label>
           <select
@@ -62,7 +63,7 @@
         <div
           class="form-group"
           [ngClass]="{ 'was-validated': sire.dirty }"
-          *ngIf="($sires | async) as sires"
+          *ngIf="$sires | async as sires"
         >
           <label for="sire">Select sire</label>
           <select

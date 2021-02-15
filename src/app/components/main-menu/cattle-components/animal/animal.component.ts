@@ -22,7 +22,6 @@ export class AnimalComponent {
     private readonly modalService: NgxSmartModalService,
     public readonly screenService: ScreenSizeService
   ) {}
-  
 
   public backToMain() {
     this.router.navigate([PageURLs.MainMenu]);
@@ -33,7 +32,7 @@ export class AnimalComponent {
     this.modalService.get(Modals.Animal).open();
   }
 
-  public editAnimal(animal:Animal = null) {
+  public editAnimal(animal: Animal = null) {
     this.isAdd = false;
     if (animal) {
       this.$selectedAnimal.next(animal);

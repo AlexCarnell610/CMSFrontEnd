@@ -3,7 +3,7 @@ import {
   Component,
   Input,
   OnInit,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Modals } from '@cms-enums';
@@ -90,12 +90,15 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
       this.tagNumber.disable();
       if (this.handlePopoverErrors()) {
         const animalUpdate = {
-            birthDate: this.dob.value,
-            dam: this.dam.value,
-            sire: this.sire.value,
-            gender: this.gender.value
-        }
-        this.animalUpdateService.updateAnimal(this.animal.tagNumber, animalUpdate)
+          birthDate: this.dob.value,
+          dam: this.dam.value,
+          sire: this.sire.value,
+          gender: this.gender.value,
+        };
+        this.animalUpdateService.updateAnimal(
+          this.animal.tagNumber,
+          animalUpdate
+        );
       }
     }
   }
@@ -153,7 +156,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
 
   private setUpForm() {
     this.animalForm = this.fb.group({
-      newTagNumber: this.fb.control(['UK722218'], {
+      newTagNumber: this.fb.control(['UK'], {
         validators: Validators.pattern(/^UK\d{12}$/),
         updateOn: 'blur',
       }),

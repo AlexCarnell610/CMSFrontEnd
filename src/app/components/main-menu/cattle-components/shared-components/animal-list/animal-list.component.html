@@ -12,14 +12,20 @@
   <button
     class="list-group-item list-group-item-action d-flex justify-content-between align-items-center animal-button"
     *ngFor="let animal of animals; let i = index"
+    [ngClass]="getCSSForButton(animal)"
     (click)="selectAnimal(i)"
   >
     {{ animal.tagNumber }}
-    <span class="badge badge-primary badge-pill align-self-center" (click)="openEditModal()"
+    <span
+      class="badge badge-info badge-pill align-self-center"
+      (click)="openEditModal()"
       >Edit {{ pillButtonText }}</span
     >
     <span *ngIf="getPillButtonText() === 'Animal'"></span>
-    <span *ngIf="getPillButtonText() !== 'Animal'" class="badge badge-success badge-pill ml-1" (click)="openAddModal()"
+    <span
+      *ngIf="getPillButtonText() !== 'Animal'"
+      class="badge badge-success badge-pill ml-1"
+      (click)="openAddModal()"
       >Add {{ pillButtonText }}</span
     >
   </button>
