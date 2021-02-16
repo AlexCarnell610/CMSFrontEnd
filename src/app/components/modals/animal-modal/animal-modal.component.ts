@@ -258,11 +258,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
   }
 
   private setData() {
-    console.warn(this.isAddMode);
-
     if (!this.isAddMode) {
-      console.warn(this.isAddMode);
-
       this.dob.setValue(this.animal.birthDate.format('yyyy-MM-DD'));
       this.dam.setValue(this.animal.dam.tagNumber);
       this.sire.setValue(
@@ -335,8 +331,6 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
     });
     animalModal.onOpenFinished.subscribe(() => {
       this.animalForm.enable();
-      console.warn(this.isAddMode);
-
       this.setData();
     });
   }

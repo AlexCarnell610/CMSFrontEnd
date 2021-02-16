@@ -63,8 +63,6 @@ export class AnimalUpdateService {
   public addAnimal(animal: Animal): Promise<boolean> {
     return new Promise((resolve) => {
       this.httpService.addAnimal(animal).subscribe((res) => {
-        console.warn(res);
-
         this.store.dispatch(new AddAnimal({ animal: res }));
         resolve(true);
       });

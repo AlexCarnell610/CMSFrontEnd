@@ -32,8 +32,6 @@ export class AnimalComponent {
   }
 
   public addAnimal() {
-    console.warn('ADD');
-
     this.isAdd = true;
     this.modalService.get(Modals.Animal).open();
   }
