@@ -29,21 +29,20 @@ export class WarningDisplayComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {}
 
   ngAfterViewInit() {
-    this.warningService.toasts.subscribe((toast) => {
-      if (toast) {
-        this.toast = toast;
-        this.modals.get(Modals.Warning).open(true);
-      }
+    this.modals.get(Modals.Warning).onDataAdded.subscribe((data) => {
+      this.toast = data;
     });
+    // this.warningService.toasts.subscribe((toast) => {
+    //   if (toast) {
+    //     this.toast = toast;
+    //     this.modals.get(Modals.Warning).open(true);
+    //   }
+    // });
   }
 
   public continueClick() {
-    if (this.toast.animal) {
-      this.modals.get(Modals.Animal).open();
-    } else {
-      this.warningService.setResult(true);
-      this.modals.get(Modals.Warning).close();
-    }
+    this.warningService.setResult(true);
+    this.modals.get(Modals.Warning).close();
   }
 
   public cancelClick() {

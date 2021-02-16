@@ -57,10 +57,4 @@ export class AnimalComponent {
   public getAnimal() {
     return this.animalToEdit ? this.animalToEdit : this.$selectedAnimal.value;
   }
-
-  public editAnimalPlease(event) {
-    this.animalToEdit = event;
-    // this.modalService.create();
-    console.error('EDITTTTTT', event);
-  }
 }

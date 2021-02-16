@@ -1,10 +1,8 @@
 import {
   AfterViewInit,
   Component,
-  EventEmitter,
   Input,
   OnInit,
-  Output,
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -38,7 +36,6 @@ enum FormControls {
 export class AnimalModalComponent implements OnInit, AfterViewInit {
   @Input() animal: Animal = null;
   @Input() isAddMode: boolean;
-  @Output() editAnimal: EventEmitter<Animal> = new EventEmitter(null);
   @ViewChild('p') popover: NgbPopover;
   public animalForm: FormGroup = new FormGroup({});
   public $dams: Observable<Animal[]>;
@@ -189,7 +186,6 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
               })
               .subscribe((result) => {
                 if (result) {
-                  // this.editAnimal.emit(this.getEnteredDam(animals));
                   output.next(false);
                   this.animal = this.getEnteredDam(animals);
                   this.isAddMode = false;
