@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
+import { Animal } from '@cms-interfaces';
 import { BehaviorSubject } from 'rxjs';
 
 export interface IToast {
   header: string;
   body?: string;
+  buttonText?: string;
+  isError?: boolean;
   delay?: number;
+  animal?: Animal;
 }
 
 @Injectable({
@@ -13,15 +17,18 @@ export interface IToast {
 export class WarningService {
   private _toasts: BehaviorSubject<IToast> = new BehaviorSubject(null);
   private _result: BehaviorSubject<boolean>;
-  private areYouSureText = 'Are you sure you want to continue';
+  private defaultBodyText = 'Are you sure you want to continue';
+  private defaultButtonText = 'Continue anyway';
+  private defaultError = {
+    body: this.defaultBodyText,
+    buttonText: this.defaultButtonText,
+    isError: false,
+  };
   constructor() {}
 
-  public show(toast: IToast) {
-    if (!toast.body) {
-      this.toasts.next({ ...toast, body: this.areYouSureText });
-    } else {
-      this._toasts.next(toast);
-    }
+  public show(toast: IToast, animal: Animal = null) {
+    this.toasts.next({ ...this.defaultError, ...toast, animal });
+
     this._result = new BehaviorSubject(null);
     return this._result;
   }

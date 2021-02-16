@@ -26,7 +26,10 @@
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
             ],
             "scripts": [],
-            "allowedCommonJsDependencies": ["chart.js"]
+            "allowedCommonJsDependencies": [
+              "chart.js",
+              "overlayscrollbars-ngx.esm.js"
+            ]
           },
           "configurations": {
             "production": {

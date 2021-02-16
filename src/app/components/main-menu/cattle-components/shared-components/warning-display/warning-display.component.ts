@@ -38,12 +38,24 @@ export class WarningDisplayComponent implements OnInit, AfterViewInit {
   }
 
   public continueClick() {
-    this.warningService.setResult(true);
-    this.modals.get(Modals.Warning).close();
+    if (this.toast.animal) {
+      this.modals.get(Modals.Animal).open();
+    } else {
+      this.warningService.setResult(true);
+      this.modals.get(Modals.Warning).close();
+    }
   }
 
   public cancelClick() {
     this.warningService.setResult(false);
     this.modals.get(Modals.Warning).close();
+  }
+
+  public getCSSForButton() {
+    return this.toast?.isError ? 'btn-danger' : 'btn-warning';
+  }
+
+  public getCSSForWarning() {
+    return this.toast?.isError ? 'error' : 'warning';
   }
 }

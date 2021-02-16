@@ -75,6 +75,9 @@ export function isBull(animal: Animal | Bull): animal is Bull {
   return 'name' in animal;
 }
 
-export function age(birthDate: moment.Moment): number {
-  return moment().diff(birthDate, 'year', true);
+export function age(
+  birthDate: moment.Moment,
+  period: moment.unitOfTime.Diff = 'year'
+): number {
+  return moment().diff(birthDate, period, true);
 }

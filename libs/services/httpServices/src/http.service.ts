@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HttpUrls } from '@cms-enums';
 import { Animal, AnimalWeight, Bull } from '@cms-interfaces';
+import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MappingService } from '../../../services/services/src/importData.service';
@@ -56,8 +57,12 @@ export class HttpService {
   }
 
   public addAnimal(animal: Animal): Observable<Animal> {
+    const newAnimal = {
+      ...animal,
+      birthDate: moment(animal.birthDate).format('yyyy-MM-DD'),
+    };
     return this.http
-      .post(HttpUrls.Animal, animal)
+      .post(HttpUrls.Animal, newAnimal)
       .pipe(map((res) => this.mappingService.importAnimalData([res])[0]));
   }
 

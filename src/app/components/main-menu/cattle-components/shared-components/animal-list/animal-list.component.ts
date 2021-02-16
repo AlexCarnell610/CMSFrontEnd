@@ -1,19 +1,26 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PageURLs } from '@cms-enums';
 import { Animal } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
-import { selectAll } from '@cms-ngrx/animal';
-import { ScreenSizeService } from '@cms-services';
+import { getAnimalByTag, selectAnimals } from '@cms-ngrx/animal';
 import { select, Store } from '@ngrx/store';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
 
 @Component({
   selector: 'cms-animal-list',
   templateUrl: './animal-list.component.html',
   styleUrls: ['./animal-list.component.css'],
 })
-export class AnimalListComponent implements OnInit {
+export class AnimalListComponent implements OnInit, OnDestroy {
   @Output() add: EventEmitter<any> = new EventEmitter();
   @Output() edit: EventEmitter<any> = new EventEmitter();
   @Output() animalSelected: EventEmitter<Animal> = new EventEmitter();
@@ -24,19 +31,21 @@ export class AnimalListComponent implements OnInit {
   public $selectedAnimal: BehaviorSubject<Animal> = new BehaviorSubject(null);
   public pillButtonText: string;
 
-  private currentAnimal: Animal = null;
-  private currentIndex: number;
+  private currentAnimal: Animal;
+  private $currentAnimal: BehaviorSubject<Animal> = new BehaviorSubject(null);
+  private subscriptions: Subscription = new Subscription();
+  private searched = false;
+
   constructor(
     private readonly fb: FormBuilder,
-    private readonly store: Store<RootState>,
-    private readonly screenSize: ScreenSizeService
+    private readonly store: Store<RootState>
   ) {}
 
   ngOnInit(): void {
-    this.searchBarGroup = this.fb.group({ searchBar: this.fb.control([]) });
-    this.animals$ = this.store.pipe(select(selectAll));
+    this.trackAnimalSelect();
+    this.animals$ = this.store.pipe(select(selectAnimals));
+    this.setUpList();
     this.trackSearch();
-    this.searchBarGroup.get('searchBar').setValue('');
     this.pillButtonText = this.getPillButtonText();
   }
 
@@ -48,18 +57,14 @@ export class AnimalListComponent implements OnInit {
     this.edit.emit(null);
   }
 
-  public selectAnimal(index: number) {
+  public selectAnimal(animal: Animal) {
     if (this.page === PageURLs.Animals) {
-      this.currentIndex = index;
-      this.animalSelected.emit(this.getAnimal(index));
+      this.currentAnimal = animal;
+      this.pushNextAnimal(animal);
     } else {
-      if (
-        this.getAnimal(index).tagNumber !==
-        this.getAnimal(this.currentIndex)?.tagNumber
-      ) {
-        // this.currentAnimal = this.getAnimal(index);
-        this.currentIndex = index;
-        this.animalSelected.emit(this.getAnimal(index));
+      if (animal.tagNumber !== this.currentAnimal?.tagNumber) {
+        this.currentAnimal = animal;
+        this.pushNextAnimal(animal);
       }
     }
   }
@@ -76,29 +81,57 @@ export class AnimalListComponent implements OnInit {
   }
 
   public getCSSForButton(animal: Animal) {
-    return animal.tagNumber === this.getSelectedAnimal()?.tagNumber
-      ? 'active'
-      : '';
+    return animal.tagNumber === this.currentAnimal?.tagNumber ? 'active' : '';
+  }
+
+  private pushNextAnimal(animal: Animal) {
+    this.subscriptions.add(
+      this.store
+        .pipe(select(getAnimalByTag, { tagNumber: animal.tagNumber }))
+        .subscribe((ani) => {
+          this.$currentAnimal.next(ani);
+        })
+    );
+  }
+
+  private setUpList() {
+    this.searchBarGroup = this.fb.group({ searchBar: this.fb.control([]) });
+    this.animals$
+      .pipe(takeWhile(() => !this.searched, true))
+      .subscribe((animals) => this.searchedAnimals$.next(animals));
+  }
+
+  private trackAnimalSelect() {
+    this.$currentAnimal.subscribe((animal) => {
+      this.animalSelected.emit(animal);
+    });
   }
 
   private trackSearch() {
-    combineLatest([
-      this.searchBarValChange,
-      this.animals$,
-      this.screenSize.isSmallScreenObs(),
-    ]).subscribe(([value, animals, isSmall]: [string, Animal[], boolean]) => {
-      if (value.length > 2) {
-        this.searchedAnimals$.next(
-          isSmall
-            ? this.getSearchedAnimals(animals, value).slice(0, 5)
-            : this.getSearchedAnimals(animals, value)
-        );
-        this.animalSelected.emit(this.getAnimal(this.currentIndex));
-      } else {
-        this.searchedAnimals$.next(isSmall ? animals.slice(0, 5) : animals);
-        this.animalSelected.emit(this.getAnimal(this.currentIndex));
+    combineLatest([this.searchBarValChange, this.animals$]).subscribe(
+      ([value, animals]: [string, Animal[]]) => {
+        this.searched = true;
+        if (value.length > 2) {
+          if (document.getElementById('animalList')) {
+            document.getElementById('animalList').scrollTop = 0;
+          }
+
+          this.searchedAnimals$.next(this.getSearchedAnimals(animals, value));
+          this.$currentAnimal.next(
+            this.searchedAnimals$.value.find(
+              (animal) => animal.tagNumber === this.currentAnimal?.tagNumber
+            )
+          );
+        } else {
+          this.searchedAnimals$.next(animals);
+          this.$currentAnimal.next(
+            animals.find(
+              (animal) => animal.tagNumber === this.currentAnimal?.tagNumber
+            )
+          );
+        }
       }
-    });
+    );
   }
 
   private getSearchedAnimals(animals: Animal[], value: string): Animal[] {
@@ -111,11 +144,7 @@ export class AnimalListComponent implements OnInit {
     return this.searchBarGroup.get('searchBar').valueChanges;
   }
 
-  private getAnimal(index: number) {
-    return this.searchedAnimals$.value[index];
-  }
-
-  private getSelectedAnimal() {
-    return this.getAnimal(this.currentIndex);
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 }

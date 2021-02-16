@@ -1,26 +1,31 @@
 import {
   AfterViewInit,
   Component,
+  EventEmitter,
   Input,
   OnInit,
+  Output,
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Modals } from '@cms-enums';
+import { Gender, Modals } from '@cms-enums';
 import { Animal, Bull } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
-import { getDams } from '@cms-ngrx/animal';
+import { getDams, selectAnimals } from '@cms-ngrx/animal';
 import { selectBulls as getBulls } from '@cms-ngrx/bull';
 import { AnimalUpdateService, LoadingPaneService } from '@cms-services';
 import { dateValidator } from '@cms-validators';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { select, Store } from '@ngrx/store';
+import { WarningService } from 'libs/services/services/src/warning.service';
+import * as moment from 'moment';
 import { NgxSmartModalService } from 'ngx-smart-modal';
-import { Observable, timer } from 'rxjs';
+import { BehaviorSubject, Observable, timer } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 enum FormControls {
   TagNumber = 'newTagNumber',
-  Gender = 'gender',
+  GenderControl = 'gender',
   DOB = 'dob',
   Dam = 'dam',
   Sire = 'sire',
@@ -33,6 +38,7 @@ enum FormControls {
 export class AnimalModalComponent implements OnInit, AfterViewInit {
   @Input() animal: Animal = null;
   @Input() isAddMode: boolean;
+  @Output() editAnimal: EventEmitter<Animal> = new EventEmitter(null);
   @ViewChild('p') popover: NgbPopover;
   public animalForm: FormGroup = new FormGroup({});
   public $dams: Observable<Animal[]>;
@@ -41,19 +47,24 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
     message: '',
     success: true,
   };
+  private $animals: Observable<Animal[]>;
+  private previousFormValue;
+  private noSireText = 'No sire assigned';
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly store: Store<RootState>,
     private readonly modals: NgxSmartModalService,
     private readonly animalUpdateService: AnimalUpdateService,
-    private readonly loadingService: LoadingPaneService
+    private readonly loadingService: LoadingPaneService,
+    private readonly warningService: WarningService
   ) {}
 
   ngOnInit(): void {
     this.setUpForm();
     this.$dams = this.store.pipe(select(getDams));
     this.$sires = this.store.pipe(select(getBulls));
+    this.$animals = this.store.pipe(select(selectAnimals));
   }
 
   ngAfterViewInit() {
@@ -61,46 +72,55 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
   }
 
   public save() {
-    if (this.isAddMode) {
-      this.markAllAsDirty();
-      if (this.handlePopoverErrors()) {
-        this.loadingService.setLoadingState(true);
-        const newAnimal: Animal = {
-          ai: [],
-          birthDate: this.dob.value,
-          calvingHistory: [],
-          calvingStats: [],
-          dam: this.dam.value,
-          gender: this.gender.value,
-          managementTag: 'null',
-          sire: this.sire.value,
-          tagNumber: this.tagNumber.value,
-          weightData: [],
-        };
-        this.animalUpdateService.addAnimal(newAnimal).then(() => {
-          this.saveResult.message = 'Animal Saved';
-          this.saveResult.success = true;
+    this.handlePopoverErrors().subscribe((canContinue) => {
+      if (this.isAddMode) {
+        this.markAllAsDirty();
+        if (canContinue) {
+          this.loadingService.setLoadingState(true);
+          const newAnimal: Animal = {
+            ai: [],
+            birthDate: this.dob.value,
+            calvingHistory: [],
+            calvingStats: [],
+            dam: this.dam.value,
+            gender: this.gender.value,
+            managementTag: 'null',
+            sire: this.sire.value == 'UK' ? '' : this.sire.value,
+            tagNumber: this.tagNumber.value,
+            weightData: [],
+          };
+          this.animalUpdateService.addAnimal(newAnimal).then(() => {
+            this.saveResult.message = 'Animal Saved';
+            this.saveResult.success = true;
 
-          this.clearForm();
-          this.loadingService.setLoadingState(false);
-          this.handlePopover(1000);
-        });
+            this.clearForm();
+            this.loadingService.setLoadingState(false);
+            this.handlePopover(this.previousFormValue ? 500 : 1000);
+          });
+        }
+      } else {
+        this.tagNumber.disable();
+        if (canContinue) {
+          this.loadingService.setLoadingState(true);
+          const animalUpdate = {
+            birthDate: this.dob.value,
+            dam: this.dam.value,
+            sire: this.noSire() ? '' : this.sire.value,
+            gender: this.gender.value,
+          };
+          this.animalUpdateService
+            .updateAnimal(this.animal.tagNumber, animalUpdate)
+            .then(() => {
+              this.saveResult.message = 'Animal Updated';
+              this.saveResult.success = true;
+
+              this.clearForm();
+              this.loadingService.setLoadingState(false);
+              this.handlePopover(1000);
+            });
+        }
       }
-    } else {
-      this.tagNumber.disable();
-      if (this.handlePopoverErrors()) {
-        const animalUpdate = {
-          birthDate: this.dob.value,
-          dam: this.dam.value,
-          sire: this.sire.value,
-          gender: this.gender.value,
-        };
-        this.animalUpdateService.updateAnimal(
-          this.animal.tagNumber,
-          animalUpdate
-        );
-      }
-    }
+    });
   }
 
   public getCSSForPopover() {
@@ -119,21 +139,113 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
     this.modals.get(Modals.Animal).close();
   }
 
-  private handlePopoverErrors() {
+  private noSire(): boolean {
+    return this.sire.value == 'UK' || this.sire.value == this.noSireText;
+  }
+
+  private handlePopoverErrors(): Observable<boolean> {
+    const output: BehaviorSubject<boolean> = new BehaviorSubject(null);
+    if (!this.isAddMode) {
+      this.tagNumber.disable();
+    }
+    this.markAllAsDirty();
+    if (this.sire.value == 'UK' || this.sire.value == '') {
+      this.sire.disable();
+    }
     if (this.animalForm.valid) {
+      this.sire.enable();
       if (!this.valuesChanged()) {
         this.saveResult.message = 'No changes made';
         this.saveResult.success = false;
         this.handlePopover(3000);
-        return false;
+        output.next(false);
+      } else {
+        this.$animals.pipe(take(1)).subscribe((animals) => {
+          if (this.damNotExists(animals)) {
+            this.warningService
+              .show({
+                header: 'The dam tag you entered does not exist',
+                body: 'Continuing will add it to the database',
+              })
+              .subscribe((result) => {
+                if (result) {
+                  this.addDam(this.dam.value).then(() => {
+                    output.next(true);
+                  });
+                } else {
+                  output.next(result);
+                }
+              });
+          } else if (
+            this.enteredTagIsMale(animals) &&
+            !this.previousFormValue
+          ) {
+            this.warningService
+              .show({
+                header: 'The animal entered for the dam is male',
+                body: 'Please edit it to continue',
+                buttonText: 'Go to edit',
+                isError: true,
+              })
+              .subscribe((result) => {
+                if (result) {
+                  // this.editAnimal.emit(this.getEnteredDam(animals));
+                  output.next(false);
+                  this.animal = this.getEnteredDam(animals);
+                  this.isAddMode = false;
+                  this.modals.get(Modals.Animal).open();
+                  this.previousFormValue = this.animalForm.value;
+                } else {
+                  output.next(false);
+                }
+              });
+          } else {
+            output.next(true);
+          }
+        });
       }
-      return true;
     } else {
+      this.sire.enable();
       this.saveResult.message = 'Please fix errors';
       this.saveResult.success = false;
       this.handlePopover(3000);
-      return false;
+      output.next(false);
     }
+    return output;
+  }
+
+  private getEnteredDam(animals: Animal[]) {
+    return animals.find((animal) => this.dam.value);
+  }
+
+  private enteredTagIsMale(animals: Animal[]): boolean {
+    return (
+      animals.find((animal) => animal.tagNumber === this.dam.value).gender ===
+      Gender.Male
+    );
+  }
+
+  private damNotExists(animals: Animal[]): boolean {
+    return (
+      animals.findIndex((animal) => animal.tagNumber === this.dam.value) === -1
+    );
+  }
+
+  private addDam(tagNumber: string) {
+    const newAnimal: Animal = {
+      ai: [],
+      birthDate: moment(),
+      calvingHistory: [],
+      calvingStats: [],
+      dam: null,
+      gender: Gender.Female,
+      managementTag: 'null',
+      sire: null,
+      tagNumber,
+      weightData: [],
+    };
+    this.loadingService.setLoadingState(true);
+    return this.animalUpdateService.addAnimal(newAnimal);
   }
 
   private valuesChanged(): boolean {
@@ -146,10 +258,18 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
   }
 
   private setData() {
+    console.warn(this.isAddMode);
+
     if (!this.isAddMode) {
+      console.warn(this.isAddMode);
+
       this.dob.setValue(this.animal.birthDate.format('yyyy-MM-DD'));
       this.dam.setValue(this.animal.dam.tagNumber);
-      this.sire.setValue(this.animal.sire.tagNumber);
+      this.sire.setValue(
+        this.animal.sire.tagNumber !== 'null'
+          ? this.animal.sire.tagNumber
+          : this.noSireText
+      );
       this.gender.setValue(this.animal.gender);
     }
   }
@@ -157,16 +277,20 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
   private setUpForm() {
     this.animalForm = this.fb.group({
       newTagNumber: this.fb.control(['UK'], {
-        validators: Validators.pattern(/^UK\d{12}$/),
+        validators: [Validators.pattern(/^UK\d{12}$/), Validators.required],
         updateOn: 'blur',
       }),
       gender: this.fb.control([], Validators.required),
       dob: this.fb.control([], [Validators.required, dateValidator()]),
-      dam: this.fb.control([], Validators.required),
-      sire: this.fb.control([], Validators.required),
+      dam: this.fb.control(['UK'], {
+        validators: Validators.pattern(/^UK\d{12}$/),
+        updateOn: 'blur',
+      }),
+      sire: this.fb.control(['UK'], {
+        validators: Validators.pattern(/^UK\d{12}|UK|No sire assigned$/),
+        updateOn: 'blur',
+      }),
     });
-    this.sire.setValue('');
-    this.dam.setValue('');
   }
 
   private handlePopover(time: number) {
@@ -177,13 +301,27 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
     timer(time).subscribe(() => {
       this.popover.close();
       if (this.saveResult.success) {
-        this.closeModal();
+        if (this.previousFormValue) {
+          this.isAddMode = true;
+          this.animalForm.setValue(this.previousFormValue);
+          this.tagNumber.enable();
+          this.previousFormValue = null;
+        } else {
+          this.closeModal();
+        }
       }
     });
   }
 
   private markAllAsDirty() {
-    this.sire.markAsDirty();
+    if (this.sire.value == 'UK') {
+      this.sire.markAsPristine();
+    } else if (this.sire.value == '') {
+      this.sire.markAsPristine();
+    } else {
+      this.sire.markAsDirty();
+    }
+
     this.dam.markAsDirty();
     this.tagNumber.markAsDirty();
     this.dob.markAsDirty();
@@ -197,12 +335,17 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
     });
     animalModal.onOpenFinished.subscribe(() => {
       this.animalForm.enable();
+      console.warn(this.isAddMode);
+
       this.setData();
     });
   }
 
   private clearForm() {
-    this.animalForm.reset({ newTagNumber: 'UK722218' }, { emitEvent: false });
+    this.animalForm.reset(
+      { newTagNumber: 'UK', sire: 'UK', dam: 'UK' },
+      { emitEvent: false }
+    );
   }
 
   public get tagNumber() {
@@ -210,7 +353,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
   }
 
   public get gender() {
-    return this.animalForm.get(FormControls.Gender);
+    return this.animalForm.get(FormControls.GenderControl);
   }
 
   public get sire() {

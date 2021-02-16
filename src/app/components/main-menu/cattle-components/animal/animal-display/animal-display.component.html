@@ -64,8 +64,9 @@
       </span>
     </li>
     <li class="list-group-item" *ngIf="$sire | async as sire">
-      <strong>Sire - </strong>{{ sire.name }}
-      <ul style="list-style-type: none">
+      <strong>Sire - </strong
+      >{{ sire.name !== "null" ? sire.name : "No sire assigned" }}
+      <ul *ngIf="sire.name !== 'null'" style="list-style-type: none">
         <li>&nbsp;{{ sire.tagNumber }}</li>
         <li>&nbsp;{{ sire.breed }}</li>
       </ul>

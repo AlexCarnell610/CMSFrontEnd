@@ -4,6 +4,19 @@
 
 <div class="container">
   <div class="row">
+    <div class="col" *ngIf="$oldMales | async as oldMales">
+      <span
+        class="alert alert-warning"
+        *ngIf="!(loading | async) && oldMales.length > 0"
+      >
+        <strong
+          >There are {{ oldMales.length }} males over 36 months on the
+          system</strong
+        >
+      </span>
+    </div>
+  </div>
+  <div class="row">
     <div class="col">
       <img
         class="menu-icon"
