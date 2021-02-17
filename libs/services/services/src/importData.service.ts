@@ -6,7 +6,7 @@ import {
   Bull,
   CalvingHistory,
   CalvingStat,
-  Dam
+  Dam,
 } from '@cms-interfaces';
 import * as moment from 'moment';
 
@@ -38,15 +38,17 @@ export class MappingService {
             ? []
             : this.convertCalvingStats(value.calving_stat),
         dam: this.convertDam(value.dam),
-        sire: {tagNumber: value.sire.tag_number},
+        sire: { tagNumber: value.sire.tag_number },
         weightData: this.convertWeightData(value.weight_data),
+        notes: value.notes,
+        breed: value.breed,
       });
     }
-    
+
     return mappedAnimals;
   }
 
-  public convertBulls(bullData: Object): Bull[]{
+  public convertBulls(bullData: Object): Bull[] {
     const convertedBulls: Bull[] = [];
     for (let value of Object.values<any>(bullData)) {
       convertedBulls.push(this.convertBull(value));
@@ -54,21 +56,23 @@ export class MappingService {
     return convertedBulls;
   }
 
-  private convertWeightData(weightData: any[]): AnimalWeight[] {
-    return weightData.map(
-      (weight) => this.convertWeight(weight)
-    );
+  public convertWeightData(weightData: any[]): AnimalWeight[] {
+    return weightData.map((weight) => this.convertWeight(weight));
   }
 
-  public convertWeight(weight: any): AnimalWeight {  
+  public convertWeight(weight: any): AnimalWeight {
     return {
       id: weight.id,
       weightDate: this.convertDate(weight.weight_date),
       weightType: {
-        isInitial: weight.is_initial_weight === 1 || weight.is_initial_weight ? true : false,
-        isSale: weight.is_sale_weight === 1 || weight.is_sale_weight ? true : false,
+        isInitial:
+          weight.is_initial_weight === 1 || weight.is_initial_weight
+            ? true
+            : false,
+        isSale:
+          weight.is_sale_weight === 1 || weight.is_sale_weight ? true : false,
       },
-      weight: weight.weight
+      weight: weight.weight,
     };
   }
   private convertBull(sire: any): Bull {

@@ -1,4 +1,4 @@
-<ngx-smart-modal #animalModal identifier="animalModal">
+<ngx-smart-modal justify-content-center #animalModal identifier="animalModal">
   <div *ngIf="animal || isAddMode">
     <h2 class="text-center">
       {{ isAddMode ? "Add Animal" : "Edit " }}
@@ -6,7 +6,8 @@
     </h2>
     <div class="cms-form">
       <form [formGroup]="animalForm">
-        <div *ngIf="isAddMode"
+        <div
+          *ngIf="isAddMode"
           class="form-group"
           [ngClass]="{ 'was-validated': tagNumber.dirty }"
         >
@@ -18,6 +19,7 @@
             name="tag"
             id="newTagNumber"
             pattern="^UK\d{12}$"
+            autocapitalize="characters"
           />
           <div class="invalid-feedback">
             <cms-form-errors [errors]="tagNumber.errors"></cms-form-errors>
@@ -37,46 +39,53 @@
             <cms-form-errors [errors]="dob.errors"></cms-form-errors>
           </div>
         </div>
-        <div
-          class="form-group"
-          [ngClass]="{ 'was-validated': dam.dirty }"
-          *ngIf="($dams | async) as dams"
-        >
-          <label for="dams">Select dam</label>
-          <select
-            class="custom-select"
-            name="dams"
-            id="dams"
-            formControlName="dam"
-            required
-          >
-            <option value=""></option>
-            <option *ngFor="let dam of dams" value="{{ dam.tagNumber }}">
-              {{ dam.tagNumber }}
+        <div class="form-group">
+          <label for="breed">Enter Breed</label>
+          <input
+            [ngClass]="getCSSClassForBreed()"
+            formControlName="breed"
+            type="text"
+            id="breed"
+            list="breeds"
+            class="form-control"
+            onclick="this.select();"
+          />
+          <datalist id="breeds">
+            <option *ngFor="let breed of breedsList" value="{{ breed.code }}">
+              {{ breed.breed }}
             </option>
-          </select>
+          </datalist>
+          <div class="invalid-feedback">
+            <cms-form-errors [errors]="breed.errors"></cms-form-errors>
+          </div>
+        </div>
+        <div class="form-group" [ngClass]="{ 'was-validated': dam.dirty }">
+          <label for="dams">Enter Dam Tag</label>
+          <input
+            class="form-control"
+            type="text"
+            name="dam"
+            id="dam"
+            formControlName="dam"
+            pattern="^UK\d{12}$"
+            required
+            autocapitalize="characters"
+          />
           <div class="invalid-feedback">
             <cms-form-errors [errors]="dam.errors"></cms-form-errors>
           </div>
         </div>
-        <div
-          class="form-group"
-          [ngClass]="{ 'was-validated': sire.dirty }"
-          *ngIf="($sires | async) as sires"
-        >
-          <label for="sire">Select sire</label>
-          <select
-            class="custom-select"
+        <div class="form-group" [ngClass]="{ 'was-validated': sire.dirty }">
+          <label for="sire">Enter Sire Tag</label>
+          <input
+            class="form-control"
+            type="text"
             name="sire"
             id="sire"
             formControlName="sire"
-            required
-          >
-            <option value=""></option>
-            <option *ngFor="let sire of sires" value="{{ sire.tagNumber }}">
-              {{ sire.name }}
-            </option>
-          </select>
+            pattern="^UK\d{12}|UK|No sire assigned$"
+            autocapitalize="characters"
+          />
           <div class="invalid-feedback">
             <cms-form-errors [errors]="sire.errors"></cms-form-errors>
           </div>

@@ -1,12 +1,20 @@
-.badge-pill{
-    font-size: 100%;
-    font-weight: 600;
+.badge-pill {
+  font-size: 100%;
+  font-weight: 600;
 }
 
 .small-screen-display {
-    max-width: 450px;
+  max-width: 450px;
 }
 
 .card {
-    font-size: clamp(9.5pt, 2vw, 17px);
+  font-size: clamp(9.5pt, 2vw, 17px);
+}
+
+.cms-notes-edit {
+  width: 7.5em;
+}
+
+.cms-disabled-pill {
+  opacity: 0.65 !important;
 }

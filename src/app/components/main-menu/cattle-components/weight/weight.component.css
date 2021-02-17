@@ -4,10 +4,8 @@
     min-width: min-content;
 } */
 
-
-
-.small-screen-graph{
-    max-width: 400px;
+.small-screen-graph {
+  max-width: 400px;
 }
 
 /* .badge-pill{

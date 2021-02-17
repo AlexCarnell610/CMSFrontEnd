@@ -12,41 +12,18 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
-    "lib": [
-      "es2018",
-      "dom"
-    ],
+    "lib": ["es2018", "dom"],
     "paths": {
-      "rxjs": [
-        "node_modules/rxjs"
-      ],
-      "rxjs/*": [
-        "node_modules/rxjs/*"
-      ],
-      "@cms-enums": [
-        "libs/enums/src"
-      ],
-      "@cms-interfaces": [
-        "libs/interfaces/src"
-      ],
-      "@cms-ngrx/animal": [
-        "libs/ngrx/src/lib/animalState"
-      ],
-      "@cms-ngrx/bull": [
-        "libs/ngrx/src/lib/bullState"
-      ],
-      "@cms-ngrx": [
-        "libs/ngrx/src/lib"
-      ],
-      "@cms-services/http": [
-        "libs/services/httpServices"
-      ],
-      "@cms-services": [
-        "libs/services/services"
-      ],
-      "@cms-validators":[
-        "libs/validators"
-      ]
+      "rxjs": ["node_modules/rxjs"],
+      "rxjs/*": ["node_modules/rxjs/*"],
+      "@cms-enums": ["libs/enums/src"],
+      "@cms-interfaces": ["libs/interfaces/src"],
+      "@cms-ngrx/animal": ["libs/ngrx/src/lib/animalState"],
+      "@cms-ngrx/bull": ["libs/ngrx/src/lib/bullState"],
+      "@cms-ngrx": ["libs/ngrx/src/lib"],
+      "@cms-services/http": ["libs/services/httpServices"],
+      "@cms-services": ["libs/services/services"],
+      "@cms-validators": ["libs/validators"]
     }
   },
   "angularCompilerOptions": {

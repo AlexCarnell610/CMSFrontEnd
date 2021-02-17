@@ -4,6 +4,19 @@
 
 <div class="container">
   <div class="row">
+    <div class="col" *ngIf="$oldMales | async as oldMales">
+      <span
+        class="alert alert-warning"
+        *ngIf="!(loading | async) && oldMales.length > 0"
+      >
+        <strong
+          >There are {{ oldMales.length }} males over 36 months on the
+          system</strong
+        >
+      </span>
+    </div>
+  </div>
+  <div class="row">
     <div class="col">
       <img
         class="menu-icon"
@@ -16,10 +29,16 @@
     <div class="col">
       <div class="btn-toolbar">
         <div class="btn-group">
-          <button class="btn btn-secondary mr-1 menu-buttons" (click)="weightScreen()">
+          <button
+            class="btn btn-secondary mr-1 menu-buttons"
+            (click)="weightScreen()"
+          >
             Animal Weights
           </button>
-          <button class="btn btn-secondary mr-1 menu-buttons" (click)="animalScreen()">
+          <button
+            class="btn btn-secondary mr-1 menu-buttons"
+            (click)="animalScreen()"
+          >
             Add/Edit Animal
           </button>
           <button class="btn btn-secondary mr-1 menu-buttons">Add Birth</button>
@@ -60,18 +79,16 @@
     </div>
   </div>
   <div class="row">
-      <div class="col">
-          <img class="user-menu-icon" src="assets/userIcon.svg" alt="UserIcon">
-          <div class="btn-toolbar">
-              <div class="btn-group">
-                <button class="btn btn-secondary mr-1 menu-buttons">
-                   Edit User
-                  </button>
-                  <button class="btn btn-danger mr-1 menu-buttons"(click)="logout()">
-                    Log Out
-                   </button>
-              </div>
-          </div>
+    <div class="col">
+      <img class="user-menu-icon" src="assets/userIcon.svg" alt="UserIcon" />
+      <div class="btn-toolbar">
+        <div class="btn-group">
+          <button class="btn btn-secondary mr-1 menu-buttons">Edit User</button>
+          <button class="btn btn-danger mr-1 menu-buttons" (click)="logout()">
+            Log Out
+          </button>
+        </div>
       </div>
+    </div>
   </div>
 </div>

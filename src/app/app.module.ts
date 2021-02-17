@@ -24,7 +24,7 @@ import { LogoutComponent } from './components/logout/logout.component';
     AppComponent,
     LoginComponent,
     LogoutComponent,
-    FooterComponent   
+    FooterComponent,
   ],
   imports: [
     BrowserModule,
@@ -32,8 +32,8 @@ import { LogoutComponent } from './components/logout/logout.component';
     StoreModule.forRoot(reducers, {
       runtimeChecks: {
         strictStateImmutability: true,
-        strictActionImmutability: true
-      }
+        strictActionImmutability: true,
+      },
     }),
     EffectsModule.forRoot([AnimalEffects, BullEffects]),
     environment.production ? [] : StoreDevtoolsModule.instrument(),
@@ -46,15 +46,17 @@ import { LogoutComponent } from './components/logout/logout.component';
     AuthModule.forRoot({
       ...environment.auth,
       httpInterceptor: {
-        allowedList: ['/api/*']
-      }      
-    })
+        allowedList: ['/api/*'],
+      },
+    }),
   ],
-  providers: [ {
-    provide: HTTP_INTERCEPTORS,
-    useClass: AuthHttpInterceptor,
-    multi: true
-  } ],
-  bootstrap: [AppComponent]
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthHttpInterceptor,
+      multi: true,
+    },
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

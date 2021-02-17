@@ -1,25 +1,32 @@
 <ul
-  class="list-group"
+  class="list-group cms-animal-list"
+  id="animalList"
   *ngIf="searchedAnimals$ | async as animals"
   [formGroup]="searchBarGroup"
 >
   <input
-    class="list-group-item animal-button"
+    class="list-group-item animal-button cms-sticky"
     type="text"
     placeholder="Search..."
     formControlName="searchBar"
   />
   <button
     class="list-group-item list-group-item-action d-flex justify-content-between align-items-center animal-button"
-    *ngFor="let animal of animals; let i = index"
-    (click)="selectAnimal(i)"
+    *ngFor="let animal of animals"
+    [ngClass]="getCSSForButton(animal)"
+    (click)="selectAnimal(animal)"
   >
     {{ animal.tagNumber }}
-    <span class="badge badge-primary badge-pill align-self-center" (click)="openEditModal()"
+    <span
+      class="badge badge-info badge-pill align-self-center"
+      (click)="openEditModal()"
       >Edit {{ pillButtonText }}</span
     >
     <span *ngIf="getPillButtonText() === 'Animal'"></span>
-    <span *ngIf="getPillButtonText() !== 'Animal'" class="badge badge-success badge-pill ml-1" (click)="openAddModal()"
+    <span
+      *ngIf="getPillButtonText() !== 'Animal'"
+      class="badge badge-success badge-pill ml-1"
+      (click)="openAddModal()"
       >Add {{ pillButtonText }}</span
     >
   </button>

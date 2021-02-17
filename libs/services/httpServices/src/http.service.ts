@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HttpUrls } from '@cms-enums';
 import { Animal, AnimalWeight, Bull } from '@cms-interfaces';
+import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MappingService } from '../../../services/services/src/importData.service';
@@ -39,26 +40,35 @@ export class HttpService {
     );
   }
 
-  public updateWeight(id, update): Observable<AnimalWeight> {
+  public updateWeight(id, update): Observable<AnimalWeight[]> {
     return this.http
       .patch(`${HttpUrls.PatchWeight}/${id}`, { ...update })
-      .pipe(map((res) => this.mappingService.convertWeight(res)));
+      .pipe(
+        map((res) => this.mappingService.convertWeightData(Object.values(res)))
+      );
   }
 
-  public addWeight(animalId, weight): Observable<AnimalWeight> {
+  public addWeight(animalId, weight): Observable<AnimalWeight[]> {
     return this.http
       .put(`${HttpUrls.PutWeight}/${animalId}`, { ...weight })
-      .pipe(map((res) => this.mappingService.convertWeight(res)));
+      .pipe(
+        map((res) => this.mappingService.convertWeightData(Object.values(res)))
+      );
   }
 
   public addAnimal(animal: Animal): Observable<Animal> {
+    const newAnimal = {
+      ...animal,
+      birthDate: moment(animal.birthDate).format('yyyy-MM-DD'),
+    };
     return this.http
-      .post(HttpUrls.Animal, animal)
+      .post(HttpUrls.Animal, newAnimal)
       .pipe(map((res) => this.mappingService.importAnimalData([res])[0]));
   }
 
-  public updateAnimal(tagNumber: string, update): Observable<Animal>{
-    return this.http.patch(`${HttpUrls.Animal}/${tagNumber}`, {...update})
-    .pipe(map((res) => this.mappingService.importAnimalData([res])[0]));
+  public updateAnimal(tagNumber: string, update): Observable<Animal> {
+    return this.http
+      .patch(`${HttpUrls.Animal}/${tagNumber}`, { ...update })
+      .pipe(map((res) => this.mappingService.importAnimalData([res])[0]));
   }
 }

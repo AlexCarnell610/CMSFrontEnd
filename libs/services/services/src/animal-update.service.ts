@@ -5,7 +5,7 @@ import {
   AddAnimal,
   AddAnimalWeight,
   UpdateAnimal,
-  UpdateAnimalWeight
+  UpdateAnimalWeight,
 } from '@cms-ngrx/animal';
 import { HttpService } from '@cms-services/http';
 import { Store } from '@ngrx/store';
@@ -29,15 +29,12 @@ export class AnimalUpdateService {
       this.httpService
         .updateWeight(Number.parseInt(weightId), weightUpdate)
         .subscribe((res) => {
-          let update = animal.weightData.slice();
-
-          update.splice(index, 1, res);
           this.store.dispatch(
             new UpdateAnimalWeight({
               weightUpdate: {
                 id: animal.tagNumber,
                 changes: {
-                  weightData: update,
+                  weightData: res,
                 },
               },
             })
@@ -53,11 +50,9 @@ export class AnimalUpdateService {
   ): Promise<boolean> {
     return new Promise((resolve) => {
       this.httpService.addWeight(animalId, weight).subscribe((res) => {
-        console.error(res);
         this.store.dispatch(
           new AddAnimalWeight({
-            id: animalId,
-            newWeight: res,
+            newWeight: { id: animalId, changes: { weightData: res } },
           })
         );
         resolve(true);
@@ -76,10 +71,12 @@ export class AnimalUpdateService {
 
   public updateAnimal(tagNumber: string, animal): Promise<boolean> {
     return new Promise((resolve) => {
-      this.httpService.updateAnimal(tagNumber, animal).subscribe(res => {
-        this.store.dispatch(new UpdateAnimal({id: res.tagNumber, changes: res}))
+      this.httpService.updateAnimal(tagNumber, animal).subscribe((res) => {
+        this.store.dispatch(
+          new UpdateAnimal({ id: res.tagNumber, changes: res })
+        );
         resolve(true);
       });
-    })
+    });
   }
 }

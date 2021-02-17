@@ -22,22 +22,23 @@ export class AppComponent implements OnInit {
     ngbAlertConfig: NgbAlertConfig,
     ngbTooltipConf: NgbTooltipConfig,
     private readonly screenSizeService: ScreenSizeService
-  ) {
-  ngbAlertConfig.dismissible = false
+  ) // private readonly breed: AnimalBreedService
+  {
+    ngbAlertConfig.dismissible = false;
   }
-  ngOnInit(){    
+  ngOnInit() {
     Moment.locale('en-gb');
-    this.auth.isAuthenticated$.subscribe(authed => {
+    this.auth.isAuthenticated$.subscribe((authed) => {
       if (authed) {
         //could do something with sessoin storage to stop redownloading data on refresh
         //would need marker to mark session data as old
         this.store.dispatch(new RetrieveAnimalData());
         this.store.dispatch(new RetreieveBullData());
       }
-    })
+    });
   }
   @HostListener('window:resize', ['$event'])
-   resize(event){
-    this.screenSizeService.screenWidth = event.currentTarget.innerWidth
-   }
+  resize(event) {
+    this.screenSizeService.screenWidth = event.currentTarget.innerWidth;
+  }
 }

@@ -1,0 +1,25 @@
+<ngx-smart-modal
+  #warningModal
+  identifier="warningModal"
+  [ngClass]="getCSSForWarning()"
+  [closable]="false"
+  [escapable]="false"
+  [dismissable]="false"
+  [customClass]="'nsm-centered'"
+>
+  <div *ngIf="toast">
+    <strong>{{ toast.header }}</strong>
+    <div>{{ toast.body }}</div>
+    <div class="mt-2">
+      <button
+        class="btn mr-2"
+        [ngClass]="getCSSForButton()"
+        (click)="continueClick()"
+      >
+        {{ toast.buttonText }}</button
+      ><button class="btn btn-dark" (click)="cancelClick()">
+        {{ toast.isError ? "Close" : "Cancel" }}
+      </button>
+    </div>
+  </div>
+</ngx-smart-modal>

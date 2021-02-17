@@ -1,32 +1,33 @@
 .container {
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+}
+
+.alert-warning {
+  font-size: clamp(12px, 2vw, 16px);
 }
 
 .menu-icon {
-    margin-top: 20px;
-    width: 8.5vw;
+  margin-top: 20px;
+  width: 8.5vw;
 }
 
 .medicine-menu-icon {
-    margin-top: 20px;
-    margin-bottom: 10px;
-    width: 3.5vw;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  width: 3.5vw;
 }
 
 .user-menu-icon {
-    margin-top: 20px;
-    margin-bottom: 10px;
-    width: 5vw;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  width: 5vw;
 }
-
-
 
 .menu-buttons {
-    font-size: clamp(10pt, 2vw, 15pt);
-    min-width: min-content;
-    width: fit-content;
-    height: fit-content;
+  font-size: clamp(10pt, 2vw, 15pt);
+  min-width: min-content;
+  width: fit-content;
+  height: fit-content;
 }
-
