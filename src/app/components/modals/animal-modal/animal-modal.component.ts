@@ -5,7 +5,13 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { Gender, Modals } from '@cms-enums';
 import { Animal, Bull } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
@@ -15,6 +21,7 @@ import { AnimalUpdateService, LoadingPaneService } from '@cms-services';
 import { dateValidator } from '@cms-validators';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { select, Store } from '@ngrx/store';
+import { AnimalBreedService } from 'libs/services/services/src/animal-breed.service';
 import { WarningService } from 'libs/services/services/src/warning.service';
 import * as moment from 'moment';
 import { NgxSmartModalService } from 'ngx-smart-modal';
@@ -27,6 +34,7 @@ enum FormControls {
   DOB = 'dob',
   Dam = 'dam',
   Sire = 'sire',
+  Breed = 'breed',
 }
 @Component({
   selector: 'cms-animal-modal',
@@ -44,6 +52,8 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
     message: '',
     success: true,
   };
+  public dropDownHidden = true;
+  public breedsList;
   private $animals: Observable<Animal[]>;
   private previousFormValue;
   private noSireText = 'No sire assigned';
@@ -54,11 +64,13 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
     private readonly modals: NgxSmartModalService,
     private readonly animalUpdateService: AnimalUpdateService,
     private readonly loadingService: LoadingPaneService,
-    private readonly warningService: WarningService
+    private readonly warningService: WarningService,
+    private readonly breedService: AnimalBreedService
   ) {}
 
   ngOnInit(): void {
     this.setUpForm();
+    this.breedsList = this.breedService.breedCodeObjects;
     this.$dams = this.store.pipe(select(getDams));
     this.$sires = this.store.pipe(select(getBulls));
     this.$animals = this.store.pipe(select(selectAnimals));
@@ -85,6 +97,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
             sire: this.sire.value == 'UK' ? '' : this.sire.value,
             tagNumber: this.tagNumber.value,
             weightData: [],
+            breed: this.breed.value,
           };
           this.animalUpdateService.addAnimal(newAnimal).then(() => {
             this.saveResult.message = 'Animal Saved';
@@ -128,6 +141,14 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
     if (this.dob.invalid && this.dob.dirty) {
       return 'is-invalid';
     } else if (this.dob.valid && this.dob.dirty) {
+      return 'is-valid';
+    }
+  }
+
+  public getCSSClassForBreed() {
+    if (this.breed.invalid && this.breed.dirty) {
+      return 'is-invalid';
+    } else if (this.breed.valid && this.breed.dirty) {
       return 'is-valid';
     }
   }
@@ -239,6 +260,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
       sire: null,
       tagNumber,
       weightData: [],
+      breed: 'UNAV',
     };
     this.loadingService.setLoadingState(true);
     return this.animalUpdateService.addAnimal(newAnimal);
@@ -263,6 +285,9 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
           : this.noSireText
       );
       this.gender.setValue(this.animal.gender);
+      this.breed.setValue(
+        this.breedService.getBreedFromCode(this.animal.breed)
+      );
     }
   }
 
@@ -274,6 +299,10 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
       }),
       gender: this.fb.control([], Validators.required),
       dob: this.fb.control([], [Validators.required, dateValidator()]),
+      breed: this.fb.control([], {
+        validators: this.breedValidator(),
+        updateOn: 'blur',
+      }),
       dam: this.fb.control(['UK'], {
         validators: Validators.pattern(/^UK\d{12}$/),
         updateOn: 'blur',
@@ -338,6 +367,16 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
     );
   }
 
+  private breedValidator(): ValidatorFn {
+    return (control: FormControl): { [key: string]: any } | null => {
+      if (this.breedService.breedExists(control.value)) {
+        return null;
+      } else {
+        return { breed: 'Please choose a breed from the dropdown' };
+      }
+    };
+  }
+
   public get tagNumber() {
     return this.animalForm.get(FormControls.TagNumber);
   }
@@ -356,5 +395,8 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
 
   public get dob() {
     return this.animalForm.get(FormControls.DOB);
+  }
+  public get breed() {
+    return this.animalForm.get(FormControls.Breed);
   }
 }

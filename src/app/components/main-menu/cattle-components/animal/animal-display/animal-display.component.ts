@@ -12,6 +12,7 @@ import { RootState } from '@cms-ngrx';
 import { selectBullByTag } from '@cms-ngrx/bull';
 import { AnimalUpdateService, ScreenSizeService } from '@cms-services';
 import { select, Store } from '@ngrx/store';
+import { AnimalBreedService } from 'libs/services/services/src/animal-breed.service';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 @Component({
@@ -34,7 +35,8 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
     private readonly store: Store<RootState>,
     public readonly screenService: ScreenSizeService,
     private readonly fb: FormBuilder,
-    private readonly animalUpdate: AnimalUpdateService
+    private readonly animalUpdate: AnimalUpdateService,
+    private readonly breedService: AnimalBreedService
   ) {}
 
   ngOnInit(): void {
@@ -42,6 +44,10 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
     this.trackSire();
     this.trackAnimalChanges();
     this.trackNotesChanges();
+  }
+
+  public getBreedName(animal: Animal): string {
+    return this.breedService.getBreedFromCode(animal.breed);
   }
 
   public getCSS() {

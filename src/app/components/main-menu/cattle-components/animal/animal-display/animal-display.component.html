@@ -20,6 +20,9 @@
       >{{ selectedAnimal.birthDate | date: "dd MMM yyyy" }}
     </li>
     <li class="list-group-item">
+      <strong>Breed - </strong>{{ getBreedName(selectedAnimal) | titlecase }}
+    </li>
+    <li class="list-group-item">
       <strong>Dam - </strong>{{ selectedAnimal.dam.tagNumber }}
     </li>
     <li

@@ -33,6 +33,7 @@ export interface Animal extends BaseAnimal {
   calvingHistory: CalvingHistory[];
   weightData: AnimalWeight[];
   notes?: string;
+  breed: string;
 }
 
 export interface AI {

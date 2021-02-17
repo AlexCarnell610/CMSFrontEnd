@@ -41,6 +41,7 @@ export class MappingService {
         sire: { tagNumber: value.sire.tag_number },
         weightData: this.convertWeightData(value.weight_data),
         notes: value.notes,
+        breed: value.breed,
       });
     }
 

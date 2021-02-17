@@ -22,7 +22,8 @@ export class AppComponent implements OnInit {
     ngbAlertConfig: NgbAlertConfig,
     ngbTooltipConf: NgbTooltipConfig,
     private readonly screenSizeService: ScreenSizeService
-  ) {
+  ) // private readonly breed: AnimalBreedService
+  {
     ngbAlertConfig.dismissible = false;
   }
   ngOnInit() {
