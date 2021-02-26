@@ -1,0 +1,11 @@
+.stat-dropdown {
+  width: max-content;
+}
+
+.dropdown-menu {
+  padding: 0 !important;
+}
+
+.invalid-stat {
+  color: #dc3545;
+}

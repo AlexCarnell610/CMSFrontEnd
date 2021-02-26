@@ -59,6 +59,7 @@ export class HttpService {
   public addAnimal(animal: Animal): Observable<Animal> {
     const newAnimal = {
       ...animal,
+      dam: animal.damTag ? animal.damTag : animal.dam,
       birthDate: moment(animal.birthDate).format('yyyy-MM-DD'),
     };
     return this.http
@@ -67,8 +68,18 @@ export class HttpService {
   }
 
   public updateAnimal(tagNumber: string, update): Observable<Animal> {
+    console.warn(update);
+
+    const newUpdate = {
+      ...update,
+    };
+
+    if (update.birthDate) {
+      newUpdate.birthDate = update.birthDate.format('YYYY-MM-DD');
+    }
+
     return this.http
-      .patch(`${HttpUrls.Animal}/${tagNumber}`, { ...update })
+      .patch(`${HttpUrls.Animal}/${tagNumber}`, { ...newUpdate })
       .pipe(map((res) => this.mappingService.importAnimalData([res])[0]));
   }
 }

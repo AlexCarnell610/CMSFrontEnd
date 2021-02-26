@@ -1,6 +1,6 @@
 .animal-button {
   max-width: 450px;
-  font-size: clamp(9.5pt, 2vw, 17px);
+  font-size: clamp(13px, 3vw, 17px);
   min-width: min-content;
 }
 
@@ -14,4 +14,5 @@
   height: 40vh;
   overflow: hidden;
   overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 }

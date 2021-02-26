@@ -23,7 +23,12 @@
       <strong>Breed - </strong>{{ getBreedName(selectedAnimal) | titlecase }}
     </li>
     <li class="list-group-item">
-      <strong>Dam - </strong>{{ selectedAnimal.dam.tagNumber }}
+      <strong>Dam - </strong
+      >{{
+        selectedAnimal.dam.tagNumber === "UK000000000000"
+          ? "Not provided"
+          : selectedAnimal.dam.tagNumber
+      }}
     </li>
     <li
       class="list-group-item d-flex justify-content-between"

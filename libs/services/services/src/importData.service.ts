@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { AssistanceReason, CalvingAssistance } from '@cms-enums';
 import {
   AI,
   Animal,
@@ -33,10 +34,7 @@ export class MappingService {
           value.calving_history.length === 0
             ? []
             : this.convertCalvingHistory(value.calving_history),
-        calvingStats:
-          value.calving_stat.length === 0
-            ? []
-            : this.convertCalvingStats(value.calving_stat),
+        calvingStat: this.convertCalvingStats(value.calving_stat),
         dam: this.convertDam(value.dam),
         sire: { tagNumber: value.sire.tag_number },
         weightData: this.convertWeightData(value.weight_data),
@@ -94,14 +92,52 @@ export class MappingService {
     };
   }
 
-  private convertCalvingStats(calvingSats: any[]): CalvingStat[] {
-    return calvingSats.map((stat) => {
-      return {
-        characteristic: stat.characteristic,
-        score: stat.score,
-        weighting: stat.weighting,
-      };
-    });
+  private convertCalvingStats(calvingStat: any): CalvingStat {
+    return {
+      alive: this.convertBoolean(calvingStat.alive),
+      assistance: this.convertAssistance(calvingStat.assistance),
+      damHealth: calvingStat.dam_health,
+      drinkAssist: this.convertBoolean(calvingStat.alive)
+        ? this.convertBoolean(calvingStat.drink_assist)
+        : null,
+      gettingUp: calvingStat.getting_up === null ? 5 : calvingStat.getting_up,
+      assistanceReason: this.convertAssistanceReason(calvingStat.assist_reason),
+      calvingNotes: calvingStat.calving_notes,
+    };
+  }
+
+  private convertAssistanceReason(reasons: string): AssistanceReason[] {
+    if (reasons === null) {
+      return [AssistanceReason.NA];
+    } else {
+      const output: AssistanceReason[] = [];
+      reasons.split('-').forEach((reason) => {
+        if (reason === 'bc') {
+          output.push(AssistanceReason.BigCalf);
+        } else if (reason === 'pp') {
+          output.push(AssistanceReason.PoorPresentation);
+        } else {
+          output.push(AssistanceReason.NA);
+        }
+      });
+
+      return output;
+    }
+  }
+
+  private convertBoolean(value) {
+    return value === 1 || value === true;
+  }
+
+  private convertAssistance(assistance: string): CalvingAssistance {
+    switch (assistance) {
+      case 'v':
+        return CalvingAssistance.Vet;
+      case 'n':
+        return CalvingAssistance.None;
+      case 'r':
+        return CalvingAssistance.Required;
+    }
   }
 
   private convertCalvingHistory(calvingHistory: any[]): CalvingHistory[] {

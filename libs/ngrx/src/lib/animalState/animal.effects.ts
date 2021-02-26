@@ -8,7 +8,7 @@ import {
   AnimalActionTypes,
   HTTPError,
   LoadAnimalData,
-  LoadAnimalsFinished
+  LoadAnimalsFinished,
 } from './animal.actions';
 
 @Injectable()
@@ -32,7 +32,7 @@ export class AnimalEffects {
           }),
           catchError((err) => {
             // this.loadingPaneService.setLoadingState(false);
-            return of(new HTTPError(err));
+            return of(new HTTPError({ error: err }));
           })
         );
       })

@@ -1,4 +1,4 @@
-import { Gender } from '@cms-enums';
+import { AssistanceReason, CalvingAssistance, Gender } from '@cms-enums';
 import * as moment from 'moment';
 
 export interface Bull {
@@ -25,11 +25,23 @@ export interface Dam extends BaseAnimal {
   sireTag: string;
 }
 
-export interface Animal extends BaseAnimal {
-  dam: BaseAnimal;
+export interface TextAnimal extends BaseAnimal {
+  dam: string;
   sire: { tagNumber: string };
   ai: AI[];
-  calvingStats: CalvingStat[];
+  calvingStat: CalvingStat;
+  calvingHistory: CalvingHistory[];
+  weightData: AnimalWeight[];
+  notes?: string;
+  breed: string;
+}
+
+export interface Animal extends BaseAnimal {
+  dam?: BaseAnimal;
+  damTag?: string;
+  sire: { tagNumber: string };
+  ai: AI[];
+  calvingStat?: CalvingStat;
   calvingHistory: CalvingHistory[];
   weightData: AnimalWeight[];
   notes?: string;
@@ -46,9 +58,13 @@ export interface AI {
 }
 
 export interface CalvingStat {
-  characteristic: string;
-  weighting: number;
-  score: number;
+  alive: boolean;
+  assistance: CalvingAssistance;
+  assistanceReason?: AssistanceReason[];
+  gettingUp?: number;
+  damHealth: number;
+  drinkAssist?: boolean;
+  calvingNotes: string;
 }
 
 export interface CalvingHistory {
@@ -66,6 +82,10 @@ export interface AnimalWeight {
 export interface AnimalWeightType {
   isInitial: boolean;
   isSale: boolean;
+}
+
+export function isAnimal(animal: any): animal is Animal {
+  return 'tagNumber' in animal;
 }
 
 export function isCow(animal: Animal | Bull): animal is Animal {

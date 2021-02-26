@@ -1,0 +1,12 @@
+.border {
+  border-width: 2px !important;
+}
+
+.disabled {
+  color: #6c757d;
+}
+
+.input-group-text {
+  border-top-left-radius: 0.25rem !important;
+  border-bottom-left-radius: 0.25rem !important;
+}

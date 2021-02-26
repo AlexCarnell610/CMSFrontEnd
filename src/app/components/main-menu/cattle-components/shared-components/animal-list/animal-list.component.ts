@@ -10,7 +10,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { PageURLs } from '@cms-enums';
 import { Animal } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
-import { getAnimalByTag, selectAnimals } from '@cms-ngrx/animal';
+import { getAnimalByTag, getDams, selectAnimals } from '@cms-ngrx/animal';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
@@ -43,7 +43,8 @@ export class AnimalListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.trackAnimalSelect();
-    this.animals$ = this.store.pipe(select(selectAnimals));
+    this.populateAnimals();
+
     this.setUpList();
     this.trackSearch();
     this.pillButtonText = this.getPillButtonText();
@@ -75,6 +76,8 @@ export class AnimalListComponent implements OnInit, OnDestroy {
         return 'Weights';
       case PageURLs.Animals:
         return 'Animal';
+      case PageURLs.Births:
+        return 'Births';
       default:
         return '';
     }
@@ -82,6 +85,14 @@ export class AnimalListComponent implements OnInit, OnDestroy {
 
   public getCSSForButton(animal: Animal) {
     return animal.tagNumber === this.currentAnimal?.tagNumber ? 'active' : '';
+  }
+
+  private populateAnimals() {
+    if (this.page === PageURLs.Births) {
+      this.animals$ = this.store.pipe(select(getDams));
+    } else {
+      this.animals$ = this.store.pipe(select(selectAnimals));
+    }
   }
 
   private pushNextAnimal(animal: Animal) {
@@ -102,35 +113,39 @@ export class AnimalListComponent implements OnInit, OnDestroy {
   }
 
   private trackAnimalSelect() {
-    this.$currentAnimal.subscribe((animal) => {
-      this.animalSelected.emit(animal);
-    });
+    this.subscriptions.add(
+      this.$currentAnimal.subscribe((animal) => {
+        this.animalSelected.emit(animal);
+      })
+    );
   }
 
   private trackSearch() {
-    combineLatest([this.searchBarValChange, this.animals$]).subscribe(
-      ([value, animals]: [string, Animal[]]) => {
-        this.searched = true;
-        if (value.length > 2) {
-          if (document.getElementById('animalList')) {
-            document.getElementById('animalList').scrollTop = 0;
-          }
+    this.subscriptions.add(
+      combineLatest([this.searchBarValChange, this.animals$]).subscribe(
+        ([value, animals]: [string, Animal[]]) => {
+          this.searched = true;
+          if (value.length > 2) {
+            if (document.getElementById('animalList')) {
+              document.getElementById('animalList').scrollTop = 0;
+            }
 
-          this.searchedAnimals$.next(this.getSearchedAnimals(animals, value));
-          this.$currentAnimal.next(
-            this.searchedAnimals$.value.find(
-              (animal) => animal.tagNumber === this.currentAnimal?.tagNumber
-            )
-          );
-        } else {
-          this.searchedAnimals$.next(animals);
-          this.$currentAnimal.next(
-            animals.find(
-              (animal) => animal.tagNumber === this.currentAnimal?.tagNumber
-            )
-          );
+            this.searchedAnimals$.next(this.getSearchedAnimals(animals, value));
+            this.$currentAnimal.next(
+              this.searchedAnimals$.value.find(
+                (animal) => animal.tagNumber === this.currentAnimal?.tagNumber
+              )
+            );
+          } else {
+            this.searchedAnimals$.next(animals);
+            this.$currentAnimal.next(
+              animals.find(
+                (animal) => animal.tagNumber === this.currentAnimal?.tagNumber
+              )
+            );
+          }
         }
-      }
+      )
     );
   }
 

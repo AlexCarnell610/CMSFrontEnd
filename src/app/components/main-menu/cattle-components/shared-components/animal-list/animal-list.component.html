@@ -16,7 +16,7 @@
     [ngClass]="getCSSForButton(animal)"
     (click)="selectAnimal(animal)"
   >
-    {{ animal.tagNumber }}
+    <span class="mr-1">{{ animal.tagNumber }}</span>
     <span
       class="badge badge-info badge-pill align-self-center"
       (click)="openEditModal()"

@@ -3,11 +3,11 @@ import { createSelector } from '@ngrx/store';
 import { selectAll } from './bull.reducer';
 
 export const selectBulls = createSelector(selectAll, (bulls: Bull[]) => {
-  return bulls;
+  return bulls.filter((bull) => bull.tagNumber !== 'null');
 });
 
 export const selectBullByTag = createSelector(
   selectAll,
-  (bulls: Bull[], props: {tagNumber: string}) =>
+  (bulls: Bull[], props: { tagNumber: string }) =>
     bulls.find((bull) => bull.tagNumber == props.tagNumber)
 );

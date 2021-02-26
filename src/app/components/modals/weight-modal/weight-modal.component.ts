@@ -202,6 +202,8 @@ export class EditWeightModalComponent
         this.saveResult.success = false;
         this.handlePopover(3000);
         output.next(false);
+      } else {
+        output.next(true);
       }
     } else {
       if (

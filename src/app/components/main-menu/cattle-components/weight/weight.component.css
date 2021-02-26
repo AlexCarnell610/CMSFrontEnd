@@ -1,14 +1,3 @@
-/* .animal-button{
-    max-width: 450px;
-    font-size: clamp(9.5pt, 2vw, 17px);
-    min-width: min-content;
-} */
-
 .small-screen-graph {
-  max-width: 400px;
+  width: 90%;
 }
-
-/* .badge-pill{
-    font-size: 90%;
-    font-weight: 600;
-} */

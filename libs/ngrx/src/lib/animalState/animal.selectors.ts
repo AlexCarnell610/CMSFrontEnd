@@ -14,7 +14,7 @@ export const getAnimalByTag = createSelector(
   }
 );
 
-export const getDams = createSelector(selectAll, (animals: Animal[]) => {
+export const getDams = createSelector(selectAnimals, (animals: Animal[]) => {
   return animals.filter(
     (animal) => animal.gender === Gender.Female && age(animal.birthDate) > 2
   );
@@ -27,6 +27,13 @@ export const getMaleOver36Months = createSelector(
       (animal) =>
         animal.gender === Gender.Male && age(animal.birthDate, 'months') > 36
     );
+  }
+);
+
+export const getCalves = createSelector(
+  selectAnimals,
+  (animals: Animal[], props: { tagNumber: string }) => {
+    return animals.filter((animal) => animal.dam.tagNumber === props.tagNumber);
   }
 );
 

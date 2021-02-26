@@ -90,11 +90,10 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
             ai: [],
             birthDate: this.dob.value,
             calvingHistory: [],
-            calvingStats: [],
             dam: this.dam.value,
             gender: this.gender.value,
             managementTag: 'null',
-            sire: this.sire.value == 'UK' ? '' : this.sire.value,
+            sire: { tagNumber: this.sire.value == 'UK' ? '' : this.sire.value },
             tagNumber: this.tagNumber.value,
             weightData: [],
             breed: this.breed.value,
@@ -115,8 +114,9 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
           const animalUpdate = {
             birthDate: this.dob.value,
             dam: this.dam.value,
-            sire: this.noSire() ? '' : this.sire.value,
+            sire: { tagNumber: this.noSire() ? '' : this.sire.value },
             gender: this.gender.value,
+            breed: this.breed.value,
           };
           this.animalUpdateService
             .updateAnimal(this.animal.tagNumber, animalUpdate)
@@ -133,7 +133,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
     });
   }
 
-  public getCSSForPopover() {
+  private getCSSForPopover() {
     return this.saveResult.success ? 'update-success' : 'update-error';
   }
 
@@ -232,7 +232,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
   }
 
   private getEnteredDam(animals: Animal[]) {
-    return animals.find((animal) => this.dam.value);
+    return animals.find((animal) => animal.tagNumber === this.dam.value);
   }
 
   private enteredTagIsMale(animals: Animal[]): boolean {
@@ -253,7 +253,6 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
       ai: [],
       birthDate: moment(),
       calvingHistory: [],
-      calvingStats: [],
       dam: null,
       gender: Gender.Female,
       managementTag: 'null',
@@ -271,7 +270,8 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
       this.animal?.sire.tagNumber !== this.sire.value ||
       this.animal?.dam.tagNumber !== this.dam.value ||
       this.animal?.birthDate.format('yyyy-MM-DD') !== this.dob.value ||
-      this.animal?.gender !== this.gender.value
+      this.animal?.gender !== this.gender.value ||
+      this.animal?.breed !== this.breed.value
     );
   }
 

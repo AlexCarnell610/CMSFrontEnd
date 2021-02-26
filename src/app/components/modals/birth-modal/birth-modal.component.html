@@ -1,0 +1,231 @@
+<ngx-smart-modal #birthModal identifier="birthModal">
+  <div *ngIf="animal">
+    <h4 class="text-center">
+      {{ isAdd ? "Add Birth" : "Edit Births" }} for
+      <strong>{{ animal.tagNumber }}</strong>
+    </h4>
+    <div class="cms-form">
+      <form [formGroup]="birthForm">
+        <div
+          class="form-group"
+          [ngClass]="{ 'was-validated': calfSelect.dirty }"
+          *ngIf="!isAdd && ($calves | async) as calves"
+        >
+          <select class="custom-select" formControlName="calves" required>
+            <option value="">Select calf...</option>
+            <option *ngFor="let calf of calves" value="{{ calf.tagNumber }}">
+              {{ calf.tagNumber }} - {{ calf.sire.tagNumber }}
+            </option>
+          </select>
+          <div class="invalid-feedback">
+            <cms-form-errors
+              [errors]="calfSelect.errors"
+              [isRadio]="true"
+            ></cms-form-errors>
+          </div>
+        </div>
+        <div
+          class="form-group"
+          *ngIf="isAdd"
+          [ngClass]="{ 'was-validated': calfTag.dirty }"
+        >
+          <label for="tagNumber">Tag Number</label>
+          <input
+            name="tag"
+            type="text"
+            class="form-control"
+            id="calfTagNumber"
+            formControlName="calfTag"
+            required
+            pattern="^UK\d{12}$"
+          />
+          <div class="invalid-feedback">
+            <cms-form-errors [errors]="calfTag.errors"></cms-form-errors>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="dob">Date of Birth</label>
+          <input
+            type="date"
+            class="form-control"
+            formControlName="dob"
+            [ngClass]="getCSSForDOB()"
+          />
+          <div class="invalid-feedback">
+            <cms-form-errors [errors]="dob.errors"></cms-form-errors>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="calfBreed">Breed</label>
+          <input
+            type="text"
+            list="breeds"
+            class="form-control"
+            formControlName="calfBreed"
+            onclick="this.select();"
+            [ngClass]="getCSSForBreed()"
+          />
+          <div class="invalid-feedback">
+            <cms-form-errors [errors]="breed.errors"></cms-form-errors>
+          </div>
+          <datalist id="breeds">
+            <option *ngFor="let breed of breeds" value="{{ breed.code }}">
+              {{ breed.breed }}
+            </option>
+          </datalist>
+        </div>
+        <div
+          class="form-group"
+          *ngIf="$filteredSires | async as sires"
+          [ngClass]="{ 'was-validated': sire.dirty }"
+        >
+          <label for="calfSire">Sire</label>
+          <select class="custom-select" formControlName="calfSire" required>
+            <option value="">Select sire...</option>
+            <option *ngFor="let sire of sires" value="{{ sire.tagNumber }}">
+              {{ sire.name }} - {{ sire.tagNumber }} - {{ sire.breed }}
+            </option>
+          </select>
+          <div class="invalid-feedback">
+            <cms-form-errors
+              [errors]="sire.errors"
+              [isRadio]="true"
+            ></cms-form-errors>
+          </div>
+        </div>
+        <div class="form-check" [ngClass]="{ 'was-validated': gender.dirty }">
+          <input
+            formControlName="gender"
+            type="radio"
+            class="form-check-input"
+            value="M"
+            name="gender"
+            id="isMaleRadio"
+            required
+          />
+          <label class="form-check-label" for="isMaleRadio">Male</label>
+        </div>
+        <div
+          class="form-check mb-3"
+          [ngClass]="{ 'was-validated': gender.dirty }"
+        >
+          <input
+            formControlName="gender"
+            type="radio"
+            class="form-check-input"
+            value="F"
+            name="gender"
+            id="isFemaleRadio"
+            required
+          />
+          <label class="form-check-label" for="isFemaleRadio">Female</label>
+          <div class="invalid-feedback">
+            <cms-form-errors
+              [isRadio]="true"
+              [errors]="gender.errors"
+            ></cms-form-errors>
+          </div>
+        </div>
+        <h5>Calving Statistic</h5>
+        <div
+          *ngIf="!stat && isAdd"
+          class="mb-2"
+          [ngClass]="getCSSForCalvingStats()"
+        >
+          <strong>No stats added - </strong>
+          <button class="btn btn-primary btn-sm" (click)="addStats()">
+            Add Stats
+          </button>
+          <div *ngIf="getCSSForCalvingStats()" class="cms-invalid-feedback">
+            <cms-form-errors [errors]="statErrors"></cms-form-errors>
+          </div>
+        </div>
+
+        <div *ngIf="!stat && !isAdd" class="mb-2">
+          <strong>Select calf to view stat</strong>
+        </div>
+
+        <div
+          *ngIf="stat"
+          ngbDropdown
+          class="mb-2 d-inline-block"
+          #statDrop="ngbDropdown"
+        >
+          <button class="btn btn-primary" ngbDropdownToggle>View Stat</button>
+          <div ngbDropdownMenu class="stat-dropdown">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <strong>Alive:</strong> {{ stat.alive ? "Alive" : "Dead" }}
+              </li>
+              <li class="list-group-item">
+                <strong>Ease:</strong> {{ assistRequired }}
+              </li>
+              <li class="list-group-item" *ngIf="stat.assistanceReason">
+                <strong>Reason:</strong> {{ assistReason }}
+              </li>
+              <li class="list-group-item">
+                <strong>Dam health:</strong> {{ stat.damHealth }}
+              </li>
+              <li class="list-group-item" *ngIf="stat.alive">
+                <strong>Assisted Feed:</strong>
+                {{ stat.drinkAssist ? "Yes" : "No" }}
+              </li>
+              <li class="list-group-item" *ngIf="stat.alive">
+                <strong>Getting up:</strong> {{ stat.gettingUp }}
+              </li>
+              <li *ngIf="truncNotes" class="list-group-item">
+                <strong>Notes: &nbsp;</strong> {{ truncNotes }}
+              </li>
+              <button
+                class="list-group-item list-group-item-action active"
+                (click)="addStats(); statDrop.close()"
+              >
+                Edit Stat
+              </button>
+            </ul>
+          </div>
+        </div>
+
+        <!-- <label for="easeOfCalving"><strong>Ease of Calving</strong></label>
+        <div class="form-check" id="easeOfCalving">
+          <input
+            type="radio"
+            class="form-check-input"
+            name="easeOfCalving"
+            id="assistanceNone"
+            value="none"
+          />
+          <label for="assistanceNone">No assistance required</label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="easeOfCalving"
+            id="assistanceRequired"
+          />
+          <label for="assistanceRequired">Assistance required</label>
+        </div> -->
+        <div>
+          <button
+            class="btn btn-success mr-3"
+            (click)="save()"
+            ngbPopover="Update Success!"
+            #errorPop="ngbPopover"
+            placement="bottom"
+            popoverClass="update-success"
+            triggers="manual"
+          >
+            Save
+          </button>
+          <button class="btn btn-danger" (click)="close()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ngx-smart-modal>
+
+<cms-calving-stats-modal
+  [stat]="stat"
+  (statSaved)="statSaved($event)"
+></cms-calving-stats-modal>

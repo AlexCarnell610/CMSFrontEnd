@@ -6,4 +6,5 @@ export enum HttpUrls {
   PutWeight = '/api/weight',
   Animal = '/api/animal',
   AnimalBreeds = '/assets/cattleBreedCodes.json',
+  Calf = '/api/calf',
 }

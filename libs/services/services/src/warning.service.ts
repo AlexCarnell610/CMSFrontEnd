@@ -18,7 +18,7 @@ export interface IToast {
 })
 export class WarningService {
   private _result: BehaviorSubject<boolean>;
-  private defaultBodyText = 'Are you sure you want to continue';
+  private defaultBodyText = 'Are you sure you want to continue?';
   private defaultButtonText = 'Continue anyway';
   private defaultError = {
     body: this.defaultBodyText,
