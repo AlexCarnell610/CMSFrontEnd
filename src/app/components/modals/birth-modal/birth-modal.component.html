@@ -14,7 +14,7 @@
           <select class="custom-select" formControlName="calves" required>
             <option value="">Select calf...</option>
             <option *ngFor="let calf of calves" value="{{ calf.tagNumber }}">
-              {{ calf.tagNumber }} - {{ calf.sire.tagNumber }}
+              {{ calf.tagNumber }}
             </option>
           </select>
           <div class="invalid-feedback">

@@ -23,9 +23,10 @@ import {
   isAnimal,
 } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
-import { getCalves } from '@cms-ngrx/animal';
+import { getCalves, selectAnimals } from '@cms-ngrx/animal';
 import { selectBulls } from '@cms-ngrx/bull';
-import { AnimalUpdateService } from '@cms-services';
+import { AnimalUpdateService, LoadingPaneService } from '@cms-services';
+
 import { dateValidator } from '@cms-validators';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { select, Store } from '@ngrx/store';
@@ -40,7 +41,7 @@ import {
   Subscription,
   timer,
 } from 'rxjs';
-import { takeWhile } from 'rxjs/operators';
+import { take, takeWhile } from 'rxjs/operators
 
 enum FormControls {
   CalfTag = 'calfTag',
@@ -85,7 +86,8 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly animalService: AnimalUpdateService,
     private readonly store: Store<RootState>,
     private readonly breedService: AnimalBreedService,
-    private readonly warningService: WarningService
+    private readonly warningService: WarningService,
+    private readonly loadingService: LoadingPaneService
   ) {}
 
   ngOnInit(): void {
@@ -101,6 +103,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public save() {
+    this.loadingService.setLoadingState(true);
     this.hasSaved = true;
     console.warn('breederrors', this.breed.errors);
     console.warn('calfselect', this.calfSelect.errors);
@@ -111,24 +114,25 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
         console.warn(canContinue);
 
         if (canContinue && isAnimal(canContinue)) {
-          console.warn('CAN CONTINEUWE', canContinue, this.isAdd);
           if (this.isAdd) {
             this.animalService.addAnimal(canContinue).then(() => {
               this.saveResult.message = 'Calf added';
               this.saveResult.success = true;
+              this.loadingService.setLoadingState(false);
               this.handlePopover(1500);
             });
           } else {
-            console.warn('UPDAET CALF');
-
             this.animalService
               .updateAnimal(this.calfSelect.value, canContinue)
               .then(() => {
                 this.saveResult.message = 'Calf updated';
                 this.saveResult.success = true;
+                this.loadingService.setLoadingState(false);
                 this.handlePopover(1500);
               });
           }
+        } else {
+          this.loadingService.setLoadingState(false);
         }
       })
     );
@@ -164,7 +168,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public statSaved(event: CalvingStat | false) {
     if (event) {
-      if (event.calvingNotes.length > 21) {
+      if (event.calvingNotes?.length > 21) {
         this.truncNotes = event.calvingNotes.slice(0, 21) + '...';
       }
       this.stat = event;
@@ -213,7 +217,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.markAllAsDirty();
     console.warn(this.birthForm.errors);
 
-    if (this.birthForm.valid) {
+    if (this.birthForm.valid && this.stat) {
       calf = this.getNewCalf();
 
       if (!this.valuesEdited(calf)) {
@@ -226,7 +230,29 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
           .show({ header: 'Entered age is more than 28 days' })
           .subscribe((result) => output.next(result ? calf : result));
       } else {
-        output.next(calf);
+        if (this.isAdd) {
+          this.store
+            .pipe(select(selectAnimals), take(1))
+            .subscribe((animals) => {
+              if (this.animalExists(animals)) {
+                this.warningService
+                  .show({
+                    header: `Animal with tag ${this.calfTag.value} already exists`,
+                    body: 'Please check the tag number and try again.',
+                    isError: true,
+                    showCloseButton: false,
+                    buttonText: 'Close',
+                  })
+                  .subscribe(() => {
+                    output.next(false);
+                  });
+              } else {
+                output.next(calf);
+              }
+            });
+        } else {
+          output.next(calf);
+        }
       }
     } else {
       this.saveResult.message = 'Please fix errors';
@@ -235,6 +261,12 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
       output.next(false);
     }
     return output;
+  }
+  private animalExists(animals: Animal[]) {
+    return (
+      animals.findIndex((animal) => animal.tagNumber === this.calfTag.value) !==
+      -1
+    );
   }
 
   private getNewCalf(): Animal {
@@ -262,8 +294,14 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.statPopover.ngbPopover = this.saveResult.message;
 
     this.statPopover.open();
+    if (!this.isAdd && this.saveResult.success) {
+      this.resetForm();
+    }
     timer(time).subscribe(() => {
       this.statPopover.close();
+      if (this.isAdd && this.saveResult.success) {
+        this.close();
+      }
     });
   }
 

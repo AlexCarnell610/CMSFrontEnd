@@ -17,7 +17,11 @@
         (click)="continueClick()"
       >
         {{ toast.buttonText }}</button
-      ><button class="btn btn-dark" (click)="cancelClick()">
+      ><button
+        *ngIf="toast.showCloseButton"
+        class="btn btn-dark"
+        (click)="cancelClick()"
+      >
         {{ toast.isError ? "Close" : "Cancel" }}
       </button>
     </div>
