@@ -26,7 +26,6 @@ export class LoginComponent implements OnInit {
 
   handleSignIn(): void {
     this.router.navigate([PageURLs.MainMenu]);
-    // this.importService.importAnimalData();
   }
 
   signOut() {

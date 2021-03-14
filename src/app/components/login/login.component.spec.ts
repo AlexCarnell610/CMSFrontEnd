@@ -1,25 +1,64 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { PageURLs } from '@cms-enums';
+import { of } from 'rxjs';
 import { LoginComponent } from './login.component';
 
-describe('LoginComponent', () => {
-  let component: LoginComponent;
-  let fixture: ComponentFixture<LoginComponent>;
-
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ LoginComponent ]
-    })
-    .compileComponents();
-  }));
-
+fdescribe('LoginComponent', () => {
+  let mockRouter, mockAuthService, component;
   beforeEach(() => {
-    fixture = TestBed.createComponent(LoginComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    mockRouter = {
+      navigate: () => {}
+    };
+    mockAuthService = {
+      isAuthenticated$: of(true),
+      loginWithPopup: () => {return of()}
+    };
+    
+    component = new LoginComponent(mockRouter, mockAuthService);
+
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+   expect(component).toBeTruthy();
   });
+
+  describe("NgOnInit",() => {
+    let signInSpy;
+    beforeEach(() =>{
+      signInSpy = spyOn(component, 'handleSignIn');
+    })
+    it("should call sign in if authenticated", () => {
+      component.ngOnInit();
+      expect(signInSpy).toHaveBeenCalled();
+    });
+  
+    it("Should not call signing if not authenticated", () => {
+      mockAuthService.isAuthenticated$ = of(false);
+      component.ngOnInit();
+      expect(signInSpy).not.toHaveBeenCalled();
+    })
+  })
+
+  describe("handleSignIn [method]", () => {
+    let navigateSpy;
+    beforeEach(() => {
+      navigateSpy = spyOn(mockRouter, 'navigate')
+    })
+    it("Should navigate to main menu", () => {
+      component.handleSignIn();
+      expect(navigateSpy).toHaveBeenCalledWith([PageURLs.MainMenu]);
+    })
+  });
+
+  describe("signOut [method]", () => {
+    let authLoginSpy;
+    beforeEach(() => {
+      authLoginSpy = spyOn(mockAuthService, 'loginWithPopup');
+    })
+
+    it("should call signingwithpopup method", () => {
+      component.signOut();
+      expect(authLoginSpy).toHaveBeenCalled();
+    })
+  })
+  
 });
