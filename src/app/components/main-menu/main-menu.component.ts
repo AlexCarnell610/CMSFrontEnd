@@ -20,9 +20,9 @@ export class MainMenuComponent implements OnInit {
   constructor(
     private readonly router: Router,
     private readonly auth: AuthService,
-    private route: ActivatedRoute,
+    private readonly route: ActivatedRoute,
     private readonly store: Store<RootState>,
-    private loadingService: LoadingPaneService
+    private readonly loadingService: LoadingPaneService
   ) {}
 
   ngOnInit() {

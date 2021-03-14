@@ -12,10 +12,9 @@ import { Store } from '@ngrx/store';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private readonly store: Store<{}>, private readonly router:Router, private readonly authService: AuthService) { }
+  constructor(private readonly router: Router, private readonly authService: AuthService) { }
 
   ngOnInit(): void {
-    // this.authService.logout()
     this.authService.isAuthenticated$.subscribe(authenticated => {
       if (authenticated) {
         this.handleSignIn();
@@ -25,7 +24,6 @@ export class LoginComponent implements OnInit {
 
   handleSignIn(): void {
     this.router.navigate([PageURLs.MainMenu]);
-    // this.importService.importAnimalData();
     
   }
 

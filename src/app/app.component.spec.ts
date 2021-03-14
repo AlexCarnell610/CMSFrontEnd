@@ -1,35 +1,49 @@
-import { TestBed, async } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { of } from 'rxjs';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule
-      ],
-      declarations: [
-        AppComponent
-      ],
-    }).compileComponents();
-  }));
+  let mockAuthService, mockLoadingService
+    let mockScreenSizeService, mockStore, mockNgbAlertConfig
+    let component: AppComponent;
+  beforeEach(() => {
+
+    mockScreenSizeService = {
+      screenWidth: {}
+    };
+    mockAuthService = {
+      isAuthenticated$: of(true)
+    };
+    mockLoadingService = {};
+    mockStore = {
+      dispatch: () =>{}
+    };
+    mockNgbAlertConfig = {};
+    
+    component = new AppComponent(mockAuthService, mockLoadingService, mockStore, mockNgbAlertConfig, mockScreenSizeService);
+  });
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    
+    expect(component).toBeTruthy()
   });
 
-  it(`should have as title 'CMSFrontEnd'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('CMSFrontEnd');
+  it("Should dispatch actoins if authenticated", () =>{
+    let dispatchSpy = spyOn(mockStore, 'dispatch');
+    component.ngOnInit();
+    expect(dispatchSpy).toHaveBeenCalledTimes(2);
   });
 
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('CMSFrontEnd app is running!');
+  it("should not dispatch is not authenticated", () =>{
+    let dispatchSpy = spyOn(mockStore, 'dispatch');
+    mockAuthService.isAuthenticated$ = of(false);
+    expect(dispatchSpy).not.toHaveBeenCalled();
+  })
+
+  it("resize should update screenwidth", () => {
+    const newSize = 120;
+    const event = {currentTarget: {innerWidth: newSize}};
+    expect(mockScreenSizeService.screenWidth).toEqual({});
+    component.resize(event);
+    expect(mockScreenSizeService.screenWidth).toEqual(newSize);
   });
 });

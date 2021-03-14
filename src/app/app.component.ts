@@ -20,7 +20,6 @@ export class AppComponent implements OnInit {
     public loadingService: LoadingPaneService,
     private readonly store: Store<RootState>,
     ngbAlertConfig: NgbAlertConfig,
-    ngbTooltipConf: NgbTooltipConfig,
     private readonly screenSizeService: ScreenSizeService
   ) // private readonly breed: AnimalBreedService
   {

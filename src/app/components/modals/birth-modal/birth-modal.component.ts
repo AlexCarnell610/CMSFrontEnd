@@ -41,7 +41,7 @@ import {
   Subscription,
   timer,
 } from 'rxjs';
-import { take, takeWhile } from 'rxjs/operators
+import { take, takeWhile } from 'rxjs/operators'
 
 enum FormControls {
   CalfTag = 'calfTag',
