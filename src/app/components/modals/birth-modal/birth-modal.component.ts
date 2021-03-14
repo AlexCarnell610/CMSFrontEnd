@@ -26,7 +26,6 @@ import { RootState } from '@cms-ngrx';
 import { getCalves, selectAnimals } from '@cms-ngrx/animal';
 import { selectBulls } from '@cms-ngrx/bull';
 import { AnimalUpdateService, LoadingPaneService } from '@cms-services';
-
 import { dateValidator } from '@cms-validators';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { select, Store } from '@ngrx/store';
@@ -41,7 +40,7 @@ import {
   Subscription,
   timer,
 } from 'rxjs';
-import { take, takeWhile } from 'rxjs/operators
+import { take, takeWhile } from 'rxjs/operators';
 
 enum FormControls {
   CalfTag = 'calfTag',

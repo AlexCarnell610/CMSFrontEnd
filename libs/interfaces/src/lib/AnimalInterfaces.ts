@@ -84,6 +84,15 @@ export interface AnimalWeightType {
   isSale: boolean;
 }
 
+export interface ICullUpdate {
+  aliveCalves?: number;
+  totalCalves?: number;
+  calfDailyWeightGain?: number;
+  age: number;
+  score: number;
+  tagNumber: string;
+}
+
 export function isAnimal(animal: any): animal is Animal {
   return 'tagNumber' in animal;
 }

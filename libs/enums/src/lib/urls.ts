@@ -7,4 +7,5 @@ export enum HttpUrls {
   Animal = '/api/animal',
   AnimalBreeds = '/assets/cattleBreedCodes.json',
   Calf = '/api/calf',
+  CullUpdate = '/api/cullUpdate',
 }

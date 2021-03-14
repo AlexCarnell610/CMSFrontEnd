@@ -1,6 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~ngx-smart-modal/ngx-smart-modal";
 
+.cms-animal-list {
+  max-width: 450px;
+  height: 40vh;
+  overflow: hidden;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
 .cms-invalid-feedback {
   display: block;
   width: 100%;

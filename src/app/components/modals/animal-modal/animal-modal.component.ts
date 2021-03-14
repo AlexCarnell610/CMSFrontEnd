@@ -96,7 +96,9 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
             sire: { tagNumber: this.sire.value == 'UK' ? '' : this.sire.value },
             tagNumber: this.tagNumber.value,
             weightData: [],
-            breed: this.breed.value,
+            breed: this.breedService.isBreedCode(this.breed.value)
+              ? this.breed.value
+              : this.breedService.getCodeFromBreed(this.breed.value),
           };
           this.animalUpdateService.addAnimal(newAnimal).then(() => {
             this.saveResult.message = 'Animal Saved';
@@ -116,7 +118,9 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
             dam: this.dam.value,
             sire: { tagNumber: this.noSire() ? '' : this.sire.value },
             gender: this.gender.value,
-            breed: this.breed.value,
+            breed: this.breedService.isBreedCode(this.breed.value)
+              ? this.breed.value
+              : this.breedService.getCodeFromBreed(this.breed.value),
           };
           this.animalUpdateService
             .updateAnimal(this.animal.tagNumber, animalUpdate)
@@ -158,6 +162,8 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
   }
 
   private noSire(): boolean {
+    console.warn(this.sire.value == 'UK' || this.sire.value == this.noSireText);
+
     return this.sire.value == 'UK' || this.sire.value == this.noSireText;
   }
 

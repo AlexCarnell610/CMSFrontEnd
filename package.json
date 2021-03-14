@@ -39,6 +39,7 @@
     "ng2-charts": "^2.4.2",
     "ngx-smart-modal": "^7.4.1",
     "popper.js": "^1.16.1",
+    "pusher-js": "^7.0.3",
     "rxjs": "^6.5.5",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"

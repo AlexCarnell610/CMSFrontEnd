@@ -26,6 +26,7 @@
       "@cms-validators": ["libs/validators"]
     }
   },
+  "exclude": ["./dist/**"],
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true

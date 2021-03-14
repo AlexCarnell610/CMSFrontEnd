@@ -45,6 +45,10 @@ export class AnimalBreedService {
     }
   }
 
+  public isBreedCode(breed: string): boolean {
+    return this._breedMap.get(breed) !== undefined;
+  }
+
   get breedCodes() {
     return Array.from(this._breedMap.keys());
   }

@@ -74,12 +74,18 @@ export class HttpService {
       ...update,
     };
 
-    if (update.birthDate) {
+    if (moment.isMoment(update.birthDate)) {
+      console.warn('ismoment');
+
       newUpdate.birthDate = update.birthDate.format('YYYY-MM-DD');
     }
 
     return this.http
       .patch(`${HttpUrls.Animal}/${tagNumber}`, { ...newUpdate })
       .pipe(map((res) => this.mappingService.importAnimalData([res])[0]));
+  }
+
+  public getCullUpdate(): Observable<any> {
+    return this.http.get(HttpUrls.CullUpdate);
   }
 }

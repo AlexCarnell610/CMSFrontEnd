@@ -8,11 +8,3 @@
   font-size: 90%;
   font-weight: 600;
 }
-
-.cms-animal-list {
-  max-width: 450px;
-  height: 40vh;
-  overflow: hidden;
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
-}

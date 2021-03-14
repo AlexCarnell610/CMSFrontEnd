@@ -31,10 +31,12 @@
     Sale date should be after initial date:
     <strong>{{ errors.saleAfterInitial }}</strong></span
   >
+
   <span *ngIf="errors.breed"> {{ errors.breed }}</span>
   <span *ngIf="errors.stats">{{ errors.stats }}</span>
 </div>
 <div *ngIf="errors && isRadio">
+  <span *ngIf="errors.noInitial"> No initial weight set. </span>
   <span *ngIf="errors.required">Please select one. </span>
   <span *ngIf="errors.saleWeightExists">Sale weight already set. </span>
   <span *ngIf="errors.initialWeightExists">Initial weight already set. </span>

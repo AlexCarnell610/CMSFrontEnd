@@ -69,6 +69,8 @@ export function weighDateValidator(): ValidatorFn {
                   intermediateWeights.length - 1
                 ].weightDate.format('DD/MM/YYYY'),
               });
+            } else if (!initialWeight) {
+              weightType.setErrors({ noInitial: true });
             } else {
               weightDate.setErrors(null);
             }
@@ -112,6 +114,8 @@ export function weighDateValidator(): ValidatorFn {
                 saleDate: saleWeight.weightDate.format('DD/MM/YYYY'),
               },
             });
+          } else if (!initialWeight) {
+            weightType.setErrors({ noInitial: true });
           }
           break;
         default:

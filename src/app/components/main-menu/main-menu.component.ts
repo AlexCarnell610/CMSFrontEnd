@@ -48,6 +48,10 @@ export class MainMenuComponent implements OnInit {
     // this.router.navigate([PageURLs.Logout])
   }
 
+  public cullUpdate(): void {
+    this.router.navigate([PageURLs.CullUpdate], { relativeTo: this.route });
+  }
+
   public get loading() {
     return this.loadingService.currentLoadingState;
   }

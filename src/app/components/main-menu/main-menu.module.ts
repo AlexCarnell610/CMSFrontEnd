@@ -13,6 +13,7 @@ import { WarningDisplayComponent } from './cattle-components/shared-components/w
 import { WeightComponent } from './cattle-components/weight/weight.component';
 import { MainMenuComponent } from './main-menu.component';
 import { MainMenuRoutingModule } from './main-menu.routing';
+import { CullUpdateComponent } from './cattle-components/cull-update/cull-update.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { MainMenuRoutingModule } from './main-menu.routing';
     AnimalDisplayComponent,
     WarningDisplayComponent,
     BirthComponent,
+    CullUpdateComponent,
   ],
   imports: [
     CommonModule,

@@ -5,4 +5,5 @@ export enum PageURLs {
   Logout = 'logout',
   Animals = 'animals',
   Births = 'births',
+  CullUpdate = 'performance',
 }
