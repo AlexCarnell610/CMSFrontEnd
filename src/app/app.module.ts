@@ -58,6 +58,10 @@ import { LogoutComponent } from './components/logout/logout.component';
       useClass: AuthHttpInterceptor,
       multi: true,
     },
+    {
+      provide: 'locationObj',
+      useValue: location,
+    },
   ],
   bootstrap: [AppComponent],
 })

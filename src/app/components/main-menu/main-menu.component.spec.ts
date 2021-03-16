@@ -1,11 +1,9 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { PageURLs } from '@cms-enums';
 import { Animal } from '@cms-interfaces';
 import { of } from 'rxjs';
-
 import { MainMenuComponent } from './main-menu.component';
 
-fdescribe('MainMenuComponent', () => {
+describe('MainMenuComponent', () => {
   let mockRouter, mockAuthService, mockRoute, mockStore, mockLoadingService;
   let component, mockLoadingState;
   const mockAnimal = ({
@@ -20,7 +18,7 @@ fdescribe('MainMenuComponent', () => {
       },
     };
     mockAuthService = {
-      logout: () => {}
+      logout: () => {},
     };
     mockRoute = {};
     mockStore = {
@@ -29,7 +27,7 @@ fdescribe('MainMenuComponent', () => {
       },
     };
     mockLoadingService = {
-      currentLoadingState: mockLoadingState
+      currentLoadingState: mockLoadingState,
     };
 
     component = new MainMenuComponent(
@@ -80,14 +78,14 @@ fdescribe('MainMenuComponent', () => {
       });
     });
 
-    it("Should logout", () => {
+    it('Should logout', () => {
       let logoutSpy = spyOn(mockAuthService, 'logout');
       component.logout();
       expect(logoutSpy).toHaveBeenCalled();
-    })
+    });
 
-    it("should get the current loading state", () => {
+    it('should get the current loading state', () => {
       expect(component.loading).toEqual(mockLoadingState);
-    })
+    });
   });
 });
