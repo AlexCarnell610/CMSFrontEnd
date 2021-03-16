@@ -2,7 +2,7 @@ import { PageURLs } from '@cms-enums';
 import { of } from 'rxjs';
 import { LoginComponent } from './login.component';
 
-describe('LoginComponent', () => {
+fdescribe('LoginComponent', () => {
   let mockRouter, mockAuthService, component;
   beforeEach(() => {
     mockRouter = {
@@ -27,15 +27,17 @@ describe('LoginComponent', () => {
     beforeEach(() => {
       signInSpy = spyOn(component, 'handleSignIn');
     });
+
     it('should call sign in if authenticated', () => {
       component.ngOnInit();
       expect(signInSpy).toHaveBeenCalled();
     });
 
-    it('Should not call signing if not authenticated', () => {
+    it('Should not call sign in if not authenticated and enable login button', () => {
       mockAuthService.isAuthenticated$ = of(false);
       component.ngOnInit();
       expect(signInSpy).not.toHaveBeenCalled();
+      expect(component.loginDisable).toBeFalse();
     });
   });
 
@@ -44,21 +46,10 @@ describe('LoginComponent', () => {
     beforeEach(() => {
       navigateSpy = spyOn(mockRouter, 'navigate');
     });
-    it('Should navigate to main menu', () => {
+    it('Should navigate to main menu and disable login button', () => {
       component.handleSignIn();
       expect(navigateSpy).toHaveBeenCalledWith([PageURLs.MainMenu]);
-    });
-  });
-
-  describe('signOut [method]', () => {
-    let authLoginSpy;
-    beforeEach(() => {
-      authLoginSpy = spyOn(mockAuthService, 'loginWithPopup');
-    });
-
-    it('should call signingwithpopup method', () => {
-      component.signOut();
-      expect(authLoginSpy).toHaveBeenCalled();
+      expect(component.loginDisable).toBeTrue();
     });
   });
 });
