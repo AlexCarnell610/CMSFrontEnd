@@ -8,12 +8,11 @@ import { ModalsModule } from '../modals/modals.module';
 import { AnimalDisplayComponent } from './cattle-components/animal/animal-display/animal-display.component';
 import { AnimalComponent } from './cattle-components/animal/animal.component';
 import { BirthComponent } from './cattle-components/birth/birth.component';
+import { CullUpdateComponent } from './cattle-components/cull-update/cull-update.component';
 import { AnimalListComponent } from './cattle-components/shared-components/animal-list/animal-list.component';
-import { WarningDisplayComponent } from './cattle-components/shared-components/warning-display/warning-display.component';
 import { WeightComponent } from './cattle-components/weight/weight.component';
 import { MainMenuComponent } from './main-menu.component';
 import { MainMenuRoutingModule } from './main-menu.routing';
-import { CullUpdateComponent } from './cattle-components/cull-update/cull-update.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +21,6 @@ import { CullUpdateComponent } from './cattle-components/cull-update/cull-update
     AnimalComponent,
     AnimalListComponent,
     AnimalDisplayComponent,
-    WarningDisplayComponent,
     BirthComponent,
     CullUpdateComponent,
   ],

@@ -16,6 +16,7 @@ import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { LoadingModalComponent } from './components/loading-modal/loading-modal.component';
 import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
 
@@ -25,6 +26,7 @@ import { LogoutComponent } from './components/logout/logout.component';
     LoginComponent,
     LogoutComponent,
     FooterComponent,
+    LoadingModalComponent,
   ],
   imports: [
     BrowserModule,

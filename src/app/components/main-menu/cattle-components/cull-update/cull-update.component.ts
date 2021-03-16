@@ -4,7 +4,7 @@ import { PageURLs } from '@cms-enums';
 import { Animal, ICullUpdate } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { getAnimalByTag, getCalves } from '@cms-ngrx/animal';
-import { ScreenSizeService } from '@cms-services';
+import { LoadingPaneService, ScreenSizeService } from '@cms-services';
 import { HttpService } from '@cms-services/http';
 import { select, Store } from '@ngrx/store';
 import { ChartDataSets, ChartOptions, ChartPoint } from 'chart.js';
@@ -39,8 +39,13 @@ export class CullUpdateComponent implements OnInit, OnDestroy {
     private readonly httpService: HttpService,
     private readonly router: Router,
     private readonly store: Store<RootState>,
-    private readonly screenSizeService: ScreenSizeService
-  ) {}
+    private readonly screenSizeService: ScreenSizeService,
+    private readonly loadingService: LoadingPaneService
+  ) {
+    if (this.cullUpdateService.getCullUpdate().length == 0) {
+      this.loadingService.setLoadingState(true);
+    }
+  }
 
   ngOnInit(): void {
     this.setUpChartOptions();
@@ -57,13 +62,14 @@ export class CullUpdateComponent implements OnInit, OnDestroy {
           },
           () => {
             this.cullUpdate = this.cullUpdateService.getCullUpdate();
-            this.subs.add(
-              this.screenSizeService.isSmallScreenObs().subscribe((isSmall) => {
-                this.isSmallScreen = isSmall;
-              })
-            );
+            this.loadingService.setLoadingState(false);
           }
         )
+      );
+      this.subs.add(
+        this.screenSizeService.isSmallScreenObs().subscribe((isSmall) => {
+          this.isSmallScreen = isSmall;
+        })
       );
     }
   }
@@ -114,10 +120,6 @@ export class CullUpdateComponent implements OnInit, OnDestroy {
             if (calves?.length > 0) {
               let dates: Moment[] = [];
               calves.forEach((calf) => {
-                let newWeight = {
-                  data: calf.weightData.map((weight) => weight.weight),
-                  label: calf.tagNumber,
-                };
                 let chartPoint: ChartPoint[] = [];
                 calf.weightData.forEach((weight) => {
                   dates.push(weight.weightDate);

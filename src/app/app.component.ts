@@ -1,5 +1,13 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  HostListener,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
+import { Modals } from '@cms-enums';
 import { RootState } from '@cms-ngrx';
 import { RetrieveAnimalData } from '@cms-ngrx/animal';
 import { RetreieveBullData } from '@cms-ngrx/bull';
@@ -9,24 +17,27 @@ import { Store } from '@ngrx/store';
 import { CullUpdateService } from 'libs/services/services/src/cull-update.service';
 import { PusherService } from 'libs/services/services/src/pusher.service';
 import * as Moment from 'moment';
-import { Subscription } from 'rxjs';
+import { NgxSmartModalService } from 'ngx-smart-modal';
+import { combineLatest, Subscription } from 'rxjs';
 
 @Component({
   selector: 'cms-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   title = 'CMSFrontEnd';
   private subs = new Subscription();
   constructor(
     public auth: AuthService,
-    public loadingService: LoadingPaneService,
+    private loadingService: LoadingPaneService,
     private readonly store: Store<RootState>,
     ngbAlertConfig: NgbAlertConfig,
     private readonly screenSizeService: ScreenSizeService,
     private readonly pusherService: PusherService,
-    private readonly cullUpdateService: CullUpdateService
+    private readonly cullUpdateService: CullUpdateService,
+    private readonly modalService: NgxSmartModalService,
+    private readonly route: Router
   ) {
     ngbAlertConfig.dismissible = false;
   }
@@ -47,6 +58,22 @@ export class AppComponent implements OnInit, OnDestroy {
       })
     );
   }
+  ngAfterViewInit() {
+    combineLatest([
+      this.auth.isLoading$,
+      this.loadingService.currentLoadingState,
+    ]).subscribe(([authLoading, dataLoading]) => {
+      if (
+        (dataLoading || authLoading) &&
+        window.location.href.includes('main-menu')
+      ) {
+        this.modalService.get(Modals.Loading).open();
+      } else {
+        this.modalService.get(Modals.Loading).close();
+      }
+    });
+  }
+
   @HostListener('window:resize', ['$event'])
   resize(event) {
     this.screenSizeService.screenWidth = event.currentTarget.innerWidth;

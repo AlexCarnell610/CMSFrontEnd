@@ -1,6 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~ngx-smart-modal/ngx-smart-modal";
 
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+
 .cms-animal-list {
   max-width: 450px;
   height: 40vh;
@@ -31,6 +38,13 @@
   background-color: #f8d7da;
   border-color: #020201;
   margin: auto;
+}
+
+.loading .nsm-content {
+  width: 0;
+  height: 0;
+  margin: auto;
+  padding: 0;
 }
 
 body {
@@ -101,7 +115,7 @@ body {
   -webkit-animation: spin 2s linear infinite;
   -moz-animation: spin 2s linear infinite;
   animation: spin 2s linear infinite;
-  z-index: 999999;
+  /* z-index: 999999; */
 }
 @-moz-keyframes spin {
   0% {

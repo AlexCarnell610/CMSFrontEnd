@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 })
 export class LoginComponent implements OnInit, OnDestroy {
   private subs = new Subscription();
+  public loginDisable = false;
   constructor(
     private readonly router: Router,
     private readonly authService: AuthService
@@ -21,18 +22,16 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.authService.isAuthenticated$.subscribe((authenticated) => {
         if (authenticated) {
           this.handleSignIn();
+        } else {
+          this.loginDisable = false;
         }
       })
     );
   }
 
   handleSignIn(): void {
+    this.loginDisable = true;
     this.router.navigate([PageURLs.MainMenu]);
-  }
-
-  signOut() {
-    this.authService.loginWithPopup();
-    // this.authService.loginWithRedirect({redirect_uri: `https://${window.location.host}/${PageURLs.Login}`});
   }
 
   ngOnDestroy() {
