@@ -3,7 +3,7 @@ import { Animal } from '@cms-interfaces';
 import { of } from 'rxjs';
 import { MainMenuComponent } from './main-menu.component';
 
-describe('MainMenuComponent', () => {
+fdescribe('MainMenuComponent', () => {
   let mockRouter, mockAuthService, mockRoute, mockStore, mockLoadingService;
   let component, mockLoadingState;
   const mockAnimal = ({
@@ -82,6 +82,13 @@ describe('MainMenuComponent', () => {
       let logoutSpy = spyOn(mockAuthService, 'logout');
       component.logout();
       expect(logoutSpy).toHaveBeenCalled();
+    });
+
+    it('should navigate to cullupdate screen', () => {
+      component.cullUpdate();
+      expect(navigateSpy).toHaveBeenCalledWith([PageURLs.CullUpdate], {
+        relativeTo: mockRoute,
+      });
     });
 
     it('should get the current loading state', () => {
