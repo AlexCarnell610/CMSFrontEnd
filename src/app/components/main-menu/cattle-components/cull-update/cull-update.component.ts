@@ -7,8 +7,9 @@ import { getAnimalByTag, getCalves } from '@cms-ngrx/animal';
 import { ScreenSizeService } from '@cms-services';
 import { HttpService } from '@cms-services/http';
 import { select, Store } from '@ngrx/store';
-import { ChartDataSets } from 'chart.js';
+import { ChartDataSets, ChartOptions, ChartPoint } from 'chart.js';
 import { CullUpdateService } from 'libs/services/services/src/cull-update.service';
+import { Moment } from 'moment';
 import { Label } from 'ng2-charts';
 import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -27,7 +28,8 @@ export class CullUpdateComponent implements OnInit, OnDestroy {
   public aliveVSDeadData: ChartDataSets[] = [];
   public aliveVSDeadLabels: Label[];
   public chartLabels: Label[];
-  public chartOptions = { responsive: true };
+  public weightChartOptions: ChartOptions;
+  public aliveDeadChartOptions: ChartOptions = { responsive: true };
   public showLegend = false;
   public isSmallScreen = false;
 
@@ -41,6 +43,7 @@ export class CullUpdateComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.setUpChartOptions();
     this.updateGraph();
     this.cullUpdate = this.cullUpdateService.getCullUpdate();
     if (this.cullUpdateService.getCullUpdate().length == 0) {
@@ -109,21 +112,53 @@ export class CullUpdateComponent implements OnInit, OnDestroy {
             ];
             this.chartWeights = [];
             if (calves?.length > 0) {
+              let dates: Moment[] = [];
               calves.forEach((calf) => {
                 let newWeight = {
                   data: calf.weightData.map((weight) => weight.weight),
                   label: calf.tagNumber,
                 };
-                this.chartWeights.push(newWeight);
+                let chartPoint: ChartPoint[] = [];
+                calf.weightData.forEach((weight) => {
+                  dates.push(weight.weightDate);
+                  chartPoint.push({
+                    x: weight.weightDate.format('L'),
+                    y: weight.weight,
+                  });
+                });
+
+                this.chartWeights.push({
+                  data: chartPoint,
+                  label: calf.tagNumber,
+                });
+              });
+              this.chartLabels = [];
+              dates.forEach((date) => {
+                this.chartLabels.push(date.format('L'));
               });
             }
-            this.chartLabels = animal.weightData.map((weight) =>
-              weight.weightDate.format('L')
-            );
           }
         }
       )
     );
+  }
+
+  private setUpChartOptions() {
+    this.weightChartOptions = {
+      responsive: true,
+      tooltips: {
+        custom: (toolTip) => {
+          console.log(toolTip);
+
+          if (toolTip.title) {
+            toolTip.title = [toolTip.body[0].lines[0].substring(0, 14)];
+            toolTip.body[0].lines[0] =
+              toolTip.body[0].lines[0].substring(16) + ' Kg';
+          }
+          return toolTip;
+        },
+      },
+    };
   }
 
   ngOnDestroy() {

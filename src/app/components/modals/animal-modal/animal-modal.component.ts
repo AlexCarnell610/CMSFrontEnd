@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   Component,
   Input,
+  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -25,7 +26,7 @@ import { AnimalBreedService } from 'libs/services/services/src/animal-breed.serv
 import { WarningService } from 'libs/services/services/src/warning.service';
 import * as moment from 'moment';
 import { NgxSmartModalService } from 'ngx-smart-modal';
-import { BehaviorSubject, Observable, timer } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, timer } from 'rxjs';
 import { take } from 'rxjs/operators';
 
 enum FormControls {
@@ -41,7 +42,7 @@ enum FormControls {
   templateUrl: './animal-modal.component.html',
   styleUrls: ['./animal-modal.component.css'],
 })
-export class AnimalModalComponent implements OnInit, AfterViewInit {
+export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() animal: Animal = null;
   @Input() isAddMode: boolean;
   @ViewChild('p') popover: NgbPopover;
@@ -57,6 +58,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
   private $animals: Observable<Animal[]>;
   private previousFormValue;
   private noSireText = 'No sire assigned';
+  private subs = new Subscription();
 
   constructor(
     private readonly fb: FormBuilder,
@@ -81,60 +83,64 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
   }
 
   public save() {
-    this.handlePopoverErrors().subscribe((canContinue) => {
-      if (this.isAddMode) {
-        this.markAllAsDirty();
-        if (canContinue) {
-          this.loadingService.setLoadingState(true);
-          const newAnimal: Animal = {
-            ai: [],
-            birthDate: this.dob.value,
-            calvingHistory: [],
-            dam: this.dam.value,
-            gender: this.gender.value,
-            managementTag: 'null',
-            sire: { tagNumber: this.sire.value == 'UK' ? '' : this.sire.value },
-            tagNumber: this.tagNumber.value,
-            weightData: [],
-            breed: this.breedService.isBreedCode(this.breed.value)
-              ? this.breed.value
-              : this.breedService.getCodeFromBreed(this.breed.value),
-          };
-          this.animalUpdateService.addAnimal(newAnimal).then(() => {
-            this.saveResult.message = 'Animal Saved';
-            this.saveResult.success = true;
-
-            this.clearForm();
-            this.loadingService.setLoadingState(false);
-            this.handlePopover(this.previousFormValue ? 500 : 1000);
-          });
-        }
-      } else {
-        this.tagNumber.disable();
-        if (canContinue) {
-          this.loadingService.setLoadingState(true);
-          const animalUpdate = {
-            birthDate: this.dob.value,
-            dam: this.dam.value,
-            sire: { tagNumber: this.noSire() ? '' : this.sire.value },
-            gender: this.gender.value,
-            breed: this.breedService.isBreedCode(this.breed.value)
-              ? this.breed.value
-              : this.breedService.getCodeFromBreed(this.breed.value),
-          };
-          this.animalUpdateService
-            .updateAnimal(this.animal.tagNumber, animalUpdate)
-            .then(() => {
-              this.saveResult.message = 'Animal Updated';
+    this.subs.add(
+      this.handlePopoverErrors().subscribe((canContinue) => {
+        if (this.isAddMode) {
+          this.markAllAsDirty();
+          if (canContinue) {
+            this.loadingService.setLoadingState(true);
+            const newAnimal: Animal = {
+              ai: [],
+              birthDate: this.dob.value,
+              calvingHistory: [],
+              dam: this.dam.value,
+              gender: this.gender.value,
+              managementTag: 'null',
+              sire: {
+                tagNumber: this.sire.value == 'UK' ? '' : this.sire.value,
+              },
+              tagNumber: this.tagNumber.value,
+              weightData: [],
+              breed: this.breedService.isBreedCode(this.breed.value)
+                ? this.breed.value
+                : this.breedService.getCodeFromBreed(this.breed.value),
+            };
+            this.animalUpdateService.addAnimal(newAnimal).then(() => {
+              this.saveResult.message = 'Animal Saved';
               this.saveResult.success = true;
 
               this.clearForm();
               this.loadingService.setLoadingState(false);
-              this.handlePopover(1000);
+              this.handlePopover(this.previousFormValue ? 500 : 1000);
             });
+          }
+        } else {
+          this.tagNumber.disable();
+          if (canContinue) {
+            this.loadingService.setLoadingState(true);
+            const animalUpdate = {
+              birthDate: this.dob.value,
+              dam: this.dam.value,
+              sire: { tagNumber: this.noSire() ? '' : this.sire.value },
+              gender: this.gender.value,
+              breed: this.breedService.isBreedCode(this.breed.value)
+                ? this.breed.value
+                : this.breedService.getCodeFromBreed(this.breed.value),
+            };
+            this.animalUpdateService
+              .updateAnimal(this.animal.tagNumber, animalUpdate)
+              .then(() => {
+                this.saveResult.message = 'Animal Updated';
+                this.saveResult.success = true;
+
+                this.clearForm();
+                this.loadingService.setLoadingState(false);
+                this.handlePopover(1000);
+              });
+          }
         }
-      }
-    });
+      })
+    );
   }
 
   private getCSSForPopover() {
@@ -162,8 +168,6 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
   }
 
   private noSire(): boolean {
-    console.warn(this.sire.value == 'UK' || this.sire.value == this.noSireText);
-
     return this.sire.value == 'UK' || this.sire.value == this.noSireText;
   }
 
@@ -184,48 +188,50 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
         this.handlePopover(3000);
         output.next(false);
       } else {
-        this.$animals.pipe(take(1)).subscribe((animals) => {
-          if (this.damNotExists(animals)) {
-            this.warningService
-              .show({
-                header: 'The dam tag you entered does not exist',
-                body: 'Continuing will add it to the database',
-              })
-              .subscribe((result) => {
-                if (result) {
-                  this.addDam(this.dam.value).then(() => {
-                    output.next(true);
-                  });
-                } else {
-                  output.next(result);
-                }
-              });
-          } else if (
-            this.enteredTagIsMale(animals) &&
-            !this.previousFormValue
-          ) {
-            this.warningService
-              .show({
-                header: 'The animal entered for the dam is male',
-                body: 'Please edit it to continue',
-                buttonText: 'Go to edit',
-                isError: true,
-              })
-              .subscribe((result) => {
-                if (result) {
-                  output.next(false);
-                  this.animal = this.getEnteredDam(animals);
-                  this.isAddMode = false;
-                  this.modals.get(Modals.Animal).open();
-                  this.previousFormValue = this.animalForm.value;
-                } else {
-                  output.next(false);
-                }
-              });
-          } else {
-            output.next(true);
-          }
-        });
+        this.subs.add(
+          this.$animals.pipe(take(1)).subscribe((animals) => {
+            if (this.damNotExists(animals)) {
+              this.warningService
+                .show({
+                  header: 'The dam tag you entered does not exist',
+                  body: 'Continuing will add it to the database',
+                })
+                .subscribe((result) => {
+                  if (result) {
+                    this.addDam(this.dam.value).then(() => {
+                      output.next(true);
+                    });
+                  } else {
+                    output.next(result);
+                  }
+                });
+            } else if (
+              this.enteredTagIsMale(animals) &&
+              !this.previousFormValue
+            ) {
+              this.warningService
+                .show({
+                  header: 'The animal entered for the dam is male',
+                  body: 'Please edit it to continue',
+                  buttonText: 'Go to edit',
+                  isError: true,
+                })
+                .subscribe((result) => {
+                  if (result) {
+                    output.next(false);
+                    this.animal = this.getEnteredDam(animals);
+                    this.isAddMode = false;
+                    this.modals.get(Modals.Animal).open();
+                    this.previousFormValue = this.animalForm.value;
+                  } else {
+                    output.next(false);
+                  }
+                });
+            } else {
+              output.next(true);
+            }
+          })
+        );
       }
     } else {
       this.sire.enable();
@@ -357,13 +363,17 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
 
   private trackModalEvents() {
     const animalModal = this.modals.get(Modals.Animal);
-    animalModal.onAnyCloseEventFinished.subscribe(() => {
-      this.clearForm();
-    });
-    animalModal.onOpenFinished.subscribe(() => {
-      this.animalForm.enable();
-      this.setData();
-    });
+    this.subs.add(
+      animalModal.onAnyCloseEventFinished.subscribe(() => {
+        this.clearForm();
+      })
+    );
+    this.subs.add(
+      animalModal.onOpenFinished.subscribe(() => {
+        this.animalForm.enable();
+        this.setData();
+      })
+    );
   }
 
   private clearForm() {
@@ -381,6 +391,10 @@ export class AnimalModalComponent implements OnInit, AfterViewInit {
         return { breed: 'Please choose a breed from the dropdown' };
       }
     };
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 
   public get tagNumber() {

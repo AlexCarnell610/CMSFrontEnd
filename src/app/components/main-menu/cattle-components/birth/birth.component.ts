@@ -26,19 +26,16 @@ export class BirthComponent implements OnInit {
   }
 
   public addBirth() {
-    console.warn('ADD BIRTH');
     this.isAdd = true;
     this.modalSerivce.get(Modals.Birth).open();
   }
 
   public editBirth() {
-    console.warn('EDIT BIRTH');
     this.isAdd = false;
     this.modalSerivce.get(Modals.Birth).open();
   }
 
   public animalSelected(animal: Animal) {
     this.$selectedAnimal.next(animal);
-    console.warn(animal);
   }
 }

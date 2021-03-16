@@ -177,16 +177,6 @@ export class CalvingStatsModalComponent implements OnInit, AfterViewInit {
     );
   }
 
-  private printErrors() {
-    console.warn('isAlive', this.isAlive.errors);
-    console.warn('EASE', this.calvingEase.errors);
-    console.warn('BigCalf', this.reasonBigCalf.errors);
-    console.warn('Poor pres', this.reasonPoorPres.errors);
-    console.warn('GETTINGUP', this.gettingUp.errors);
-    console.warn('FEED ASSIST', this.drinkAssistance.errors);
-    console.warn('DAM HEALTH', this.damHealth.errors);
-  }
-
   private convertDrinkAssist() {
     return this.drinkAssistance.value === 'yes';
   }

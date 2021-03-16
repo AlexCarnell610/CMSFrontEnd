@@ -41,27 +41,30 @@
       </div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item" *ngIf="selectedCullUpdate.score">
-          <strong>Animal score: </strong
+          <strong>Animal score - </strong
           >{{ selectedCullUpdate.score | number: "1.0-0" }}
         </li>
         <li class="list-group-item" *ngIf="selectedCullUpdate.totalCalves == 0">
           <strong>Animal has no calves</strong>
         </li>
         <li class="list-group-item">
-          <strong>Age: </strong> {{ selectedCullUpdate.age }}
+          <strong>Age - </strong> {{ selectedCullUpdate.age }}
         </li>
         <li
           *ngIf="selectedCullUpdate.calfDailyWeightGain"
           class="list-group-item"
         >
-          <strong>Calf average daily weight gain: </strong>
+          <strong>Calf average daily weight gain - </strong>
           {{ selectedCullUpdate.calfDailyWeightGain | number: "1.0-3" }} Kg
         </li>
-        <li class="list-group-item">
-          <strong>Dam tagnumber</strong>
-          {{ animal.dam.tagNumber }}
+        <li *ngIf="selectedCullUpdate.totalCalves > 0" class="list-group-item">
+          <strong>Calf tag numbers - </strong>
+          <ul style="list-style-type: none">
+            <li *ngFor="let calf of $calves | async">
+              {{ calf.tagNumber }}
+            </li>
+          </ul>
         </li>
-        <li class="list-group-item"></li>
       </ul>
     </div>
     <div class="chart-wrapper mt-2" *ngIf="chartWeights.length > 0">
@@ -72,7 +75,7 @@
         baseChart
         [datasets]="chartWeights"
         [labels]="chartLabels"
-        [options]="chartOptions"
+        [options]="weightChartOptions"
         [colors]=""
         [legend]="false"
         [chartType]="'line'"
@@ -88,7 +91,7 @@
         baseChart
         [datasets]="aliveVSDeadData"
         [labels]="aliveVSDeadLabels"
-        [options]="chartOptions"
+        [options]="aliveDeadChartOptions"
         [legend]="true"
         [chartType]="'pie'"
         [plugins]="[]"

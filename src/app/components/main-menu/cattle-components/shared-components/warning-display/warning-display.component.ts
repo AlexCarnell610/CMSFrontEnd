@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   Component,
   EventEmitter,
+  OnDestroy,
   OnInit,
   Output,
 } from '@angular/core';
@@ -11,16 +12,18 @@ import {
   WarningService,
 } from 'libs/services/services/src/warning.service';
 import { NgxSmartModalService } from 'ngx-smart-modal';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'cms-warning-display',
   templateUrl: './warning-display.component.html',
   styleUrls: ['./warning-display.component.css'],
 })
-export class WarningDisplayComponent implements OnInit, AfterViewInit {
+export class WarningDisplayComponent
+  implements OnInit, AfterViewInit, OnDestroy {
   @Output() continue: EventEmitter<Observable<boolean>> = new EventEmitter();
   public toast: IToast = null;
+  private subs = new Subscription();
   constructor(
     public readonly warningService: WarningService,
     private readonly modals: NgxSmartModalService
@@ -29,9 +32,11 @@ export class WarningDisplayComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {}
 
   ngAfterViewInit() {
-    this.modals.get(Modals.Warning).onDataAdded.subscribe((data) => {
-      this.toast = data;
-    });
+    this.subs.add(
+      this.modals.get(Modals.Warning).onDataAdded.subscribe((data) => {
+        this.toast = data;
+      })
+    );
     // this.warningService.toasts.subscribe((toast) => {
     //   if (toast) {
     //     this.toast = toast;
@@ -56,5 +61,9 @@ export class WarningDisplayComponent implements OnInit, AfterViewInit {
 
   public getCSSForWarning() {
     return this.toast?.isError ? 'error' : 'warning';
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 }

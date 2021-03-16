@@ -41,7 +41,7 @@ export class AppComponent implements OnInit, OnDestroy {
           this.store.dispatch(new RetreieveBullData());
 
           this.pusherService.channel.bind('cull-update', (data) => {
-            this.cullUpdateService.cullUpdate = data;
+            this.cullUpdateService.cullUpdate = data.animal;
           });
         }
       })

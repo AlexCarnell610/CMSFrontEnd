@@ -107,9 +107,11 @@ export class AnimalListComponent implements OnInit, OnDestroy {
 
   private setUpList() {
     this.searchBarGroup = this.fb.group({ searchBar: this.fb.control([]) });
-    this.animals$
-      .pipe(takeWhile(() => !this.searched, true))
-      .subscribe((animals) => this.searchedAnimals$.next(animals));
+    this.subscriptions.add(
+      this.animals$
+        .pipe(takeWhile(() => !this.searched, true))
+        .subscribe((animals) => this.searchedAnimals$.next(animals))
+    );
   }
 
   private trackAnimalSelect() {

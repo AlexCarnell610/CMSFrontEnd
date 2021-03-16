@@ -33,19 +33,3 @@ export class CullUpdateService {
     }
   }
 }
-
-// export class CullUpdateService {
-//   private _cullUpdate$: BehaviorSubject<any> = new BehaviorSubject(null);
-
-//   constructor() {}
-
-//   public getCullUpdate() {
-//     return this._cullUpdate$;
-//   }
-
-//   public nextCullUpdate(update: any) {
-//     console.warn('NEXT UPDAET', update);
-
-//     this._cullUpdate$.next(update);
-//   }
-// }

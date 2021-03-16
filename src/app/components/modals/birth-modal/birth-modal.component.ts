@@ -104,14 +104,8 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   public save() {
     this.loadingService.setLoadingState(true);
     this.hasSaved = true;
-    console.warn('breederrors', this.breed.errors);
-    console.warn('calfselect', this.calfSelect.errors);
-    console.warn('CALFTAG', this.calfTag.errors);
-
     this.subs.add(
       this.handleErrors().subscribe((canContinue) => {
-        console.warn(canContinue);
-
         if (canContinue && isAnimal(canContinue)) {
           if (this.isAdd) {
             this.animalService.addAnimal(canContinue).then(() => {
@@ -206,16 +200,11 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     const output: BehaviorSubject<boolean | Animal> = new BehaviorSubject(null);
     let calf: Animal;
     if (this.isAdd) {
-      console.warn('DISABLE CALFSELECT');
-
       this.calfSelect.disable();
     } else {
-      console.warn('DISABLE CALFTAG');
       this.calfTag.disable();
     }
     this.markAllAsDirty();
-    console.warn(this.birthForm.errors);
-
     if (this.birthForm.valid && this.stat) {
       calf = this.getNewCalf();
 
@@ -393,8 +382,6 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
               this.gender.setValue(selectedCalf.gender);
               this.stat = selectedCalf.calvingStat;
             } else {
-              console.warn('TRACK CALFSELECT', val, calves);
-
               this.resetForm(false);
             }
           }
@@ -410,8 +397,6 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
         this.stat = null;
         this.hasSaved = false;
         this.truncNotes = '';
-        console.warn('CLOSE MODAL');
-
         this.resetForm();
         this.breedSelected = false;
       });
@@ -454,8 +439,6 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private resetForm(emit = true) {
-    console.warn('RESE£T FOIRM');
-
     this.birthForm.reset(
       { calfTag: 'UK722218', calves: '', calfSire: '' },
       { emitEvent: emit }

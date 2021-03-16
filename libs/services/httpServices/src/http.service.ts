@@ -68,15 +68,11 @@ export class HttpService {
   }
 
   public updateAnimal(tagNumber: string, update): Observable<Animal> {
-    console.warn(update);
-
     const newUpdate = {
       ...update,
     };
 
     if (moment.isMoment(update.birthDate)) {
-      console.warn('ismoment');
-
       newUpdate.birthDate = update.birthDate.format('YYYY-MM-DD');
     }
 
