@@ -1,26 +1,18 @@
 import { Injectable } from '@angular/core';
-import { NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LoadingPaneService {
-
-  constructor(private readonly modalService: NgxSmartModalService) {
-    // this._isLoadingState.subscribe(state => {
-    //   state ? this.modalService.getModal(Modals.Weight).open() : this.modalService.getModal(Modals.Weight).close()
-    // })
-   }
+  constructor() {}
   private _loadingState: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  public setLoadingState(state: boolean){
-    // sessionStorage.setItem("FUCK", "FUCK");
+  public setLoadingState(state: boolean) {
     this._loadingState.next(state);
   }
 
-  public get currentLoadingState(): BehaviorSubject<boolean>{
-    return this._loadingState
+  public get currentLoadingState(): BehaviorSubject<boolean> {
+    return this._loadingState;
   }
-
 }

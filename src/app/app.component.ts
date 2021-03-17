@@ -31,7 +31,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   private subs = new Subscription();
   constructor(
     @Inject('locationObj') private location: Location,
-    private readonly auth: AuthService,
+    public readonly auth: AuthService,
     private readonly loadingService: LoadingPaneService,
     private readonly store: Store<RootState>,
     private readonly ngbAlertConfig: NgbAlertConfig,
