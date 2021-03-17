@@ -2,7 +2,7 @@ import { Modals, PageURLs } from '@cms-enums';
 import { of } from 'rxjs';
 import { AppComponent } from './app.component';
 
-describe('AppComponent', () => {
+fdescribe('AppComponent', () => {
   let mockAuthService, mockLoadingService, mockStore, mockNgbAlertConfig;
   let mockScreenSizeService, mockPusherService, mockCullUpdateService;
   let mockLocation, mockModalService, mockModalComp;

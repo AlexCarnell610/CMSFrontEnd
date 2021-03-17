@@ -3,7 +3,7 @@ import { Animal } from '@cms-interfaces';
 import { of } from 'rxjs';
 import { MainMenuComponent } from './main-menu.component';
 
-describe('MainMenuComponent', () => {
+fdescribe('MainMenuComponent', () => {
   let mockRouter, mockAuthService, mockRoute, mockStore, mockLoadingService;
   let component, mockLoadingState;
   const mockAnimal = ({
