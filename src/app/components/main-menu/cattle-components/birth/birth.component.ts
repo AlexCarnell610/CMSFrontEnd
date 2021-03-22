@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Modals, PageURLs } from '@cms-enums';
 import { Animal } from '@cms-interfaces';
@@ -10,7 +10,7 @@ import { BehaviorSubject } from 'rxjs';
   templateUrl: './birth.component.html',
   styleUrls: ['./birth.component.css'],
 })
-export class BirthComponent implements OnInit {
+export class BirthComponent {
   public pageName = PageURLs.Births;
   public $selectedAnimal: BehaviorSubject<Animal> = new BehaviorSubject(null);
   public isAdd: boolean;
@@ -18,8 +18,6 @@ export class BirthComponent implements OnInit {
     private readonly router: Router,
     private readonly modalSerivce: NgxSmartModalService
   ) {}
-
-  ngOnInit(): void {}
 
   public backToMain() {
     this.router.navigate([PageURLs.MainMenu]);

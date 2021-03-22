@@ -57,8 +57,6 @@ fdescribe('AnimalDisplayComponent', () => {
       component.$selectedAnimal.next(mockAnimal);
       component.$selectedAnimal.subscribe((animal) => {
         if (animal) {
-          console.warn(animal);
-
           component.$sire.subscribe((sire) => {
             expect(sire).toEqual(mockBull);
             done();

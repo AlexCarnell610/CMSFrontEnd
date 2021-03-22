@@ -57,7 +57,6 @@ enum FormControls {
   styleUrls: ['./birth-modal.component.css'],
 })
 export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
-  $animal: BehaviorSubject<Animal> = new BehaviorSubject(null);
   @Input() animal: Animal;
   @Input() isAdd: boolean = false;
   @ViewChild('errorPop') statPopover: NgbPopover;
@@ -73,7 +72,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     success: true,
   };
   public truncNotes: string = '';
-  private subs: Subscription;
+  private subs: Subscription = new Subscription();
   private longLifeSubs: Subscription = new Subscription();
   private breedSelected: boolean = false;
   private hasSaved: boolean = false;
@@ -131,9 +130,9 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  public get assistReason() {
+  public get assistReason(): string[] {
     const output = [];
-    this.stat.assistanceReason.forEach((stat) => {
+    this.stat.assistanceReason.forEach((stat: AssistanceReason) => {
       switch (stat) {
         case AssistanceReason.BigCalf:
           output.push('Big Calf');
@@ -207,7 +206,6 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.markAllAsDirty();
     if (this.birthForm.valid && this.stat) {
       calf = this.getNewCalf();
-
       if (!this.valuesEdited(calf)) {
         this.saveResult.message = 'No changes made';
         this.saveResult.success = false;
