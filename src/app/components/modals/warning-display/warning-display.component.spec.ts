@@ -1,5 +1,5 @@
 import { Modals } from '@cms-enums';
-import { IToast } from 'libs/services/services/src/warning.service';
+import { IToast } from '@cms-services';
 import { of } from 'rxjs';
 import { WarningDisplayComponent } from './warning-display.component';
 
