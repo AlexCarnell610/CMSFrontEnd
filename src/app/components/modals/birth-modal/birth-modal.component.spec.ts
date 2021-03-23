@@ -1,12 +1,8 @@
 import { fakeAsync, tick, waitForAsync } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
-import {
-  AssistanceReason,
-  CalvingAssistance,
-  Gender,
-  Modals,
-} from '@cms-enums';
+import { AssistanceReason, CalvingAssistance, Modals } from '@cms-enums';
 import { Animal, bull, CalvingStat } from '@cms-interfaces';
+import { mockAnimal, mockCalvingStat } from '@cms-testing-data';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { of } from 'rxjs';
@@ -24,34 +20,10 @@ fdescribe('BirthModalComponent', () => {
     mockBreedObject,
     mockBreedObject2,
     mockModal,
-    mockAnimal: Animal,
-    mockCalvingStat: CalvingStat,
     mockBreed;
 
   beforeEach(() => {
     mockBreed = 'MockBreed';
-
-    mockCalvingStat = {
-      alive: true,
-      assistance: CalvingAssistance.None,
-      calvingNotes: '',
-      damHealth: 5,
-      assistanceReason: [AssistanceReason.BigCalf],
-    };
-
-    mockAnimal = {
-      tagNumber: 'UK111111222333',
-      birthDate: moment(),
-      breed: 'CalfBreed',
-      sire: { tagNumber: 'SireTagNumber' },
-      gender: Gender.Male,
-      calvingStat: mockCalvingStat,
-      ai: [],
-      calvingHistory: [],
-      managementTag: null,
-      weightData: [],
-    };
-
     mockModal = {
       onAnyCloseEventFinished: of({}),
       onOpen: of({}),
@@ -583,6 +555,13 @@ fdescribe('BirthModalComponent', () => {
         });
         it('form should be valid', () => {
           component.save();
+          // console.warn(component.calfSelect.errors);
+          // console.warn(component.dob.errors);
+          // console.warn(component.breed.errors);
+          // console.warn(component.sire.errors);
+          // console.warn(component.gender.errors);
+          // console.warn(component.calfTag.errors);
+
           expect(component.birthForm.valid).toBeTrue();
           expect(component.stat).toBeTruthy();
         });
