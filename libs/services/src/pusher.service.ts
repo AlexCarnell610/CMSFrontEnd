@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import Pusher from 'pusher-js';
-import { environment } from '../../../../src/environments/environment';
+import { environment } from '../../../src/environments/environment';
 
 @Injectable({
   providedIn: 'root',

@@ -9,10 +9,13 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Modals } from '@cms-enums';
 import { Animal, AnimalWeight, AnimalWeightType } from '@cms-interfaces';
-import { AnimalUpdateService, LoadingPaneService } from '@cms-services';
+import {
+  AnimalUpdateService,
+  LoadingPaneService,
+  WarningService,
+} from '@cms-services';
 import { dateValidator, weighDateValidator } from '@cms-validators';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
-import { WarningService } from 'libs/services/services/src/warning.service';
 import * as moment from 'moment';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject, Observable, Subscription, timer } from 'rxjs';

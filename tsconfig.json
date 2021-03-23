@@ -21,9 +21,10 @@
       "@cms-ngrx/animal": ["libs/ngrx/src/lib/animalState"],
       "@cms-ngrx/bull": ["libs/ngrx/src/lib/bullState"],
       "@cms-ngrx": ["libs/ngrx/src/lib"],
-      "@cms-services/http": ["libs/services/httpServices"],
-      "@cms-services": ["libs/services/services"],
-      "@cms-validators": ["libs/validators"]
+      "@cms-services/http": ["libs/httpServices"],
+      "@cms-services": ["libs/services"],
+      "@cms-validators": ["libs/validators"],
+      "@cms-testing-data": ["libs/testingData"]
     }
   },
   "exclude": ["./dist/**"],

@@ -4,11 +4,14 @@ import { PageURLs } from '@cms-enums';
 import { Animal, ICullUpdate } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { getAnimalByTag, getCalves } from '@cms-ngrx/animal';
-import { LoadingPaneService, ScreenSizeService } from '@cms-services';
+import {
+  CullUpdateService,
+  LoadingPaneService,
+  ScreenSizeService,
+} from '@cms-services';
 import { HttpService } from '@cms-services/http';
 import { select, Store } from '@ngrx/store';
 import { ChartDataSets, ChartOptions, ChartPoint } from 'chart.js';
-import { CullUpdateService } from 'libs/services/services/src/cull-update.service';
 import { Moment } from 'moment';
 import { Label } from 'ng2-charts';
 import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';

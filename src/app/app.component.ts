@@ -11,12 +11,15 @@ import { Modals, PageURLs } from '@cms-enums';
 import { RootState } from '@cms-ngrx';
 import { RetrieveAnimalData } from '@cms-ngrx/animal';
 import { RetreieveBullData } from '@cms-ngrx/bull';
-import { LoadingPaneService, ScreenSizeService } from '@cms-services';
+import {
+  CullUpdateService,
+  LoadingPaneService,
+  ScreenSizeService,
+} from '@cms-services';
 import { NgbAlertConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { PusherChannels } from 'libs/enums/src/lib/pusher-channels';
-import { CullUpdateService } from 'libs/services/services/src/cull-update.service';
-import { PusherService } from 'libs/services/services/src/pusher.service';
+import { PusherService } from 'libs/services/src/pusher.service';
 import * as Moment from 'moment';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { combineLatest, Subscription } from 'rxjs';

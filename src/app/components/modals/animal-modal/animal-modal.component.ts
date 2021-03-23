@@ -18,12 +18,15 @@ import { Animal, Bull } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { getDams, selectAnimals } from '@cms-ngrx/animal';
 import { selectBulls as getBulls } from '@cms-ngrx/bull';
-import { AnimalUpdateService, LoadingPaneService } from '@cms-services';
+import {
+  AnimalBreedService,
+  AnimalUpdateService,
+  LoadingPaneService,
+  WarningService,
+} from '@cms-services';
 import { dateValidator } from '@cms-validators';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { select, Store } from '@ngrx/store';
-import { AnimalBreedService } from 'libs/services/services/src/animal-breed.service';
-import { WarningService } from 'libs/services/services/src/warning.service';
 import * as moment from 'moment';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject, Observable, Subscription, timer } from 'rxjs';

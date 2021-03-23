@@ -5,7 +5,7 @@ import { Animal, AnimalWeight, Bull } from '@cms-interfaces';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { MappingService } from '../../../services/services/src/importData.service';
+import { MappingService } from '../../services/src/importData.service';
 
 @Injectable({
   providedIn: 'root',

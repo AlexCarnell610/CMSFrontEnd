@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IBreedCode } from '@cms-interfaces';
-import * as CattleBreedCodes from '../../../../src/assets/cattleBreedCodes.json';
+import * as CattleBreedCodes from '../../../src/assets/cattleBreedCodes.json';
 
 @Injectable({
   providedIn: 'root',
