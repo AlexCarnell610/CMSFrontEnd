@@ -15,7 +15,7 @@ export class AnimalBreedService {
     }
 
     this._breedMap.forEach((value: string, key: string) => {
-      this._breedObjectList.push({ breed: value, code: key });
+      this._breedObjectList.push({ breed: value.trim(), code: key });
     });
   }
 
@@ -54,7 +54,7 @@ export class AnimalBreedService {
   }
 
   get breeds() {
-    return Array.from(this._breedMap.values());
+    return Array.from(this._breedMap.values()).map((breed) => breed.trim());
   }
 
   get breedCodeObjects(): IBreedCode[] {
