@@ -253,7 +253,8 @@
           "options": {
             "main": "libs/services/src/test.ts",
             "tsConfig": "libs/services/tsconfig.spec.json",
-            "karmaConfig": "libs/services/karma.conf.js"
+            "karmaConfig": "libs/services/karma.conf.js",
+            "codeCoverage": true
           }
         },
         "lint": {
