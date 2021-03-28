@@ -156,4 +156,15 @@ fdescribe('AnimalDisplayComponent', () => {
       'badge-success cms-notes-edit'
     );
   });
+
+  describe('ngOndestroy', () => {
+    let unsubscribeSpy;
+    beforeEach(() => {
+      unsubscribeSpy = spyOn<any>(component['subscriptions'], 'unsubscribe');
+    });
+    it('should call unsubscribe', () => {
+      component.ngOnDestroy();
+      expect(unsubscribeSpy).toHaveBeenCalledTimes(1);
+    });
+  });
 });

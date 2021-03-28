@@ -4,12 +4,7 @@ import { PageURLs } from '@cms-enums';
 import { Animal, ICullUpdate } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { getAnimalByTag, getCalves } from '@cms-ngrx/animal';
-import {
-  CullUpdateService,
-  LoadingPaneService,
-  ScreenSizeService,
-} from '@cms-services';
-import { HttpService } from '@cms-services/http';
+import { CullUpdateService, ScreenSizeService } from '@cms-services';
 import { select, Store } from '@ngrx/store';
 import { ChartDataSets, ChartOptions, ChartPoint } from 'chart.js';
 import { Moment } from 'moment';
@@ -39,42 +34,20 @@ export class CullUpdateComponent implements OnInit, OnDestroy {
   private subs: Subscription = new Subscription();
   constructor(
     private readonly cullUpdateService: CullUpdateService,
-    private readonly httpService: HttpService,
     private readonly router: Router,
     private readonly store: Store<RootState>,
-    private readonly screenSizeService: ScreenSizeService,
-    private readonly loadingService: LoadingPaneService
-  ) {
-    if (this.cullUpdateService.getCullUpdate().length == 0) {
-      this.loadingService.setLoadingState(true);
-    }
-  }
+    private readonly screenSizeService: ScreenSizeService
+  ) {}
 
   ngOnInit(): void {
     this.setUpChartOptions();
     this.updateGraph();
     this.cullUpdate = this.cullUpdateService.getCullUpdate();
-    if (this.cullUpdateService.getCullUpdate().length == 0) {
-      this.subs.add(
-        this.httpService.getCullUpdate().subscribe(
-          (data) => {
-            this.cullUpdateService.cullUpdate = data;
-          },
-          (err) => {
-            console.error(err);
-          },
-          () => {
-            this.cullUpdate = this.cullUpdateService.getCullUpdate();
-            this.loadingService.setLoadingState(false);
-          }
-        )
-      );
-      this.subs.add(
-        this.screenSizeService.isSmallScreenObs().subscribe((isSmall) => {
-          this.isSmallScreen = isSmall;
-        })
-      );
-    }
+    this.subs.add(
+      this.screenSizeService.isSmallScreenObs().subscribe((isSmall) => {
+        this.isSmallScreen = isSmall;
+      })
+    );
   }
 
   public animalSelected(event: ICullUpdate) {
@@ -153,8 +126,6 @@ export class CullUpdateComponent implements OnInit, OnDestroy {
       responsive: true,
       tooltips: {
         custom: (toolTip) => {
-          console.log(toolTip);
-
           if (toolTip.title) {
             toolTip.title = [toolTip.body[0].lines[0].substring(0, 14)];
             toolTip.body[0].lines[0] =

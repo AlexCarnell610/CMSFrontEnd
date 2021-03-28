@@ -24,8 +24,6 @@ fdescribe('Import data service', () => {
       let noAiHistAnimal = [{ ...rawAnimal[0], ai_history: [] }];
       let expectation: Animal[] = [{ ...convertedAnimal, ai: [] }];
 
-      //   console.warn(noAiHistAnimal.ai_history.length);
-
       expect(service.importAnimalData(noAiHistAnimal)).toEqual(expectation);
     });
 
