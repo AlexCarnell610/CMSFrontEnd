@@ -28,8 +28,6 @@ export class AnimalListComponent implements OnInit, OnDestroy {
   public searchBarGroup: FormGroup = new FormGroup({});
   public animals$: Observable<Animal[]>;
   public searchedAnimals$: BehaviorSubject<Animal[]> = new BehaviorSubject([]);
-  public $selectedAnimal: BehaviorSubject<Animal> = new BehaviorSubject(null);
-  public pillButtonText: string;
 
   private currentAnimal: Animal;
   private $currentAnimal: BehaviorSubject<Animal> = new BehaviorSubject(null);
@@ -47,7 +45,6 @@ export class AnimalListComponent implements OnInit, OnDestroy {
 
     this.setUpList();
     this.trackSearch();
-    this.pillButtonText = this.getPillButtonText();
   }
 
   public openAddModal() {
@@ -70,7 +67,7 @@ export class AnimalListComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getPillButtonText(): string {
+  get pillButtonText(): string {
     switch (this.page) {
       case PageURLs.Weight:
         return 'Weights';
@@ -107,11 +104,6 @@ export class AnimalListComponent implements OnInit, OnDestroy {
 
   private setUpList() {
     this.searchBarGroup = this.fb.group({ searchBar: this.fb.control([]) });
-    this.subscriptions.add(
-      this.animals$
-        .pipe(takeWhile(() => !this.searched, true))
-        .subscribe((animals) => this.searchedAnimals$.next(animals))
-    );
   }
 
   private trackAnimalSelect() {
@@ -123,6 +115,11 @@ export class AnimalListComponent implements OnInit, OnDestroy {
   }
 
   private trackSearch() {
+    this.subscriptions.add(
+      this.animals$
+        .pipe(takeWhile(() => !this.searched, true))
+        .subscribe((animals) => this.searchedAnimals$.next(animals))
+    );
     this.subscriptions.add(
       combineLatest([this.searchBarValChange, this.animals$]).subscribe(
         ([value, animals]: [string, Animal[]]) => {
