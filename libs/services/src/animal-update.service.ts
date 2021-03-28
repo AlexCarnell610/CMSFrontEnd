@@ -20,27 +20,25 @@ export class AnimalUpdateService {
   ) {}
 
   public updateAnimalWeight(
-    weightId: string,
+    weightId: number,
     weightUpdate: any,
     animal: Animal,
     index
   ): Promise<boolean> {
     return new Promise((resolve) => {
-      this.httpService
-        .updateWeight(Number.parseInt(weightId), weightUpdate)
-        .subscribe((res) => {
-          this.store.dispatch(
-            new UpdateAnimalWeight({
-              weightUpdate: {
-                id: animal.tagNumber,
-                changes: {
-                  weightData: res,
-                },
+      this.httpService.updateWeight(weightId, weightUpdate).subscribe((res) => {
+        this.store.dispatch(
+          new UpdateAnimalWeight({
+            weightUpdate: {
+              id: animal.tagNumber,
+              changes: {
+                weightData: res,
               },
-            })
-          );
-          resolve(true);
-        });
+            },
+          })
+        );
+        resolve(true);
+      });
     });
   }
 

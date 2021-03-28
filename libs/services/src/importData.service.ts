@@ -29,14 +29,12 @@ export class MappingService {
           value.ai_history.length === 0
             ? []
             : this.convertAiHistory(value.ai_history),
-        birthDate: moment(value.birth_date, 'YYYY-MM-D'),
+        birthDate: this.convertDate(value.birth_date),
         calvingHistory:
           value.calving_history.length === 0
             ? []
             : this.convertCalvingHistory(value.calving_history),
-        calvingStat: value.calving_stat
-          ? this.convertCalvingStats(value.calving_stat)
-          : null,
+        calvingStat: this.convertCalvingStats(value.calving_stat),
         dam: this.convertDam(value.dam),
         sire: { tagNumber: value.sire.tag_number },
         weightData: this.convertWeightData(value.weight_data),
@@ -51,7 +49,13 @@ export class MappingService {
   public convertBulls(bullData: Object): Bull[] {
     const convertedBulls: Bull[] = [];
     for (let value of Object.values<any>(bullData)) {
-      convertedBulls.push(this.convertBull(value));
+      let newBull: Bull = {
+        breed: value.breed,
+        name: value.name,
+        tagNumber: value.tag_number,
+      };
+
+      convertedBulls.push(newBull);
     }
     return convertedBulls;
   }
@@ -73,13 +77,6 @@ export class MappingService {
           weight.is_sale_weight === 1 || weight.is_sale_weight ? true : false,
       },
       weight: weight.weight,
-    };
-  }
-  private convertBull(sire: any): Bull {
-    return {
-      breed: sire.breed,
-      name: sire.name,
-      tagNumber: sire.tag_number,
     };
   }
 
@@ -161,7 +158,7 @@ export class MappingService {
           tagNumber: aiOccurence.bull.tag_number,
         },
         heatDate: this.convertDate(aiOccurence.heat_date),
-        sweeperBull: aiOccurence.sweeper_bull,
+        sweeperBull: this.convertBoolean(aiOccurence.sweeper_bull),
         year: aiOccurence.year,
         id: aiOccurence.id,
       };
@@ -169,6 +166,6 @@ export class MappingService {
   }
 
   private convertDate(date: string) {
-    return moment(date, 'YYYY-MM-D');
+    return moment(date, 'YYYY-MM-DD');
   }
 }

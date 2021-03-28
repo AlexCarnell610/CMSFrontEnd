@@ -8,8 +8,6 @@ fdescribe('CullUpdateService', () => {
     convertedUpdate: ICullUpdate;
 
   beforeEach(() => {
-    tagNumber = 'TAGNUMBER';
-
     mockUpdate = {
       tagNumber: {
         score: 123,
