@@ -6,6 +6,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class ScreenSizeService {
   private _screenWidth: number;
+  private smallScreenWidth = 1000;
   private $_isSmallScreen: BehaviorSubject<boolean> = new BehaviorSubject(
     false
   );
@@ -26,7 +27,7 @@ export class ScreenSizeService {
   }
 
   get isSmallScreen() {
-    return this.screenWidth <= 1000;
+    return this.screenWidth <= this.smallScreenWidth;
   }
 
   public isSmallScreenObs(): Observable<boolean> {
