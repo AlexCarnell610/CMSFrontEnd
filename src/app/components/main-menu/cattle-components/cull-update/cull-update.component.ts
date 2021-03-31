@@ -93,6 +93,7 @@ export class CullUpdateComponent implements OnInit, OnDestroy {
               'Number dead calves',
             ];
             this.chartWeights = [];
+            this.chartLabels = [];
             if (calves?.length > 0) {
               let dates: Moment[] = [];
               calves.forEach((calf) => {
@@ -110,7 +111,6 @@ export class CullUpdateComponent implements OnInit, OnDestroy {
                   label: calf.tagNumber,
                 });
               });
-              this.chartLabels = [];
               dates.forEach((date) => {
                 this.chartLabels.push(date.format('L'));
               });

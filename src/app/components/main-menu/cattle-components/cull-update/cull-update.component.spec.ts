@@ -88,7 +88,7 @@ fdescribe('CullUpdateComponent', () => {
       component.$selectedAnimal.next(mockAnimal);
       tick();
       let convertedWeight = convertedAnimal.weightData;
-      expect(component.chartWeights).toEqual([
+      let expectation = [
         {
           data: [
             {
@@ -102,7 +102,17 @@ fdescribe('CullUpdateComponent', () => {
           ],
           label: convertedAnimal.tagNumber,
         },
-      ]);
+      ];
+      expect(component.chartWeights).toEqual(expectation);
+    }));
+
+    it('should not set the chart weights or chart labels if no calves', fakeAsync(() => {
+      component.ngOnInit();
+      component.$calves.next([]);
+      component.$selectedAnimal.next(mockAnimal);
+      tick();
+      expect(component.chartWeights).toEqual([]);
+      expect(component.chartLabels).toEqual([]);
     }));
 
     it('should set the cull update', () => {
@@ -117,17 +127,31 @@ fdescribe('CullUpdateComponent', () => {
   });
 
   describe('animalSelected [method]', () => {
+    let storePipeSpy;
     beforeEach(() => {
-      spyOn(mockStore, 'pipe').and.returnValues(
+      storePipeSpy = spyOn(mockStore, 'pipe').and.returnValues(
         of(convertedAnimal),
         of([convertedAnimal])
       );
-      component.animalSelected(mockCullUpdate);
     });
 
     it('should set the selected animal and the calves', () => {
+      component.animalSelected(mockCullUpdate);
       expect(component.$selectedAnimal.value).toEqual(convertedAnimal);
       expect(component.$calves.value).toEqual([convertedAnimal]);
+    });
+
+    it('should not update calves observable if animals dont match', () => {
+      component.$selectedAnimal.next(convertedAnimal);
+      let incorrectCullUpdate = {
+        ...mockCullUpdate,
+        tagNumber: convertedAnimal.tagNumber,
+      };
+      let selectedAnimalNextSpy = spyOn(component.$selectedAnimal, 'next');
+      component.animalSelected(incorrectCullUpdate);
+
+      expect(storePipeSpy).toHaveBeenCalledTimes(1);
+      expect(selectedAnimalNextSpy).not.toHaveBeenCalled();
     });
   });
 
