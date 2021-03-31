@@ -51,7 +51,7 @@ export class WeightComponent implements OnInit, OnDestroy {
 
   public openEditModal() {
     this.isAddMode = false;
-    this.modalService.getModal(Modals.Weight).open();
+    this.modalService.get(Modals.Weight).open();
   }
 
   private updateGraph() {
