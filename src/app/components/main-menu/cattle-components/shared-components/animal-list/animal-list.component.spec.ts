@@ -38,6 +38,14 @@ fdescribe('AnimalListComponent', () => {
       });
     });
 
+    it('should popluate the animals observable births page', () => {
+      component.page = PageURLs.Births;
+      component.ngOnInit();
+      component.animals$.subscribe((ani) => {
+        expect(ani).toEqual(animalArray);
+      });
+    });
+
     it('should create the formgroup', () => {
       let fbGroupSpy = spyOn(fb, 'group').and.callThrough();
       component.ngOnInit();
