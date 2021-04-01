@@ -282,12 +282,23 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private valuesChanged(): boolean {
     return (
-      this.animal?.sire.tagNumber !== this.sire.value ||
+      this.animal?.sire.tagNumber !== this.convertSireValue(this.sire.value) ||
       this.animal?.dam.tagNumber !== this.dam.value ||
       this.animal?.birthDate.format('yyyy-MM-DD') !== this.dob.value ||
       this.animal?.gender !== this.gender.value ||
-      this.animal?.breed !== this.breed.value
+      this.breedChanged()
     );
+  }
+
+  private breedChanged() {
+    return this.animal?.breed !== undefined
+      ? this.breedService.getBreedCode(this.animal.breed) !==
+          this.breedService.getBreedCode(this.breed.value)
+      : true;
+  }
+
+  private convertSireValue(sire: string) {
+    return sire === 'No sire assigned' || sire === 'UK' ? 'null' : sire;
   }
 
   private setData() {

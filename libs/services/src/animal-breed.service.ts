@@ -30,7 +30,7 @@ export class AnimalBreedService {
   }
 
   public breedExists(breedCodeOrName: string): boolean {
-    const codeOrNameUpper = breedCodeOrName?.toString().toUpperCase();
+    const codeOrNameUpper = breedCodeOrName?.toString().toUpperCase().trim();
     return (
       this.getBreedFromCode(codeOrNameUpper) !== undefined ||
       this.breeds.findIndex((breed) => breed === codeOrNameUpper) !== -1
@@ -38,10 +38,10 @@ export class AnimalBreedService {
   }
 
   public getBreedCode(breed: string) {
-    if (this.getBreedFromCode(breed) !== undefined) {
+    if (this.getBreedFromCode(breed.trim()) !== undefined) {
       return breed;
     } else {
-      return this.getCodeFromBreed(breed);
+      return this.getCodeFromBreed(breed.trim());
     }
   }
 

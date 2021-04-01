@@ -34,7 +34,9 @@ export class MappingService {
           value.calving_history.length === 0
             ? []
             : this.convertCalvingHistory(value.calving_history),
-        calvingStat: this.convertCalvingStats(value.calving_stat),
+        calvingStat: value.calving_stat
+          ? this.convertCalvingStats(value.calving_stat)
+          : null,
         dam: this.convertDam(value.dam),
         sire: { tagNumber: value.sire.tag_number },
         weightData: this.convertWeightData(value.weight_data),
