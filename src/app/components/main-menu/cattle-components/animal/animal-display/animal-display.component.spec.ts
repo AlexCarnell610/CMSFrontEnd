@@ -36,7 +36,6 @@ fdescribe('AnimalDisplayComponent', () => {
     };
     mockAnimal = { breed: 'LIM', sire: { tagNumber: 'tagNumber' } };
     mockBreed = 'limousin';
-    mockControl = { setValue: () => {} };
     component = new AnimalDisplayComponent(
       mockStore,
       mockScreenService,

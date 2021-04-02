@@ -1,4 +1,7 @@
 import { Modals, PageURLs } from '@cms-enums';
+import { CullUpdateService } from '@cms-services';
+import { PusherChannels } from 'libs/enums/src/lib/pusher-channels';
+import { PusherMock } from 'pusher-js-mock';
 import { of } from 'rxjs';
 import { AppComponent } from './app.component';
 
@@ -7,7 +10,11 @@ fdescribe('AppComponent', () => {
   let mockScreenSizeService, mockPusherService, mockCullUpdateService;
   let mockLocation, mockModalService, mockModalComp;
   let component: AppComponent;
+  let pusher, channel;
   beforeEach(() => {
+    pusher = new PusherMock();
+    channel = pusher.subscribe('cull-update');
+
     mockLocation = { href: 'main-menu' };
     mockScreenSizeService = {
       screenWidth: {},
@@ -23,8 +30,11 @@ fdescribe('AppComponent', () => {
       dispatch: () => {},
     };
     mockNgbAlertConfig = {};
-    mockPusherService = { channel: { bind: () => {} } };
-    mockCullUpdateService = {};
+
+    mockPusherService = {
+      channel,
+    };
+    mockCullUpdateService = new CullUpdateService();
     mockModalService = {
       get: () => {
         return mockModalComp;
@@ -55,8 +65,10 @@ fdescribe('AppComponent', () => {
   it('should not dispatch is not authenticated', () => {
     let dispatchSpy = spyOn(mockStore, 'dispatch');
     mockAuthService.isAuthenticated$ = of(false);
+    component.ngOnInit();
     expect(dispatchSpy).not.toHaveBeenCalled();
   });
+
   describe('Authenticated', () => {
     beforeEach(() => {
       mockAuthService.isAuthenticated$ = of(true);
@@ -71,6 +83,18 @@ fdescribe('AppComponent', () => {
       let bindSpy = spyOn(mockPusherService.channel, 'bind');
       component.ngOnInit();
       expect(bindSpy).toHaveBeenCalled();
+    });
+
+    it('should set the cull data', () => {
+      let mockPusherData = { animal: 'MOCKDATA' };
+      let cullUpdateSpy = spyOnProperty(
+        mockCullUpdateService,
+        'cullUpdate',
+        'set'
+      );
+      component.ngOnInit();
+      channel.emit(PusherChannels.CullUpdate, mockPusherData);
+      expect(cullUpdateSpy).toHaveBeenCalledWith(mockPusherData.animal);
     });
   });
 
@@ -115,6 +139,17 @@ fdescribe('AppComponent', () => {
       expect(modalGetSpy).toHaveBeenCalledWith(Modals.Loading);
       expect(modalCloseSpy).toHaveBeenCalled();
       expect(modalOpenSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('ngOndestroy', () => {
+    let unsubscribeSpy;
+    beforeEach(() => {
+      unsubscribeSpy = spyOn<any>(component['subs'], 'unsubscribe');
+    });
+    it('should call unsubscribe', () => {
+      component.ngOnDestroy();
+      expect(unsubscribeSpy).toHaveBeenCalledTimes(1);
     });
   });
 });

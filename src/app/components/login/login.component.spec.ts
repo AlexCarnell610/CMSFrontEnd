@@ -52,4 +52,15 @@ fdescribe('LoginComponent', () => {
       expect(component.loginDisable).toBeTrue();
     });
   });
+
+  describe('ngOndestroy', () => {
+    let unsubscribeSpy;
+    beforeEach(() => {
+      unsubscribeSpy = spyOn<any>(component['subs'], 'unsubscribe');
+    });
+    it('should call unsubscribe', () => {
+      component.ngOnDestroy();
+      expect(unsubscribeSpy).toHaveBeenCalledTimes(1);
+    });
+  });
 });
