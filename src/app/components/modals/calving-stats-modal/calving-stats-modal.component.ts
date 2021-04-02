@@ -139,6 +139,7 @@ export class CalvingStatsModalComponent implements OnInit, AfterViewInit {
       this.notesChanged = val !== '';
     });
   }
+
   private setFormValues() {
     this.isAlive.setValue(this.stat.alive ? 'alive' : 'dead');
     this.calvingEase.setValue(this.stat.assistance);
