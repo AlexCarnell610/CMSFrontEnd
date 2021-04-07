@@ -42,6 +42,7 @@ export class MappingService {
         weightData: this.convertWeightData(value.weight_data),
         notes: value.notes,
         breed: value.breed,
+        registered: this.convertBoolean(value.registered),
       });
     }
 

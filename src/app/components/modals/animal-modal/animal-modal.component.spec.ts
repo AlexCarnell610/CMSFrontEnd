@@ -197,6 +197,7 @@ describe('AnimalModalComponent', () => {
           breed: 'LIM',
           dam: convertedAnimal.dam.tagNumber,
           sire: convertedAnimal.sire.tagNumber,
+          registered: 'yes',
         };
         component.animalForm.setValue(mockFormValue);
         handleErrorsSpy.and.returnValue(of(true));
@@ -231,6 +232,7 @@ describe('AnimalModalComponent', () => {
             tagNumber: mockFormValue.newTagNumber,
             weightData: [],
             breed: mockFormValue.breed,
+            registered: mockFormValue.registered,
           };
 
           expect(animalServiceAddAnimalSpy).toHaveBeenCalledWith(newAnimal);
@@ -345,6 +347,7 @@ describe('AnimalModalComponent', () => {
           tagNumber: damTag,
           weightData: [],
           breed: 'UNAV',
+          registered: false,
         };
 
         component.dam.setValue(damTag);

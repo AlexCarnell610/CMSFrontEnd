@@ -46,6 +46,7 @@ export interface Animal extends BaseAnimal {
   weightData: AnimalWeight[];
   notes?: string;
   breed: string;
+  registered: boolean;
 }
 
 export interface AI {

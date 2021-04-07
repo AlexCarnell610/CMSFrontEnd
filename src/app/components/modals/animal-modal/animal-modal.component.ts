@@ -39,6 +39,7 @@ enum FormControls {
   Dam = 'dam',
   Sire = 'sire',
   Breed = 'breed',
+  Registered = 'registered',
 }
 @Component({
   selector: 'cms-animal-modal',
@@ -79,6 +80,9 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.$dams = this.store.pipe(select(getDams));
     this.$sires = this.store.pipe(select(getBulls));
     this.$animals = this.store.pipe(select(selectAnimals));
+    this.registered.valueChanges.subscribe((val) => {
+      console.warn(val);
+    });
   }
 
   ngAfterViewInit() {
@@ -107,6 +111,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
               breed: this.breedService.isBreedCode(this.breed.value)
                 ? this.breed.value
                 : this.breedService.getCodeFromBreed(this.breed.value),
+              registered: this.isRegistered,
             };
             this.animalUpdateService.addAnimal(newAnimal).then(() => {
               this.saveResult.message = 'Animal Saved';
@@ -129,6 +134,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
               breed: this.breedService.isBreedCode(this.breed.value)
                 ? this.breed.value
                 : this.breedService.getCodeFromBreed(this.breed.value),
+              registered: this.isRegistered,
             };
             this.animalUpdateService
               .updateAnimal(this.animal.tagNumber, animalUpdate)
@@ -163,6 +169,22 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
       return 'is-invalid';
     } else if (this.breed.valid && this.breed.dirty) {
       return 'is-valid';
+    }
+  }
+
+  public getCSSForRegisteredNo() {
+    if (this.registered.invalid && this.registered.dirty) {
+      return 'btn-outline-danger';
+    } else if (this.registered.value === 'no') {
+      return 'active';
+    }
+  }
+
+  public getCSSForRegisteredYes() {
+    if (this.registered.invalid && this.registered.dirty) {
+      return 'btn-outline-danger';
+    } else if (this.registered.value === 'yes') {
+      return 'active';
     }
   }
 
@@ -275,6 +297,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
       tagNumber,
       weightData: [],
       breed: 'UNAV',
+      registered: false,
     };
     this.loadingService.setLoadingState(true);
     return this.animalUpdateService.addAnimal(newAnimal);
@@ -286,8 +309,13 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
       this.animal?.dam.tagNumber !== this.dam.value ||
       this.animal?.birthDate.format('yyyy-MM-DD') !== this.dob.value ||
       this.animal?.gender !== this.gender.value ||
-      this.breedChanged()
+      this.breedChanged() ||
+      this.animal?.registered !== this.isRegistered
     );
+  }
+
+  private get isRegistered() {
+    return this.registered.value === 'yes';
   }
 
   private breedChanged() {
@@ -314,7 +342,9 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
       this.breed.setValue(
         this.breedService.getBreedFromCode(this.animal.breed)
       );
+      this.registered.setValue(this.animal.registered ? 'yes' : 'no');
     }
+    console.warn(this.registered.value);
   }
 
   private setUpForm() {
@@ -337,6 +367,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
         validators: Validators.pattern(/^UK\d{12}|UK|No sire assigned$/),
         updateOn: 'blur',
       }),
+      registered: this.fb.control([], Validators.required),
     });
   }
 
@@ -361,6 +392,8 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private markAllAsDirty() {
+    console.warn(this.breed.errors);
+
     if (this.sire.value == 'UK') {
       this.sire.markAsPristine();
     } else if (this.sire.value == '') {
@@ -373,6 +406,8 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.tagNumber.markAsDirty();
     this.dob.markAsDirty();
     this.gender.markAsDirty();
+    this.breed.markAsDirty();
+    this.registered.markAsDirty();
   }
 
   private trackModalEvents() {
@@ -432,5 +467,8 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   public get breed() {
     return this.animalForm.get(FormControls.Breed);
+  }
+  public get registered() {
+    return this.animalForm.get(FormControls.Registered);
   }
 }

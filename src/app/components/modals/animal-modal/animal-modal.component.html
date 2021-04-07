@@ -25,6 +25,46 @@
             <cms-form-errors [errors]="tagNumber.errors"></cms-form-errors>
           </div>
         </div>
+        <div class="mb-2">
+          <label for="registered">Registered on BCMS - &nbsp; </label>
+          <div class="btn-group btn-group-toggle" id="registered">
+            <label
+              class="btn btn-outline-primary btn-sm"
+              [ngClass]="getCSSForRegisteredYes()"
+            >
+              <input
+                formControlName="registered"
+                value="yes"
+                type="radio"
+                name="registered"
+                id="yes"
+                required
+              />Yes
+            </label>
+            <label
+              class="btn btn-outline-primary btn-sm"
+              [ngClass]="getCSSForRegisteredNo()"
+            >
+              <input
+                formControlName="registered"
+                value="no"
+                type="radio"
+                name="registered"
+                id="no"
+                required
+              />No
+            </label>
+          </div>
+          <div
+            *ngIf="registered.invalid && registered.dirty"
+            class="cms-invalid-feedback"
+          >
+            <cms-form-errors
+              [errors]="registered.errors"
+              [isRadio]="true"
+            ></cms-form-errors>
+          </div>
+        </div>
         <div class="form-group">
           <label for="birthDate">Enter birth date</label>
           <input

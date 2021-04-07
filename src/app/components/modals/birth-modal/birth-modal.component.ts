@@ -52,6 +52,7 @@ enum FormControls {
   Sire = 'calfSire',
   Gender = 'gender',
   Calves = 'calves',
+  Registered = 'registered',
 }
 
 @Component({
@@ -209,6 +210,8 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.markAllAsDirty();
     if (this.birthForm.valid && this.stat) {
       calf = this.getNewCalf();
+      console.warn(this.valuesEdited(calf));
+
       if (!this.valuesEdited(calf)) {
         this.saveResult.message = 'No changes made';
         this.saveResult.success = false;
@@ -271,6 +274,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
       ai: [],
       calvingHistory: [],
       weightData: [],
+      registered: this.isRegistered,
     };
   }
 
@@ -304,13 +308,17 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private valuesEdited(calf: Animal) {
+    console.warn(this.animal.registered !== this.isRegistered);
+    console.warn(this.registered.value);
+
     return (
       calf.birthDate.format('DD-MM-YYYY') !==
         this.selectedCalf?.birthDate.format('DD-MM-YYYY') ||
       calf.breed !== this.selectedCalf?.breed ||
       calf.sire.tagNumber !== this.selectedCalf?.sire.tagNumber ||
       calf.gender !== this.selectedCalf?.gender ||
-      this.statChanged()
+      this.statChanged() ||
+      calf.registered !== this.selectedCalf?.registered
     );
   }
 
@@ -381,6 +389,9 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
               );
               this.sire.setValue(selectedCalf.sire.tagNumber);
               this.gender.setValue(selectedCalf.gender);
+              console.warn(selectedCalf.registered);
+
+              this.registered.setValue(selectedCalf.registered ? 'yes' : 'no');
               this.stat = selectedCalf.calvingStat;
             } else {
               this.resetForm(false);
@@ -390,6 +401,27 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
       )
     );
   }
+
+  private get isRegistered() {
+    return this.registered.value === 'yes';
+  }
+
+  public getCSSForRegisteredNo() {
+    if (this.registered.invalid && this.registered.dirty) {
+      return 'btn-outline-danger';
+    } else if (this.registered.value === 'no') {
+      return 'active';
+    }
+  }
+
+  public getCSSForRegisteredYes() {
+    if (this.registered.invalid && this.registered.dirty) {
+      return 'btn-outline-danger';
+    } else if (this.registered.value === 'yes') {
+      return 'active';
+    }
+  }
+
   private trackModalEvents() {
     this.modalService
       .get(Modals.Birth)
@@ -436,6 +468,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
       }),
       calfSire: this.fb.control([], Validators.required),
       gender: this.fb.control([], Validators.required),
+      registered: this.fb.control([], Validators.required),
     });
   }
 
@@ -477,6 +510,10 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public get calfSelect() {
     return this.birthForm.get(FormControls.Calves);
+  }
+
+  public get registered() {
+    return this.birthForm.get(FormControls.Registered);
   }
 
   ngOnDestroy() {

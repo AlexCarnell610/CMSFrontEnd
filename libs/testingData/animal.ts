@@ -23,6 +23,7 @@ export const mockAnimal = {
   calvingHistory: [],
   managementTag: null,
   weightData: [],
+  registered: false,
 };
 
 export const rawAnimal = [
@@ -179,6 +180,7 @@ export const convertedAnimal: Animal = {
   ],
   notes: '',
   breed: 'LIM',
+  registered: true,
 };
 
 // {

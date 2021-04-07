@@ -20,6 +20,10 @@
       >{{ selectedAnimal.birthDate | date: "dd MMM yyyy" }}
     </li>
     <li class="list-group-item">
+      <strong>Registered - </strong
+      >{{ selectedAnimal.registered ? "Yes" : "No" }}
+    </li>
+    <li class="list-group-item">
       <strong>Breed - </strong>{{ getBreedName(selectedAnimal) | titlecase }}
     </li>
     <li class="list-group-item">
