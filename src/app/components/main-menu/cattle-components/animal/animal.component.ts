@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Modals, PageURLs } from '@cms-enums';
-import { Animal, Bull, isBull } from '@cms-interfaces';
+import { Animal, Bull } from '@cms-interfaces';
 import { ScreenSizeService } from '@cms-services';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -39,8 +39,5 @@ export class AnimalComponent {
 
   public animalSelected(event: Animal) {
     this.$selectedAnimal.next(event);
-  }
-  public isntBull(animal): boolean {
-    return !isBull(animal);
   }
 }

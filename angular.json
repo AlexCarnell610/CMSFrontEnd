@@ -24,7 +24,6 @@
               "src/styles.css",
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
             ],
-            "scripts": [],
             "allowedCommonJsDependencies": [
               "chart.js",
               "overlayscrollbars-ngx.esm.js"
@@ -83,6 +82,7 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "main": "src/test.ts",
+            "codeCoverage": true,
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
@@ -253,7 +253,8 @@
           "options": {
             "main": "libs/services/src/test.ts",
             "tsConfig": "libs/services/tsconfig.spec.json",
-            "karmaConfig": "libs/services/karma.conf.js"
+            "karmaConfig": "libs/services/karma.conf.js",
+            "codeCoverage": true
           }
         },
         "lint": {

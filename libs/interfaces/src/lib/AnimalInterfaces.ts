@@ -37,7 +37,7 @@ export interface TextAnimal extends BaseAnimal {
 }
 
 export interface Animal extends BaseAnimal {
-  dam?: BaseAnimal;
+  dam?: Dam;
   damTag?: string;
   sire: { tagNumber: string };
   ai: AI[];
@@ -73,7 +73,7 @@ export interface CalvingHistory {
 }
 
 export interface AnimalWeight {
-  id?: string;
+  id?: number;
   weightDate: moment.Moment;
   weight: number;
   weightType: AnimalWeightType;
@@ -82,6 +82,15 @@ export interface AnimalWeight {
 export interface AnimalWeightType {
   isInitial: boolean;
   isSale: boolean;
+}
+
+export interface ICullUpdate {
+  aliveCalves?: number;
+  totalCalves?: number;
+  calfDailyWeightGain?: number;
+  age: number;
+  score: number;
+  tagNumber: string;
 }
 
 export function isAnimal(animal: any): animal is Animal {

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ValidationErrors } from '@angular/forms';
 
 @Component({
@@ -6,9 +6,8 @@ import { ValidationErrors } from '@angular/forms';
   templateUrl: './form-errors.component.html',
   styleUrls: ['./form-errors.component.css'],
 })
-export class FormErrorsComponent implements OnInit {
+export class FormErrorsComponent {
   constructor() {}
   @Input() errors: ValidationErrors;
   @Input() isRadio: boolean = false;
-  ngOnInit(): void {}
 }

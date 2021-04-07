@@ -20,9 +20,9 @@ export class MainMenuComponent implements OnInit {
   constructor(
     private readonly router: Router,
     private readonly auth: AuthService,
-    private route: ActivatedRoute,
+    private readonly route: ActivatedRoute,
     private readonly store: Store<RootState>,
-    private loadingService: LoadingPaneService
+    private readonly loadingService: LoadingPaneService
   ) {}
 
   ngOnInit() {
@@ -46,6 +46,10 @@ export class MainMenuComponent implements OnInit {
       returnTo: 'https://' + document.location.host + '/' + PageURLs.Login,
     });
     // this.router.navigate([PageURLs.Logout])
+  }
+
+  public cullUpdate(): void {
+    this.router.navigate([PageURLs.CullUpdate], { relativeTo: this.route });
   }
 
   public get loading() {

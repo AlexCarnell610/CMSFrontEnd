@@ -22,9 +22,9 @@
       (click)="openEditModal()"
       >Edit {{ pillButtonText }}</span
     >
-    <span *ngIf="getPillButtonText() === 'Animal'"></span>
+    <span *ngIf="pillButtonText === 'Animal'"></span>
     <span
-      *ngIf="getPillButtonText() !== 'Animal'"
+      *ngIf="pillButtonText !== 'Animal'"
       class="badge badge-success badge-pill ml-1"
       (click)="openAddModal()"
       >Add {{ pillButtonText }}</span

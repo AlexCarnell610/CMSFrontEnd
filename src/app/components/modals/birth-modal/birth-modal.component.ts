@@ -25,13 +25,15 @@ import {
 import { RootState } from '@cms-ngrx';
 import { getCalves, selectAnimals } from '@cms-ngrx/animal';
 import { selectBulls } from '@cms-ngrx/bull';
-import { AnimalUpdateService, LoadingPaneService } from '@cms-services';
-
+import {
+  AnimalBreedService,
+  AnimalUpdateService,
+  LoadingPaneService,
+  WarningService,
+} from '@cms-services';
 import { dateValidator } from '@cms-validators';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { select, Store } from '@ngrx/store';
-import { AnimalBreedService } from 'libs/services/services/src/animal-breed.service';
-import { WarningService } from 'libs/services/services/src/warning.service';
 import * as moment from 'moment';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import {
@@ -41,7 +43,7 @@ import {
   Subscription,
   timer,
 } from 'rxjs';
-import { take, takeWhile } from 'rxjs/operators
+import { take, takeWhile } from 'rxjs/operators';
 
 enum FormControls {
   CalfTag = 'calfTag',
@@ -58,7 +60,6 @@ enum FormControls {
   styleUrls: ['./birth-modal.component.css'],
 })
 export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
-  $animal: BehaviorSubject<Animal> = new BehaviorSubject(null);
   @Input() animal: Animal;
   @Input() isAdd: boolean = false;
   @ViewChild('errorPop') statPopover: NgbPopover;
@@ -74,7 +75,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     success: true,
   };
   public truncNotes: string = '';
-  private subs: Subscription;
+  private subs: Subscription = new Subscription();
   private longLifeSubs: Subscription = new Subscription();
   private breedSelected: boolean = false;
   private hasSaved: boolean = false;
@@ -105,14 +106,8 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   public save() {
     this.loadingService.setLoadingState(true);
     this.hasSaved = true;
-    console.warn('breederrors', this.breed.errors);
-    console.warn('calfselect', this.calfSelect.errors);
-    console.warn('CALFTAG', this.calfTag.errors);
-
     this.subs.add(
       this.handleErrors().subscribe((canContinue) => {
-        console.warn(canContinue);
-
         if (canContinue && isAnimal(canContinue)) {
           if (this.isAdd) {
             this.animalService.addAnimal(canContinue).then(() => {
@@ -138,9 +133,9 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  public get assistReason() {
+  public get assistReason(): string[] {
     const output = [];
-    this.stat.assistanceReason.forEach((stat) => {
+    this.stat.assistanceReason.forEach((stat: AssistanceReason) => {
       switch (stat) {
         case AssistanceReason.BigCalf:
           output.push('Big Calf');
@@ -207,19 +202,13 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     const output: BehaviorSubject<boolean | Animal> = new BehaviorSubject(null);
     let calf: Animal;
     if (this.isAdd) {
-      console.warn('DISABLE CALFSELECT');
-
       this.calfSelect.disable();
     } else {
-      console.warn('DISABLE CALFTAG');
       this.calfTag.disable();
     }
     this.markAllAsDirty();
-    console.warn(this.birthForm.errors);
-
     if (this.birthForm.valid && this.stat) {
       calf = this.getNewCalf();
-
       if (!this.valuesEdited(calf)) {
         this.saveResult.message = 'No changes made';
         this.saveResult.success = false;
@@ -394,8 +383,6 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
               this.gender.setValue(selectedCalf.gender);
               this.stat = selectedCalf.calvingStat;
             } else {
-              console.warn('TRACK CALFSELECT', val, calves);
-
               this.resetForm(false);
             }
           }
@@ -411,8 +398,6 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
         this.stat = null;
         this.hasSaved = false;
         this.truncNotes = '';
-        console.warn('CLOSE MODAL');
-
         this.resetForm();
         this.breedSelected = false;
       });
@@ -455,8 +440,6 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private resetForm(emit = true) {
-    console.warn('RESE£T FOIRM');
-
     this.birthForm.reset(
       { calfTag: 'UK722218', calves: '', calfSire: '' },
       { emitEvent: emit }

@@ -10,9 +10,12 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Animal, Bull } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { selectBullByTag } from '@cms-ngrx/bull';
-import { AnimalUpdateService, ScreenSizeService } from '@cms-services';
+import {
+  AnimalBreedService,
+  AnimalUpdateService,
+  ScreenSizeService,
+} from '@cms-services';
 import { select, Store } from '@ngrx/store';
-import { AnimalBreedService } from 'libs/services/services/src/animal-breed.service';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 @Component({

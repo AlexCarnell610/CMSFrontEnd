@@ -139,6 +139,7 @@ export class CalvingStatsModalComponent implements OnInit, AfterViewInit {
       this.notesChanged = val !== '';
     });
   }
+
   private setFormValues() {
     this.isAlive.setValue(this.stat.alive ? 'alive' : 'dead');
     this.calvingEase.setValue(this.stat.assistance);
@@ -175,16 +176,6 @@ export class CalvingStatsModalComponent implements OnInit, AfterViewInit {
         (reason) => reason === findReason
       ) !== -1
     );
-  }
-
-  private printErrors() {
-    console.warn('isAlive', this.isAlive.errors);
-    console.warn('EASE', this.calvingEase.errors);
-    console.warn('BigCalf', this.reasonBigCalf.errors);
-    console.warn('Poor pres', this.reasonPoorPres.errors);
-    console.warn('GETTINGUP', this.gettingUp.errors);
-    console.warn('FEED ASSIST', this.drinkAssistance.errors);
-    console.warn('DAM HEALTH', this.damHealth.errors);
   }
 
   private convertDrinkAssist() {

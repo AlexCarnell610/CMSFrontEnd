@@ -37,8 +37,11 @@ export function weighDateValidator(): ValidatorFn {
     const weightDate = formGroup.get('date');
     const weightSelect = formGroup.get('weightSelect');
     const animalControl = formGroup.get('animalControl');
-
-    weightDate.setErrors(null);
+    if (weightDate.errors?.date) {
+      weightDate.setErrors({ date: true });
+    } else {
+      weightDate.setErrors(null);
+    }
     let output: { [key: string]: any } = null;
     if (weightType && weightDate.value && animalControl.value) {
       const weights = (animalControl.value as Animal).weightData;
@@ -69,6 +72,8 @@ export function weighDateValidator(): ValidatorFn {
                   intermediateWeights.length - 1
                 ].weightDate.format('DD/MM/YYYY'),
               });
+            } else if (!initialWeight) {
+              weightType.setErrors({ noInitial: true });
             } else {
               weightDate.setErrors(null);
             }
@@ -112,13 +117,18 @@ export function weighDateValidator(): ValidatorFn {
                 saleDate: saleWeight.weightDate.format('DD/MM/YYYY'),
               },
             });
+          } else if (!initialWeight) {
+            weightType.setErrors({ noInitial: true });
+          } else if (inputDate.diff(initialWeight.weightDate, 'day') <= 0) {
+            weightDate.setErrors({
+              interBeforeInitial: initialWeight.weightDate.format('DD/MM/YYYY'),
+            });
           }
           break;
         default:
           break;
       }
     }
-
     return output;
   };
 }

@@ -3,7 +3,7 @@ import { HttpService } from '@cms-services/http';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
-import { LoadingPaneService } from '../../../../services/services/src/loading-pane.service';
+import { LoadingPaneService } from '../../../../services/src/loading-pane.service';
 import {
   AnimalActionTypes,
   HTTPError,

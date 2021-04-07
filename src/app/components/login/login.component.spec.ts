@@ -1,25 +1,66 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { PageURLs } from '@cms-enums';
+import { of } from 'rxjs';
 import { LoginComponent } from './login.component';
 
 describe('LoginComponent', () => {
-  let component: LoginComponent;
-  let fixture: ComponentFixture<LoginComponent>;
-
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ LoginComponent ]
-    })
-    .compileComponents();
-  }));
-
+  let mockRouter, mockAuthService, component;
   beforeEach(() => {
-    fixture = TestBed.createComponent(LoginComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    mockRouter = {
+      navigate: () => {},
+    };
+    mockAuthService = {
+      isAuthenticated$: of(true),
+      loginWithPopup: () => {
+        return of();
+      },
+    };
+
+    component = new LoginComponent(mockRouter, mockAuthService);
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('NgOnInit', () => {
+    let signInSpy;
+    beforeEach(() => {
+      signInSpy = spyOn(component, 'handleSignIn');
+    });
+
+    it('should call sign in if authenticated', () => {
+      component.ngOnInit();
+      expect(signInSpy).toHaveBeenCalled();
+    });
+
+    it('Should not call sign in if not authenticated and enable login button', () => {
+      mockAuthService.isAuthenticated$ = of(false);
+      component.ngOnInit();
+      expect(signInSpy).not.toHaveBeenCalled();
+      expect(component.loginDisable).toBeFalse();
+    });
+  });
+
+  describe('handleSignIn [method]', () => {
+    let navigateSpy;
+    beforeEach(() => {
+      navigateSpy = spyOn(mockRouter, 'navigate');
+    });
+    it('Should navigate to main menu and disable login button', () => {
+      component.handleSignIn();
+      expect(navigateSpy).toHaveBeenCalledWith([PageURLs.MainMenu]);
+      expect(component.loginDisable).toBeTrue();
+    });
+  });
+
+  describe('ngOndestroy', () => {
+    let unsubscribeSpy;
+    beforeEach(() => {
+      unsubscribeSpy = spyOn<any>(component['subs'], 'unsubscribe');
+    });
+    it('should call unsubscribe', () => {
+      component.ngOnDestroy();
+      expect(unsubscribeSpy).toHaveBeenCalledTimes(1);
+    });
   });
 });

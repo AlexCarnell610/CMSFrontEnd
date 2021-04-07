@@ -4,4 +4,5 @@ export enum Modals {
   Warning = 'warningModal',
   Birth = 'birthModal',
   CalvingStats = 'calvingStats',
+  Loading = 'loadingModal',
 }

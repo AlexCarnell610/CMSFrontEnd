@@ -39,6 +39,7 @@
     "ng2-charts": "^2.4.2",
     "ngx-smart-modal": "^7.4.1",
     "popper.js": "^1.16.1",
+    "pusher-js": "^7.0.3",
     "rxjs": "^6.5.5",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
@@ -49,9 +50,9 @@
     "@angular/cli": "~10.2.1",
     "@angular/compiler-cli": "~10.2.4",
     "@angular/language-service": "~10.2.4",
-    "@types/node": "^12.11.1",
     "@types/jasmine": "~3.5.0",
     "@types/jasminewd2": "~2.0.3",
+    "@types/node": "^12.11.1",
     "codelyzer": "^5.1.2",
     "jasmine-core": "~3.5.0",
     "jasmine-spec-reporter": "~5.0.0",
@@ -62,6 +63,7 @@
     "karma-jasmine-html-reporter": "^1.5.0",
     "ng-packagr": "^10.1.0",
     "protractor": "~7.0.0",
+    "pusher-js-mock": "^0.3.4",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
     "typescript": "~4.0.5"

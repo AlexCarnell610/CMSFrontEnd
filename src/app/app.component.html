@@ -1,12 +1,14 @@
-<div *ngIf="loadingService.currentLoadingState | async">
+<!-- <div *ngIf="loadingService.currentLoadingState | async">
   <img class="loading-spinner" src="assets/cowLoading.svg" alt="LoadingIcon" />
 </div>
 
 <div *ngIf="auth.isLoading$ | async">
   <img class="loading-spinner" src="assets/cowLoading.svg" alt="LoadingIcon" />
-</div>
+</div> -->
 <!-- <div class="loader"></div> -->
 <div *ngIf="!(auth.isLoading$ | async)">
   <router-outlet class="router-outlet"></router-outlet>
   <cms-footer></cms-footer>
 </div>
+
+<cms-loading-modal></cms-loading-modal>

@@ -1,0 +1,102 @@
+<div class="cms-container">
+  <span class="cms-flex-item">
+    <span
+      (click)="backToMain()"
+      class="fas fa-arrow-left ml-5"
+      placement="right"
+      ngbTooltip="Back to Main Menu"
+    ></span>
+  </span>
+  <h1 class="page-title cms-flex-item">Cow Performance</h1>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <div
+        class="list-group mb-2"
+        [ngClass]="{ 'cms-animal-list': isSmallScreen }"
+      >
+        <button
+          *ngFor="let update of cullUpdate"
+          class="list-group-item list-group-item-action"
+          (click)="animalSelected(update)"
+        >
+          {{ update.tagNumber }}
+        </button>
+      </div>
+    </div>
+    <ng-container *ngIf="!isSmallScreen; then infoDisplay"></ng-container>
+  </div>
+  <ng-container *ngIf="isSmallScreen; then infoDisplay"></ng-container>
+</div>
+
+<ng-template #infoDisplay>
+  <div class="cms-sticky" [ngClass]="{ col: !isSmallScreen }">
+    <div
+      *ngIf="selectedCullUpdate && $selectedAnimal | async as animal"
+      class="card"
+    >
+      <div class="card-header">
+        <strong>{{ selectedCullUpdate.tagNumber }}</strong>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item" *ngIf="selectedCullUpdate.score">
+          <strong>Animal score - </strong
+          >{{ selectedCullUpdate.score | number: "1.0-0" }}
+        </li>
+        <li class="list-group-item" *ngIf="selectedCullUpdate.totalCalves == 0">
+          <strong>Animal has no calves</strong>
+        </li>
+        <li class="list-group-item">
+          <strong>Age - </strong> {{ selectedCullUpdate.age }}
+        </li>
+        <li
+          *ngIf="selectedCullUpdate.calfDailyWeightGain"
+          class="list-group-item"
+        >
+          <strong>Calf average daily weight gain - </strong>
+          {{ selectedCullUpdate.calfDailyWeightGain | number: "1.0-3" }} Kg
+        </li>
+        <li *ngIf="selectedCullUpdate.totalCalves > 0" class="list-group-item">
+          <strong>Calf tag numbers - </strong>
+          <ul style="list-style-type: none">
+            <li *ngFor="let calf of $calves | async">
+              {{ calf.tagNumber }}
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="chart-wrapper mt-2" *ngIf="chartWeights.length > 0">
+      <span class="ml-2 mb-1" style="color: #7e7e7e"
+        ><strong>Calf Weight Gain</strong></span
+      >
+      <canvas
+        baseChart
+        [datasets]="chartWeights"
+        [labels]="chartLabels"
+        [options]="weightChartOptions"
+        [colors]=""
+        [legend]="false"
+        [chartType]="'line'"
+        [plugins]="[]"
+      >
+      </canvas>
+    </div>
+    <div class="chart-wrapper mt-2" *ngIf="chartWeights.length > 0">
+      <span class="ml-2 mb-1" style="color: #7e7e7e"
+        ><strong>Alive vs Dead Calves</strong></span
+      >
+      <canvas
+        baseChart
+        [datasets]="aliveVSDeadData"
+        [labels]="aliveVSDeadLabels"
+        [options]="aliveDeadChartOptions"
+        [legend]="true"
+        [chartType]="'pie'"
+        [plugins]="[]"
+      >
+      </canvas>
+    </div>
+  </div>
+</ng-template>

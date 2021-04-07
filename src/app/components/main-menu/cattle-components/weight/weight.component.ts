@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Modals, PageURLs } from '@cms-enums';
 import { Animal } from '@cms-interfaces';
@@ -6,14 +6,14 @@ import { ScreenSizeService } from '@cms-services';
 import { ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
 import { NgxSmartModalService } from 'ngx-smart-modal';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'cms-weight',
   templateUrl: './weight.component.html',
   styleUrls: ['./weight.component.css'],
 })
-export class WeightComponent implements OnInit {
+export class WeightComponent implements OnInit, OnDestroy {
   public chartWeights: ChartDataSets[] = [];
   public chartLabels: Label[];
   public chartOptions = { responsive: true };
@@ -24,6 +24,7 @@ export class WeightComponent implements OnInit {
   public $selectedAnimal: BehaviorSubject<Animal> = new BehaviorSubject(null);
   public isAddMode = false;
   public pageName = PageURLs.Weight;
+  private subs = new Subscription();
 
   constructor(
     private readonly modalService: NgxSmartModalService,
@@ -50,7 +51,7 @@ export class WeightComponent implements OnInit {
 
   public openEditModal() {
     this.isAddMode = false;
-    this.modalService.getModal(Modals.Weight).open();
+    this.modalService.get(Modals.Weight).open();
   }
 
   private updateGraph() {
@@ -68,5 +69,9 @@ export class WeightComponent implements OnInit {
         );
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 }
