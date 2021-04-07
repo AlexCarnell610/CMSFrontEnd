@@ -304,6 +304,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sire.markAsDirty();
     this.gender.markAsDirty();
     this.calfTag.markAsDirty();
+    this.registered.markAsDirty();
   }
 
   private valuesEdited(calf: Animal) {

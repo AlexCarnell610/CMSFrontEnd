@@ -503,6 +503,33 @@ describe('AnimalModalComponent', () => {
         expect(component.getCSSClassForBreed()).toEqual('is-invalid');
       });
     });
+
+    describe('getCSSForRegistered [method]', () => {
+      it('should return outline danger if invalid and dirty', () => {
+        component.registered.setValue('');
+        component.registered.markAsDirty();
+
+        expect(component.getCSSForRegisteredNo()).toEqual('btn-outline-danger');
+        expect(component.getCSSForRegisteredYes()).toEqual(
+          'btn-outline-danger'
+        );
+      });
+
+      it('should return active if button is clicked', () => {
+        component.registered.setValue('yes');
+        expect(component.getCSSForRegisteredYes()).toEqual('active');
+        expect(component.getCSSForRegisteredNo()).toBeUndefined();
+        component.registered.setValue('no');
+        expect(component.getCSSForRegisteredNo()).toEqual('active');
+        expect(component.getCSSForRegisteredYes()).toBeUndefined();
+      });
+
+      it('should return undeifned if not dirty and invalid', () => {
+        component.registered.markAsPristine();
+        expect(component.getCSSForRegisteredYes()).toBeUndefined();
+        expect(component.getCSSForRegisteredNo()).toBeUndefined();
+      });
+    });
   });
 
   describe('Close modal [method]', () => {
