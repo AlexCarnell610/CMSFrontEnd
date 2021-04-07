@@ -25,7 +25,9 @@ export class AnimalBreedService {
 
   public getCodeFromBreed(searchBreed: string) {
     return this.breedCodes[
-      this.breeds.findIndex((breed) => breed === searchBreed.toUpperCase())
+      this.breeds.findIndex(
+        (breed) => breed.trim() === searchBreed.toUpperCase().trim()
+      )
     ];
   }
 
