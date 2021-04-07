@@ -75,4 +75,15 @@ fdescribe('WarningDisplayComponent', () => {
     component.ngAfterViewInit();
     expect(component.toast).toEqual(mockModalData);
   });
+
+  describe('ngOndestroy', () => {
+    let unsubscribeSpy;
+    beforeEach(() => {
+      unsubscribeSpy = spyOn<any>(component['subs'], 'unsubscribe');
+    });
+    it('should call unsubscribe', () => {
+      component.ngOnDestroy();
+      expect(unsubscribeSpy).toHaveBeenCalledTimes(1);
+    });
+  });
 });
