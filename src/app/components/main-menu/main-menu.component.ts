@@ -48,6 +48,10 @@ export class MainMenuComponent implements OnInit {
     // this.router.navigate([PageURLs.Logout])
   }
 
+  public registrationScreen(): void {
+    this.router.navigate([PageURLs.Registration], { relativeTo: this.route });
+  }
+
   public cullUpdate(): void {
     this.router.navigate([PageURLs.CullUpdate], { relativeTo: this.route });
   }

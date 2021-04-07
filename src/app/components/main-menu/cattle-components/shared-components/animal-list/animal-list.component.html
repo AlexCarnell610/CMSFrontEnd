@@ -18,6 +18,7 @@
   >
     <span class="mr-1">{{ animal.tagNumber }}</span>
     <span
+      *ngIf="page !== 'registration'"
       class="badge badge-info badge-pill align-self-center"
       (click)="openEditModal()"
       >Edit {{ pillButtonText }}</span
@@ -26,8 +27,10 @@
     <span
       *ngIf="pillButtonText !== 'Animal'"
       class="badge badge-success badge-pill ml-1"
-      (click)="openAddModal()"
-      >Add {{ pillButtonText }}</span
+      (click)="openAddModal(animal)"
+      >{{ page === "registration" ? "" : "Add" }} {{ pillButtonText }}</span
     >
+    <span *ngIf="page === 'registration'"></span>
   </button>
 </ul>
+<cms-warning-display></cms-warning-display>
