@@ -1,6 +1,6 @@
 import { LoadingModalComponent } from './loading-modal.component';
 
-fdescribe('LoadingModalComponent', () => {
+describe('LoadingModalComponent', () => {
   let component: LoadingModalComponent;
 
   beforeEach(() => {

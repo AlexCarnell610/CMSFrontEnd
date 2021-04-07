@@ -4,7 +4,7 @@ import { convertedAnimal, mockAnimal } from '@cms-testing-data';
 import { of } from 'rxjs';
 import { AnimalListComponent } from './animal-list.component';
 
-fdescribe('AnimalListComponent', () => {
+describe('AnimalListComponent', () => {
   let component: AnimalListComponent, mockStore, fb, animalArray;
   beforeEach(() => {
     fb = new FormBuilder();

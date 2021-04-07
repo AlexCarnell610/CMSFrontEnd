@@ -4,7 +4,7 @@ import { convertedAnimal, mockAnimal } from '@cms-testing-data';
 import { of } from 'rxjs';
 import { CullUpdateComponent } from './cull-update.component';
 
-fdescribe('CullUpdateComponent', () => {
+describe('CullUpdateComponent', () => {
   let component: CullUpdateComponent,
     mockCullUpdateService,
     mockRouter,

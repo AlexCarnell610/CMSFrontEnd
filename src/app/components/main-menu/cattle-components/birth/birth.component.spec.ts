@@ -2,7 +2,7 @@ import { Modals, PageURLs } from '@cms-enums';
 import { mockAnimal } from '@cms-testing-data';
 import { BirthComponent } from './birth.component';
 
-fdescribe('BirthComponent', () => {
+describe('BirthComponent', () => {
   let component: BirthComponent, mockRouter, mockModalService, mockModal;
   let modalGetSpy, modalOpenSpy;
 

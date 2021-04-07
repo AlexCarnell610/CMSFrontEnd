@@ -3,7 +3,7 @@ import { Bull } from '@cms-interfaces';
 import { of } from 'rxjs';
 import { AnimalDisplayComponent } from './animal-display.component';
 
-fdescribe('AnimalDisplayComponent', () => {
+describe('AnimalDisplayComponent', () => {
   let component: AnimalDisplayComponent;
   let mockStore,
     mockScreenService,

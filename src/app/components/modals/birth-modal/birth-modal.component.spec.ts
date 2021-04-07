@@ -8,7 +8,7 @@ import * as moment from 'moment';
 import { of } from 'rxjs';
 import { BirthModalComponent } from './birth-modal.component';
 
-fdescribe('BirthModalComponent', () => {
+describe('BirthModalComponent', () => {
   let component: BirthModalComponent;
   let mockModalService,
     mockAnimalUpdateService,
@@ -555,12 +555,6 @@ fdescribe('BirthModalComponent', () => {
         });
         it('form should be valid', () => {
           component.save();
-          // console.warn(component.calfSelect.errors);
-          // console.warn(component.dob.errors);
-          // console.warn(component.breed.errors);
-          // console.warn(component.sire.errors);
-          // console.warn(component.gender.errors);
-          // console.warn(component.calfTag.errors);
 
           expect(component.birthForm.valid).toBeTrue();
           expect(component.stat).toBeTruthy();
@@ -623,3 +617,12 @@ fdescribe('BirthModalComponent', () => {
     });
   });
 });
+
+function printErrors(component) {
+  console.warn(component.calfSelect.errors);
+  console.warn(component.dob.errors);
+  console.warn(component.breed.errors);
+  console.warn(component.sire.errors);
+  console.warn(component.gender.errors);
+  console.warn(component.calfTag.errors);
+}

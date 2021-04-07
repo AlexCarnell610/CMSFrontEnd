@@ -2,7 +2,7 @@ import { fakeAsync, tick } from '@angular/core/testing';
 import { Modals } from '@cms-enums';
 import { IToast, WarningService } from './warning.service';
 
-fdescribe('WarningService', () => {
+describe('WarningService', () => {
   let service: WarningService, mockModalService, mockModal, mockToast: IToast;
 
   beforeEach(() => {

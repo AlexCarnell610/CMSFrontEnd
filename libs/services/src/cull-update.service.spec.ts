@@ -1,7 +1,7 @@
 import { ICullUpdate } from '@cms-interfaces';
 import { CullUpdateService } from './cull-update.service';
 
-fdescribe('CullUpdateService', () => {
+describe('CullUpdateService', () => {
   let service: CullUpdateService,
     mockUpdate,
     tagNumber,

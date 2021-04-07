@@ -2,7 +2,7 @@ import { AbstractControl } from '@angular/forms';
 import * as moment from 'moment';
 import { DobValidatorDirective } from './dob-validator.directive';
 
-fdescribe('DobValidatorDirective', () => {
+describe('DobValidatorDirective', () => {
   let directive: DobValidatorDirective, mockControl;
 
   beforeEach(() => {

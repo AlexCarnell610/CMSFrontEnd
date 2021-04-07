@@ -1,6 +1,6 @@
 import { AnimalBreedService } from './animal-breed.service';
 
-fdescribe('AnimalBreedService', () => {
+describe('AnimalBreedService', () => {
   let service: AnimalBreedService;
 
   beforeEach(() => {

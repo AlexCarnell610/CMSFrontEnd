@@ -1,6 +1,6 @@
 import { PusherService } from './pusher.service';
 
-fdescribe('PusherService', () => {
+describe('PusherService', () => {
   let service: PusherService;
 
   beforeEach(() => {

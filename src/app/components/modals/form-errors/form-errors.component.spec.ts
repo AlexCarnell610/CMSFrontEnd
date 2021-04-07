@@ -1,6 +1,6 @@
 import { FormErrorsComponent } from './form-errors.component';
 
-fdescribe('FormErrorsComponent', () => {
+describe('FormErrorsComponent', () => {
   let component: FormErrorsComponent;
 
   beforeEach(() => {

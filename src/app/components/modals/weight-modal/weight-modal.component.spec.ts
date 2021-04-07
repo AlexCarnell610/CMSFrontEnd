@@ -262,9 +262,6 @@ describe('EditWeightModalComponent', () => {
       );
       component.date.markAsDirty();
 
-      console.warn(component.date.errors);
-      console.warn(component.date.value);
-
       expect(component.getCSSClassForDate()).toEqual('is-valid');
     });
 
@@ -483,8 +480,6 @@ describe('EditWeightModalComponent', () => {
         component.weightType.setValue('isInitial');
 
         component.saveChanges();
-        console.warn(component.editWeightForm.value);
-        console.warn(component.selectedWeight);
 
         expect(component.saveResult.message).toEqual('No changes made');
         expect(component.saveResult.success).toBeFalse();

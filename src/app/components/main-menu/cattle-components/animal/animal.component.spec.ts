@@ -4,7 +4,7 @@ import { Animal } from '@cms-interfaces';
 import { take } from 'rxjs/operators';
 import { AnimalComponent } from './animal.component';
 
-fdescribe('AnimalComponent', () => {
+describe('AnimalComponent', () => {
   let component: AnimalComponent;
   let mockRouter,
     mockModalService,

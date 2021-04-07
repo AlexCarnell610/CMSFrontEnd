@@ -4,7 +4,7 @@ import { mockCalvingStat } from '@cms-testing-data';
 import { Subject } from 'rxjs';
 import { CalvingStatsModalComponent } from './calving-stats-modal.component';
 
-fdescribe('CalvingStatsModalComponent', () => {
+describe('CalvingStatsModalComponent', () => {
   let component: CalvingStatsModalComponent,
     formBuilder,
     mockModalService,

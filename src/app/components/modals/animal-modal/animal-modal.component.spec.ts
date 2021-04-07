@@ -9,7 +9,7 @@ import * as moment from 'moment';
 import { of, Subject } from 'rxjs';
 import { AnimalModalComponent } from './animal-modal.component';
 
-fdescribe('AnimalModalComponent', () => {
+describe('AnimalModalComponent', () => {
   let component: AnimalModalComponent,
     formBuilder,
     mockStore,

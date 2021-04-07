@@ -3,7 +3,7 @@ import { IToast } from '@cms-services';
 import { of } from 'rxjs';
 import { WarningDisplayComponent } from './warning-display.component';
 
-fdescribe('WarningDisplayComponent', () => {
+describe('WarningDisplayComponent', () => {
   let component: WarningDisplayComponent,
     mockWarningService,
     mockModalService,

@@ -1,6 +1,6 @@
 import { LoadingPaneService } from './loading-pane.service';
 
-fdescribe('LoadingPaneService', () => {
+describe('LoadingPaneService', () => {
   let service: LoadingPaneService;
 
   beforeEach(() => {

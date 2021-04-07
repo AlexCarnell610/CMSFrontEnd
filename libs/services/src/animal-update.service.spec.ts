@@ -8,7 +8,7 @@ import { mockAnimal } from '@cms-testing-data';
 import { of } from 'rxjs';
 import { AnimalUpdateService } from './animal-update.service';
 
-fdescribe('AnimalUpdateService', () => {
+describe('AnimalUpdateService', () => {
   let service: AnimalUpdateService, mockHttpService, mockStore;
   let updateWeightSpy, dispatchSpy, mockWeightUpdate, mockWeightID;
 

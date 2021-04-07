@@ -3,7 +3,7 @@ import { Animal, Bull } from '@cms-interfaces';
 import { convertedAnimal, rawAnimal } from '@cms-testing-data';
 import { MappingService } from './importData.service';
 
-fdescribe('Import data service', () => {
+describe('Import data service', () => {
   let service: MappingService;
 
   beforeEach(() => {

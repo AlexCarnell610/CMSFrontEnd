@@ -5,7 +5,7 @@ import { PusherMock } from 'pusher-js-mock';
 import { of } from 'rxjs';
 import { AppComponent } from './app.component';
 
-fdescribe('AppComponent', () => {
+describe('AppComponent', () => {
   let mockAuthService, mockLoadingService, mockStore, mockNgbAlertConfig;
   let mockScreenSizeService, mockPusherService, mockCullUpdateService;
   let mockLocation, mockModalService, mockModalComp;

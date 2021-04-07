@@ -1,6 +1,6 @@
 import { ScreenSizeService } from './screen-size.service';
 
-fdescribe('ScreenSizeService', () => {
+describe('ScreenSizeService', () => {
   let service: ScreenSizeService;
 
   beforeEach(() => {

@@ -1,6 +1,6 @@
 import { LogoutComponent } from './logout.component';
 
-fdescribe('LogoutComponent', () => {
+describe('LogoutComponent', () => {
   let component: LogoutComponent;
 
   beforeEach(() => {

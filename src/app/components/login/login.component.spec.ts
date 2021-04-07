@@ -2,7 +2,7 @@ import { PageURLs } from '@cms-enums';
 import { of } from 'rxjs';
 import { LoginComponent } from './login.component';
 
-fdescribe('LoginComponent', () => {
+describe('LoginComponent', () => {
   let mockRouter, mockAuthService, component;
   beforeEach(() => {
     mockRouter = {

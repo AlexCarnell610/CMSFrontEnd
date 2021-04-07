@@ -3,7 +3,7 @@ import { AnimalWeight } from '@cms-interfaces';
 import { convertedAnimal } from '@cms-testing-data';
 import { WeightComponent } from './weight.component';
 
-fdescribe('WeightComponent', () => {
+describe('WeightComponent', () => {
   let component: WeightComponent,
     mockModalService,
     mockModal,
