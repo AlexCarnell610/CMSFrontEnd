@@ -45,7 +45,7 @@ export class EditWeightModalComponent
   @ViewChild('p') popover: NgbPopover;
   private subs: Subscription = new Subscription();
   public editWeightForm: FormGroup = new FormGroup({});
-  private selectedWeight: AnimalWeight = null;
+  public selectedWeight: AnimalWeight = null;
   public showSuccess = false;
   public saveResult: { message: string; success: boolean } = {
     message: '',
@@ -54,9 +54,9 @@ export class EditWeightModalComponent
 
   constructor(
     private readonly modalService: NgxSmartModalService,
-    private fb: FormBuilder,
-    private loadingService: LoadingPaneService,
-    private updateService: AnimalUpdateService,
+    private readonly fb: FormBuilder,
+    private readonly loadingService: LoadingPaneService,
+    private readonly updateService: AnimalUpdateService,
     private readonly warningService: WarningService
   ) {}
 
@@ -68,7 +68,6 @@ export class EditWeightModalComponent
   ngAfterViewInit() {
     const weightModal = this.modalService.get(Modals.Weight);
     weightModal.onAnyCloseEventFinished.subscribe(() => {
-      weightModal.removeData();
       this.clearForm();
       this.selectedWeight = null;
     });
@@ -139,8 +138,7 @@ export class EditWeightModalComponent
             .updateAnimalWeight(
               this.selectedWeight.id,
               weightUpdate,
-              this.animal,
-              this.getSelectedIndex()
+              this.animal
             )
             .then(() => {
               this.loadingService.setLoadingState(false);
@@ -298,12 +296,6 @@ export class EditWeightModalComponent
     this.weightType.markAsPristine();
   }
 
-  private getSelectedIndex(): number {
-    return this.animal.weightData.findIndex(
-      (weight) => weight?.id === this.selectedWeight.id
-    );
-  }
-
   private valuesEdited(): boolean {
     const initialDate = this.selectedWeight?.weightDate.format('YYYY-MM-DD');
     const weightTypeInput = this.getWeightType();
@@ -318,19 +310,19 @@ export class EditWeightModalComponent
   }
 
   private updateForm() {
-    this.editWeightForm.controls[FormControls.Weight].setValue(
-      this.selectedWeight.weight
+    this.weight.setValue(this.selectedWeight.weight);
+    this.date.setValue(this.selectedWeight.weightDate.format('YYYY-MM-DD'));
+    this.weightType.setValue(
+      this.convertWeightType(this.selectedWeight.weightType)
     );
-    this.editWeightForm.controls[FormControls.Date].setValue(
-      this.selectedWeight.weightDate.format('YYYY-MM-DD')
-    );
-    this.editWeightForm.controls[FormControls.WeightType].setValue(
-      this.selectedWeight.weightType.isInitial
-        ? RadioValues.Initial
-        : this.selectedWeight.weightType.isSale
-        ? RadioValues.Sale
-        : RadioValues.Intermediate
-    );
+  }
+
+  private convertWeightType(weightType): RadioValues {
+    return weightType.isInitial
+      ? RadioValues.Initial
+      : this.selectedWeight.weightType.isSale
+      ? RadioValues.Sale
+      : RadioValues.Intermediate;
   }
 
   private clearForm() {
