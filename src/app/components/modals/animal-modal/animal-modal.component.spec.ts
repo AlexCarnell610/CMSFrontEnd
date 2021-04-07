@@ -148,6 +148,7 @@ describe('AnimalModalComponent', () => {
         breed: breedService.getBreedFromCode(convertedAnimal.breed),
         dam: convertedAnimal.dam.tagNumber,
         sire: 'No sire assigned',
+        registered: convertedAnimal.registered ? 'yes' : 'no',
       };
       expect(component.animalForm.enabled).toBeTrue();
       expect(component.animalForm.value).toEqual(expectation);
@@ -163,6 +164,7 @@ describe('AnimalModalComponent', () => {
         breed: [],
         dam: ['UK'],
         sire: ['UK'],
+        registered: [],
       };
       expect(component.animalForm.enabled).toBeTrue();
       expect(component.animalForm.value).toEqual(expectation);
@@ -232,7 +234,7 @@ describe('AnimalModalComponent', () => {
             tagNumber: mockFormValue.newTagNumber,
             weightData: [],
             breed: mockFormValue.breed,
-            registered: mockFormValue.registered,
+            registered: mockFormValue.registered === 'yes',
           };
 
           expect(animalServiceAddAnimalSpy).toHaveBeenCalledWith(newAnimal);
@@ -259,6 +261,7 @@ describe('AnimalModalComponent', () => {
             breed: null,
             dam: 'UK',
             sire: 'UK',
+            registered: null,
           };
           expect(component.animalForm.value).toEqual(expectation);
         });
@@ -289,6 +292,7 @@ describe('AnimalModalComponent', () => {
             sire: { tagNumber: mockFormValue.sire },
             gender: mockFormValue.gender,
             breed: mockFormValue.breed,
+            registered: mockFormValue.registered == 'yes',
           };
           expect(editAnimalSpy).toHaveBeenCalledWith(
             convertedAnimal.tagNumber,

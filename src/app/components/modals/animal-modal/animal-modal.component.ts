@@ -80,9 +80,6 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.$dams = this.store.pipe(select(getDams));
     this.$sires = this.store.pipe(select(getBulls));
     this.$animals = this.store.pipe(select(selectAnimals));
-    this.registered.valueChanges.subscribe((val) => {
-      console.warn(val);
-    });
   }
 
   ngAfterViewInit() {
@@ -344,7 +341,6 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
       );
       this.registered.setValue(this.animal.registered ? 'yes' : 'no');
     }
-    console.warn(this.registered.value);
   }
 
   private setUpForm() {
@@ -392,8 +388,6 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private markAllAsDirty() {
-    console.warn(this.breed.errors);
-
     if (this.sire.value == 'UK') {
       this.sire.markAsPristine();
     } else if (this.sire.value == '') {

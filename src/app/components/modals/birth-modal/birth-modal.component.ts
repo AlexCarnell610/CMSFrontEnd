@@ -210,7 +210,6 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.markAllAsDirty();
     if (this.birthForm.valid && this.stat) {
       calf = this.getNewCalf();
-      console.warn(this.valuesEdited(calf));
 
       if (!this.valuesEdited(calf)) {
         this.saveResult.message = 'No changes made';
@@ -308,9 +307,6 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private valuesEdited(calf: Animal) {
-    console.warn(this.animal.registered !== this.isRegistered);
-    console.warn(this.registered.value);
-
     return (
       calf.birthDate.format('DD-MM-YYYY') !==
         this.selectedCalf?.birthDate.format('DD-MM-YYYY') ||
@@ -389,8 +385,6 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
               );
               this.sire.setValue(selectedCalf.sire.tagNumber);
               this.gender.setValue(selectedCalf.gender);
-              console.warn(selectedCalf.registered);
-
               this.registered.setValue(selectedCalf.registered ? 'yes' : 'no');
               this.stat = selectedCalf.calvingStat;
             } else {

@@ -552,6 +552,7 @@ describe('BirthModalComponent', () => {
           component.breed.setValue(mockAnimal.breed);
           component.sire.setValue(mockAnimal.sire.tagNumber);
           component.gender.setValue(mockAnimal.gender);
+          component.registered.setValue(mockAnimal.registered);
         });
         it('form should be valid', () => {
           component.save();
@@ -618,11 +619,12 @@ describe('BirthModalComponent', () => {
   });
 });
 
-function printErrors(component) {
+function printErrors(component: BirthModalComponent) {
   console.warn(component.calfSelect.errors);
   console.warn(component.dob.errors);
   console.warn(component.breed.errors);
   console.warn(component.sire.errors);
   console.warn(component.gender.errors);
   console.warn(component.calfTag.errors);
+  console.warn('registered', component.registered.errors);
 }
