@@ -43,13 +43,6 @@ export function animalReducer(
     }
     case AnimalActionTypes.AddAnimalWeightType: {
       return animalAdapter.updateOne(action.payload.newWeight, state);
-      // const weightData = state.entities[action.payload.id].weightData.slice();
-      // weightData.push(action.payload.newWeight);
-      // const id = action.payload.id;
-      // return animalAdapter.updateOne(
-      //   { id, changes: { ...state.entities[id], weightData } },
-      //   state
-      // );
     }
     case AnimalActionTypes.AddAnimalType: {
       return animalAdapter.addOne(action.payload.animal, state);

@@ -31,7 +31,10 @@
     Sale date should be after initial date:
     <strong>{{ errors.saleAfterInitial }}</strong></span
   >
-
+  <span *ngIf="errors.interBeforeInitial">
+    Intermediate dates should be after initial date:
+    <strong>{{ errors.interBeforeInitial }}</strong>
+  </span>
   <span *ngIf="errors.breed"> {{ errors.breed }}</span>
   <span *ngIf="errors.stats">{{ errors.stats }}</span>
 </div>

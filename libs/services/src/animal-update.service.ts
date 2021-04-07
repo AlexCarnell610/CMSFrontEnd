@@ -22,8 +22,7 @@ export class AnimalUpdateService {
   public updateAnimalWeight(
     weightId: number,
     weightUpdate: any,
-    animal: Animal,
-    index
+    animal: Animal
   ): Promise<boolean> {
     return new Promise((resolve) => {
       this.httpService.updateWeight(weightId, weightUpdate).subscribe((res) => {
