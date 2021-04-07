@@ -271,13 +271,15 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private enteredTagIsMale(animals: Animal[]): boolean {
     return (
+      this.dam.value !== 'UK000000000000' &&
       animals.find((animal) => animal.tagNumber === this.dam.value).gender ===
-      Gender.Male
+        Gender.Male
     );
   }
 
   private damNotExists(animals: Animal[]): boolean {
     return (
+      this.dam.value !== 'UK000000000000' &&
       animals.findIndex((animal) => animal.tagNumber === this.dam.value) === -1
     );
   }
