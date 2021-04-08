@@ -82,7 +82,7 @@ describe('AnimalListComponent', () => {
         expect(add).toBeNull();
       });
 
-      component.openAddModal();
+      component.openAddModal(null);
     });
   });
 

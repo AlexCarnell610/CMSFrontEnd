@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { PageURLs } from '@cms-enums';
 import { Animal } from '@cms-interfaces';
@@ -13,7 +13,7 @@ import {
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.css'],
 })
-export class RegistrationComponent implements OnInit {
+export class RegistrationComponent {
   public pageName = PageURLs.Registration;
 
   constructor(
@@ -22,8 +22,6 @@ export class RegistrationComponent implements OnInit {
     private readonly animalUpdateService: AnimalUpdateService,
     private readonly loadingPaneService: LoadingPaneService
   ) {}
-
-  ngOnInit(): void {}
 
   public backToMain() {
     this.router.navigate([PageURLs.MainMenu]);
@@ -49,7 +47,6 @@ export class RegistrationComponent implements OnInit {
       .updateAnimal(animal.tagNumber, { registered: true })
       .then(() => {
         this.loadingPaneService.setLoadingState(false);
-        console.warn('UPDATED');
       });
   }
 }
