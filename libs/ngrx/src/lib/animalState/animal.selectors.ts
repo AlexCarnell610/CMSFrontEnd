@@ -37,6 +37,13 @@ export const getCalves = createSelector(
   }
 );
 
+export const getUnregisteredCalves = createSelector(
+  selectAnimals,
+  (animals: Animal[]) => {
+    return animals.filter((animal) => !animal.registered);
+  }
+);
+
 // export const getSires = createSelector(
 //     selectAll
 // )

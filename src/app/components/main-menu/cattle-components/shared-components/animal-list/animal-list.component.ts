@@ -10,7 +10,12 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { PageURLs } from '@cms-enums';
 import { Animal } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
-import { getAnimalByTag, getDams, selectAnimals } from '@cms-ngrx/animal';
+import {
+  getAnimalByTag,
+  getDams,
+  getUnregisteredCalves,
+  selectAnimals,
+} from '@cms-ngrx/animal';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
@@ -21,7 +26,7 @@ import { takeWhile } from 'rxjs/operators';
   styleUrls: ['./animal-list.component.css'],
 })
 export class AnimalListComponent implements OnInit, OnDestroy {
-  @Output() add: EventEmitter<any> = new EventEmitter();
+  @Output() add: EventEmitter<Animal> = new EventEmitter();
   @Output() edit: EventEmitter<any> = new EventEmitter();
   @Output() animalSelected: EventEmitter<Animal> = new EventEmitter();
   @Input() page: PageURLs;
@@ -47,8 +52,8 @@ export class AnimalListComponent implements OnInit, OnDestroy {
     this.trackSearch();
   }
 
-  public openAddModal() {
-    this.add.emit(null);
+  public openAddModal(animal: Animal) {
+    this.add.emit(animal);
   }
 
   public openEditModal() {
@@ -75,6 +80,8 @@ export class AnimalListComponent implements OnInit, OnDestroy {
         return 'Animal';
       case PageURLs.Births:
         return 'Births';
+      case PageURLs.Registration:
+        return 'Register Calf';
       default:
         return '';
     }
@@ -87,6 +94,8 @@ export class AnimalListComponent implements OnInit, OnDestroy {
   private populateAnimals() {
     if (this.page === PageURLs.Births) {
       this.animals$ = this.store.pipe(select(getDams));
+    } else if (this.page === PageURLs.Registration) {
+      this.animals$ = this.store.pipe(select(getUnregisteredCalves));
     } else {
       this.animals$ = this.store.pipe(select(selectAnimals));
     }

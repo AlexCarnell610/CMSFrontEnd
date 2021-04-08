@@ -13,6 +13,7 @@ import { AnimalListComponent } from './cattle-components/shared-components/anima
 import { WeightComponent } from './cattle-components/weight/weight.component';
 import { MainMenuComponent } from './main-menu.component';
 import { MainMenuRoutingModule } from './main-menu.routing';
+import { RegistrationComponent } from './cattle-components/registration/registration.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { MainMenuRoutingModule } from './main-menu.routing';
     AnimalDisplayComponent,
     BirthComponent,
     CullUpdateComponent,
+    RegistrationComponent,
   ],
   imports: [
     CommonModule,
