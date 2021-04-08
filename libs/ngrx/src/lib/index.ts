@@ -8,10 +8,6 @@ export interface RootState {
   bull: BullState;
 }
 
-// export const initialState: RootState = {
-//   animal: initialAnim
-// };
-
 export const reducers: ActionReducerMap<RootState, any> = {
   animal: animalReducer,
   bull: bullReducer,

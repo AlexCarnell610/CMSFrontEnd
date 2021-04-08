@@ -156,8 +156,6 @@ export class MappingService {
       return {
         aiDate: this.convertDate(aiOccurence.ai_date),
         bull: {
-          // breed: aiOccurence.bull.breed,
-          // name: aiOccurence.bull.name,
           tagNumber: aiOccurence.bull.tag_number,
         },
         heatDate: this.convertDate(aiOccurence.heat_date),

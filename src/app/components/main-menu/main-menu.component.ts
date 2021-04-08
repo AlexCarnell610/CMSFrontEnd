@@ -45,7 +45,6 @@ export class MainMenuComponent implements OnInit {
     this.auth.logout({
       returnTo: 'https://' + document.location.host + '/' + PageURLs.Login,
     });
-    // this.router.navigate([PageURLs.Logout])
   }
 
   public registrationScreen(): void {

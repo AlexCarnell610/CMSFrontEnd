@@ -31,7 +31,6 @@ export class AnimalEffects {
             return new LoadAnimalData({ animals });
           }),
           catchError((err) => {
-            // this.loadingPaneService.setLoadingState(false);
             return of(new HTTPError({ error: err }));
           })
         );
@@ -60,6 +59,4 @@ export class AnimalEffects {
       ),
     { dispatch: false }
   );
-
-  // $updateWeight = createEffect(() => this.actions$.pipe(ofType(/)))
 }

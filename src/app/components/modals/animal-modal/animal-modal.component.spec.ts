@@ -29,9 +29,7 @@ describe('AnimalModalComponent', () => {
     openEvent = new Subject();
     formBuilder = new FormBuilder();
     mockStore = {
-      pipe: () => {
-        // return of([convertedAnimal]);
-      },
+      pipe: () => {},
     };
     mockModal = {
       onAnyCloseEventFinished: closeEvent,

@@ -43,7 +43,3 @@ export const getUnregisteredCalves = createSelector(
     return animals.filter((animal) => !animal.registered);
   }
 );
-
-// export const getSires = createSelector(
-//     selectAll
-// )
