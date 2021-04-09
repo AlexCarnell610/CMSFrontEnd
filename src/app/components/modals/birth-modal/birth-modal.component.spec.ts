@@ -642,6 +642,17 @@ describe('BirthModalComponent', () => {
       expect(component.getCSSForRegisteredNo()).toBeUndefined();
     });
   });
+
+  describe('ngOndestroy', () => {
+    let unsubscribeSpy;
+    beforeEach(() => {
+      unsubscribeSpy = spyOn<any>(component['longLifeSubs'], 'unsubscribe');
+    });
+    it('should call unsubscribe', () => {
+      component.ngOnDestroy();
+      expect(unsubscribeSpy).toHaveBeenCalledTimes(1);
+    });
+  });
 });
 
 function printErrors(component: BirthModalComponent) {
