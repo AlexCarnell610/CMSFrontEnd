@@ -7,7 +7,10 @@ import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
 import { reducers } from '@cms-ngrx';
 import { AnimalEffects } from '@cms-ngrx/animal';
 import { BullEffects } from '@cms-ngrx/bull';
-import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbDropdownModule,
+  NgbTooltipModule,
+} from '@ng-bootstrap/ng-bootstrap';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -45,6 +48,7 @@ import { LogoutComponent } from './components/logout/logout.component';
     CommonModule,
     NgxSmartModalModule.forRoot(),
     NgbTooltipModule,
+    NgbDropdownModule,
     AuthModule.forRoot({
       ...environment.auth,
       httpInterceptor: {

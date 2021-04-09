@@ -1,16 +1,29 @@
-import { PageURLs } from '@cms-enums';
+import { Modals, PageURLs } from '@cms-enums';
 import { Animal } from '@cms-interfaces';
+import { convertedAnimal } from '@cms-testing-data';
+import * as moment from 'moment';
 import { of } from 'rxjs';
 import { MainMenuComponent } from './main-menu.component';
 
 describe('MainMenuComponent', () => {
-  let mockRouter, mockAuthService, mockRoute, mockStore, mockLoadingService;
-  let component, mockLoadingState;
+  let mockRouter,
+    mockAuthService,
+    mockRoute,
+    mockStore,
+    mockLoadingService,
+    mockModalService;
+  let component: MainMenuComponent, mockLoadingState, mockModal;
   const mockAnimal = ({
     tagNumber: 1234,
   } as unknown) as Animal;
 
   beforeEach(() => {
+    mockModal = { open: () => {} };
+    mockModalService = {
+      get: () => {
+        return mockModal;
+      },
+    };
     mockLoadingState = true;
     mockRouter = {
       navigate: () => {
@@ -23,7 +36,7 @@ describe('MainMenuComponent', () => {
     mockRoute = {};
     mockStore = {
       pipe: () => {
-        return of(mockAnimal);
+        return of([mockAnimal]);
       },
     };
     mockLoadingService = {
@@ -35,7 +48,8 @@ describe('MainMenuComponent', () => {
       mockAuthService,
       mockRoute,
       mockStore,
-      mockLoadingService
+      mockLoadingService,
+      mockModalService
     );
   });
 
@@ -51,10 +65,45 @@ describe('MainMenuComponent', () => {
     });
   });
 
-  describe('Navigatoin functoins', () => {
+  it('shoudl populate allUnregCalves', () => {
+    let overdueCalves = [
+      { ...convertedAnimal, birthDate: moment().subtract(28, 'days') },
+    ];
+    let unregCalves = [
+      { ...mockAnimal, birthDate: moment().subtract(3, 'days') },
+    ];
+    spyOn(mockStore, 'pipe').and.returnValues(
+      of(mockAnimal),
+      of(unregCalves),
+      of(overdueCalves)
+    );
+    component.ngOnInit();
+    component.$allUnregCalves.subscribe((allUnregCalves) => {
+      expect(allUnregCalves.overdue).toEqual(overdueCalves);
+      expect(allUnregCalves.unreg).toEqual(unregCalves);
+    });
+  });
+
+  it('should open the weight modal', () => {
+    let modalGetSpy = spyOn(mockModalService, 'get').and.callThrough();
+    let modalOpenSpy = spyOn(mockModal, 'open');
+    component.openWeightModal(mockAnimal);
+    expect(component.selectedAnimal).toEqual(mockAnimal);
+    expect(modalGetSpy).toHaveBeenCalledWith(Modals.Weight);
+    expect(modalOpenSpy).toHaveBeenCalled();
+  });
+
+  describe('Navigation functions', () => {
     let navigateSpy;
     beforeEach(() => {
       navigateSpy = spyOn(mockRouter, 'navigate');
+    });
+
+    it('should navigate to the registration screen', () => {
+      component.registrationScreen();
+      expect(navigateSpy).toHaveBeenCalledWith([PageURLs.Registration], {
+        relativeTo: mockRoute,
+      });
     });
 
     it('should navigate to weight screen', () => {

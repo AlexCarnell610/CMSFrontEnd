@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
-import { PageURLs } from '@cms-enums';
+import { Modals, PageURLs } from '@cms-enums';
 import { Animal } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
-import { getMaleOver36Months } from '@cms-ngrx/animal';
+import { getMaleOver36Months, getUnregisteredCalves } from '@cms-ngrx/animal';
 import { LoadingPaneService } from '@cms-services';
 import { select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import * as moment from 'moment';
+import { NgxSmartModalService } from 'ngx-smart-modal';
+import { combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'cms-main-menu',
@@ -16,17 +19,54 @@ import { Observable } from 'rxjs';
 })
 export class MainMenuComponent implements OnInit {
   public $oldMales: Observable<Animal[]>;
+  public $allUnregCalves: Observable<{ overdue: Animal[]; unreg: Animal[] }>;
+  public selectedAnimal: Animal;
+
+  private $unregCalves: Observable<Animal[]>;
+  private $overdueUnregCalves: Observable<Animal[]>;
 
   constructor(
     private readonly router: Router,
     private readonly auth: AuthService,
     private readonly route: ActivatedRoute,
     private readonly store: Store<RootState>,
-    private readonly loadingService: LoadingPaneService
+    private readonly loadingService: LoadingPaneService,
+    private readonly modalService: NgxSmartModalService
   ) {}
 
   ngOnInit() {
     this.$oldMales = this.store.pipe(select(getMaleOver36Months));
+    this.$unregCalves = this.store.pipe(select(getUnregisteredCalves)).pipe(
+      map((animals) =>
+        animals.filter((animal) => {
+          return moment().diff(animal.birthDate, 'days') < 27;
+        })
+      )
+    );
+
+    this.$overdueUnregCalves = this.store
+      .pipe(select(getUnregisteredCalves))
+      .pipe(
+        map((animals) =>
+          animals.filter((animal) => {
+            return moment().diff(animal.birthDate, 'days') >= 27;
+          })
+        )
+      );
+
+    this.$allUnregCalves = combineLatest([
+      this.$unregCalves,
+      this.$overdueUnregCalves,
+    ]).pipe(
+      map(([unreg, overdue]: [Animal[], Animal[]]) => {
+        return { overdue, unreg };
+      })
+    );
+  }
+
+  public openWeightModal(animal: Animal) {
+    this.selectedAnimal = animal;
+    this.modalService.get(Modals.Weight).open();
   }
 
   public weightScreen(): void {

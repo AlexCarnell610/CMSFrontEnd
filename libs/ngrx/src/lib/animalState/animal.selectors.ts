@@ -25,7 +25,9 @@ export const getMaleOver36Months = createSelector(
   (animals: Animal[]) => {
     return animals.filter(
       (animal) =>
-        animal.gender === Gender.Male && age(animal.birthDate, 'months') > 36
+        animal.gender === Gender.Male &&
+        age(animal.birthDate, 'months') > 36 &&
+        animal.weightData.findIndex((weight) => weight.weightType.isSale) == -1
     );
   }
 );
