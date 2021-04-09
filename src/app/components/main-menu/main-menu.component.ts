@@ -19,10 +19,11 @@ import { map } from 'rxjs/operators';
 })
 export class MainMenuComponent implements OnInit {
   public $oldMales: Observable<Animal[]>;
-  public $unregCalves: Observable<Animal[]>;
-  public $overdueUnregCalves: Observable<Animal[]>;
   public $allUnregCalves: Observable<{ overdue: Animal[]; unreg: Animal[] }>;
   public selectedAnimal: Animal;
+
+  private $unregCalves: Observable<Animal[]>;
+  private $overdueUnregCalves: Observable<Animal[]>;
 
   constructor(
     private readonly router: Router,
