@@ -31,3 +31,15 @@
   width: fit-content;
   height: fit-content;
 }
+
+.dropdown-menu {
+  padding: 0 !important;
+}
+
+span {
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

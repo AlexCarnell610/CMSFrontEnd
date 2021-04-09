@@ -3,17 +3,63 @@
 </div>
 
 <div class="container">
-  <div class="row">
-    <div class="col" *ngIf="$oldMales | async as oldMales">
+  <div class="row mt-3" *ngIf="$allUnregCalves | async as allUnregCalves">
+    <div class="col" *ngIf="allUnregCalves.overdue.length > 0">
       <span
+        *ngIf="!(loading | async)"
+        class="alert alert-danger btn"
+        (click)="registrationScreen()"
+        ><strong>
+          {{ allUnregCalves.overdue.length }}
+          {{ allUnregCalves.overdue.length == 1 ? "calf" : "calves" }}
+          {{ allUnregCalves.overdue.length == 1 ? "is" : "are" }}
+          overdue registration</strong
+        >
+        Click to register</span
+      >
+    </div>
+    <div class="col" *ngIf="allUnregCalves.unreg.length > 0">
+      <span
+        *ngIf="!(loading | async)"
+        class="alert alert-warning btn"
+        (click)="registrationScreen()"
+        ><strong>
+          {{ allUnregCalves.unreg.length }}
+          {{ allUnregCalves.unreg.length == 1 ? "calf" : "calves" }}
+          {{ allUnregCalves.unreg.length == 1 ? "is" : "are" }}
+          unregistered</strong
+        >
+        Click to reisgter</span
+      >
+    </div>
+  </div>
+  <div class="row">
+    <div class="col" *ngIf="$oldMales | async as oldMales" ngbDropdown>
+      <span
+        ngbDropdownToggle
         class="alert alert-warning"
         *ngIf="!(loading | async) && oldMales.length > 0"
       >
         <strong
-          >There are {{ oldMales.length }} males over 36 months on the
+          >There {{ oldMales.length == 1 ? "is" : "are" }}
+          {{ oldMales.length }}
+          {{ oldMales.length == 1 ? "male" : "males" }} over 36 months on the
           system</strong
         >
       </span>
+      <div ngbDropdownMenu>
+        <div class="list-group">
+          <button
+            *ngFor="let male of oldMales"
+            type="button"
+            class="list-group-item list-group-item-action active"
+            ngbDropdownItem
+            (click)="openWeightModal(male)"
+          >
+            Add sale weight - {{ male.tagNumber }}
+          </button>
+        </div>
+      </div>
     </div>
   </div>
   <div class="row">
@@ -103,3 +149,8 @@
     </div>
   </div>
 </div>
+
+<cms-weight-modal
+  [animal]="selectedAnimal"
+  [isAddMode]="true"
+></cms-weight-modal>
