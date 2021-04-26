@@ -24,6 +24,9 @@ describe('WarningService', () => {
       get: () => {
         return mockModal;
       },
+      getHigherIndex: () => {
+        return 123;
+      },
     };
     service = new WarningService(mockModalService);
   });

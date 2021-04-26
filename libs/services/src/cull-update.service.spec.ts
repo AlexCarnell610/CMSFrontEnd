@@ -35,7 +35,7 @@ describe('CullUpdateService', () => {
 
   it('should set the cull update', () => {
     service.cullUpdate = mockUpdate;
-    expect(service.getCullUpdate()).toEqual([convertedUpdate]);
+    expect(service.getCullUpdate().value).toEqual([convertedUpdate]);
   });
 
   it('should set default values if they are not present', () => {
@@ -56,6 +56,12 @@ describe('CullUpdateService', () => {
       calfDailyWeightGain: null,
     };
     service.cullUpdate = nullUpdate;
-    expect(service.getCullUpdate()).toEqual([nullConverted]);
+    expect(service.getCullUpdate().value).toEqual([nullConverted]);
+  });
+
+  it('should not send a new update if update is error', () => {
+    let nextSpy = spyOn<any>(service['_cullUpdate'], 'next');
+    service.cullUpdate = 'error';
+    expect(nextSpy).not.toHaveBeenCalled();
   });
 });

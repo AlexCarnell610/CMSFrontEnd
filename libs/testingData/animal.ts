@@ -28,6 +28,7 @@ export const mockAnimal = {
 
 export const rawAnimal = [
   {
+    registered: true,
     tag_number: 'UK722218079336',
     management_tag: 'C8',
     dam_tag_number: 'UK722218087840',

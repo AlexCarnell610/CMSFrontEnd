@@ -42,7 +42,7 @@ describe('AnimalUpdateService', () => {
   });
 
   it('should send an update request', () => {
-    service.updateAnimalWeight(mockWeightID, mockWeightUpdate, mockAnimal, 12);
+    service.updateAnimalWeight(mockWeightID, mockWeightUpdate, mockAnimal);
     expect(updateWeightSpy).toHaveBeenCalledWith(
       mockWeightID,
       mockWeightUpdate
