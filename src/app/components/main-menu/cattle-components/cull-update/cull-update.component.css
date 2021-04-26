@@ -1,0 +1,5 @@
+.button-text {
+  max-width: 450px;
+  font-size: clamp(13px, 3vw, 17px);
+  min-width: min-content;
+}

@@ -56,7 +56,10 @@ export class WeightComponent implements OnInit, OnDestroy {
 
   private updateGraph() {
     this.$selectedAnimal.subscribe((animal) => {
-      if (animal) {
+      if (
+        animal &&
+        (this.selectedAnimal !== animal || this.chartWeights.length == 0)
+      ) {
         this.selectedAnimal = animal;
         this.chartWeights = [
           {
@@ -67,6 +70,8 @@ export class WeightComponent implements OnInit, OnDestroy {
         this.chartLabels = animal.weightData.map((weight) =>
           weight.weightDate.format('L')
         );
+      } else if (animal == undefined) {
+        this.chartWeights = [];
       }
     });
   }

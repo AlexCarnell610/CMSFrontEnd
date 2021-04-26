@@ -18,9 +18,15 @@ export class WarningDisplayComponent implements AfterViewInit, OnDestroy {
   ) {}
 
   ngAfterViewInit() {
+    const modal = this.modals.get(Modals.Warning);
     this.subs.add(
-      this.modals.get(Modals.Warning).onDataAdded.subscribe((data) => {
+      modal.onDataAdded.subscribe((data) => {
         this.toast = data;
+      })
+    );
+    this.subs.add(
+      modal.onAnyCloseEvent.subscribe(() => {
+        modal.removeData();
       })
     );
   }

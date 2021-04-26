@@ -168,7 +168,7 @@
         </div>
         <h5>Calving Statistic</h5>
         <div
-          *ngIf="!stat && isAdd"
+          *ngIf="(!stat && isAdd) || (!isAdd && !stat && calfSelected)"
           class="mb-2"
           [ngClass]="getCSSForCalvingStats()"
         >
@@ -181,12 +181,12 @@
           </div>
         </div>
 
-        <div *ngIf="!stat && !isAdd" class="mb-2">
+        <div *ngIf="!stat && !isAdd && !calfSelected" class="mb-2">
           <strong>Select calf to view stat</strong>
         </div>
 
         <div
-          *ngIf="stat"
+          *ngIf="(!isAdd && stat && calfSelected) || (isAdd && stat)"
           ngbDropdown
           class="mb-2 d-inline-block"
           #statDrop="ngbDropdown"

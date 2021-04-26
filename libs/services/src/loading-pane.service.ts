@@ -7,9 +7,21 @@ import { BehaviorSubject } from 'rxjs';
 export class LoadingPaneService {
   constructor() {}
   private _loadingState: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  private counter = 0;
 
   public setLoadingState(state: boolean) {
-    this._loadingState.next(state);
+    if (state) {
+      this.counter++;
+    } else {
+      this.counter--;
+    }
+
+    this._loadingState.next(this.counter > 0);
+  }
+
+  public stopLoading() {
+    this.counter = 0;
+    this._loadingState.next(false);
   }
 
   public get currentLoadingState(): BehaviorSubject<boolean> {

@@ -1,7 +1,5 @@
-.cms-center-animal-list {
-  min-width: max-content;
-  margin-left: 38.5vw;
-  margin-right: 38vw;
+.cms-birth-animal-list {
+  min-width: min-content;
 }
 
 .cms-blank-arrow {

@@ -53,7 +53,8 @@ export class AnimalEffects {
       this.actions$.pipe(
         ofType(AnimalActionTypes.HTTPErrorType),
         map((action: any) => {
-          this.loadingPaneService.setLoadingState(false);
+          this.loadingPaneService.stopLoading();
+          alert('An error has occured. Please try again later');
           console.error('An error has occured', action.payload);
         })
       ),

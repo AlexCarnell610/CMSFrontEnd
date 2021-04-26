@@ -80,7 +80,7 @@
       >{{ sire.name !== "null" ? sire.name : "No sire assigned" }}
       <ul *ngIf="sire.name !== 'null'" style="list-style-type: none">
         <li>&nbsp;{{ sire.tagNumber }}</li>
-        <li>&nbsp;{{ sire.breed }}</li>
+        <li>&nbsp;{{ getBreedName(sire) | titlecase }}</li>
       </ul>
     </li>
   </ul>

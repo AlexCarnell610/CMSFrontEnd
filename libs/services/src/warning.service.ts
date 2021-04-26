@@ -30,10 +30,9 @@ export class WarningService {
   constructor(private readonly modals: NgxSmartModalService) {}
 
   public show(toast: IToast, animal: Animal = null) {
-    this.modals
-      .get(Modals.Warning)
-      .setData({ ...this.defaultError, ...toast, animal })
-      .open();
+    const warningModal = this.modals.get(Modals.Warning);
+    warningModal.layerPosition = this.modals.getHigherIndex();
+    warningModal.setData({ ...this.defaultError, ...toast, animal }).open();
 
     this._result = new BehaviorSubject(null);
     return this._result;

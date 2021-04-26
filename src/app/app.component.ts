@@ -63,6 +63,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
   ngAfterViewInit() {
+    const loadingModal = this.modalService.get(Modals.Loading);
     combineLatest([
       this.auth.isLoading$,
       this.loadingService.currentLoadingState,
@@ -71,9 +72,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         (dataLoading || authLoading) &&
         this.location.href.includes(PageURLs.MainMenu)
       ) {
-        this.modalService.get(Modals.Loading).open();
+        loadingModal.layerPosition = this.modalService.getHigherIndex();
+        loadingModal.open(true);
       } else {
-        this.modalService.get(Modals.Loading).close();
+        loadingModal.close();
       }
     });
   }

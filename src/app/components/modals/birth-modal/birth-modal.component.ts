@@ -75,6 +75,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     message: '',
     success: true,
   };
+  public calfSelected: boolean = false;
   public truncNotes: string = '';
   private subs: Subscription = new Subscription();
   private longLifeSubs: Subscription = new Subscription();
@@ -216,7 +217,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
         this.saveResult.success = false;
         this.handlePopover(3000);
         output.next(false);
-      } else if (age(calf.birthDate, 'days') > 28) {
+      } else if (age(calf.birthDate, 'days') > 28 && this.isAdd) {
         this.warningService
           .show({ header: 'Entered age is more than 28 days' })
           .subscribe((result) => output.next(result ? calf : result));
@@ -378,6 +379,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
           const selectedCalf = calves.find((calf) => calf.tagNumber === val);
           if (!this.isAdd) {
             if (selectedCalf) {
+              this.calfSelected = true;
               this.selectedCalf = selectedCalf;
               this.calfTag.setValue(selectedCalf.tagNumber);
               this.dob.setValue(selectedCalf.birthDate.format('YYYY-MM-DD'));
@@ -389,6 +391,8 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
               this.registered.setValue(selectedCalf.registered ? 'yes' : 'no');
               this.stat = selectedCalf.calvingStat;
             } else {
+              this.stat = null;
+              this.calfSelected = false;
               this.resetForm(false);
             }
           }
@@ -427,6 +431,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
         this.truncNotes = '';
         this.resetForm();
         this.breedSelected = false;
+        this.calfSelected = false;
       });
 
     this.modalService.get(Modals.Birth).onOpen.subscribe(() => {

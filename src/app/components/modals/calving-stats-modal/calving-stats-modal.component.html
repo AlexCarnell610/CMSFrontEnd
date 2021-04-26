@@ -1,5 +1,5 @@
 <ngx-smart-modal #calvingStats identifier="calvingStats">
-  <h4 class="text-center">Calving Stats</h4>
+  <h4 class="text-center">Calving Stat</h4>
   <div class="cms-form">
     <form [formGroup]="calvingStatForm">
       <div class="mb-2">
@@ -166,7 +166,6 @@
       <label for="firstDrink" [ngClass]="getCSSForDrinkAssistNo()"
         >First feed assisted -
       </label>
-      <!-- <div class="w-100"> -->
       <div class="btn-group btn-group-toggle ml-2 mb-2" id="firstDrink">
         <label
           class="btn btn-outline-primary btn-sm"
@@ -202,7 +201,6 @@
           [isRadio]="true"
         ></cms-form-errors>
       </div>
-      <!-- </div> -->
       <div class="form-group">
         <label for="damHealth"
           ><strong>Dam health </strong>(1 worst - 5 best)</label
@@ -223,12 +221,6 @@
               <div class="input-group-text">{{ damHealth.value }}</div>
             </div>
           </div>
-          <!-- <span
-            class="ml-2 align-top border border-secondary"
-            style="border-width: 2px"
-          >
-            <span class="m-2">{{ damHealth.value }}</span>
-          </span> -->
         </div>
       </div>
       <div>

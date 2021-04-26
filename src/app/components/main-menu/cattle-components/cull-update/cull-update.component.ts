@@ -42,7 +42,9 @@ export class CullUpdateComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.setUpChartOptions();
     this.updateGraph();
-    this.cullUpdate = this.cullUpdateService.getCullUpdate();
+    this.cullUpdateService.getCullUpdate().subscribe((cullUpdate) => {
+      this.cullUpdate = cullUpdate;
+    });
     this.subs.add(
       this.screenSizeService.isSmallScreenObs().subscribe((isSmall) => {
         this.isSmallScreen = isSmall;

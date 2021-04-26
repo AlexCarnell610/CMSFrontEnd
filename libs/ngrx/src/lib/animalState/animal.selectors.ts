@@ -16,7 +16,9 @@ export const getAnimalByTag = createSelector(
 
 export const getDams = createSelector(selectAnimals, (animals: Animal[]) => {
   return animals.filter(
-    (animal) => animal.gender === Gender.Female && age(animal.birthDate) > 2
+    (animal) =>
+      animal.gender === Gender.Female &&
+      (age(animal.birthDate) > 2 || animal.dam.tagNumber == 'UK000000000000')
   );
 });
 

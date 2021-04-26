@@ -55,12 +55,7 @@ export function weighDateValidator(): ValidatorFn {
           if (saleWeight !== undefined && weightSelect.disabled) {
             weightType.setErrors({ saleWeightExists: true });
           } else {
-            if (
-              getInitialWeight(weights)?.weightDate.isSameOrAfter(
-                inputDate,
-                'day'
-              )
-            ) {
+            if (initialWeight?.weightDate.isSameOrAfter(inputDate, 'day')) {
               weightDate.setErrors({
                 saleAfterInitial: initialWeight.weightDate.format('DD/MM/YYYY'),
               });

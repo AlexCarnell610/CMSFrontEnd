@@ -13,7 +13,12 @@ export enum BullActionTypes {
   DeleteBull = '[Bull] Delete Bull',
   DeleteBulls = '[Bull] Delete Bulls',
   ClearBulls = '[Bull] Clear Bulls',
-  RetrieveBulls = '[Bull] Retrieve Data'
+  RetrieveBulls = '[Bull] Retrieve Data',
+  LoadBullsFinished = '[Bull] Load Finished',
+}
+
+export class LoadBullsFinished implements Action {
+  readonly type = BullActionTypes.LoadBullsFinished;
 }
 
 export class RetreieveBullData implements Action {
@@ -79,13 +84,13 @@ export class ClearBulls implements Action {
 }
 
 export type BullActions =
- LoadBulls
- | AddBull
- | UpsertBull
- | AddBulls
- | UpsertBulls
- | UpdateBull
- | UpdateBulls
- | DeleteBull
- | DeleteBulls
- | ClearBulls;
+  | LoadBulls
+  | AddBull
+  | UpsertBull
+  | AddBulls
+  | UpsertBulls
+  | UpdateBull
+  | UpdateBulls
+  | DeleteBull
+  | DeleteBulls
+  | ClearBulls;

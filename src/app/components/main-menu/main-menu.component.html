@@ -52,7 +52,7 @@
           <button
             *ngFor="let male of oldMales"
             type="button"
-            class="list-group-item list-group-item-action active"
+            class="list-group-item list-group-item-action text"
             ngbDropdownItem
             (click)="openWeightModal(male)"
           >
@@ -91,7 +91,7 @@
             class="btn btn-secondary mr-1 menu-buttons"
             (click)="birthScreen()"
           >
-            Add Calf
+            Add Birth
           </button>
           <button
             class="btn btn-secondary mr-1 menu-buttons"
@@ -103,7 +103,7 @@
             class="btn btn-secondary mr-1 menu-buttons"
             (click)="registrationScreen()"
           >
-            Add to BCMS
+            Calf Registration
           </button>
         </div>
       </div>
@@ -122,13 +122,13 @@
     <div class="col">
       <div class="btn-toolbar">
         <div class="btn-group">
-          <button class="btn btn-secondary mr-1 menu-buttons">
+          <button class="btn btn-secondary mr-1 menu-buttons" disabled>
             Add Treatment
           </button>
-          <button class="btn btn-secondary mr-1 menu-buttons">
+          <button class="btn btn-secondary mr-1 menu-buttons" disabled>
             Add Medication
           </button>
-          <button class="btn btn-secondary mr-1 menu-buttons">
+          <button class="btn btn-secondary mr-1 menu-buttons" disabled>
             Print Report
           </button>
         </div>
@@ -140,7 +140,6 @@
       <img class="user-menu-icon" src="assets/userIcon.svg" alt="UserIcon" />
       <div class="btn-toolbar">
         <div class="btn-group">
-          <button class="btn btn-secondary mr-1 menu-buttons">Edit User</button>
           <button class="btn btn-danger mr-1 menu-buttons" (click)="logout()">
             Log Out
           </button>

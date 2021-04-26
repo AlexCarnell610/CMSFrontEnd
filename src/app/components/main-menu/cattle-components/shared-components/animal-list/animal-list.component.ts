@@ -18,7 +18,7 @@ import {
 } from '@cms-ngrx/animal';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
-import { takeWhile } from 'rxjs/operators';
+import { map, takeWhile } from 'rxjs/operators';
 
 @Component({
   selector: 'cms-animal-list',
@@ -93,12 +93,20 @@ export class AnimalListComponent implements OnInit, OnDestroy {
 
   private populateAnimals() {
     if (this.page === PageURLs.Births) {
-      this.animals$ = this.store.pipe(select(getDams));
+      this.animals$ = this.store
+        .pipe(select(getDams))
+        .pipe(
+          map((animals) => animals.filter((animal) => this.notSold(animal)))
+        );
     } else if (this.page === PageURLs.Registration) {
       this.animals$ = this.store.pipe(select(getUnregisteredCalves));
     } else {
       this.animals$ = this.store.pipe(select(selectAnimals));
     }
+  }
+
+  private notSold(animal: Animal) {
+    return animal.weightData.every((weight) => !weight.weightType.isSale);
   }
 
   private pushNextAnimal(animal: Animal) {

@@ -25,6 +25,11 @@
   width: 5vw;
 }
 
+.alert,
+.text {
+  font-size: clamp(10pt, 2vw, 16px);
+}
+
 .menu-buttons {
   font-size: clamp(10pt, 2vw, 15pt);
   min-width: min-content;

@@ -3,7 +3,7 @@ import { LoadingPaneService } from '@cms-services';
 import { HttpService } from '@cms-services/http';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { map, switchMap } from 'rxjs/operators';
-import { BullActionTypes, LoadBulls } from './bull.actions';
+import { BullActionTypes, LoadBulls, LoadBullsFinished } from './bull.actions';
 
 @Injectable()
 export class BullEffects {
@@ -20,9 +20,19 @@ export class BullEffects {
         this.loadingService.setLoadingState(true);
         return this.httpService.getBullData().pipe(
           map((bulls) => {
-            return new LoadBulls({bulls})
+            return new LoadBulls({ bulls });
           })
         );
+      })
+    )
+  );
+
+  $loadBulls = createEffect(() =>
+    this.actions$.pipe(
+      ofType(BullActionTypes.LoadBulls),
+      map(() => {
+        this.loadingService.setLoadingState(false);
+        return new LoadBullsFinished();
       })
     )
   );

@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
 import { ICullUpdate } from '@cms-interfaces';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CullUpdateService {
-  private _cullUpdate: ICullUpdate[] = [];
+  private _cullUpdate: BehaviorSubject<ICullUpdate[]> = new BehaviorSubject([]);
   constructor() {}
 
-  public getCullUpdate(): ICullUpdate[] {
+  public getCullUpdate(): BehaviorSubject<ICullUpdate[]> {
     return this._cullUpdate;
   }
 
   set cullUpdate(update: any) {
-    this._cullUpdate = [];
     let interUpdate = [];
     if (update !== 'error') {
       Object.entries(update).forEach(([key, value]: [string, any]) => {
@@ -29,7 +29,7 @@ export class CullUpdateService {
         };
         interUpdate.push(convertedUpdate);
       });
-      this._cullUpdate = interUpdate;
+      this._cullUpdate.next(interUpdate);
     }
   }
 }

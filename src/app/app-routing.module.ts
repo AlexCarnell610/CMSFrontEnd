@@ -12,7 +12,7 @@ const routes: Routes = [
       import('./components/main-menu/main-menu.module').then(
         (m) => m.MainMenuModule
       ),
-      canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
     path: PageURLs.Login,
@@ -23,8 +23,8 @@ const routes: Routes = [
     component: LogoutComponent,
   },
   {
-    path: '',
-    redirectTo: PageURLs.Logout,
+    path: '**',
+    redirectTo: PageURLs.Login,
     pathMatch: 'full',
   },
 ];
