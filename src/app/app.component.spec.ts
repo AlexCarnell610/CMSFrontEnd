@@ -39,6 +39,9 @@ describe('AppComponent', () => {
       get: () => {
         return mockModalComp;
       },
+      getHigherIndex: () => {
+        return 123;
+      },
     };
 
     mockModalComp = {

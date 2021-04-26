@@ -38,11 +38,19 @@ describe('AnimalListComponent', () => {
       });
     });
 
+    it('should popluate the animals observable registration page', () => {
+      component.page = PageURLs.Registration;
+      component.ngOnInit();
+      component.animals$.subscribe((ani) => {
+        expect(ani).toEqual(animalArray);
+      });
+    });
+
     it('should popluate the animals observable births page', () => {
       component.page = PageURLs.Births;
       component.ngOnInit();
       component.animals$.subscribe((ani) => {
-        expect(ani).toEqual(animalArray);
+        expect(ani).toEqual([mockAnimal]);
       });
     });
 
@@ -143,6 +151,7 @@ describe('AnimalListComponent', () => {
       { page: PageURLs.Login, result: '' },
       { page: PageURLs.Logout, result: '' },
       { page: PageURLs.MainMenu, result: '' },
+      { page: PageURLs.Registration, result: 'Register Calf' },
     ].forEach((test) => {
       it(`should return ${test.result} on ${test.page} page`, () => {
         component.page = test.page;

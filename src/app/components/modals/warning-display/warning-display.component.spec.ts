@@ -1,6 +1,6 @@
 import { Modals } from '@cms-enums';
 import { IToast } from '@cms-services';
-import { of } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { WarningDisplayComponent } from './warning-display.component';
 
 describe('WarningDisplayComponent', () => {
@@ -9,13 +9,16 @@ describe('WarningDisplayComponent', () => {
     mockModalService,
     mockModal,
     mockModalData;
-  let modalGetSpy, modalCloseSpy, setResultSpy;
+  let modalGetSpy, modalCloseSpy, setResultSpy, modalCloseEvent: Subject<any>;
 
   beforeEach(() => {
+    modalCloseEvent = new Subject();
     mockModalData = { data: 'I AM SOME DATA' };
     mockModal = {
       onDataAdded: of(mockModalData),
+      onAnyCloseEvent: modalCloseEvent,
       close: () => {},
+      removeData: () => {},
     };
     mockWarningService = { setResult: () => {} };
     mockModalService = {
@@ -74,6 +77,13 @@ describe('WarningDisplayComponent', () => {
   it('Should set data to the new data', () => {
     component.ngAfterViewInit();
     expect(component.toast).toEqual(mockModalData);
+  });
+
+  it('should remove data on close event', () => {
+    let removeDataSpy = spyOn(mockModal, 'removeData');
+    component.ngAfterViewInit();
+    modalCloseEvent.next('close');
+    expect(removeDataSpy).toHaveBeenCalled();
   });
 
   describe('ngOndestroy', () => {

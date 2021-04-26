@@ -24,7 +24,7 @@ describe('CullUpdateComponent', () => {
 
     mockCullUpdateService = {
       getCullUpdate: () => {
-        return [mockCullUpdate];
+        return of([mockCullUpdate]);
       },
     };
     mockRouter = { navigate: () => {} };
