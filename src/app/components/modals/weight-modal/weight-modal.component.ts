@@ -9,6 +9,8 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Modals } from '@cms-enums';
 import { Animal, AnimalWeight, AnimalWeightType } from '@cms-interfaces';
+import { RootState } from '@cms-ngrx';
+import { getAnimalByTag } from '@cms-ngrx/animal';
 import {
   AnimalUpdateService,
   LoadingPaneService,
@@ -16,6 +18,7 @@ import {
 } from '@cms-services';
 import { dateValidator, weighDateValidator } from '@cms-validators';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
+import { select, Store } from '@ngrx/store';
 import * as moment from 'moment';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject, Observable, Subscription, timer } from 'rxjs';
@@ -44,6 +47,7 @@ export class EditWeightModalComponent
   @Input() isAddMode = false;
   @ViewChild('p') popover: NgbPopover;
   private subs: Subscription = new Subscription();
+  private shortLifeSubs: Subscription = new Subscription();
   public editWeightForm: FormGroup = new FormGroup({});
   public selectedWeight: AnimalWeight = null;
   public showSuccess = false;
@@ -57,7 +61,8 @@ export class EditWeightModalComponent
     private readonly fb: FormBuilder,
     private readonly loadingService: LoadingPaneService,
     private readonly updateService: AnimalUpdateService,
-    private readonly warningService: WarningService
+    private readonly warningService: WarningService,
+    private readonly store: Store<RootState>
   ) {}
 
   ngOnInit(): void {
@@ -70,6 +75,7 @@ export class EditWeightModalComponent
     weightModal.onAnyCloseEventFinished.subscribe(() => {
       this.clearForm();
       this.selectedWeight = null;
+      this.shortLifeSubs.unsubscribe();
     });
 
     weightModal.onOpenFinished.subscribe(() => {
@@ -78,6 +84,14 @@ export class EditWeightModalComponent
       } else {
         this.weightSelect.enable();
       }
+      this.shortLifeSubs.add(
+        this.store
+          .pipe(select(getAnimalByTag, { tagNumber: this.animal.tagNumber }))
+          .subscribe((ani) => {
+            this.animal = ani;
+            this.animalControl.setValue(ani);
+          })
+      );
       this.animalControl.setValue(this.animal);
       this.animalControl.updateValueAndValidity();
       this.date.updateValueAndValidity();
@@ -327,10 +341,10 @@ export class EditWeightModalComponent
 
   private clearForm() {
     this.selectedWeight = null;
-    this.editWeightForm.reset(
-      { weight: '', date: '', weightSelect: '', weightType: '' },
-      { emitEvent: false }
-    );
+    this.weight.reset('', { emitEvent: false });
+    this.date.reset('', { emitEvent: false });
+    this.weightSelect.reset('', { emitEvent: false });
+    this.weightType.reset('', { emitEvent: false });
   }
 
   get weight() {

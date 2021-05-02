@@ -48,7 +48,6 @@ enum FormControls {
 })
 export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() animal: Animal = null;
-  @Input() isAddMode: boolean;
   @ViewChild('p') popover: NgbPopover;
   public animalForm: FormGroup = new FormGroup({});
   public $dams: Observable<Animal[]>;
@@ -59,6 +58,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
   };
   public dropDownHidden = true;
   public breedsList;
+  public isAddMode: boolean = false;
   private $animals: Observable<Animal[]>;
   private previousFormValue;
   private noSireText = 'No sire assigned';
@@ -221,6 +221,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
                 .subscribe((result) => {
                   if (result) {
                     this.addDam(this.dam.value).then(() => {
+                      this.loadingService.setLoadingState(false);
                       output.next(true);
                     });
                   } else {
@@ -241,10 +242,10 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
                 .subscribe((result) => {
                   if (result) {
                     output.next(false);
+                    this.previousFormValue = this.animalForm.value;
                     this.animal = this.getEnteredDam(animals);
                     this.isAddMode = false;
-                    this.modals.get(Modals.Animal).open();
-                    this.previousFormValue = this.animalForm.value;
+                    this.setData();
                   } else {
                     output.next(false);
                   }
@@ -410,11 +411,13 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
     const animalModal = this.modals.get(Modals.Animal);
     this.subs.add(
       animalModal.onAnyCloseEventFinished.subscribe(() => {
+        this.modals.get(Modals.Animal).removeData();
         this.clearForm();
       })
     );
     this.subs.add(
-      animalModal.onOpenFinished.subscribe(() => {
+      this.modals.get(Modals.Animal).onOpenFinished.subscribe(() => {
+        this.isAddMode = this.modals.get(Modals.Animal).getData().isAdd;
         this.animalForm.enable();
         this.setData();
       })

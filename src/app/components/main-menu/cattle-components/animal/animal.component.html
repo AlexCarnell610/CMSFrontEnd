@@ -2,7 +2,7 @@
   <span class="cms-flex-item">
     <span
       (click)="backToMain()"
-      class="fas fa-arrow-left ml-5"
+      class="fas fa-arrow-left ml-md-5 ml-3"
       placement="right"
       ngbTooltip="Back to Main Menu"
     ></span>
@@ -15,7 +15,6 @@
     <div class="col">
       <cms-animal-list
         [page]="pageName"
-        (add)="addAnimal()"
         (edit)="editAnimal()"
         (animalSelected)="animalSelected($event)"
       ></cms-animal-list>
@@ -37,8 +36,5 @@
   </div>
 </div>
 
-<cms-animal-modal
-  [animal]="$selectedAnimal | async"
-  [isAddMode]="isAdd"
-></cms-animal-modal>
+<cms-animal-modal [animal]="$selectedAnimal | async"></cms-animal-modal>
 <cms-warning-display></cms-warning-display>

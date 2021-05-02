@@ -54,7 +54,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
           //would need marker to mark session data as old
           this.store.dispatch(new RetrieveAnimalData());
           this.store.dispatch(new RetreieveBullData());
-
           this.pusherService.channel.bind(PusherChannels.CullUpdate, (data) => {
             this.cullUpdateService.cullUpdate = data.animal;
           });
@@ -63,6 +62,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
   ngAfterViewInit() {
+    let isOpen = false;
     const loadingModal = this.modalService.get(Modals.Loading);
     combineLatest([
       this.auth.isLoading$,
@@ -72,10 +72,14 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         (dataLoading || authLoading) &&
         this.location.href.includes(PageURLs.MainMenu)
       ) {
-        loadingModal.layerPosition = this.modalService.getHigherIndex();
-        loadingModal.open(true);
+        if (!isOpen) {
+          loadingModal.layerPosition = this.modalService.getHigherIndex();
+          loadingModal.open(true);
+          isOpen = true;
+        }
       } else {
         loadingModal.close();
+        isOpen = false;
       }
     });
   }

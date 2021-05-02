@@ -28,12 +28,12 @@ export class AnimalComponent {
   }
 
   public addAnimal() {
-    this.isAdd = true;
+    this.modalService.get(Modals.Animal).setData({ isAdd: true });
     this.modalService.get(Modals.Animal).open();
   }
 
   public editAnimal() {
-    this.isAdd = false;
+    this.modalService.get(Modals.Animal).setData({ isAdd: false });
     this.modalService.get(Modals.Animal).open();
   }
 
