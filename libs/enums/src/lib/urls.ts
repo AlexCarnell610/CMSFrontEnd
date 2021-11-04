@@ -8,6 +8,8 @@ export enum HttpUrls {
   AnimalBreeds = '/assets/cattleBreedCodes.json',
   Calf = '/calf',
   CullUpdate = '/cullUpdate',
+  Medication = '/medications',
+  Treatments = '/treatments',
   Root = '/',
 }
 

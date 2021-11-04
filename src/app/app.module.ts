@@ -16,6 +16,8 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { environment } from 'src/environments/environment';
+import { MedicationEffects } from '../../libs/ngrx/src/lib/medicationState/medication.effects';
+import { TreatmentEffects } from '../../libs/ngrx/src/lib/treatmentState/treatment.effects';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FooterComponent } from './components/footer/footer.component';
@@ -23,6 +25,12 @@ import { LoadingModalComponent } from './components/loading-modal/loading-modal.
 import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
 
+const EFFECTS = [
+  AnimalEffects,
+  BullEffects,
+  MedicationEffects,
+  TreatmentEffects,
+];
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,7 +48,7 @@ import { LogoutComponent } from './components/logout/logout.component';
         strictActionImmutability: true,
       },
     }),
-    EffectsModule.forRoot([AnimalEffects, BullEffects]),
+    EffectsModule.forRoot(EFFECTS),
     environment.production ? [] : StoreDevtoolsModule.instrument(),
     HttpClientModule,
     FormsModule,

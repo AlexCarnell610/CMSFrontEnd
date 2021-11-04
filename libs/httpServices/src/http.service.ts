@@ -1,7 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HttpUrls } from '@cms-enums';
-import { Animal, AnimalWeight, Bull } from '@cms-interfaces';
+import {
+  Animal,
+  AnimalWeight,
+  Bull,
+  Medication,
+  Treatment,
+} from '@cms-interfaces';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -86,5 +92,21 @@ export class HttpService {
 
   public getCullUpdate(): Observable<any> {
     return this.http.get(environment.api + HttpUrls.CullUpdate);
+  }
+
+  public getMedications(): Observable<Medication[]> {
+    return this.http.get(environment.api + HttpUrls.Medication).pipe(
+      map((response) => {
+        return this.mappingService.convertMedication(response);
+      })
+    );
+  }
+
+  public getTreatments(): Observable<Treatment[]> {
+    return this.http.get(environment.api + HttpUrls.Treatments).pipe(
+      map((response) => {
+        return this.mappingService.convertTreatments(response);
+      })
+    );
   }
 }

@@ -19,6 +19,8 @@ import {
 import { NgbAlertConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { PusherChannels } from 'libs/enums/src/lib/pusher-channels';
+import { LoadMedications } from 'libs/ngrx/src/lib/medicationState';
+import { LoadTreatments } from 'libs/ngrx/src/lib/treatmentState/treatment.actions';
 import { PusherService } from 'libs/services/src/pusher.service';
 import * as Moment from 'moment';
 import { NgxSmartModalService } from 'ngx-smart-modal';
@@ -54,6 +56,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
           //would need marker to mark session data as old
           this.store.dispatch(new RetrieveAnimalData());
           this.store.dispatch(new RetreieveBullData());
+          this.store.dispatch(new LoadMedications());
+          this.store.dispatch(new LoadTreatments());
           this.pusherService.channel.bind(PusherChannels.CullUpdate, (data) => {
             this.cullUpdateService.cullUpdate = data.animal;
           });
