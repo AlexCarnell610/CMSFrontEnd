@@ -95,6 +95,10 @@ export class MainMenuComponent implements OnInit {
     this.router.navigate([PageURLs.CullUpdate], { relativeTo: this.route });
   }
 
+  public medicationScreen(): void {
+    this.router.navigate([PageURLs.Medication], { relativeTo: this.route });
+  }
+
   public get loading() {
     return this.loadingService.currentLoadingState;
   }

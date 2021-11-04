@@ -14,6 +14,7 @@ import { WeightComponent } from './cattle-components/weight/weight.component';
 import { MainMenuComponent } from './main-menu.component';
 import { MainMenuRoutingModule } from './main-menu.routing';
 import { RegistrationComponent } from './cattle-components/registration/registration.component';
+import { MedicationComponent } from './medication-components/medication/medication.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { RegistrationComponent } from './cattle-components/registration/registra
     BirthComponent,
     CullUpdateComponent,
     RegistrationComponent,
+    MedicationComponent,
   ],
   imports: [
     CommonModule,
