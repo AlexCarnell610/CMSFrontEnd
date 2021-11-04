@@ -1,14 +1,14 @@
 export enum HttpUrls {
-  Animals = '/api/animals',
-  Bulls = '/api/bulls',
+  Animals = '/animals',
+  Bulls = '/bulls',
   OfflineAnimals = '/assets/data.json',
-  PatchWeight = '/api/weight',
-  PutWeight = '/api/weight',
-  Animal = '/api/animal',
+  PatchWeight = '/weight',
+  PutWeight = '/weight',
+  Animal = '/animal',
   AnimalBreeds = '/assets/cattleBreedCodes.json',
-  Calf = '/api/calf',
-  CullUpdate = '/api/cullUpdate',
-  Root = '/api/',
+  Calf = '/calf',
+  CullUpdate = '/cullUpdate',
+  Root = '/',
 }
 
 export const BackendURL = 'https://cmsBackend.api/';

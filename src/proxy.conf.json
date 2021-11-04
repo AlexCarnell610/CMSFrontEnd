@@ -2,7 +2,14 @@
   "/api": {
     "target": "https://cmsbackend.api:4430",
     "secure": false,
-    "logLevel": "debug",
+    "logLevel": "error",
     "pathRewrite": { "^/api": "" }
+  },
+
+  "/devApi": {
+    "target": "https://cmsDevBackend.api",
+    "secure": false,
+    "logLevel": "debug",
+    "pathRewrite": { "^/devApi": "" }
   }
 }

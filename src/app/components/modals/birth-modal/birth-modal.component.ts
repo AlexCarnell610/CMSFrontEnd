@@ -106,11 +106,11 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public save() {
-    this.loadingService.setLoadingState(true);
     this.hasSaved = true;
     this.subs.add(
       this.handleErrors().subscribe((canContinue) => {
         if (canContinue && isAnimal(canContinue)) {
+          this.loadingService.setLoadingState(true);
           if (this.isAdd) {
             this.animalService.addAnimal(canContinue).then(() => {
               this.saveResult.message = 'Calf added';
@@ -128,8 +128,6 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.handlePopover(1500);
               });
           }
-        } else {
-          this.loadingService.setLoadingState(false);
         }
       })
     );
@@ -254,6 +252,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     return output;
   }
+
   private animalExists(animals: Animal[]) {
     return (
       animals.findIndex((animal) => animal.tagNumber === this.calfTag.value) !==
@@ -262,6 +261,8 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private getNewCalf(): Animal {
+    console.warn(this.isRegistered);
+
     return {
       tagNumber: this.calfTag.value,
       managementTag: 'null',

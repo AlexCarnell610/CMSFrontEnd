@@ -7,4 +7,5 @@ export enum PageURLs {
   Births = 'births',
   CullUpdate = 'performance',
   Registration = 'registration',
+  Medication = 'medication',
 }

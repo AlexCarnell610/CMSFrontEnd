@@ -5,6 +5,7 @@ import { Animal, AnimalWeight, Bull } from '@cms-interfaces';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from '../../../src/environments/environment';
 import { MappingService } from '../../services/src/importData.service';
 
 @Injectable({
@@ -17,7 +18,7 @@ export class HttpService {
   ) {}
 
   public getAnimalData(): Observable<Animal[]> {
-    return this.http.get(HttpUrls.Animals).pipe(
+    return this.http.get(environment.api + HttpUrls.Animals).pipe(
       map((response) => {
         return this.mappingService.importAnimalData(response);
       })
@@ -25,7 +26,7 @@ export class HttpService {
   }
 
   public getBullData(): Observable<Bull[]> {
-    return this.http.get(HttpUrls.Bulls).pipe(
+    return this.http.get(environment.api + HttpUrls.Bulls).pipe(
       map((response) => {
         return this.mappingService.convertBulls(response);
       })
@@ -42,7 +43,7 @@ export class HttpService {
 
   public updateWeight(id, update): Observable<AnimalWeight[]> {
     return this.http
-      .patch(`${HttpUrls.PatchWeight}/${id}`, { ...update })
+      .patch(`${environment.api + HttpUrls.PatchWeight}/${id}`, { ...update })
       .pipe(
         map((res) => this.mappingService.convertWeightData(Object.values(res)))
       );
@@ -50,7 +51,7 @@ export class HttpService {
 
   public addWeight(animalId, weight): Observable<AnimalWeight[]> {
     return this.http
-      .put(`${HttpUrls.PutWeight}/${animalId}`, { ...weight })
+      .put(`${environment.api + HttpUrls.PutWeight}/${animalId}`, { ...weight })
       .pipe(
         map((res) => this.mappingService.convertWeightData(Object.values(res)))
       );
@@ -63,7 +64,7 @@ export class HttpService {
       birthDate: moment(animal.birthDate).format('yyyy-MM-DD'),
     };
     return this.http
-      .post(HttpUrls.Animal, newAnimal)
+      .post(environment.api + HttpUrls.Animal, newAnimal)
       .pipe(map((res) => this.mappingService.importAnimalData([res])[0]));
   }
 
@@ -77,11 +78,13 @@ export class HttpService {
     }
 
     return this.http
-      .patch(`${HttpUrls.Animal}/${tagNumber}`, { ...newUpdate })
+      .patch(`${environment.api + HttpUrls.Animal}/${tagNumber}`, {
+        ...newUpdate,
+      })
       .pipe(map((res) => this.mappingService.importAnimalData([res])[0]));
   }
 
   public getCullUpdate(): Observable<any> {
-    return this.http.get(HttpUrls.CullUpdate);
+    return this.http.get(environment.api + HttpUrls.CullUpdate);
   }
 }

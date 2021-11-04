@@ -52,7 +52,7 @@ import { LogoutComponent } from './components/logout/logout.component';
     AuthModule.forRoot({
       ...environment.auth,
       httpInterceptor: {
-        allowedList: ['/api/*'],
+        allowedList: ['/api/*', '/devApi/*'],
       },
     }),
   ],
