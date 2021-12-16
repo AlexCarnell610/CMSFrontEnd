@@ -1,4 +1,6 @@
-import { createFeatureSelector } from '@ngrx/store';
+import { Medication } from '@cms-interfaces';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
+import * as moment from 'moment';
 import {
   medicationAdapter,
   medicationFeatureKey,
@@ -10,3 +12,17 @@ const getMedicationState =
 
 export const { selectIds, selectEntities, selectAll, selectTotal } =
   medicationAdapter.getSelectors(getMedicationState);
+
+export const selectInDateMedications = createSelector(
+  selectAll,
+  (medications: Medication[]) => {
+    return medications.filter((med) => med.expiry.isAfter(moment.now()));
+  }
+);
+
+export const selectMedicationById = createSelector(
+  selectAll,
+  (medications: Medication[], props: { id: number }) => {
+    return medications.find((medication) => medication.id == props.id);
+  }
+);

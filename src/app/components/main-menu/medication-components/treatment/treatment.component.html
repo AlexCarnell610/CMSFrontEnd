@@ -1,0 +1,54 @@
+<div class="cms-container">
+  <span class="cms-flex-item">
+    <span
+      (click)="backToMain()"
+      class="fas fa-arrow-left ml-md-5 ml-3"
+      placement="right"
+      ngbTooltip="Back to Main Menu"
+    ></span>
+  </span>
+  <h1 class="page-title cms-flex-item">Treatments</h1>
+  <span>
+    <div class="mr-5 invisible cms-blank-arrow"></div>
+  </span>
+</div>
+<div class="card treatment-card">
+  <div class="card-body">
+    <form [formGroup]="form">
+      <div
+        *ngIf="medications$ | async as medications"
+        class="form-group"
+        [ngClass]="{ 'was-validated': medication.dirty }"
+      >
+        <label for="medicationDropDown">Medication</label>
+        <select
+          formControlName="medication"
+          id="medicationDropdown"
+          class="form-control custom-select"
+          required
+        >
+          <option value="" disabled>Select One</option>
+          <option
+            *ngFor="let medication of medications"
+            value="{{ medication.id }}"
+          >
+            {{ medication.name }} -
+            {{ medication.expiry | date: "dd/MM/yyyy" }} -
+            {{ medication.batchNo | uppercase }}
+          </option>
+        </select>
+        <div class="invalid-feedback">
+          <cms-form-errors
+            [errors]="medication.errors"
+            [isDropDown]="true"
+          ></cms-form-errors>
+        </div>
+      </div>
+      <button class="btn btn-primary" (click)="openTreatmentModal()">
+        Add Treatment
+      </button>
+    </form>
+  </div>
+</div>
+
+<cms-treatment-modal [parentForm]="form"></cms-treatment-modal>

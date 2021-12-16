@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChartsModule } from 'ng2-charts';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
@@ -9,12 +9,14 @@ import { AnimalDisplayComponent } from './cattle-components/animal/animal-displa
 import { AnimalComponent } from './cattle-components/animal/animal.component';
 import { BirthComponent } from './cattle-components/birth/birth.component';
 import { CullUpdateComponent } from './cattle-components/cull-update/cull-update.component';
+import { RegistrationComponent } from './cattle-components/registration/registration.component';
 import { AnimalListComponent } from './cattle-components/shared-components/animal-list/animal-list.component';
 import { WeightComponent } from './cattle-components/weight/weight.component';
 import { MainMenuComponent } from './main-menu.component';
 import { MainMenuRoutingModule } from './main-menu.routing';
-import { RegistrationComponent } from './cattle-components/registration/registration.component';
 import { MedicationComponent } from './medication-components/medication/medication.component';
+import { TreatmentComponent } from './medication-components/treatment/treatment.component';
+import { TreatmentModalComponent } from './medication-components/treatment/treatment-modal/treatment-modal.component';
 
 @NgModule({
   declarations: [
@@ -27,11 +29,14 @@ import { MedicationComponent } from './medication-components/medication/medicati
     CullUpdateComponent,
     RegistrationComponent,
     MedicationComponent,
+    TreatmentComponent,
+    TreatmentModalComponent,
   ],
   imports: [
     CommonModule,
     MainMenuRoutingModule,
     ChartsModule,
+    FormsModule,
     ReactiveFormsModule,
     NgxSmartModalModule.forChild(),
     ModalsModule,

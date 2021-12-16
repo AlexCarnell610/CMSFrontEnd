@@ -8,4 +8,5 @@ export enum PageURLs {
   CullUpdate = 'performance',
   Registration = 'registration',
   Medication = 'medication',
+  Treatment = 'treatment',
 }

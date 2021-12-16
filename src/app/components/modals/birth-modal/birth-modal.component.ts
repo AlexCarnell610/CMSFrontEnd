@@ -261,8 +261,6 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private getNewCalf(): Animal {
-    console.warn(this.isRegistered);
-
     return {
       tagNumber: this.calfTag.value,
       managementTag: 'null',

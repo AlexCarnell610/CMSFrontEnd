@@ -1,4 +1,4 @@
-<div *ngIf="errors && !isRadio">
+<div *ngIf="errors && !(isRadio || isDropDown)">
   <span *ngIf="errors.required">This field is required. </span>
   <span *ngIf="errors.min"
     >Value should be more than {{ errors.min.min }}Kg.
@@ -37,6 +37,9 @@
   </span>
   <span *ngIf="errors.breed"> {{ errors.breed }}</span>
   <span *ngIf="errors.stats">{{ errors.stats }}</span>
+</div>
+<div *ngIf="errors && isDropDown">
+  <span *ngIf="errors.required">Please choose one. </span>
 </div>
 <div *ngIf="errors && isRadio">
   <span *ngIf="errors.noInitial"> No initial weight set. </span>

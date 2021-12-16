@@ -2,9 +2,9 @@ import * as moment from 'moment';
 
 export interface Medication {
   id: number;
-  medicationName: string;
+  name: string;
   batchNo: string;
-  expiryDate: moment.Moment;
+  expiry: moment.Moment;
   size: number;
 }
 

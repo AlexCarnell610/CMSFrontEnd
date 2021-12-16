@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { ValidationErrors } from '@angular/forms';
 
 @Component({
@@ -6,8 +6,13 @@ import { ValidationErrors } from '@angular/forms';
   templateUrl: './form-errors.component.html',
   styleUrls: ['./form-errors.component.css'],
 })
-export class FormErrorsComponent {
+export class FormErrorsComponent implements OnChanges {
   constructor() {}
   @Input() errors: ValidationErrors;
   @Input() isRadio: boolean = false;
+  @Input() isDropDown: boolean = false;
+
+  ngOnChanges() {
+    console.error(this.errors, this.isDropDown, this.isRadio);
+  }
 }

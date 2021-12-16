@@ -7,6 +7,7 @@ import { RegistrationComponent } from './cattle-components/registration/registra
 import { WeightComponent } from './cattle-components/weight/weight.component';
 import { MainMenuComponent } from './main-menu.component';
 import { MedicationComponent } from './medication-components/medication/medication.component';
+import { TreatmentComponent } from './medication-components/treatment/treatment.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,10 @@ const routes: Routes = [
   {
     path: 'medication',
     component: MedicationComponent,
+  },
+  {
+    path: 'treatment',
+    component: TreatmentComponent,
   },
 ];
 

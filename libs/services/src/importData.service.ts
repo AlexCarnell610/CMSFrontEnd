@@ -89,9 +89,9 @@ export class MappingService {
     let medication: Medication[] = [];
     for (let value of Object.values<any>(response)) {
       medication.push({
-        medicationName: value.medication_name,
+        name: value.medication_name,
         batchNo: value.batch_no,
-        expiryDate: this.convertDate(value.expiry),
+        expiry: this.convertDate(value.expiry),
         size: value.size,
         id: value.id,
       });

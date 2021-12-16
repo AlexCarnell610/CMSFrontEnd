@@ -32,7 +32,7 @@
     "@ngrx/store-devtools": "^10.0.1",
     "@nrwl/angular": "^10.3.2",
     "@schematics/angular": "^10.2.1",
-    "bootstrap": "^4.5.3",
+    "bootstrap": "latest-4",
     "chart.js": "^2.9.4",
     "moment": "^2.29.1",
     "ng-popups": "^9.0.0",

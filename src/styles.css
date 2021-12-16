@@ -8,6 +8,11 @@
   width: 100%;
 } */
 
+.cms-blank-arrow {
+  width: 28px;
+  height: 32px;
+}
+
 .cms-animal-list {
   max-width: 450px;
   height: 40vh;

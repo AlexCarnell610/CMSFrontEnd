@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Modals, PageURLs } from '@cms-enums';
 import { Animal } from '@cms-interfaces';
 import { ScreenSizeService } from '@cms-services';
-import { ChartDataSets } from 'chart.js';
+import { ChartDataSets, ChartType } from 'chart.js';
 import { Label } from 'ng2-charts';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject, Subscription } from 'rxjs';
@@ -17,7 +17,7 @@ export class WeightComponent implements OnInit, OnDestroy {
   public chartWeights: ChartDataSets[] = [];
   public chartLabels: Label[];
   public chartOptions = { responsive: true };
-  public chartType = 'line';
+  public chartType: ChartType = 'line';
   public chartPlugins = [];
   public showLegend = false;
   public selectedAnimal: Animal;

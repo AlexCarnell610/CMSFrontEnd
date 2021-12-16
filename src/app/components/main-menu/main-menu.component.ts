@@ -99,6 +99,10 @@ export class MainMenuComponent implements OnInit {
     this.router.navigate([PageURLs.Medication], { relativeTo: this.route });
   }
 
+  public treatmentScreen(): void {
+    this.router.navigate([PageURLs.Treatment], { relativeTo: this.route });
+  }
+
   public get loading() {
     return this.loadingService.currentLoadingState;
   }
