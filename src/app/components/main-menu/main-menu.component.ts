@@ -83,7 +83,7 @@ export class MainMenuComponent implements OnInit {
 
   public logout(): void {
     this.auth.logout({
-      returnTo: 'https://' + document.location.host + '/' + PageURLs.Login,
+      returnTo: `https://${window.location.host}/CMSFrontEnd/${PageURLs.Login}`,
     });
   }
 

@@ -5,7 +5,7 @@ export const environment = {
   auth: {
     domain,
     clientId,
-    redirectUri: `https://${window.location.host}/CMSFrontEnd/${PageURLs.Login}`,
+    redirectUri: `https://${window.location.host}/${PageURLs.Login}`,
     audience,
   },
   pusher: {
