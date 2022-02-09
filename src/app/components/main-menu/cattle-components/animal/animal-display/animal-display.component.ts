@@ -17,6 +17,7 @@ import {
 } from '@cms-services';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'cms-animal-display',
@@ -118,7 +119,15 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
       this.$selectedAnimal.subscribe((animal) => {
         if (animal) {
           this.$sire = this.store.pipe(
-            select(selectBullByTag, { tagNumber: animal.sire.tagNumber })
+            select(selectBullByTag, { tagNumber: animal.sire.tagNumber }),
+            map((bull) => {
+              return {
+                ...bull,
+                tagNumber: bull.tagNumber.includes('UK000')
+                  ? 'NA'
+                  : bull.tagNumber,
+              };
+            })
           );
         }
       })

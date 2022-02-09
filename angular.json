@@ -37,7 +37,6 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "proxyConfig": "src/prod.proxy.conf.json",
 
               "optimization": true,
               "outputHashing": "all",

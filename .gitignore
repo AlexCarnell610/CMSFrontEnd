@@ -6,6 +6,8 @@
 /out-tsc
 # Only exists if Bazel was run
 /bazel-out
+*.tar.gz
+*.tar
 
 # dependencies
 /node_modules

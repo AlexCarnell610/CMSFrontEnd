@@ -24,6 +24,7 @@ export class MappingService {
       mappedAnimals.push({
         tagNumber: value.tag_number,
         managementTag: value.management_tag,
+        name: value.name,
         gender: value.sex,
         ai:
           value.ai_history.length === 0

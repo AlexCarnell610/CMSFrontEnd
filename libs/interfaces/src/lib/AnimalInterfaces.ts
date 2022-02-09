@@ -47,6 +47,7 @@ export interface Animal extends BaseAnimal {
   notes?: string;
   breed: string;
   registered: boolean;
+  name?: string;
 }
 
 export interface AI {
