@@ -8,3 +8,11 @@
   font-size: 90%;
   font-weight: 600;
 }
+
+.list-group-flush > .list-group-item {
+  position: relative;
+  display: block;
+  padding: 0;
+  background-color: #fff;
+  border: 0px solid rgba(0, 0, 0, 0.125);
+}

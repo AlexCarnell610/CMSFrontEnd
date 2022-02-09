@@ -37,6 +37,7 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
+
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -68,7 +69,8 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "CMSFrontEnd:build:production"
+              "browserTarget": "CMSFrontEnd:build:production",
+              "proxyConfig": "src/prod.proxy.conf.json"
             }
           }
         },

@@ -12,6 +12,12 @@
     >
   </div>
   <ul class="list-group list-group-flush">
+    <li *ngIf="selectedAnimal.managementTag !== 'null'" class="list-group-item">
+      <strong>Management Tag - </strong> {{ selectedAnimal.managementTag }}
+    </li>
+    <li *ngIf="selectedAnimal.name" class="list-group-item">
+      <strong>Name - </strong> {{ selectedAnimal.name }}
+    </li>
     <li class="list-group-item">
       <strong>Gender - </strong> {{ selectedAnimal.gender }}
     </li>
@@ -79,7 +85,7 @@
       <strong>Sire - </strong
       >{{ sire.name !== "null" ? sire.name : "No sire assigned" }}
       <ul *ngIf="sire.name !== 'null'" style="list-style-type: none">
-        <li>&nbsp;{{ sire.tagNumber }}</li>
+        <li *ngIf="sire.tagNumber !== 'NA'">&nbsp;{{ sire.tagNumber }}</li>
         <li>&nbsp;{{ getBreedName(sire) | titlecase }}</li>
       </ul>
     </li>

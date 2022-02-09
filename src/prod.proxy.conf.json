@@ -1,0 +1,8 @@
+{
+  "/api": {
+    "target": "https://cmsbackend.api:4430",
+    "secure": false,
+    "logLevel": "error",
+    "pathRewrite": { "^/api": "" }
+  }
+}

@@ -16,7 +16,22 @@
     [ngClass]="getCSSForButton(animal)"
     (click)="selectAnimal(animal)"
   >
-    <span class="mr-1">{{ animal.tagNumber }}</span>
+    <span *ngIf="!animal.name" class="mr-1"
+      ><strong>
+        {{ animal.tagNumber }}
+      </strong></span
+    >
+    <ul *ngIf="animal.name" class="mr-1 list-group list-group-flush">
+      <li class="list-group">
+        <strong>
+          {{ animal.tagNumber }}
+        </strong>
+      </li>
+      <li class="list-group">
+        {{ animal.name ? animal.name : "" }}
+      </li>
+    </ul>
+
     <span
       *ngIf="page !== 'registration'"
       class="badge badge-info badge-pill align-self-center"

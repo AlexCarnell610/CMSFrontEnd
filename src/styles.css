@@ -15,7 +15,7 @@
 
 .cms-animal-list {
   max-width: 450px;
-  height: 40vh;
+  height: 50vh;
   overflow: hidden;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
