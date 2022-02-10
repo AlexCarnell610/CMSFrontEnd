@@ -1,12 +1,12 @@
 import { PageURLs } from '@cms-enums';
-import { audience, clientId, domain } from '../../auth_config.json';
+import * as authConf from '../../auth_config.json';
 export const environment = {
-  production: true,
+  production: false,
   auth: {
-    domain,
-    clientId,
+    domain: authConf.domain,
+    clientId: authConf.clientId,
     redirectUri: `https://${window.location.host}/CMSFrontEnd/${PageURLs.Login}`,
-    audience,
+    audience: authConf.audience,
   },
   pusher: {
     key: '2c99d4674e8e6f7e2397',
