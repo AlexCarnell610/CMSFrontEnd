@@ -5,7 +5,6 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class LoadingPaneService {
-  constructor() {}
   private _loadingState: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private counter = 0;
 

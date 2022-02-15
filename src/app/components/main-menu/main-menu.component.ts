@@ -5,7 +5,7 @@ import { Modals, PageURLs } from '@cms-enums';
 import { Animal } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { getMaleOver36Months, getUnregisteredCalves } from '@cms-ngrx/animal';
-import { LoadingPaneService } from '@cms-services';
+import { LoadingPaneService, ScreenSizeService } from '@cms-services';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment';
 import { NgxSmartModalService } from 'ngx-smart-modal';
@@ -31,10 +31,12 @@ export class MainMenuComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly store: Store<RootState>,
     private readonly loadingService: LoadingPaneService,
-    private readonly modalService: NgxSmartModalService
+    private readonly modalService: NgxSmartModalService,
+    private screenWidth: ScreenSizeService
   ) {}
 
   ngOnInit() {
+    console.warn(this.screenWidth.screenWidth);
     this.$oldMales = this.store.pipe(select(getMaleOver36Months));
     this.$unregCalves = this.store.pipe(select(getUnregisteredCalves)).pipe(
       map((animals) =>
