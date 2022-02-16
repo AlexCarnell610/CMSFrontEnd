@@ -32,13 +32,17 @@
     <li class="list-group-item">
       <strong>Breed - </strong>{{ getBreedName(selectedAnimal) | titlecase }}
     </li>
-    <li class="list-group-item">
-      <strong>Dam - </strong
-      >{{
-        selectedAnimal.dam.tagNumber === "UK000000000000"
-          ? "Not provided"
-          : selectedAnimal.dam.tagNumber
-      }}
+    <li class="list-group-item d-flex">
+      <strong>Dam -&nbsp;</strong
+      ><span class="flex-grow-1">{{
+        damTagNotProvided() ? "Not provided" : selectedAnimal.dam.tagNumber
+      }}</span>
+      <span
+        *ngIf="!damTagNotProvided()"
+        (click)="goToDam(selectedAnimal)"
+        class="badge badge-pill badge-info"
+        >Go to Dam</span
+      >
     </li>
     <li
       class="list-group-item d-flex justify-content-between"

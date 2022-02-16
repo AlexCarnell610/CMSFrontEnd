@@ -9,6 +9,7 @@ import {
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Animal, Bull } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
+import { getAnimalByTag } from '@cms-ngrx/animal';
 import { selectBullByTag } from '@cms-ngrx/bull';
 import {
   AnimalBreedService,
@@ -17,7 +18,7 @@ import {
 } from '@cms-services';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 
 @Component({
   selector: 'cms-animal-display',
@@ -27,6 +28,7 @@ import { map } from 'rxjs/operators';
 export class AnimalDisplayComponent implements OnInit, OnDestroy {
   @Input() $selectedAnimal: BehaviorSubject<Animal> = new BehaviorSubject(null);
   @Output() editAnimal: EventEmitter<Animal> = new EventEmitter();
+  @Output() goToDamOutput: EventEmitter<Animal> = new EventEmitter();
   public $sire: Observable<Bull>;
   public isEditNotes = false;
   public hasChangedNotes = false;
@@ -48,6 +50,15 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
     this.trackSire();
     this.trackAnimalChanges();
     this.trackNotesChanges();
+  }
+
+  public goToDam(animal: Animal) {
+    this.store
+      .select(getAnimalByTag(animal.dam.tagNumber))
+      .pipe(take(1))
+      .subscribe((dam) => {
+        this.goToDamOutput.emit(dam);
+      });
   }
 
   public getBreedName(animal: Animal): string {
@@ -75,6 +86,10 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
   public cancelEdit() {
     this.isEditNotes = false;
     this.notesControl().setValue(this.notes);
+  }
+
+  public damTagNotProvided(): boolean {
+    return this.$selectedAnimal.value.dam.tagNumber === 'UK000000000000';
   }
 
   public getCSSForNotesEdit() {
@@ -119,7 +134,7 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
       this.$selectedAnimal.subscribe((animal) => {
         if (animal) {
           this.$sire = this.store.pipe(
-            select(selectBullByTag, { tagNumber: animal.sire.tagNumber }),
+            select(selectBullByTag(animal.sire.tagNumber)),
             map((bull) => {
               return {
                 ...bull,

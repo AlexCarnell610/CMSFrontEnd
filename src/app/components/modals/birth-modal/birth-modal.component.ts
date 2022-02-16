@@ -261,8 +261,6 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private getNewCalf(): Animal {
-    console.warn(this.isRegistered);
-
     return {
       tagNumber: this.calfTag.value,
       managementTag: 'null',
@@ -447,9 +445,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
         this.calfTag.disable();
         this.calfSelect.enable();
       }
-      this.$calves = this.store.pipe(
-        select(getCalves, { tagNumber: this.animal.tagNumber })
-      );
+      this.$calves = this.store.pipe(select(getCalves(this.animal.tagNumber)));
       this.trackCalfSelect();
       this.setInitialSires();
     });

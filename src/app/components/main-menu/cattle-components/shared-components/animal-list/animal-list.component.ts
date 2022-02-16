@@ -112,7 +112,7 @@ export class AnimalListComponent implements OnInit, OnDestroy {
   private pushNextAnimal(animal: Animal) {
     this.subscriptions.add(
       this.store
-        .pipe(select(getAnimalByTag, { tagNumber: animal.tagNumber }))
+        .pipe(select(getAnimalByTag(animal.tagNumber)))
         .subscribe((ani) => {
           this.$currentAnimal.next(ani);
         })
@@ -166,8 +166,10 @@ export class AnimalListComponent implements OnInit, OnDestroy {
   }
 
   private getSearchedAnimals(animals: Animal[], value: string): Animal[] {
-    return animals.filter((animal) =>
-      animal.tagNumber.toLowerCase().includes(value.toLowerCase())
+    return animals.filter(
+      (animal) =>
+        animal.tagNumber.toLowerCase().includes(value.toLowerCase()) ||
+        animal.name?.toLowerCase().includes(value.toLowerCase())
     );
   }
 

@@ -16,6 +16,7 @@ export class AnimalComponent {
   public $selectedAnimal: BehaviorSubject<Animal> = new BehaviorSubject(null);
   public isAdd: boolean;
   public $sire: Observable<Bull>;
+  public selectedAnimal: Animal;
 
   constructor(
     private readonly router: Router,

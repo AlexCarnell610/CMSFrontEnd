@@ -40,6 +40,7 @@ enum FormControls {
   Sire = 'sire',
   Breed = 'breed',
   Registered = 'registered',
+  Name = 'name',
 }
 @Component({
   selector: 'cms-animal-modal',
@@ -109,6 +110,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
                 ? this.breed.value
                 : this.breedService.getCodeFromBreed(this.breed.value),
               registered: this.isRegistered,
+              name: this.name.value ? this.name.value : null,
             };
             this.animalUpdateService.addAnimal(newAnimal).then(() => {
               this.saveResult.message = 'Animal Saved';
@@ -132,6 +134,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
                 ? this.breed.value
                 : this.breedService.getCodeFromBreed(this.breed.value),
               registered: this.isRegistered,
+              name: this.name.value ? this.name.value : null,
             };
             this.animalUpdateService
               .updateAnimal(this.animal.tagNumber, animalUpdate)
@@ -158,6 +161,14 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
       return 'is-invalid';
     } else if (this.dob.valid && this.dob.dirty) {
       return 'is-valid';
+    }
+  }
+
+  public getCSSClassForName() {
+    if (this.name.valid && this.name.dirty && this.name.value.length > 0) {
+      return 'is-valid';
+    } else {
+      return '';
     }
   }
 
@@ -310,7 +321,8 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
       this.animal?.birthDate.format('yyyy-MM-DD') !== this.dob.value ||
       this.animal?.gender !== this.gender.value ||
       this.breedChanged() ||
-      this.animal?.registered !== this.isRegistered
+      this.animal?.registered !== this.isRegistered ||
+      this.animal?.name !== this.name.value
     );
   }
 
@@ -343,6 +355,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
         this.breedService.getBreedFromCode(this.animal.breed)
       );
       this.registered.setValue(this.animal.registered ? 'yes' : 'no');
+      this.name.setValue(this.animal.name);
     }
   }
 
@@ -367,6 +380,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
         updateOn: 'blur',
       }),
       registered: this.fb.control([], Validators.required),
+      name: this.fb.control([], {}),
     });
   }
 
@@ -405,6 +419,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.gender.markAsDirty();
     this.breed.markAsDirty();
     this.registered.markAsDirty();
+    this.name.markAsDirty();
   }
 
   private trackModalEvents() {
@@ -469,5 +484,9 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   public get registered() {
     return this.animalForm.get(FormControls.Registered);
+  }
+
+  public get name() {
+    return this.animalForm.get(FormControls.Name);
   }
 }

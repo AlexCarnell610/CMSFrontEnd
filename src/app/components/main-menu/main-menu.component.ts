@@ -36,7 +36,6 @@ export class MainMenuComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    console.warn(this.screenWidth.screenWidth);
     this.$oldMales = this.store.pipe(select(getMaleOver36Months));
     this.$unregCalves = this.store.pipe(select(getUnregisteredCalves)).pipe(
       map((animals) =>

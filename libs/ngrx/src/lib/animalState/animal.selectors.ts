@@ -7,12 +7,10 @@ export const selectAnimals = createSelector(selectAll, (animals) => {
   return animals.filter((animal) => animal.tagNumber !== 'UK000000000000');
 });
 
-export const getAnimalByTag = createSelector(
-  selectAnimals,
-  (animals: Animal[], props: { tagNumber: string }) => {
-    return animals.find((animal) => animal.tagNumber === props.tagNumber);
-  }
-);
+export const getAnimalByTag = (tagNumber: string) =>
+  createSelector(selectAnimals, (animals: Animal[]) => {
+    return animals.find((animal) => animal.tagNumber === tagNumber);
+  });
 
 export const getDams = createSelector(selectAnimals, (animals: Animal[]) => {
   return animals.filter(
@@ -34,12 +32,10 @@ export const getMaleOver36Months = createSelector(
   }
 );
 
-export const getCalves = createSelector(
-  selectAnimals,
-  (animals: Animal[], props: { tagNumber: string }) => {
-    return animals.filter((animal) => animal.dam.tagNumber === props.tagNumber);
-  }
-);
+export const getCalves = (tagNumber: string) =>
+  createSelector(selectAnimals, (animals: Animal[]) => {
+    return animals.filter((animal) => animal.dam.tagNumber === tagNumber);
+  });
 
 export const getUnregisteredCalves = createSelector(
   selectAnimals,

@@ -1,6 +1,6 @@
 {
   "/devApi": {
-    "target": "https://cmsDevBackend.api",
+    "target": "https://cmsfrontend.farm:4430",
     "secure": false,
     "logLevel": "debug",
     "pathRewrite": { "^/devApi": "" }
