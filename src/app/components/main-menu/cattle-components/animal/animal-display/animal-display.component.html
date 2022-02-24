@@ -6,7 +6,7 @@
   <div class="card-header d-flex justify-content-between">
     <strong>Tag number - {{ selectedAnimal.tagNumber }}</strong>
     <span
-      class="badge badge-info badge-pill align-self-center"
+      class="btn badge badge-info badge-pill align-self-center"
       (click)="openEditModal()"
       >Edit Animal</span
     >
@@ -37,12 +37,20 @@
       ><span class="flex-grow-1">{{
         damTagNotProvided() ? "Not provided" : selectedAnimal.dam.tagNumber
       }}</span>
-      <span
-        *ngIf="!damTagNotProvided()"
-        (click)="goToDam(selectedAnimal)"
-        class="badge badge-pill badge-info"
-        >Go to Dam</span
-      >
+      <div>
+        <span
+          *ngIf="showGoToChild"
+          (click)="goToChildEmit.emit({})"
+          class="btn badge badge-pill badge-danger mr-1"
+          >Back</span
+        >
+        <span
+          *ngIf="!damTagNotProvided()"
+          (click)="goToDam(selectedAnimal)"
+          class="btn badge badge-pill badge-info"
+          >Go to Dam</span
+        >
+      </div>
     </li>
     <li
       class="list-group-item d-flex justify-content-between"
@@ -72,14 +80,27 @@
         class="d-flex flex-column ml-auto justify-content-center"
       >
         <span
+          *ngIf="!saving"
           class="badge badge-pill"
           [ngClass]="getCSSForNotesEdit()"
           (click)="editNotes()"
           >{{ !isEditNotes ? "Edit Notes" : "Save Changes" }}</span
         >
         <span
+          *ngIf="saving"
+          class="badge badge-pill badge-success"
+          type="button"
+        >
+          <span
+            class="spinner-border cms-disabled-pill spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          Saving...
+        </span>
+        <span
           *ngIf="isEditNotes"
-          class="badge badge-pill badge-danger mt-1 cms-notes-edit"
+          class="btn badge badge-pill badge-danger mt-1 cms-notes-edit"
           (click)="cancelEdit()"
           >Cancel Edit</span
         >

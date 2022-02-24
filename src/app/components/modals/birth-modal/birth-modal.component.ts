@@ -289,12 +289,15 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.isAdd && this.saveResult.success) {
       this.resetForm();
     }
-    timer(time).subscribe(() => {
-      this.statPopover.close();
-      if (this.isAdd && this.saveResult.success) {
-        this.close();
-      }
-    });
+
+    this.subs.add(
+      timer(time).subscribe(() => {
+        this.statPopover.close();
+        if (this.isAdd && this.saveResult.success) {
+          this.close();
+        }
+      })
+    );
   }
 
   private markAllAsDirty() {

@@ -23,6 +23,7 @@ import { PusherService } from 'libs/services/src/pusher.service';
 import * as Moment from 'moment';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { combineLatest, Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'cms-root',
@@ -67,21 +68,23 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     combineLatest([
       this.auth.isLoading$,
       this.loadingService.currentLoadingState,
-    ]).subscribe(([authLoading, dataLoading]) => {
-      if (
-        (dataLoading || authLoading) &&
-        this.location.href.includes(PageURLs.MainMenu)
-      ) {
-        if (!isOpen) {
-          loadingModal.layerPosition = this.modalService.getHigherIndex();
-          loadingModal.open(true);
-          isOpen = true;
+    ])
+      .pipe(debounceTime(300))
+      .subscribe(([authLoading, dataLoading]) => {
+        if (
+          (dataLoading || authLoading) &&
+          this.location.href.includes(PageURLs.MainMenu)
+        ) {
+          if (!isOpen) {
+            loadingModal.layerPosition = this.modalService.getHigherIndex();
+            loadingModal.open(true);
+            isOpen = true;
+          }
+        } else {
+          loadingModal.close();
+          isOpen = false;
         }
-      } else {
-        loadingModal.close();
-        isOpen = false;
-      }
-    });
+      });
   }
 
   @HostListener('window:resize', ['$event'])

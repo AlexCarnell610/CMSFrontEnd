@@ -27,12 +27,15 @@ import { map, take } from 'rxjs/operators';
 })
 export class AnimalDisplayComponent implements OnInit, OnDestroy {
   @Input() $selectedAnimal: BehaviorSubject<Animal> = new BehaviorSubject(null);
+  @Input() showGoToChild: boolean;
   @Output() editAnimal: EventEmitter<Animal> = new EventEmitter();
   @Output() goToDamOutput: EventEmitter<Animal> = new EventEmitter();
+  @Output() goToChildEmit: EventEmitter<any> = new EventEmitter();
   public $sire: Observable<Bull>;
   public isEditNotes = false;
   public hasChangedNotes = false;
   public notesGroup: FormGroup = new FormGroup({});
+  public saving = false;
   private subscriptions: Subscription = new Subscription();
   private animalTagNumber: string = null;
   private notes: string = null;
@@ -59,6 +62,10 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
       .subscribe((dam) => {
         this.goToDamOutput.emit(dam);
       });
+  }
+
+  public backToChild() {
+    this.goToChildEmit.emit({});
   }
 
   public getBreedName(animal: Animal): string {
@@ -96,7 +103,7 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
     return !this.isEditNotes
       ? 'badge-info'
       : this.hasChangedNotes
-      ? 'badge-success cms-notes-edit'
+      ? 'badge-success cms-notes-edit btn'
       : 'badge-success cms-disabled-pill cms-notes-edit';
   }
 
@@ -113,9 +120,12 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
   }
 
   private updateNotes() {
+    this.saving = true;
     this.animalUpdate
       .updateAnimal(this.animalTagNumber, { notes: this.notesControl().value })
-      .then(() => {});
+      .then(() => {
+        this.saving = false;
+      });
   }
 
   private trackAnimalChanges() {

@@ -142,7 +142,6 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.saveResult.message = 'Animal Updated';
                 this.saveResult.success = true;
 
-                this.clearForm();
                 this.loadingService.setLoadingState(false);
                 this.handlePopover(1000);
               });
