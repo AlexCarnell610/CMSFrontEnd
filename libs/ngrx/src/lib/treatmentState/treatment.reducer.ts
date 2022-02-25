@@ -17,7 +17,7 @@ export function treatmentReducer(
   action: TreatmentActions
 ): TreatmentState {
   switch (action.type) {
-    case TreatmentActionTypes.LoadTreatmentsSuccess: {
+    case TreatmentActionTypes.LoadTreatmentData: {
       return treatmentAdapter.setAll(action.payload.treatments, state);
     }
     default:

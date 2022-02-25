@@ -1,0 +1,66 @@
+<ngx-smart-modal #treatmentModal identifier="treatmentModal">
+  <div *ngIf="selectedMedication$ | async as selectedMedication">
+    <h4 class="text-center">Add Treatment</h4>
+    <h5 class="text-center">{{ selectedMedication.name }}</h5>
+    <div class="cms-form">
+      <form [formGroup]="parentForm" class="mb-3 mt2">
+        <div
+          class="form-group"
+          [ngClass]="{ 'was-validated': treatmentGroupControl.dirty }"
+        >
+          <label for="treatmentGroup">Treatment group</label>
+
+          <input
+            formControlName="treatmentGroup"
+            id="treatmentGroup"
+            type="text"
+            class="form-control"
+            required
+          />
+          <div class="invalid-feedback">
+            <cms-form-errors
+              [errors]="treatmentGroupControl.errors"
+            ></cms-form-errors>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="dose">Treatment Dose</label>
+          <div class="input-group" [ngClass]="getCSSForDose()">
+            <input
+              formControlName="dose"
+              id="dose"
+              type="number"
+              class="form-control"
+              required
+              max="1000"
+            />
+            <div class="input-group-append">
+              <span class="input-group-text">ml</span>
+            </div>
+          </div>
+          <div class="invalid-feedback">
+            <cms-form-errors
+              [errors]="doseControl.errors"
+              [units]="'ml'"
+            ></cms-form-errors>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="date">Treatment Date</label>
+          <input
+            formControlName="date"
+            id="date"
+            type="date"
+            class="form-control"
+            [ngClass]="getCSSForDate()"
+          />
+          <div class="invalid-feedback">
+            <cms-form-errors [errors]="dateControl.errors"></cms-form-errors>
+          </div>
+        </div>
+        <button class="btn btn-success" (click)="save()">Save</button>
+      </form>
+    </div>
+  </div>
+</ngx-smart-modal>

@@ -11,6 +11,18 @@ export function yes() {
   return 'ok';
 }
 
+export function treatmentDateValidator(): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    let date = moment(control.value);
+    if (date.isAfter(moment.now())) {
+      return { date: true };
+    } else if (date.isBefore(moment().subtract(1, 'year'))) {
+      return { dateTooOld: true };
+    }
+    return null;
+  };
+}
+
 export const selectValidator: ValidatorFn = (control: FormControl) => {
   if (control.value !== 'invalid') {
     return null;
@@ -37,11 +49,15 @@ export function weighDateValidator(): ValidatorFn {
     const weightDate = formGroup.get('date');
     const weightSelect = formGroup.get('weightSelect');
     const animalControl = formGroup.get('animalControl');
+
     if (weightDate.errors?.date) {
       weightDate.setErrors({ date: true });
+    } else if (weightDate.errors?.required) {
+      weightDate.setErrors({ required: true });
     } else {
       weightDate.setErrors(null);
     }
+
     let output: { [key: string]: any } = null;
     if (weightType && weightDate.value && animalControl.value) {
       const weights = (animalControl.value as Animal).weightData;
@@ -63,9 +79,10 @@ export function weighDateValidator(): ValidatorFn {
               !afterIntermediateWeights(intermediateWeights, inputDate)
             ) {
               weightDate.setErrors({
-                saleAfterInter: intermediateWeights[
-                  intermediateWeights.length - 1
-                ].weightDate.format('DD/MM/YYYY'),
+                saleAfterInter:
+                  intermediateWeights[
+                    intermediateWeights.length - 1
+                  ].weightDate.format('DD/MM/YYYY'),
               });
             } else if (!initialWeight) {
               weightType.setErrors({ noInitial: true });
@@ -86,9 +103,8 @@ export function weighDateValidator(): ValidatorFn {
               !beforeIntermediateWeights(intermediateWeights, inputDate)
             ) {
               weightDate.setErrors({
-                initialBeforeInter: intermediateWeights[0].weightDate.format(
-                  'DD/MM/YYYY'
-                ),
+                initialBeforeInter:
+                  intermediateWeights[0].weightDate.format('DD/MM/YYYY'),
               });
             } else {
               weightDate.setErrors(null);

@@ -109,4 +109,10 @@ export class HttpService {
       })
     );
   }
+
+  public addTreatment(treatment: Treatment): Observable<Treatment> {
+    return this.http.post<Treatment>(environment.api + HttpUrls.PostTreatment, {
+      ...treatment,
+    });
+  }
 }

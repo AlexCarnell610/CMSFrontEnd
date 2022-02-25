@@ -33,7 +33,7 @@
             value="{{ medication.id }}"
           >
             {{ medication.name }} -
-            {{ medication.expiry | date: "dd/MM/yyyy" }} -
+            {{ medication.expiry.toDate() | date: "dd/MM/yyyy" }} -
             {{ medication.batchNo | uppercase }}
           </option>
         </select>
@@ -44,8 +44,11 @@
           ></cms-form-errors>
         </div>
       </div>
-      <button class="btn btn-primary" (click)="openTreatmentModal()">
+      <button class="btn btn-success" (click)="openTreatmentModal()">
         Add Treatment
+      </button>
+      <button class="btn btn-info float-right" (click)="viewTreatments()">
+        View Treatments
       </button>
     </form>
   </div>

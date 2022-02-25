@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Modals, PageURLs } from '@cms-enums';
 import { Medication } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
+import { treatmentDateValidator } from '@cms-validators';
 import { select, Store } from '@ngrx/store';
 import { selectInDateMedications } from 'libs/ngrx/src/lib/medicationState';
 import { NgxSmartModalService } from 'ngx-smart-modal';
@@ -13,6 +14,7 @@ export enum MedicationFormControls {
   Medication = 'medication',
   TreatmentGroup = 'treatmentGroup',
   Dose = 'dose',
+  Date = 'date',
 }
 
 @Component({
@@ -43,8 +45,12 @@ export class TreatmentComponent implements OnInit {
   private setUpForm() {
     this.form = this._fb.group({
       medication: this._fb.control([], Validators.required),
-      treatmentGroup: this._fb.control([]),
-      dose: this._fb.control([]),
+      treatmentGroup: this._fb.control([], Validators.required),
+      dose: this._fb.control([], Validators.required),
+      date: this._fb.control(
+        [],
+        Validators.compose([Validators.required, treatmentDateValidator()])
+      ),
     });
   }
 
@@ -57,5 +63,9 @@ export class TreatmentComponent implements OnInit {
     if (this.medication.valid) {
       this.modalService.get(Modals.Treatment).open();
     }
+  }
+
+  public viewTreatments() {
+    console.log('Go To Treatments');
   }
 }

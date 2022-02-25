@@ -1,15 +1,16 @@
 <div *ngIf="errors && !(isRadio || isDropDown)">
   <span *ngIf="errors.required">This field is required. </span>
   <span *ngIf="errors.min"
-    >Value should be more than {{ errors.min.min }}Kg.
+    >Value should be more than {{ errors.min.min }}{{ units ? units : "Kg" }}.
   </span>
   <span *ngIf="errors.max"
-    >Value should be less than {{ errors.max.max }}Kg.
+    >Value should be less than {{ errors.max.max }}{{ units ? units : "Kg" }}.
   </span>
   <span *ngIf="errors.pattern"
     >Should follow the pattern: "UK" followed by 12 numbers.</span
   >
   <span *ngIf="errors.date">Date can't be in the future.</span>
+  <span *ngIf="errors.dateTooOld">Date shouldn't be older than a year.</span>
   <span *ngIf="errors.initialBeforeInter"
     >Initial date should be before first intermediate date
     <strong>{{ errors.initialBeforeInter }}</strong></span

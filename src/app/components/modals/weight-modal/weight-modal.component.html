@@ -22,7 +22,7 @@
               *ngFor="let weight of animal.weightData"
               value="{{ weight.id }}"
             >
-              {{ weight.weightDate | date: "dd/MM/yyyy" }} -
+              {{ weight.weightDate.toDate() | date: "dd/MM/yyyy" }} -
               {{ weight.weight }} Kg
             </option>
           </select>
@@ -36,10 +36,7 @@
 
         <div class="form-group">
           <label for="newWeight">Enter new weight</label>
-          <div
-            class="input-group"
-            [ngClass]="{ 'was-validated': weight.dirty }"
-          >
+          <div class="input-group" [ngClass]="getCSSForWeight()">
             <input
               formControlName="weight"
               class="form-control"
@@ -53,9 +50,9 @@
             <div class="input-group-append">
               <span class="input-group-text">Kg</span>
             </div>
-            <div class="invalid-feedback">
-              <cms-form-errors [errors]="weight.errors"></cms-form-errors>
-            </div>
+          </div>
+          <div class="invalid-feedback">
+            <cms-form-errors [errors]="weight.errors"></cms-form-errors>
           </div>
         </div>
 

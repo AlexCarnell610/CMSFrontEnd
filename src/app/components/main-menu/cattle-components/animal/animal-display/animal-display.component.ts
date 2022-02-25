@@ -68,7 +68,7 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
     this.goToChildEmit.emit({});
   }
 
-  public getBreedName(animal: Animal): string {
+  public getBreedName(animal: Animal | Bull): string {
     return this.breedService.getBreedFromCode(animal.breed);
   }
 

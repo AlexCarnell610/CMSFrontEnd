@@ -107,6 +107,14 @@ export class EditWeightModalComponent
     }
   }
 
+  public getCSSForWeight() {
+    if (this.weight.invalid && this.weight.dirty) {
+      return 'is-invalid was-validated';
+    } else if (this.weight.valid && this.weight.dirty) {
+      return 'is-valid was-validated';
+    }
+  }
+
   public getCSSClassForDate() {
     if (this.date.invalid && this.date.dirty) {
       return 'is-invalid';
@@ -120,6 +128,8 @@ export class EditWeightModalComponent
   }
 
   public saveChanges() {
+    console.warn(this.date.errors);
+
     this.editWeightForm.markAllAsTouched();
     this.handlePopoverErrors().subscribe((canContinue) => {
       if (this.isAddMode) {

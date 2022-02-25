@@ -20,9 +20,7 @@ export const selectInDateMedications = createSelector(
   }
 );
 
-export const selectMedicationById = createSelector(
-  selectAll,
-  (medications: Medication[], props: { id: number }) => {
-    return medications.find((medication) => medication.id == props.id);
-  }
-);
+export const selectMedicationById = (id: number) =>
+  createSelector(selectAll, (medications: Medication[]) => {
+    return medications.find((medication) => medication.id == id);
+  });

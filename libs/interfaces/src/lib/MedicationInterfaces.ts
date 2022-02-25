@@ -9,7 +9,7 @@ export interface Medication {
 }
 
 export interface Treatment {
-  id: number;
+  id?: number;
   medicationID: number;
   dose: number;
   treatmentGroup?: string;

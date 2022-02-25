@@ -16,7 +16,6 @@ import { MainMenuComponent } from './main-menu.component';
 import { MainMenuRoutingModule } from './main-menu.routing';
 import { MedicationComponent } from './medication-components/medication/medication.component';
 import { TreatmentComponent } from './medication-components/treatment/treatment.component';
-import { TreatmentModalComponent } from './medication-components/treatment/treatment-modal/treatment-modal.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +29,6 @@ import { TreatmentModalComponent } from './medication-components/treatment/treat
     RegistrationComponent,
     MedicationComponent,
     TreatmentComponent,
-    TreatmentModalComponent,
   ],
   imports: [
     CommonModule,

@@ -19,7 +19,7 @@ export function medicationReducer(
   action: MedicationActions
 ): MedicationState {
   switch (action.type) {
-    case MedicationActionTypes.LoadMedicationsSuccess: {
+    case MedicationActionTypes.LoadMedications: {
       return medicationAdapter.setAll(action.payload.medication, state);
     }
     default:

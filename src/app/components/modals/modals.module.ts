@@ -11,6 +11,7 @@ import { AnimalModalComponent } from './animal-modal/animal-modal.component';
 import { BirthModalComponent } from './birth-modal/birth-modal.component';
 import { CalvingStatsModalComponent } from './calving-stats-modal/calving-stats-modal.component';
 import { FormErrorsComponent } from './form-errors/form-errors.component';
+import { TreatmentModalComponent } from './treatment-modal/treatment-modal.component';
 import { WarningDisplayComponent } from './warning-display/warning-display.component';
 import { EditWeightModalComponent } from './weight-modal/weight-modal.component';
 
@@ -21,6 +22,7 @@ const MODALS = [
   BirthModalComponent,
   CalvingStatsModalComponent,
   WarningDisplayComponent,
+  TreatmentModalComponent,
 ];
 
 @NgModule({

@@ -10,6 +10,7 @@ export enum HttpUrls {
   CullUpdate = '/cullUpdate',
   Medication = '/medications',
   Treatments = '/treatments',
+  PostTreatment = '/treatment',
   Root = '/',
 }
 
