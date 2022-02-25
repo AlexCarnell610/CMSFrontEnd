@@ -42,7 +42,8 @@ enum RadioValues {
   styleUrls: ['./weight-modal.component.css'],
 })
 export class EditWeightModalComponent
-  implements OnInit, AfterViewInit, OnDestroy {
+  implements OnInit, AfterViewInit, OnDestroy
+{
   @Input() animal: Animal = null;
   @Input() isAddMode = false;
   @ViewChild('p') popover: NgbPopover;
@@ -86,7 +87,7 @@ export class EditWeightModalComponent
       }
       this.shortLifeSubs.add(
         this.store
-          .pipe(select(getAnimalByTag, { tagNumber: this.animal.tagNumber }))
+          .pipe(select(getAnimalByTag(this.animal.tagNumber)))
           .subscribe((ani) => {
             this.animal = ani;
             this.animalControl.setValue(ani);

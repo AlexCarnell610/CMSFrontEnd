@@ -56,12 +56,12 @@ export class CullUpdateComponent implements OnInit, OnDestroy {
     this.selectedCullUpdate = event;
     this.subs.add(
       this.store
-        .pipe(select(getAnimalByTag, { tagNumber: event.tagNumber }), take(1))
+        .pipe(select(getAnimalByTag(event.tagNumber)), take(1))
         .subscribe((animal) => {
           if (this.$selectedAnimal.getValue()?.tagNumber !== animal.tagNumber) {
             this.$selectedAnimal.next(animal);
             this.store
-              .pipe(select(getCalves, { tagNumber: event.tagNumber }), take(1))
+              .pipe(select(getCalves(event.tagNumber)), take(1))
               .subscribe((calves) => {
                 this.$calves.next(calves);
               });

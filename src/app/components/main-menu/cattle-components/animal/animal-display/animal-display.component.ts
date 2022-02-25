@@ -9,6 +9,7 @@ import {
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Animal, Bull } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
+import { getAnimalByTag } from '@cms-ngrx/animal';
 import { selectBullByTag } from '@cms-ngrx/bull';
 import {
   AnimalBreedService,
@@ -17,7 +18,7 @@ import {
 } from '@cms-services';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 
 @Component({
   selector: 'cms-animal-display',
@@ -26,11 +27,15 @@ import { map } from 'rxjs/operators';
 })
 export class AnimalDisplayComponent implements OnInit, OnDestroy {
   @Input() $selectedAnimal: BehaviorSubject<Animal> = new BehaviorSubject(null);
+  @Input() showGoToChild: boolean;
   @Output() editAnimal: EventEmitter<Animal> = new EventEmitter();
+  @Output() goToDamOutput: EventEmitter<Animal> = new EventEmitter();
+  @Output() goToChildEmit: EventEmitter<any> = new EventEmitter();
   public $sire: Observable<Bull>;
   public isEditNotes = false;
   public hasChangedNotes = false;
   public notesGroup: FormGroup = new FormGroup({});
+  public saving = false;
   private subscriptions: Subscription = new Subscription();
   private animalTagNumber: string = null;
   private notes: string = null;
@@ -50,7 +55,24 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
     this.trackNotesChanges();
   }
 
+<<<<<<< HEAD
   public getBreedName(animal: Animal | Bull): string {
+=======
+  public goToDam(animal: Animal) {
+    this.store
+      .select(getAnimalByTag(animal.dam.tagNumber))
+      .pipe(take(1))
+      .subscribe((dam) => {
+        this.goToDamOutput.emit(dam);
+      });
+  }
+
+  public backToChild() {
+    this.goToChildEmit.emit({});
+  }
+
+  public getBreedName(animal: Animal): string {
+>>>>>>> master
     return this.breedService.getBreedFromCode(animal.breed);
   }
 
@@ -77,11 +99,15 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
     this.notesControl().setValue(this.notes);
   }
 
+  public damTagNotProvided(): boolean {
+    return this.$selectedAnimal.value.dam.tagNumber === 'UK000000000000';
+  }
+
   public getCSSForNotesEdit() {
     return !this.isEditNotes
       ? 'badge-info'
       : this.hasChangedNotes
-      ? 'badge-success cms-notes-edit'
+      ? 'badge-success cms-notes-edit btn'
       : 'badge-success cms-disabled-pill cms-notes-edit';
   }
 
@@ -98,9 +124,12 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
   }
 
   private updateNotes() {
+    this.saving = true;
     this.animalUpdate
       .updateAnimal(this.animalTagNumber, { notes: this.notesControl().value })
-      .then(() => {});
+      .then(() => {
+        this.saving = false;
+      });
   }
 
   private trackAnimalChanges() {
@@ -119,7 +148,7 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
       this.$selectedAnimal.subscribe((animal) => {
         if (animal) {
           this.$sire = this.store.pipe(
-            select(selectBullByTag, { tagNumber: animal.sire.tagNumber }),
+            select(selectBullByTag(animal.sire.tagNumber)),
             map((bull) => {
               return {
                 ...bull,

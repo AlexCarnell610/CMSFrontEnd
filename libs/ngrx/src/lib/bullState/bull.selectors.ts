@@ -6,8 +6,7 @@ export const selectBulls = createSelector(selectAll, (bulls: Bull[]) => {
   return bulls.filter((bull) => bull.tagNumber !== 'null');
 });
 
-export const selectBullByTag = createSelector(
-  selectAll,
-  (bulls: Bull[], props: { tagNumber: string }) =>
-    bulls.find((bull) => bull.tagNumber == props.tagNumber)
-);
+export const selectBullByTag = (tagNumber) =>
+  createSelector(selectAll, (bulls: Bull[]) =>
+    bulls.find((bull) => bull.tagNumber == tagNumber)
+  );

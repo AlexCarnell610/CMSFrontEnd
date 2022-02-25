@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
 import { Modals, PageURLs } from '@cms-enums';
@@ -17,7 +17,7 @@ import { map } from 'rxjs/operators';
   templateUrl: './main-menu.component.html',
   styleUrls: ['./main-menu.component.css'],
 })
-export class MainMenuComponent implements OnInit {
+export class MainMenuComponent implements OnInit, AfterViewInit {
   public $oldMales: Observable<Animal[]>;
   public $allUnregCalves: Observable<{ overdue: Animal[]; unreg: Animal[] }>;
   public selectedAnimal: Animal;
@@ -33,6 +33,8 @@ export class MainMenuComponent implements OnInit {
     private readonly loadingService: LoadingPaneService,
     private readonly modalService: NgxSmartModalService
   ) {}
+
+  ngAfterViewInit() {}
 
   ngOnInit() {
     this.$oldMales = this.store.pipe(select(getMaleOver36Months));

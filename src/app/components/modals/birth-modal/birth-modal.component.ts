@@ -289,12 +289,15 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.isAdd && this.saveResult.success) {
       this.resetForm();
     }
-    timer(time).subscribe(() => {
-      this.statPopover.close();
-      if (this.isAdd && this.saveResult.success) {
-        this.close();
-      }
-    });
+
+    this.subs.add(
+      timer(time).subscribe(() => {
+        this.statPopover.close();
+        if (this.isAdd && this.saveResult.success) {
+          this.close();
+        }
+      })
+    );
   }
 
   private markAllAsDirty() {
@@ -445,9 +448,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
         this.calfTag.disable();
         this.calfSelect.enable();
       }
-      this.$calves = this.store.pipe(
-        select(getCalves, { tagNumber: this.animal.tagNumber })
-      );
+      this.$calves = this.store.pipe(select(getCalves(this.animal.tagNumber)));
       this.trackCalfSelect();
       this.setInitialSires();
     });

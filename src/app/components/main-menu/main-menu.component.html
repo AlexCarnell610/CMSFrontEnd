@@ -11,8 +11,7 @@
         (click)="registrationScreen()"
         ><strong>
           {{ allUnregCalves.overdue.length }}
-          {{ allUnregCalves.overdue.length == 1 ? "calf" : "calves" }}
-          {{ allUnregCalves.overdue.length == 1 ? "is" : "are" }}
+          {{ allUnregCalves.overdue.length == 1 ? "calf is" : "calves are" }}
           overdue registration</strong
         >
         Click to register</span
@@ -25,8 +24,7 @@
         (click)="registrationScreen()"
         ><strong>
           {{ allUnregCalves.unreg.length }}
-          {{ allUnregCalves.unreg.length == 1 ? "calf" : "calves" }}
-          {{ allUnregCalves.unreg.length == 1 ? "is" : "are" }}
+          {{ allUnregCalves.unreg.length == 1 ? "calf is" : "calves are" }}
           unregistered</strong
         >
         Click to reisgter</span
@@ -65,7 +63,7 @@
   <div class="row">
     <div class="col">
       <img
-        class="menu-icon"
+        class="cow-menu-icon"
         src="assets/cowSilhouette.svg"
         alt="CowDataButton"
       />
@@ -100,7 +98,8 @@
             Cull Update
           </button>
           <button
-            class="btn btn-secondary mr-1 menu-buttons"
+            class="btn btn-secondary menu-buttons"
+            style="margin-right: 15px"
             (click)="registrationScreen()"
           >
             Calf Registration

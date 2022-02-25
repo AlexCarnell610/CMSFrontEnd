@@ -16,6 +16,8 @@ export class AnimalComponent {
   public $selectedAnimal: BehaviorSubject<Animal> = new BehaviorSubject(null);
   public isAdd: boolean;
   public $sire: Observable<Bull>;
+  public selectedAnimal: Animal;
+  private previousAnimals: Animal[] = [];
 
   constructor(
     private readonly router: Router,
@@ -39,5 +41,18 @@ export class AnimalComponent {
 
   public animalSelected(event: Animal) {
     this.$selectedAnimal.next(event);
+  }
+
+  public goToDam(dam: Animal): void {
+    this.previousAnimals.push(this.$selectedAnimal.value);
+    this.animalSelected(dam);
+  }
+
+  public get showGoToChild(): boolean {
+    return this.previousAnimals.length > 0;
+  }
+
+  public goToPreviousAnimal(): void {
+    this.animalSelected(this.previousAnimals.pop());
   }
 }

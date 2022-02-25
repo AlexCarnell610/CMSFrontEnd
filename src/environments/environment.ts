@@ -2,14 +2,13 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 import { PageURLs } from '@cms-enums';
-import { audience, clientId, domain } from '../../auth_config.json';
 export const environment = {
   production: false,
   auth: {
-    domain,
-    clientId,
+    domain: 'cattle-management-system.eu.auth0.com',
+    clientId: 'HkkCv3GXyrOhjDwK4y7evcP757A22BPS',
     redirectUri: `https://${window.location.host}/${PageURLs.Login}`,
-    audience,
+    audience: 'https://cmsBackend.com',
   },
   pusher: {
     key: '2c99d4674e8e6f7e2397',
@@ -25,4 +24,4 @@ export const environment = {
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
  */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.

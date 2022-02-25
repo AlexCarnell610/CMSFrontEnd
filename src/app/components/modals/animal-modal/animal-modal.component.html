@@ -80,6 +80,20 @@
           </div>
         </div>
         <div class="form-group">
+          <label for="name">Enter name (optional)</label>
+          <input
+            formControlName="name"
+            type="text"
+            class="form-control"
+            [ngClass]="getCSSClassForName()"
+            name="name"
+            id="name"
+          />
+          <div class="invalid-feedback">
+            <cms-form-errors [errors]="dob.errors"></cms-form-errors>
+          </div>
+        </div>
+        <div class="form-group">
           <label for="breed">Enter Breed</label>
           <input
             [ngClass]="getCSSClassForBreed()"

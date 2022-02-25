@@ -1,12 +1,11 @@
 import { PageURLs } from '@cms-enums';
-import { audience, clientId, domain } from '../../auth_config.json';
 export const environment = {
-  production: true,
+  production: false,
   auth: {
-    domain,
-    clientId,
+    domain: 'cattle-management-system.eu.auth0.com',
+    clientId: 'HkkCv3GXyrOhjDwK4y7evcP757A22BPS',
     redirectUri: `https://${window.location.host}/CMSFrontEnd/${PageURLs.Login}`,
-    audience,
+    audience: 'https://cmsBackend.com',
   },
   pusher: {
     key: '2c99d4674e8e6f7e2397',

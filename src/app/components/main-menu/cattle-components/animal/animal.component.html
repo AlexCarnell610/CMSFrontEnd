@@ -20,21 +20,25 @@
       ></cms-animal-list>
     </div>
     <div *ngIf="!screenService.isSmallScreen" class="col">
-      <cms-animal-display
-        [$selectedAnimal]="$selectedAnimal"
-        (editAnimal)="editAnimal()"
-      ></cms-animal-display>
+      <ng-container *ngTemplateOutlet="animalDisplay"></ng-container>
     </div>
   </div>
   <div class="row mt-3">
     <div class="col" *ngIf="screenService.isSmallScreen">
-      <cms-animal-display
-        [$selectedAnimal]="$selectedAnimal"
-        (editAnimal)="editAnimal()"
-      ></cms-animal-display>
+      <ng-container *ngTemplateOutlet="animalDisplay"></ng-container>
     </div>
   </div>
 </div>
+
+<ng-template #animalDisplay>
+  <cms-animal-display
+    [$selectedAnimal]="$selectedAnimal"
+    [showGoToChild]="showGoToChild"
+    (editAnimal)="editAnimal()"
+    (goToDamOutput)="goToDam($event)"
+    (goToChildEmit)="goToPreviousAnimal()"
+  ></cms-animal-display>
+</ng-template>
 
 <cms-animal-modal [animal]="$selectedAnimal | async"></cms-animal-modal>
 <cms-warning-display></cms-warning-display>
