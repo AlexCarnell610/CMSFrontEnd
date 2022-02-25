@@ -55,9 +55,6 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
     this.trackNotesChanges();
   }
 
-<<<<<<< HEAD
-  public getBreedName(animal: Animal | Bull): string {
-=======
   public goToDam(animal: Animal) {
     this.store
       .select(getAnimalByTag(animal.dam.tagNumber))
@@ -72,7 +69,6 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
   }
 
   public getBreedName(animal: Animal): string {
->>>>>>> master
     return this.breedService.getBreedFromCode(animal.breed);
   }
 
