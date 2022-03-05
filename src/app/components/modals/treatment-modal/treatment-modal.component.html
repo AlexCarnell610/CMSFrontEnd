@@ -1,28 +1,41 @@
 <ngx-smart-modal #treatmentModal identifier="treatmentModal">
-  <div *ngIf="selectedMedication$ | async as selectedMedication">
+  <div
+    *ngIf="selectedMedication$ | async as selectedMedication"
+    (click)="divClicked($event)"
+  >
     <h4 class="text-center">Add Treatment</h4>
     <h5 class="text-center">{{ selectedMedication.name }}</h5>
     <div class="cms-form">
       <form [formGroup]="parentForm" class="mb-3 mt2">
-        <div
-          class="form-group"
-          [ngClass]="{ 'was-validated': treatmentGroupControl.dirty }"
-        >
-          <label for="treatmentGroup">Treatment group</label>
-
-          <input
-            formControlName="treatmentGroup"
+        <div class="form-group">
+          <label for="treatmentGroup">Treatment Group</label>
+          <ng-select
             id="treatmentGroup"
-            type="text"
-            class="form-control"
-            required
-          />
-          <div class="invalid-feedback">
+            #NgSelect
+            formControlName="treatmentGroup"
+            [items]="treatmentGroups$ | async"
+            [addTag]="true"
+            [multiple]="true"
+            [closeOnSelect]="false"
+            [addTagText]="'Add group: '"
+            groupBy="group"
+            bindValue="value"
+            bindLabel="value"
+            [clearable]="false"
+            (click)="ngSelectClick($event)"
+            [isOpen]="openSelect"
+          >
+          </ng-select>
+          <div
+            *ngIf="treatmentGroupControl.errors && treatmentGroupControl.dirty"
+            class="ng-select-invalid-feedback"
+          >
             <cms-form-errors
               [errors]="treatmentGroupControl.errors"
             ></cms-form-errors>
           </div>
         </div>
+
         <div class="form-group">
           <label for="dose">Treatment Dose</label>
           <div class="input-group" [ngClass]="getCSSForDose()">

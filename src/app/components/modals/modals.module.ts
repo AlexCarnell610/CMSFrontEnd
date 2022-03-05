@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   NgbAlertModule,
   NgbDropdownModule,
   NgbPopoverModule,
 } from '@ng-bootstrap/ng-bootstrap';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { AnimalModalComponent } from './animal-modal/animal-modal.component';
 import { BirthModalComponent } from './birth-modal/birth-modal.component';
@@ -29,6 +30,8 @@ const MODALS = [
   declarations: [...MODALS],
   imports: [
     CommonModule,
+    NgSelectModule,
+    FormsModule,
     NgxSmartModalModule.forChild(),
     ReactiveFormsModule,
     NgbAlertModule,

@@ -43,3 +43,10 @@ export const getUnregisteredCalves = createSelector(
     return animals.filter((animal) => !animal.registered);
   }
 );
+
+export const getTagsForSelect = () =>
+  createSelector(selectAnimals, (animals: Animal[]) =>
+    animals.map((animal) => {
+      return { value: animal.tagNumber, group: 'Tags' };
+    })
+  );

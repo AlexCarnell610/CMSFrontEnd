@@ -11,6 +11,7 @@ import {
   NgbDropdownModule,
   NgbTooltipModule,
 } from '@ng-bootstrap/ng-bootstrap';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -40,6 +41,7 @@ const EFFECTS = [
     LoadingModalComponent,
   ],
   imports: [
+    NgSelectModule,
     BrowserModule,
     AppRoutingModule,
     StoreModule.forRoot(reducers, {
@@ -51,6 +53,7 @@ const EFFECTS = [
     EffectsModule.forRoot(EFFECTS),
     environment.production ? [] : StoreDevtoolsModule.instrument(),
     HttpClientModule,
+    NgSelectModule,
     FormsModule,
     ReactiveFormsModule,
     CommonModule,

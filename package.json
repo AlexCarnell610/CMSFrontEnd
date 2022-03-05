@@ -27,6 +27,7 @@
     "@auth0/auth0-angular": "^1.9.0",
     "@fortawesome/fontawesome-free": "^5.15.1",
     "@ng-bootstrap/ng-bootstrap": "^10",
+    "@ng-select/ng-select": "^8.1.1",
     "@ngrx/effects": "^12.5.1",
     "@ngrx/entity": "^12.5.1",
     "@ngrx/schematics": "^12.5.1",
