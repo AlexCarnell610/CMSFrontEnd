@@ -76,15 +76,15 @@
         <div class="form-check">
           <input
             formControlName="weightType"
-            value="isSale"
+            value="isInitial"
             type="radio"
             name="weightType"
             class="form-check-input"
-            id="isSaleRadio"
+            id="isInitialRadio"
             [ngClass]="getCSSForRadio()"
           />
-          <label for="isSaleRadio" class="form-check-label"
-            >&nbsp; Is sale weight?</label
+          <label for="isInitialRadio" class="form-check-label">
+            &nbsp; Is initial weight?</label
           >
         </div>
         <div class="form-check">
@@ -104,15 +104,15 @@
         <div class="form-check mb-3">
           <input
             formControlName="weightType"
-            value="isInitial"
+            value="isSale"
             type="radio"
             name="weightType"
             class="form-check-input"
-            id="isInitialRadio"
+            id="isSaleRadio"
             [ngClass]="getCSSForRadio()"
           />
-          <label for="isInitialRadio" class="form-check-label">
-            &nbsp; Is initial weight?</label
+          <label for="isSaleRadio" class="form-check-label"
+            >&nbsp; Is sale weight?</label
           >
           <div class="invalid-feedback">
             <cms-form-errors

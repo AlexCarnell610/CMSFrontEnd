@@ -164,7 +164,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public getCSSClassForName() {
-    if (this.name.valid && this.name.dirty && this.name.value.length > 0) {
+    if (this.name.valid && this.name.dirty && this.name.value?.length > 0) {
       return 'is-valid';
     } else {
       return '';
