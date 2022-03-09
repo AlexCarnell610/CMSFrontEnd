@@ -66,6 +66,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       })
     );
   }
+
   ngAfterViewInit() {
     let isOpen = false;
     const loadingModal = this.modalService.get(Modals.Loading);

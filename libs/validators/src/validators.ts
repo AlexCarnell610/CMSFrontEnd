@@ -6,10 +6,7 @@ import {
 } from '@angular/forms';
 import { Animal, AnimalWeight } from '@cms-interfaces';
 import * as moment from 'moment';
-
-export function yes() {
-  return 'ok';
-}
+import { WeightType } from 'src/app/components/modals/weight-modal/weight-modal.component';
 
 export function treatmentDateValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
@@ -43,23 +40,21 @@ export function dateValidator(): ValidatorFn {
   };
 }
 
-export function weighDateValidator(): ValidatorFn {
+export function weighDateValidator(
+  isAddMode: boolean,
+  initialWeightType?: string
+): ValidatorFn {
   return (formGroup: FormGroup): { [key: string]: any } | null => {
     const weightType = formGroup.get('weightType');
     const weightDate = formGroup.get('date');
-    const weightSelect = formGroup.get('weightSelect');
     const animalControl = formGroup.get('animalControl');
 
-    if (weightDate.errors?.date) {
-      weightDate.setErrors({ date: true });
-    } else if (weightDate.errors?.required) {
-      weightDate.setErrors({ required: true });
-    } else {
-      weightDate.setErrors(null);
-    }
-
     let output: { [key: string]: any } = null;
-    if (weightType && weightDate.value && animalControl.value) {
+    if (
+      weightType &&
+      animalControl.value &&
+      !dateAlreadyHasErrors(weightDate)
+    ) {
       const weights = (animalControl.value as Animal).weightData;
       const intermediateWeights = getIntermediateWeights(weights);
       const saleWeight = getSaleWeight(weights);
@@ -67,8 +62,8 @@ export function weighDateValidator(): ValidatorFn {
       const inputDate = moment(weightDate.value);
 
       switch (weightType.value) {
-        case 'isSale':
-          if (saleWeight !== undefined && weightSelect.disabled) {
+        case WeightType.Sale:
+          if (saleWeight !== undefined) {
             weightType.setErrors({ saleWeightExists: true });
           } else {
             if (initialWeight?.weightDate.isSameOrAfter(inputDate, 'day')) {
@@ -76,7 +71,11 @@ export function weighDateValidator(): ValidatorFn {
                 saleAfterInitial: initialWeight.weightDate.format('DD/MM/YYYY'),
               });
             } else if (
-              !afterIntermediateWeights(intermediateWeights, inputDate)
+              (isAddMode &&
+                !afterIntermediateWeights(intermediateWeights, inputDate)) ||
+              (!isAddMode &&
+                !afterIntermediateWeights(intermediateWeights, inputDate) &&
+                initialWeightType !== WeightType.Sale)
             ) {
               weightDate.setErrors({
                 saleAfterInter:
@@ -84,6 +83,7 @@ export function weighDateValidator(): ValidatorFn {
                     intermediateWeights.length - 1
                   ].weightDate.format('DD/MM/YYYY'),
               });
+              weightDate.markAsDirty();
             } else if (!initialWeight) {
               weightType.setErrors({ noInitial: true });
             } else {
@@ -91,8 +91,11 @@ export function weighDateValidator(): ValidatorFn {
             }
           }
           break;
-        case 'isInitial':
-          if (initialWeight !== undefined && weightSelect.disabled) {
+        case WeightType.Initial:
+          if (
+            initialWeight !== undefined &&
+            initialWeightType !== WeightType.Initial
+          ) {
             weightType.setErrors({ initialWeightExists: true });
           } else {
             if (saleWeight?.weightDate.isBefore(inputDate)) {
@@ -111,8 +114,10 @@ export function weighDateValidator(): ValidatorFn {
             }
           }
           break;
-        case 'isIntermediate':
-          if (
+        case WeightType.Intermediate:
+          if (initialWeightType === WeightType.Initial) {
+            weightType.setErrors({ noInitial: true });
+          } else if (
             saleWeight &&
             initialWeight &&
             !inputDate.isBetween(
@@ -122,23 +127,34 @@ export function weighDateValidator(): ValidatorFn {
               '()'
             )
           ) {
-            weightDate.setErrors({
-              intermediateDate: {
-                initialDate: initialWeight.weightDate.format('DD/MM/YYYY'),
-                saleDate: saleWeight.weightDate.format('DD/MM/YYYY'),
-              },
-            });
+            if (
+              isAddMode ||
+              (!isAddMode && initialWeightType !== WeightType.Sale)
+            ) {
+              weightDate.setErrors({
+                intermediateDate: {
+                  initialDate: initialWeight.weightDate.format('DD/MM/YYYY'),
+                  saleDate: saleWeight.weightDate.format('DD/MM/YYYY'),
+                },
+              });
+            }
           } else if (!initialWeight) {
             weightType.setErrors({ noInitial: true });
           } else if (inputDate.diff(initialWeight.weightDate, 'day') <= 0) {
             weightDate.setErrors({
               interBeforeInitial: initialWeight.weightDate.format('DD/MM/YYYY'),
             });
+          } else {
+            weightDate.setErrors(null);
           }
           break;
         default:
+          weightDate.setErrors(null);
+          if (!weightDate.value) weightDate.markAsPristine();
           break;
       }
+    } else {
+      weightDate.setErrors(null);
     }
     return output;
   };
@@ -172,4 +188,11 @@ function beforeIntermediateWeights(
   date: moment.Moment
 ): boolean {
   return weights.every((weight) => date.isBefore(weight.weightDate, 'day'));
+}
+
+function dateAlreadyHasErrors(dateControl: AbstractControl): boolean {
+  return (
+    (dateControl.errors?.required || dateControl.errors?.date) &&
+    dateControl.dirty
+  );
 }
