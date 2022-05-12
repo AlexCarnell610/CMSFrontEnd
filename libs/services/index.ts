@@ -5,4 +5,5 @@ export * from './src/importData.service';
 export * from './src/loading-pane.service';
 export * from './src/pusher.service';
 export * from './src/screen-size.service';
+export * from './src/treatment-update.service';
 export * from './src/warning.service';

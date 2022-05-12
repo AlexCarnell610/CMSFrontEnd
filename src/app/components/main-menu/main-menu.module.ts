@@ -1,9 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbDropdownModule,
+  NgbPopoverModule,
+} from '@ng-bootstrap/ng-bootstrap';
 import { ChartsModule } from 'ng2-charts';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
+import { SharedComponentsModule } from 'src/app/shared-components/shared-components.module';
 import { ModalsModule } from '../modals/modals.module';
 import { AnimalDisplayComponent } from './cattle-components/animal/animal-display/animal-display.component';
 import { AnimalComponent } from './cattle-components/animal/animal.component';
@@ -16,6 +20,7 @@ import { MainMenuComponent } from './main-menu.component';
 import { MainMenuRoutingModule } from './main-menu.routing';
 import { MedicationComponent } from './medication-components/medication/medication.component';
 import { TreatmentComponent } from './medication-components/treatment/treatment.component';
+import { ViewTreatmentsComponent } from './medication-components/treatment/view-treatments/view-treatments.component';
 
 @NgModule({
   declarations: [
@@ -29,16 +34,19 @@ import { TreatmentComponent } from './medication-components/treatment/treatment.
     RegistrationComponent,
     MedicationComponent,
     TreatmentComponent,
+    ViewTreatmentsComponent,
   ],
   imports: [
     CommonModule,
+    SharedComponentsModule,
     MainMenuRoutingModule,
     ChartsModule,
     FormsModule,
     ReactiveFormsModule,
     NgxSmartModalModule.forChild(),
     ModalsModule,
-    NgbModule,
+    NgbPopoverModule,
+    NgbDropdownModule,
   ],
   exports: [MainMenuComponent],
 })

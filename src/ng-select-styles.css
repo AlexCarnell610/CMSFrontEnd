@@ -23,6 +23,11 @@ ng-select.ng-invalid.ng-dirty.ng-select-opened > .ng-select-container {
   color: #dc3545;
 }
 
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
+  background-color: #1e90ff !important;
+  color: #fff8ff !important;
+}
+
 .ng-select-container {
   background: #fff
     url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='4' height='5' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e")

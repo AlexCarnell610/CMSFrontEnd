@@ -9,4 +9,5 @@ export enum PageURLs {
   Registration = 'registration',
   Medication = 'medication',
   Treatment = 'treatment',
+  ViewTreatment = 'view',
 }

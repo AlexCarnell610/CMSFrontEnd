@@ -111,8 +111,12 @@ export class HttpService {
   }
 
   public addTreatment(treatment: Treatment): Observable<Treatment> {
-    return this.http.post<Treatment>(environment.api + HttpUrls.PostTreatment, {
-      ...treatment,
-    });
+    return this.http
+      .post<Treatment>(environment.api + HttpUrls.PostTreatment, {
+        ...treatment,
+      })
+      .pipe(
+        map((response) => this.mappingService.convertSingleTreatment(response))
+      );
   }
 }

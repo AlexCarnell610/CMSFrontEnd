@@ -1,17 +1,4 @@
-<div class="cms-container">
-  <span class="cms-flex-item">
-    <span
-      (click)="backToMain()"
-      class="fas fa-arrow-left ml-md-5 ml-3"
-      placement="right"
-      ngbTooltip="Back to Main Menu"
-    ></span>
-  </span>
-  <h1 class="page-title cms-flex-item">Treatments</h1>
-  <span>
-    <div class="mr-5 invisible cms-blank-arrow"></div>
-  </span>
-</div>
+<cms-header>Treatments</cms-header>
 <div class="card treatment-card">
   <div class="card-body">
     <form [formGroup]="form">
@@ -55,3 +42,4 @@
 </div>
 
 <cms-treatment-modal [parentForm]="form"></cms-treatment-modal>
+<router-outlet></router-outlet>

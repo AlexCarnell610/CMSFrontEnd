@@ -104,19 +104,21 @@ export class MappingService {
   public convertTreatments(response: any): Treatment[] {
     let treatments: Treatment[] = [];
     for (let value of Object.values<any>(response)) {
-      treatments.push({
-        dose: value.dose,
-        date: this.convertDate(value.date),
-        id: value.id,
-        medicationID: value.medication,
-        treatmentGroup: value.treatment_group ? value.treatment_group : null,
-        treatmentTagNos: value.tag_numbers
-          ? value.tag_numbers.split(',')
-          : null,
-      });
+      treatments.push(this.convertSingleTreatment(value));
     }
 
     return treatments;
+  }
+
+  public convertSingleTreatment(value: any): Treatment {
+    return {
+      dose: value.dose,
+      date: this.convertDate(value.date),
+      id: value.id,
+      medicationID: value.medication,
+      treatmentGroup: value.treatment_group ? value.treatment_group : null,
+      treatmentTagNos: value.tag_numbers ? value.tag_numbers.split(',') : null,
+    };
   }
 
   private convertDam(dam: any): Dam {

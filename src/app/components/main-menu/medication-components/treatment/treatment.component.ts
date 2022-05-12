@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Modals, PageURLs } from '@cms-enums';
 import { Medication } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
@@ -22,7 +22,7 @@ export enum MedicationFormControls {
   templateUrl: './treatment.component.html',
   styleUrls: ['./treatment.component.css'],
 })
-export class TreatmentComponent implements OnInit {
+export class TreatmentComponent implements OnInit, AfterViewInit {
   public form: FormGroup;
   public medications$: Observable<Medication[]>;
 
@@ -30,7 +30,8 @@ export class TreatmentComponent implements OnInit {
     private readonly router: Router,
     private readonly _fb: FormBuilder,
     private readonly store: Store<RootState>,
-    private readonly modalService: NgxSmartModalService
+    private readonly modalService: NgxSmartModalService,
+    private readonly route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -38,20 +39,14 @@ export class TreatmentComponent implements OnInit {
     this.medications$ = this.store.pipe(select(selectInDateMedications));
   }
 
-  public backToMain() {
-    this.router.navigate([PageURLs.MainMenu]);
+  ngAfterViewInit(): void {
+    this.modalService
+      .get(Modals.Treatment)
+      .onAnyCloseEventFinished.subscribe(() => this.resetForm());
   }
 
-  private setUpForm() {
-    this.form = this._fb.group({
-      medication: this._fb.control([], Validators.required),
-      treatmentGroup: this._fb.control([], Validators.required),
-      dose: this._fb.control([], Validators.required),
-      date: this._fb.control(
-        [],
-        Validators.compose([Validators.required, treatmentDateValidator()])
-      ),
-    });
+  public backToMain() {
+    this.router.navigate([PageURLs.MainMenu]);
   }
 
   public get medication() {
@@ -66,6 +61,28 @@ export class TreatmentComponent implements OnInit {
   }
 
   public viewTreatments() {
-    console.log('Go To Treatments');
+    this.router.navigate([PageURLs.ViewTreatment], {
+      relativeTo: this.route,
+    });
+  }
+  private setUpForm() {
+    this.form = this._fb.group({
+      medication: this._fb.control([], Validators.required),
+      treatmentGroup: this._fb.control([], Validators.required),
+      dose: this._fb.control([], Validators.required),
+      date: this._fb.control(
+        [],
+        Validators.compose([Validators.required, treatmentDateValidator()])
+      ),
+    });
+  }
+
+  private resetForm() {
+    this.form.reset({
+      [MedicationFormControls.Dose]: '',
+      [MedicationFormControls.Date]: '',
+      [MedicationFormControls.TreatmentGroup]: '',
+      [MedicationFormControls.Medication]: this.medication.value,
+    });
   }
 }

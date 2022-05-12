@@ -7,10 +7,6 @@ import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
 import { reducers } from '@cms-ngrx';
 import { AnimalEffects } from '@cms-ngrx/animal';
 import { BullEffects } from '@cms-ngrx/bull';
-import {
-  NgbDropdownModule,
-  NgbTooltipModule,
-} from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
@@ -58,8 +54,6 @@ const EFFECTS = [
     ReactiveFormsModule,
     CommonModule,
     NgxSmartModalModule.forRoot(),
-    NgbTooltipModule,
-    NgbDropdownModule,
     AuthModule.forRoot({
       ...environment.auth,
       httpInterceptor: {

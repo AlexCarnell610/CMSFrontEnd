@@ -24,6 +24,7 @@
             [clearable]="false"
             (click)="ngSelectClick($event)"
             [isOpen]="openSelect"
+            [placeholder]="'Select...'"
           >
           </ng-select>
           <div
@@ -72,8 +73,18 @@
             <cms-form-errors [errors]="dateControl.errors"></cms-form-errors>
           </div>
         </div>
-        <button class="btn btn-success" (click)="save()">Save</button>
+        <button
+          class="btn btn-success"
+          ngbPopover
+          #popover="ngbPopover"
+          placement="bottom"
+          triggers="manual"
+          (click)="save()"
+        >
+          Save
+        </button>
       </form>
     </div>
   </div>
 </ngx-smart-modal>
+<cms-warning-display></cms-warning-display>

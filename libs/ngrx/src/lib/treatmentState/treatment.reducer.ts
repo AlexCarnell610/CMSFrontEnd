@@ -20,6 +20,9 @@ export function treatmentReducer(
     case TreatmentActionTypes.LoadTreatmentData: {
       return treatmentAdapter.setAll(action.payload.treatments, state);
     }
+    case TreatmentActionTypes.AddTreatment: {
+      return treatmentAdapter.addOne(action.payload.treatment, state);
+    }
     default:
       return state;
   }

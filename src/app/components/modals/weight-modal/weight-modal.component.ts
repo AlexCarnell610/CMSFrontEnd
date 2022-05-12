@@ -130,8 +130,6 @@ export class EditWeightModalComponent
   }
 
   public saveChanges() {
-    console.warn(this.date.errors);
-
     this.editWeightForm.markAllAsTouched();
     this.markAllAsDirty();
     if (this.editWeightForm.valid) {
@@ -330,16 +328,6 @@ export class EditWeightModalComponent
   private valuesEdited(): boolean {
     const initialDate = this.selectedWeight?.weightDate.format('YYYY-MM-DD');
     const weightTypeInput = this.getWeightType();
-    console.warn(
-      this.selectedWeight?.weight !== this.weight.value,
-      initialDate !== this.date.value,
-      this.selectedWeight?.weightType.isInitial !== weightTypeInput.isInitial,
-      this.selectedWeight?.weightType.isSale !== weightTypeInput.isSale
-    );
-    console.warn(
-      this.selectedWeight?.weightType.isInitial !== weightTypeInput.isInitial ||
-        this.selectedWeight?.weightType.isSale !== weightTypeInput.isSale
-    );
 
     return (
       this.selectedWeight?.weight !== this.weight.value ||

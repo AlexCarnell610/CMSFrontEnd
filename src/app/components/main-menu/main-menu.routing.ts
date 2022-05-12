@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { PageURLs } from '@cms-enums';
 import { AnimalComponent } from './cattle-components/animal/animal.component';
 import { BirthComponent } from './cattle-components/birth/birth.component';
 import { CullUpdateComponent } from './cattle-components/cull-update/cull-update.component';
@@ -8,6 +9,7 @@ import { WeightComponent } from './cattle-components/weight/weight.component';
 import { MainMenuComponent } from './main-menu.component';
 import { MedicationComponent } from './medication-components/medication/medication.component';
 import { TreatmentComponent } from './medication-components/treatment/treatment.component';
+import { ViewTreatmentsComponent } from './medication-components/treatment/view-treatments/view-treatments.component';
 
 const routes: Routes = [
   {
@@ -15,32 +17,36 @@ const routes: Routes = [
     component: MainMenuComponent,
   },
   {
-    path: 'weight',
+    path: PageURLs.Weight,
     component: WeightComponent,
   },
   {
-    path: 'animals',
+    path: PageURLs.Animals,
     component: AnimalComponent,
   },
   {
-    path: 'births',
+    path: PageURLs.Births,
     component: BirthComponent,
   },
   {
-    path: 'performance',
+    path: PageURLs.CullUpdate,
     component: CullUpdateComponent,
   },
   {
-    path: 'registration',
+    path: PageURLs.Registration,
     component: RegistrationComponent,
   },
   {
-    path: 'medication',
+    path: PageURLs.Medication,
     component: MedicationComponent,
   },
   {
-    path: 'treatment',
+    path: PageURLs.Treatment,
     component: TreatmentComponent,
+  },
+  {
+    path: `${PageURLs.Treatment}/${PageURLs.ViewTreatment}`,
+    component: ViewTreatmentsComponent,
   },
 ];
 

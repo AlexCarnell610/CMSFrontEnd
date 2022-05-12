@@ -6,6 +6,7 @@ export enum TreatmentActionTypes {
   LoadTreatmentData = '[Treatment] Load Treatment Data',
   LoadTreatmentsFailure = '[Treatment] Load Treatments Failure',
   LoadTreatmentDataFinished = '[Treatment] Load Treatment Data Finished',
+  AddTreatment = '[Treatment] Add New Treatment',
 }
 
 export class RetrieveTreatmentData implements Action {
@@ -26,7 +27,13 @@ export class LoadTreatmentsFailure implements Action {
   constructor(public payload: { error: any }) {}
 }
 
+export class AddTreatment implements Action {
+  readonly type = TreatmentActionTypes.AddTreatment;
+  constructor(public payload: { treatment: Treatment }) {}
+}
+
 export type TreatmentActions =
   | RetrieveTreatmentData
   | LoadTreatmentData
-  | LoadTreatmentsFailure;
+  | LoadTreatmentsFailure
+  | AddTreatment;

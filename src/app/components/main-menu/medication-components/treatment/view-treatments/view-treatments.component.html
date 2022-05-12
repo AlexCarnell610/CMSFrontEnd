@@ -1,0 +1,31 @@
+<cms-header [path]="backPath" [tooltipLabel]="backText">
+  View Treatments
+</cms-header>
+<div class="container mt-5 d-flex flex-column align-items-center">
+  <ul class="list-group">
+    <ul class="btn list-group list-group-horizontal mb-1">
+      <li class="list-group-item list-group-item-dark">Tag</li>
+      <li class="list-group-item list-group-item-dark">Date</li>
+      <li class="list-group-item list-group-item-dark">Treatment</li>
+      <li class="list-group-item list-group-item-dark">Dose</li>
+    </ul>
+    <ul class="btn list-group list-group-horizontal mb-1">
+      <li class="list-group-item">UK722218123456</li>
+      <li class="list-group-item">21/08/2020</li>
+      <li class="list-group-item">Pen Strep</li>
+      <li class="list-group-item">20ml</li>
+    </ul>
+    <ul class="btn list-group list-group-horizontal" (click)="hello()">
+      <li class="list-group-item">UK722218123456</li>
+      <li class="list-group-item">21/08/2020</li>
+      <li class="list-group-item">Pen Strep</li>
+      <li class="list-group-item">20ml</li>
+    </ul>
+  </ul>
+</div>
+
+<div class="container">
+  <div class="row">
+    <ul class="list-group"></ul>
+  </div>
+</div>
