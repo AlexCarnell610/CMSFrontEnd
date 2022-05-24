@@ -45,7 +45,7 @@ import {
 } from 'rxjs';
 import { take, takeWhile } from 'rxjs/operators';
 
-enum FormControls {
+export enum BirthModalFormControls {
   CalfTag = 'calfTag',
   DOB = 'dob',
   Breed = 'calfBreed',
@@ -380,6 +380,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
         ([val, calves]: [string, Animal[]]) => {
           const selectedCalf = calves.find((calf) => calf.tagNumber === val);
           if (!this.isAdd) {
+            this.cleanForm()
             if (selectedCalf) {
               this.calfSelected = true;
               this.selectedCalf = selectedCalf;
@@ -403,24 +404,8 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  private get isRegistered() {
-    return this.registered.value === 'yes';
-  }
-
-  public getCSSForRegisteredNo() {
-    if (this.registered.invalid && this.registered.dirty) {
-      return 'btn-outline-danger';
-    } else if (this.registered.value === 'no') {
-      return 'active';
-    }
-  }
-
-  public getCSSForRegisteredYes() {
-    if (this.registered.invalid && this.registered.dirty) {
-      return 'btn-outline-danger';
-    } else if (this.registered.value === 'yes') {
-      return 'active';
-    }
+  private cleanForm(): void{
+    this.birthForm.markAsPristine()
   }
 
   private trackModalEvents() {
@@ -454,6 +439,10 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  private get isRegistered() {
+    return this.registered.value === 'yes';
+  }
+
   private setUpForm() {
     this.birthForm = this.fb.group({
       calves: this.fb.control([]),
@@ -467,7 +456,10 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
         updateOn: 'blur',
       }),
       calfSire: this.fb.control([], Validators.required),
-      gender: this.fb.control([], Validators.required),
+      gender: this.fb.control([], {
+        validators: [Validators.required],
+        updateOn: 'submit',
+      }),
       registered: this.fb.control([], Validators.required),
     });
   }
@@ -490,30 +482,30 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public get dob() {
-    return this.birthForm.get(FormControls.DOB);
+    return this.birthForm.get(BirthModalFormControls.DOB);
   }
 
   public get calfTag() {
-    return this.birthForm.get(FormControls.CalfTag);
+    return this.birthForm.get(BirthModalFormControls.CalfTag);
   }
 
   public get breed() {
-    return this.birthForm.get(FormControls.Breed);
+    return this.birthForm.get(BirthModalFormControls.Breed);
   }
 
   public get sire() {
-    return this.birthForm.get(FormControls.Sire);
+    return this.birthForm.get(BirthModalFormControls.Sire);
   }
   public get gender() {
-    return this.birthForm.get(FormControls.Gender);
+    return this.birthForm.get(BirthModalFormControls.Gender);
   }
 
   public get calfSelect() {
-    return this.birthForm.get(FormControls.Calves);
+    return this.birthForm.get(BirthModalFormControls.Calves);
   }
 
   public get registered() {
-    return this.birthForm.get(FormControls.Registered);
+    return this.birthForm.get(BirthModalFormControls.Registered);
   }
 
   ngOnDestroy() {

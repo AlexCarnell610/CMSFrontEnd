@@ -8,6 +8,10 @@
   font-size: clamp(12px, 2vw, 16px);
 }
 
+/* .col {
+  min-width: 125px;
+} */
+
 .cow-menu-icon {
   margin-top: 20px;
   width: 8.5vw;
@@ -48,4 +52,8 @@ span {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.dropdown-toggle {
+  white-space: normal;
 }

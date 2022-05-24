@@ -8,16 +8,15 @@ import {
 } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
+import { SharedComponentsModule } from 'src/app/shared-components/shared-components.module';
 import { AnimalModalComponent } from './animal-modal/animal-modal.component';
 import { BirthModalComponent } from './birth-modal/birth-modal.component';
 import { CalvingStatsModalComponent } from './calving-stats-modal/calving-stats-modal.component';
-import { FormErrorsComponent } from './form-errors/form-errors.component';
 import { TreatmentModalComponent } from './treatment-modal/treatment-modal.component';
 import { WarningDisplayComponent } from './warning-display/warning-display.component';
 import { EditWeightModalComponent } from './weight-modal/weight-modal.component';
 
 const MODALS = [
-  FormErrorsComponent,
   EditWeightModalComponent,
   AnimalModalComponent,
   BirthModalComponent,
@@ -37,6 +36,7 @@ const MODALS = [
     NgbAlertModule,
     NgbPopoverModule,
     NgbDropdownModule,
+    SharedComponentsModule
   ],
   exports: [...MODALS, CommonModule, NgxSmartModalModule],
 })

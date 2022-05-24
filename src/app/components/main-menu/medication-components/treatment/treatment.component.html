@@ -1,43 +1,47 @@
 <cms-header>Treatments</cms-header>
-<div class="card treatment-card">
-  <div class="card-body">
-    <form [formGroup]="form">
-      <div
-        *ngIf="medications$ | async as medications"
-        class="form-group"
-        [ngClass]="{ 'was-validated': medication.dirty }"
-      >
-        <label for="medicationDropDown">Medication</label>
-        <select
-          formControlName="medication"
-          id="medicationDropdown"
-          class="form-control custom-select"
-          required
-        >
-          <option value="" disabled>Select One</option>
-          <option
-            *ngFor="let medication of medications"
-            value="{{ medication.id }}"
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="card col-md-6 col-10">
+      <div class="card-body">
+        <form [formGroup]="form">
+          <div
+            *ngIf="medications$ | async as medications"
+            class="form-group mb-2"
+            [ngClass]="{ 'was-validated': medication.dirty }"
           >
-            {{ medication.name }} -
-            {{ medication.expiry.toDate() | date: "dd/MM/yyyy" }} -
-            {{ medication.batchNo | uppercase }}
-          </option>
-        </select>
-        <div class="invalid-feedback">
-          <cms-form-errors
-            [errors]="medication.errors"
-            [isDropDown]="true"
-          ></cms-form-errors>
-        </div>
+            <label for="medicationDropDown">Medication</label>
+            <select
+              formControlName="medication"
+              id="medicationDropdown"
+              class="form-control form-select"
+              required
+            >
+              <option value="" disabled>Select One</option>
+              <option
+                *ngFor="let medication of medications"
+                value="{{ medication.id }}"
+              >
+                {{ medication.name }} -
+                {{ medication.expiry.toDate() | date: "dd/MM/yyyy" }} -
+                {{ medication.batchNo | uppercase }}
+              </option>
+            </select>
+            <div class="invalid-feedback">
+              <cms-form-errors
+                [errors]="medication.errors"
+                [isDropDown]="true"
+              ></cms-form-errors>
+            </div>
+          </div>
+          <button class="btn btn-success" (click)="openTreatmentModal()">
+            Add Treatment
+          </button>
+          <button class="btn btn-info float-end" (click)="viewTreatments()">
+            View Treatments
+          </button>
+        </form>
       </div>
-      <button class="btn btn-success" (click)="openTreatmentModal()">
-        Add Treatment
-      </button>
-      <button class="btn btn-info float-right" (click)="viewTreatments()">
-        View Treatments
-      </button>
-    </form>
+    </div>
   </div>
 </div>
 

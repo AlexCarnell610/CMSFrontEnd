@@ -6,12 +6,13 @@
     </h4>
     <div class="cms-form">
       <form [formGroup]="birthForm">
+        
         <div
           class="form-group"
           [ngClass]="{ 'was-validated': calfSelect.dirty }"
           *ngIf="!isAdd && ($calves | async) as calves"
         >
-          <select class="custom-select" formControlName="calves" required>
+          <select class="form-select" formControlName="calves" required>
             <option value="">Select calf...</option>
             <option *ngFor="let calf of calves" value="{{ calf.tagNumber }}">
               {{ calf.tagNumber }}
@@ -80,7 +81,7 @@
           [ngClass]="{ 'was-validated': sire.dirty }"
         >
           <label for="calfSire">Sire</label>
-          <select class="custom-select" formControlName="calfSire" required>
+          <select class="form-select" formControlName="calfSire" required>
             <option value="">Select sire...</option>
             <option *ngFor="let sire of sires" value="{{ sire.tagNumber }}">
               {{ sire.name }} - {{ sire.tagNumber }} - {{ sire.breed }}
@@ -93,7 +94,8 @@
             ></cms-form-errors>
           </div>
         </div>
-        <div class="mb-2">
+        <cms-bcms-registered [form]="birthForm"></cms-bcms-registered>
+        <!-- <div class="mb-2">
           <label for="registered">Registered on BCMS - &nbsp; </label>
           <div class="btn-group btn-group-toggle" id="registered">
             <label
@@ -132,7 +134,7 @@
               [isRadio]="true"
             ></cms-form-errors>
           </div>
-        </div>
+        </div> -->
         <div class="form-check" [ngClass]="{ 'was-validated': gender.dirty }">
           <input
             formControlName="gender"
@@ -227,7 +229,7 @@
         </div>
         <div>
           <button
-            class="btn btn-success mr-3"
+            class="btn btn-success me-3"
             (click)="save()"
             ngbPopover="Update Success!"
             #errorPop="ngbPopover"

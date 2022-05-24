@@ -16,12 +16,12 @@
     [ngClass]="getCSSForButton(animal)"
     (click)="selectAnimal(animal)"
   >
-    <span *ngIf="!animal.name" class="mr-1"
+    <span *ngIf="!animal.name" class="me-1"
       ><strong>
         {{ animal.tagNumber }}
       </strong></span
     >
-    <ul *ngIf="animal.name" class="mr-1 list-group list-group-flush">
+    <ul *ngIf="animal.name" class="me-1 list-group list-group-flush">
       <li class="list-group">
         <strong>
           {{ animal.tagNumber }}
@@ -34,14 +34,14 @@
 
     <span
       *ngIf="page !== 'registration'"
-      class="btn badge badge-info badge-pill align-self-center"
+      class="btn badge bg-info rounded-pill align-self-center"
       (click)="openEditModal()"
       >Edit {{ pillButtonText }}</span
     >
     <span *ngIf="pillButtonText === 'Animal'"></span>
     <span
       *ngIf="pillButtonText !== 'Animal'"
-      class="btn badge badge-success badge-pill ml-1"
+      class="btn badge bg-success rounded-pill ms-1"
       (click)="openAddModal(animal)"
       >{{ page === "registration" ? "" : "Add" }} {{ pillButtonText }}</span
     >

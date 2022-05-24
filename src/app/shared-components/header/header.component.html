@@ -1,16 +1,35 @@
-<div class="cms-container">
+<!-- <div class="cms-container">
   <span class="cms-flex-item">
     <span
       (click)="backToMain()"
-      class="fas fa-arrow-left ml-md-5 ml-3"
+      class="fas fa-arrow-left ms-md-5 ms-3"
       placement="right"
       ngbTooltip="Back to Main Menu"
     ></span>
   </span>
-  <h1 class="page-title cms-flex-item">
+  <h1 class="page-title cms-flex-item text-center">
     <ng-content></ng-content>
   </h1>
   <span>
-    <div class="mr-5 invisible cms-blank-arrow"></div>
+    <div class="me-5 invisible cms-blank-arrow"></div>
   </span>
+</div> -->
+
+<div class="container">
+  <div class="row align-items-center gx-5">
+    <div class="col-1">
+      <span
+        class="text-start fas fa-arrow-left ms-md-5 ms-3 me-2"
+        (click)="backToMain()"
+        placement="right"
+        ngbTooltip="Back to Main Menu"
+      ></span>
+    </div>
+    <div class="col">
+      <h1 class="page-title cms-flex-item text-center">
+        <ng-content></ng-content>
+      </h1>
+    </div>
+    <div class="col-1"></div>
+  </div>
 </div>

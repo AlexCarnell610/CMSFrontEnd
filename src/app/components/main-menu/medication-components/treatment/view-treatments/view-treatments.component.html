@@ -1,31 +1,63 @@
 <cms-header [path]="backPath" [tooltipLabel]="backText">
   View Treatments
 </cms-header>
-<div class="container mt-5 d-flex flex-column align-items-center">
+<!-- <div class="container mt-5 d-flex flex-column align-items-center">
   <ul class="list-group">
     <ul class="btn list-group list-group-horizontal mb-1">
-      <li class="list-group-item list-group-item-dark">Tag</li>
-      <li class="list-group-item list-group-item-dark">Date</li>
-      <li class="list-group-item list-group-item-dark">Treatment</li>
-      <li class="list-group-item list-group-item-dark">Dose</li>
+      <li class="list-group-item list-group-item-dark flex-fill">Tag</li>
+      <li class="list-group-item list-group-item-dark flex-fill">Date</li>
+      <li class="list-group-item list-group-item-dark flex-fill">Treatment</li>
+      <li class="list-group-item list-group-item-dark flex-fill">Dose</li>
     </ul>
     <ul class="btn list-group list-group-horizontal mb-1">
+      <li class="list-group-item flex-fill">UK722218123456</li>
+      <li class="list-group-item flex-fill">21/08/2020</li>
+      <li class="list-group-item flex-fill">Pen Strep</li>
+      <li class="list-group-item flex-fill">20ml</li>
+    </ul>
+    
       <li class="list-group-item">UK722218123456</li>
       <li class="list-group-item">21/08/2020</li>
       <li class="list-group-item">Pen Strep</li>
       <li class="list-group-item">20ml</li>
-    </ul>
-    <ul class="btn list-group list-group-horizontal" (click)="hello()">
-      <li class="list-group-item">UK722218123456</li>
-      <li class="list-group-item">21/08/2020</li>
-      <li class="list-group-item">Pen Strep</li>
-      <li class="list-group-item">20ml</li>
-    </ul>
+   
   </ul>
-</div>
+</div> -->
+<ng-container *ngIf="!isSmallScreen">
 
-<div class="container">
-  <div class="row">
-    <ul class="list-group"></ul>
+  <div class="container" *ngIf="treatments$ | async as treatments">
+    <div class="row g-0 justify-content-center">
+      <cms-view-treatment-column class="col-4" [title]="'Treatment Group'" [data]="treatments.group"></cms-view-treatment-column>
+      <cms-view-treatment-column class="col-3" [title]="'Medication'" [data]="treatments.medicationName"></cms-view-treatment-column>
+      <cms-view-treatment-column class="col-1" [title]="'Dose'" [data]="treatments.dose"></cms-view-treatment-column>
+      <cms-view-treatment-column class="col-2" [title]="'Date'" [data]="treatments.date"></cms-view-treatment-column>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="isSmallScreen">
+
+
+<div class="container" *ngIf="actualTreatments$ | async as treatments">
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div *ngFor="let treatment of treatments" class="col">
+      <div class="card h-100">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <strong> {{treatment.treatmentGroup ? "Group": "Tag Numbers"}}:</strong> {{ treatment.treatmentGroup ?? treatment.treatmentTagNos }}
+          </li>
+          <li class="list-group-item">
+           <strong> Medication:</strong> {{ treatment.medication.name }}
+          </li>
+          <li class="list-group-item">
+            <strong> Dose:</strong>  {{ treatment.dose }} ml
+          </li>
+          <li class="list-group-item">
+            <strong> Date:</strong> {{ treatment.date.toDate() | date: "dd/MM/yyyy" }} 
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </div>
+</ng-container>

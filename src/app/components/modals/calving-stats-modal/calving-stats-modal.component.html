@@ -4,11 +4,12 @@
     <form [formGroup]="calvingStatForm">
       <div class="mb-2">
         <label
-          [ngClass]="{ 'invalid-label': isAlive.invalid && isAlive.dirty }"
+        [ngClass]="{ 'invalid-label': isAlive.invalid && isAlive.dirty }"
           for="isAlive"
           ><strong>Calf Alive - </strong>&nbsp;
         </label>
-        <div class="btn-group btn-group-toggle" id="isAlive">
+        <cms-yes-no-toggle [form]="calvingStatForm" [controlName]="'isAlive'"></cms-yes-no-toggle>
+        <!-- <div class="btn-group btn-group-toggle" id="isAlive">
           <label
             class="btn btn-outline-primary btn-sm"
             [ngClass]="getCSSForIsAliveYes()"
@@ -35,7 +36,7 @@
               required
             />No
           </label>
-        </div>
+        </div> -->
         <div
           *ngIf="isAlive.invalid && isAlive.dirty"
           class="cms-invalid-feedback"
@@ -153,7 +154,7 @@
             max="5"
             step="1"
           />
-          <div class="input-group-append ml-2">
+          <div class="input-group-append ms-2">
             <div
               class="input-group-text"
               [ngClass]="{ disabled: gettingUp.disabled }"
@@ -163,10 +164,11 @@
           </div>
         </div>
       </div>
-      <label for="firstDrink" [ngClass]="getCSSForDrinkAssistNo()"
+      <label for="firstDrink" [ngClass]="getCSSForDrinkAssistNo()" class="me-2"
         >First feed assisted -
       </label>
-      <div class="btn-group btn-group-toggle ml-2 mb-2" id="firstDrink">
+      <cms-yes-no-toggle [form]="calvingStatForm" [controlName]="'drinkAssistance'"></cms-yes-no-toggle>
+      <!-- <div class="btn-group btn-group-toggle ms-2 mb-2" id="firstDrink">
         <label
           class="btn btn-outline-primary btn-sm"
           [ngClass]="getCSSForDrinkAssistYes()"
@@ -191,7 +193,7 @@
             id="no"
           />No
         </label>
-      </div>
+      </div> -->
       <div
         *ngIf="drinkAssistance.invalid && drinkAssistance.dirty"
         class="cms-invalid-feedback"
@@ -217,14 +219,14 @@
               max="5"
               step="1"
             />
-            <div class="input-group-append ml-2">
+            <div class="input-group-append ms-2">
               <div class="input-group-text">{{ damHealth.value }}</div>
             </div>
           </div>
         </div>
       </div>
       <div>
-        <button class="btn btn-success mr-3" (click)="save()">Save</button>
+        <button class="btn btn-success me-3" (click)="save()">Save</button>
         <button class="btn btn-danger" (click)="close()">Cancel</button>
       </div>
     </form>

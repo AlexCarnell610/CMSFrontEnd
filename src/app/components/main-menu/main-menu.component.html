@@ -3,7 +3,7 @@
 </div>
 
 <div class="container">
-  <div class="row mt-3" *ngIf="$allUnregCalves | async as allUnregCalves">
+  <div class="row row-cols-lg-auto row-cols-sm-1 row-cols-1" *ngIf="$allUnregCalves | async as allUnregCalves">
     <div class="col" *ngIf="allUnregCalves.overdue.length > 0">
       <span
         *ngIf="!(loading | async)"
@@ -17,7 +17,8 @@
         Click to register</span
       >
     </div>
-    <div class="col" *ngIf="allUnregCalves.unreg.length > 0">
+
+    <div class="col-auto" *ngIf="allUnregCalves.unreg.length > 0">
       <span
         *ngIf="!(loading | async)"
         class="alert alert-warning btn"
@@ -30,12 +31,11 @@
         Click to reisgter</span
       >
     </div>
-  </div>
-  <div class="row">
+
     <div class="col" *ngIf="$oldMales | async as oldMales" ngbDropdown>
       <span
         ngbDropdownToggle
-        class="alert alert-warning"
+        class="alert alert-warning d-inline-block"
         *ngIf="!(loading | async) && oldMales.length > 0"
       >
         <strong
@@ -74,25 +74,25 @@
       <div class="btn-toolbar">
         <div class="btn-group">
           <button
-            class="btn btn-secondary mr-1 menu-buttons"
+            class="btn btn-secondary me-1 menu-buttons"
             (click)="weightScreen()"
           >
             Animal Weights
           </button>
           <button
-            class="btn btn-secondary mr-1 menu-buttons"
+            class="btn btn-secondary me-1 menu-buttons"
             (click)="animalScreen()"
           >
             Add/Edit Animal
           </button>
           <button
-            class="btn btn-secondary mr-1 menu-buttons"
+            class="btn btn-secondary me-1 menu-buttons"
             (click)="birthScreen()"
           >
             Add Birth
           </button>
           <button
-            class="btn btn-secondary mr-1 menu-buttons"
+            class="btn btn-secondary me-1 menu-buttons"
             (click)="cullUpdate()"
           >
             Cull Update
@@ -122,18 +122,18 @@
       <div class="btn-toolbar">
         <div class="btn-group">
           <button
-            class="btn btn-secondary mr-1 menu-buttons"
+            class="btn btn-secondary me-1 menu-buttons"
             (click)="treatmentScreen()"
           >
             Treatment
           </button>
           <button
-            class="btn btn-secondary mr-1 menu-buttons"
+            class="btn btn-secondary me-1 menu-buttons"
             (click)="medicationScreen()"
           >
             Medication
           </button>
-          <button class="btn btn-secondary mr-1 menu-buttons" disabled>
+          <button class="btn btn-secondary me-1 menu-buttons" disabled>
             Print Report
           </button>
         </div>
@@ -145,7 +145,7 @@
       <img class="user-menu-icon" src="assets/userIcon.svg" alt="UserIcon" />
       <div class="btn-toolbar">
         <div class="btn-group">
-          <button class="btn btn-danger mr-1 menu-buttons" (click)="logout()">
+          <button class="btn btn-danger me-1 menu-buttons" (click)="logout()">
             Log Out
           </button>
         </div>

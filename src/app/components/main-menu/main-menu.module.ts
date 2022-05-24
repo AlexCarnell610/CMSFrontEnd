@@ -21,6 +21,7 @@ import { MainMenuRoutingModule } from './main-menu.routing';
 import { MedicationComponent } from './medication-components/medication/medication.component';
 import { TreatmentComponent } from './medication-components/treatment/treatment.component';
 import { ViewTreatmentsComponent } from './medication-components/treatment/view-treatments/view-treatments.component';
+import { ViewTreatmentColumnComponent } from './medication-components/treatment/view-treatments/view-treatment-column/view-treatment-column.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { ViewTreatmentsComponent } from './medication-components/treatment/view-
     MedicationComponent,
     TreatmentComponent,
     ViewTreatmentsComponent,
+    ViewTreatmentColumnComponent,
   ],
   imports: [
     CommonModule,

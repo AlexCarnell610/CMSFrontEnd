@@ -89,13 +89,7 @@ export class MappingService {
   public convertMedication(response: any): Medication[] {
     let medication: Medication[] = [];
     for (let value of Object.values<any>(response)) {
-      medication.push({
-        name: value.medication_name,
-        batchNo: value.batch_no,
-        expiry: this.convertDate(value.expiry),
-        size: value.size,
-        id: value.id,
-      });
+      medication.push(this.convertSingleMedication(value));
     }
 
     return medication;
@@ -115,10 +109,20 @@ export class MappingService {
       dose: value.dose,
       date: this.convertDate(value.date),
       id: value.id,
-      medicationID: value.medication,
+      medication: this.convertSingleMedication(value.medication),
       treatmentGroup: value.treatment_group ? value.treatment_group : null,
       treatmentTagNos: value.tag_numbers ? value.tag_numbers.split(',') : null,
     };
+  }
+
+  private convertSingleMedication(value: any): Medication{
+    return {
+      name: value.medication_name,
+      batchNo: value.batch_no,
+      expiry: this.convertDate(value.expiry),
+      size: value.size,
+      id: value.id,
+    }
   }
 
   private convertDam(dam: any): Dam {

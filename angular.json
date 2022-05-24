@@ -20,7 +20,7 @@
             "tsConfig": "tsconfig.app.json",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
-              "src/styles.css",
+              "src/styles.scss",
               "src/ng-select-styles.css",
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
             ],
@@ -260,6 +260,11 @@
     }
   },
   "defaultProject": "CMSFrontEnd",
+  "schematics": {
+    "@schematics/angular:component": {
+      "style": "scss"
+    }
+  },
   "cli": {
     "defaultCollection": "@ngrx/schematics"
   }

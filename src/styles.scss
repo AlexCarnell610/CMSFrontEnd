@@ -8,6 +8,50 @@
   width: 100%;
 } */
 
+$primary: #007bff;
+$danger: #dc3545;
+$success: #28a745;
+$warning: #ffc107;
+$info: #17a2b8;
+$secondary: #6c757d;
+$dark: #343a40;
+@import "node_modules/bootstrap/scss/bootstrap.scss";
+
+.btn-success,
+.btn-info,
+.btn-check:checked + .btn-outline-primary,
+.btn-check:hover + .btn-outline-primary,  .btn-primary {
+  color: #fff !important;
+  // font-weight: bold !important;
+}
+
+[class^="col-"]:nth-child(1) .list-group-item:first-child {
+  border-top-right-radius: 0px;
+}
+
+[class^="col-"]:nth-child(1) .list-group-item:last-child {
+  border-bottom-right-radius: 0px;
+}
+
+[class^="col-"]:not([class^="col-"]:nth-child(1)):not([class^="col-"]:nth-last-child(1))
+  .list-group-item:first-child,
+[class^="col-"]:not([class^="col-"]:nth-child(1)):not([class^="col-"]:nth-last-child(1))
+  .list-group-item:last-child {
+  border-radius: 0px;
+}
+
+[class^="col-"]:nth-last-child(1) .list-group-item:last-child {
+  border-bottom-left-radius: 0px;
+}
+
+[class^="col-"]:nth-last-child(1) .list-group-item:first-child {
+  border-top-left-radius: 0px;
+}
+
+.form-group {
+  margin-bottom: 0.5rem !important;
+}
+
 .cms-blank-arrow {
   width: 28px;
   height: 32px;
@@ -101,6 +145,7 @@ body {
   flex-wrap: nowrap;
   align-items: center;
 }
+
 .cms-flex-item {
   flex-grow: 1;
   flex-shrink: 1;

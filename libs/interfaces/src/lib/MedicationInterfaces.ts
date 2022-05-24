@@ -10,7 +10,8 @@ export interface Medication {
 
 export interface Treatment {
   id?: number;
-  medicationID: number;
+  medication?: Medication;
+  medicationID?: number;
   dose: number;
   treatmentGroup?: string;
   treatmentTagNos?: string[];

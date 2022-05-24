@@ -25,7 +25,8 @@
             <cms-form-errors [errors]="tagNumber.errors"></cms-form-errors>
           </div>
         </div>
-        <div class="mb-2">
+        <cms-bcms-registered [form]="animalForm"></cms-bcms-registered>
+        <!-- <div class="mb-2">
           <label for="registered">Registered on BCMS - &nbsp; </label>
           <div class="btn-group btn-group-toggle" id="registered">
             <label
@@ -64,7 +65,7 @@
               [isRadio]="true"
             ></cms-form-errors>
           </div>
-        </div>
+        </div> -->
         <div class="form-group">
           <label for="birthDate">Enter birth date</label>
           <input
@@ -187,7 +188,7 @@
         >
           Save {{ isAddMode ? "Animal" : "Changes" }}
         </button>
-        <button class="btn btn-danger ml-3" (click)="closeModal()">
+        <button class="btn btn-danger ms-3" (click)="closeModal()">
           Close
         </button>
       </form>

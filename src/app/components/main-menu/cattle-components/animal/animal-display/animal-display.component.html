@@ -6,7 +6,7 @@
   <div class="card-header d-flex justify-content-between">
     <strong>Tag number - {{ selectedAnimal.tagNumber }}</strong>
     <span
-      class="btn badge badge-info badge-pill align-self-center"
+      class="btn badge bg-info rounded-pill align-self-center"
       (click)="openEditModal()"
       >Edit Animal</span
     >
@@ -41,13 +41,13 @@
         <span
           *ngIf="showGoToChild"
           (click)="goToChildEmit.emit({})"
-          class="btn badge badge-pill badge-danger mr-1"
+          class="btn badge rounded-pill bg-danger me-1"
           >Back</span
         >
         <span
           *ngIf="!damTagNotProvided()"
           (click)="goToDam(selectedAnimal)"
-          class="btn badge badge-pill badge-info"
+          class="btn badge rounded-pill bg-info"
           >Go to Dam</span
         >
       </div>
@@ -72,23 +72,23 @@
       <textarea
         *ngIf="isEditNotes"
         formControlName="notes"
-        class="flex-fill mr-1"
+        class="flex-fill me-1"
         style="height: 81px; resize: none"
       ></textarea>
       <span
         *ngIf="selectedAnimal.notes || isEditNotes"
-        class="d-flex flex-column ml-auto justify-content-center"
+        class="d-flex flex-column ms-auto justify-content-center"
       >
         <span
           *ngIf="!saving"
-          class="badge badge-pill"
+          class="badge rounded-pill"
           [ngClass]="getCSSForNotesEdit()"
           (click)="editNotes()"
           >{{ !isEditNotes ? "Edit Notes" : "Save Changes" }}</span
         >
         <span
           *ngIf="saving"
-          class="badge badge-pill badge-success"
+          class="badge rounded-pill bg-success"
           type="button"
         >
           <span
@@ -100,7 +100,7 @@
         </span>
         <span
           *ngIf="isEditNotes"
-          class="btn badge badge-pill badge-danger mt-1 cms-notes-edit"
+          class="btn badge rounded-pill bg-danger mt-1 cms-notes-edit"
           (click)="cancelEdit()"
           >Cancel Edit</span
         >

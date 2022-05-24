@@ -2,3 +2,11 @@
   max-width: 40vw;
   margin: auto;
 }
+
+.container * {
+  font-size: clamp(10pt, 2vw, 16px);
+}
+
+label {
+  font-size: clamp(12pt, 2vw, 15pt) !important; 
+}

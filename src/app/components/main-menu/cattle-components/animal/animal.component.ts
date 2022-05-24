@@ -40,12 +40,14 @@ export class AnimalComponent {
   }
 
   public animalSelected(event: Animal) {
+    this.previousAnimals = []
+    
     this.$selectedAnimal.next(event);
   }
 
   public goToDam(dam: Animal): void {
     this.previousAnimals.push(this.$selectedAnimal.value);
-    this.animalSelected(dam);
+    this.childOrDamSelected(dam);
   }
 
   public get showGoToChild(): boolean {
@@ -53,6 +55,10 @@ export class AnimalComponent {
   }
 
   public goToPreviousAnimal(): void {
-    this.animalSelected(this.previousAnimals.pop());
+    this.childOrDamSelected(this.previousAnimals.pop());
+  }
+
+  private childOrDamSelected(animal: Animal){
+    this.$selectedAnimal.next(animal);
   }
 }

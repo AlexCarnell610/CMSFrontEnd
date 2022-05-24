@@ -1,0 +1,37 @@
+<div [formGroup]="form" class="btn-group" role="group" [id]="controlName">
+  <input
+    type="radio"
+    class="btn-check"
+    [formControlName]="controlName"
+    value="yes"
+    [name]="controlName"
+    [id]="'yes' + controlName"
+    required
+    autocomplete="off"
+  />
+  <label
+    [for]="'yes' + controlName"
+    class="btn btn-outline-primary btn-sm"
+    [ngClass]="getCSSForYes()"
+  >
+    Yes
+  </label>
+
+  <input
+    class="btn-check"
+    [formControlName]="controlName"
+    value="no"
+    type="radio"
+    [name]="controlName"
+    [id]="'no' + controlName"
+    required
+    autocomplete="off"
+  />
+  <label
+    [for]="'no' + controlName"
+    class="btn btn-outline-primary btn-sm"
+    [ngClass]="getCSSForNo()"
+  >
+    No
+  </label>
+</div>

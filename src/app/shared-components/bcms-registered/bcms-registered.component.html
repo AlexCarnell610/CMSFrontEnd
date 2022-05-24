@@ -1,0 +1,52 @@
+<div class="mb-2">
+
+
+  <label for="registered">Registered on BCMS - &nbsp; </label>
+  <cms-yes-no-toggle [form]="form" [controlName]="'registered'"></cms-yes-no-toggle>
+  <!-- <div class="btn-group" role="group" id="registered">
+    <input
+      type="radio"
+      class="btn-check"
+      formControlName="registered"
+      value="yes"
+      name="registered"
+      id="yes"
+      required
+      autocomplete="off"
+    />
+    <label
+      for="yes"
+      class="btn btn-outline-primary btn-sm"
+      [ngClass]="getCSSForRegisteredYes()"
+    >
+      Yes
+    </label>
+
+    <input
+      class="btn-check"
+      formControlName="registered"
+      value="no"
+      type="radio"
+      name="registered"
+      id="no"
+      required
+      autocomplete="off"
+    />
+    <label
+      for="no"
+      class="btn btn-outline-primary btn-sm"
+      [ngClass]="getCSSForRegisteredNo()"
+    >
+      No
+    </label>
+  </div> -->
+  <div
+    *ngIf="registered.invalid && registered.dirty"
+    class="cms-invalid-feedback"
+  >
+    <cms-form-errors
+      [errors]="registered.errors"
+      [isRadio]="true"
+    ></cms-form-errors>
+  </div>
+</div>

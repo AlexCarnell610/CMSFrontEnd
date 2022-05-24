@@ -101,10 +101,10 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
 
   public getCSSForNotesEdit() {
     return !this.isEditNotes
-      ? 'badge-info'
+      ? 'bg-info'
       : this.hasChangedNotes
-      ? 'badge-success cms-notes-edit btn'
-      : 'badge-success cms-disabled-pill cms-notes-edit';
+      ? 'bg-success cms-notes-edit btn'
+      : 'bg-success cms-disabled-pill cms-notes-edit';
   }
 
   private setUpForm() {
