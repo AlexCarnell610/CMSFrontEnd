@@ -28,7 +28,7 @@ import { debounceTime } from 'rxjs/operators';
 @Component({
   selector: 'cms-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   title = 'CMSFrontEnd';

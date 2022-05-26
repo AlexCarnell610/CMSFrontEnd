@@ -23,7 +23,7 @@ import { map, takeWhile } from 'rxjs/operators';
 @Component({
   selector: 'cms-animal-list',
   templateUrl: './animal-list.component.html',
-  styleUrls: ['./animal-list.component.css'],
+  styleUrls: ['./animal-list.component.scss'],
 })
 export class AnimalListComponent implements OnInit, OnDestroy {
   @Output() add: EventEmitter<Animal> = new EventEmitter();

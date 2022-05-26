@@ -9,7 +9,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 @Component({
   selector: 'cms-animal',
   templateUrl: './animal.component.html',
-  styleUrls: ['./animal.component.css'],
+  styleUrls: ['./animal.component.scss'],
 })
 export class AnimalComponent {
   public pageName = PageURLs.Animals;

@@ -11,7 +11,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 @Component({
   selector: 'cms-weight',
   templateUrl: './weight.component.html',
-  styleUrls: ['./weight.component.css'],
+  styleUrls: ['./weight.component.scss'],
 })
 export class WeightComponent implements OnInit, OnDestroy {
   public chartWeights: ChartDataSets[] = [];

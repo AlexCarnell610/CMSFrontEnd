@@ -23,7 +23,7 @@ import { map, take } from 'rxjs/operators';
 @Component({
   selector: 'cms-animal-display',
   templateUrl: './animal-display.component.html',
-  styleUrls: ['./animal-display.component.css'],
+  styleUrls: ['./animal-display.component.scss'],
 })
 export class AnimalDisplayComponent implements OnInit, OnDestroy {
   @Input() $selectedAnimal: BehaviorSubject<Animal> = new BehaviorSubject(null);

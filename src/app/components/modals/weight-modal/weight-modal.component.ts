@@ -39,7 +39,7 @@ export enum WeightType {
 @Component({
   selector: 'cms-weight-modal',
   templateUrl: './weight-modal.component.html',
-  styleUrls: ['./weight-modal.component.css'],
+  styleUrls: ['./weight-modal.component.scss'],
 })
 export class EditWeightModalComponent
   implements OnInit, AfterViewInit, OnDestroy

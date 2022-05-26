@@ -4,7 +4,7 @@ import { ValidationErrors } from '@angular/forms';
 @Component({
   selector: 'cms-form-errors',
   templateUrl: './form-errors.component.html',
-  styleUrls: ['./form-errors.component.css'],
+  styleUrls: ['./form-errors.component.scss'],
 })
 export class FormErrorsComponent {
   constructor() {}

@@ -74,18 +74,22 @@
             </option>
           </datalist>
         </div>
+        <label for="calfSire">Sire</label>
         <div
-          class="form-group"
+          class="input-group"
           *ngIf="$filteredSires | async as sires"
           [ngClass]="{ 'was-validated': sire.dirty }"
         >
-          <label for="calfSire">Sire</label>
+       
           <select class="custom-select" formControlName="calfSire" required>
             <option value="">Select sire...</option>
             <option *ngFor="let sire of sires" value="{{ sire.tagNumber }}">
               {{ sire.name }} - {{ sire.tagNumber }} - {{ sire.breed }}
             </option>
           </select>
+          <div class="input-group-append">
+            <button class="btn btn-secondary" type="button">Add Sire</button>
+          </div>
           <div class="invalid-feedback">
             <cms-form-errors
               [errors]="sire.errors"

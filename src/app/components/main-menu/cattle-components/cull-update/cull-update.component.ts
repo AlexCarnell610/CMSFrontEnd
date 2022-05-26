@@ -15,7 +15,7 @@ import { take } from 'rxjs/operators';
 @Component({
   selector: 'cms-cull-update',
   templateUrl: './cull-update.component.html',
-  styleUrls: ['./cull-update.component.css'],
+  styleUrls: ['./cull-update.component.scss'],
 })
 export class CullUpdateComponent implements OnInit, OnDestroy {
   public cullUpdate: ICullUpdate[] = null;

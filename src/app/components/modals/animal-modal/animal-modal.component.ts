@@ -45,7 +45,7 @@ enum FormControls {
 @Component({
   selector: 'cms-animal-modal',
   templateUrl: './animal-modal.component.html',
-  styleUrls: ['./animal-modal.component.css'],
+  styleUrls: ['./animal-modal.component.scss'],
 })
 export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() animal: Animal = null;

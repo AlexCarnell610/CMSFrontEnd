@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'cms-warning-display',
   templateUrl: './warning-display.component.html',
-  styleUrls: ['./warning-display.component.css'],
+  styleUrls: ['./warning-display.component.scss'],
 })
 export class WarningDisplayComponent implements AfterViewInit, OnDestroy {
   public toast: IToast = null;

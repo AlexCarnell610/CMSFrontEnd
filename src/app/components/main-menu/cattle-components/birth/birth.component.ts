@@ -8,7 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 @Component({
   selector: 'cms-birth',
   templateUrl: './birth.component.html',
-  styleUrls: ['./birth.component.css'],
+  styleUrls: ['./birth.component.scss'],
 })
 export class BirthComponent {
   public pageName = PageURLs.Births;
