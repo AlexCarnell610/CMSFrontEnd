@@ -49,8 +49,6 @@ export class CullUpdateService {
       };
       interUpdate.push(convertedUpdate);
     });
-    console.warn("TEST");
-    
     return interUpdate;
   }
 }
