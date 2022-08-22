@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Animal, AnimalWeight } from '@cms-interfaces';
+import { Animal, AnimalWeight, Bull } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import {
   AddAnimal,
@@ -7,6 +7,7 @@ import {
   UpdateAnimal,
   UpdateAnimalWeight,
 } from '@cms-ngrx/animal';
+import { AddBull, UpdateBull, UpsertBull } from '@cms-ngrx/bull';
 import { HttpService } from '@cms-services/http';
 import { Store } from '@ngrx/store';
 
@@ -75,5 +76,18 @@ export class AnimalUpdateService {
         resolve(true);
       });
     });
+  }
+
+  public addBull(bull: Bull): Promise<boolean>{
+    console.warn("ADD BULL OUTSIDE PROMISE");
+    
+    return new Promise(resolve => {
+      this.httpService.addBull(bull).subscribe(res => {
+        console.warn("ADD BULL", res);
+        
+        this.store.dispatch(new UpsertBull({bull: res}))
+        resolve(true)
+      })
+    })
   }
 }

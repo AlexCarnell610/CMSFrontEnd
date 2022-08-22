@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoadingPaneService {
+  private _cullUpdateLoading: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private _loadingState: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private counter = 0;
 
@@ -25,5 +26,13 @@ export class LoadingPaneService {
 
   public get currentLoadingState(): BehaviorSubject<boolean> {
     return this._loadingState;
+  }
+
+  get cullUpdateLoading(): Observable<boolean> {
+    return this._cullUpdateLoading.asObservable()
+  }
+
+  setCullUpdateLoading(updating: boolean) {
+    this._cullUpdateLoading.next(updating)
   }
 }

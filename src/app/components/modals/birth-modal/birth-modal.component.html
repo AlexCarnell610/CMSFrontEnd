@@ -55,40 +55,25 @@
             <cms-form-errors [errors]="dob.errors"></cms-form-errors>
           </div>
         </div>
+        <cms-breeds-list [form]="birthForm" [controlName]="'calfBreed'"></cms-breeds-list>
         <div class="form-group">
-          <label for="calfBreed">Breed</label>
-          <input
-            type="text"
-            list="breeds"
-            class="form-control"
-            formControlName="calfBreed"
-            onclick="this.select();"
-            [ngClass]="getCSSForBreed()"
-          />
-          <div class="invalid-feedback">
-            <cms-form-errors [errors]="breed.errors"></cms-form-errors>
-          </div>
-          <datalist id="breeds">
-            <option *ngFor="let breed of breeds" value="{{ breed.code }}">
-              {{ breed.breed }}
-            </option>
-          </datalist>
-        </div>
-        <label for="calfSire">Sire</label>
-        <div
-          class="input-group"
-          *ngIf="$filteredSires | async as sires"
-          [ngClass]="{ 'was-validated': sire.dirty }"
-        >
-       
-          <select class="custom-select" formControlName="calfSire" required>
-            <option value="">Select sire...</option>
-            <option *ngFor="let sire of sires" value="{{ sire.tagNumber }}">
-              {{ sire.name }} - {{ sire.tagNumber }} - {{ sire.breed }}
-            </option>
-          </select>
-          <div class="input-group-append">
-            <button class="btn btn-secondary" type="button">Add Sire</button>
+          <label for="calfSire">Sire</label>
+          <div
+            class="input-group"
+            *ngIf="$filteredSires | async as sires"
+            [ngClass]="{ 'was-validated': sire.dirty, 'is-invalid': sire.invalid && sire.dirty }"
+          >
+            <select class="custom-select" formControlName="calfSire" required>
+              <option value="">Select sire...</option>
+              <option style="background-color: #ebebeb;" value="addNew" (click)="addSire()">Add new Sire...</option>
+              <option *ngFor="let sire of sires" value="{{ sire.tagNumber }}">
+                {{ sire.name }} - {{ sire.tagNumber }} - {{ sire.breed }}
+              </option>
+             
+            </select>
+            <!-- <div class="input-group-append">
+              <button class="btn btn-secondary" type="button" (click)="addSire()">Add Sire</button>
+            </div> -->
           </div>
           <div class="invalid-feedback">
             <cms-form-errors
@@ -252,3 +237,5 @@
   [stat]="stat"
   (statSaved)="statSaved($event)"
 ></cms-calving-stats-modal>
+
+<cms-bull-modal (sireAdded)="newSire = $event" [form]="birthForm"></cms-bull-modal>

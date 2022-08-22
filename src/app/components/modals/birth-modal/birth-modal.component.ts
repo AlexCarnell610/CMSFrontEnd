@@ -8,9 +8,7 @@ import {
 } from '@angular/core';
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
-  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { AssistanceReason, CalvingAssistance, Modals } from '@cms-enums';
@@ -24,14 +22,14 @@ import {
 } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { getCalves, selectAnimals } from '@cms-ngrx/animal';
-import { selectBulls } from '@cms-ngrx/bull';
+import { selectBullByTag, selectBulls } from '@cms-ngrx/bull';
 import {
   AnimalBreedService,
   AnimalUpdateService,
   LoadingPaneService,
   WarningService,
 } from '@cms-services';
-import { dateValidator } from '@cms-validators';
+import { breedValidator, dateValidator } from '@cms-validators';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment';
@@ -45,7 +43,7 @@ import {
 } from 'rxjs';
 import { take, takeWhile } from 'rxjs/operators';
 
-enum FormControls {
+export enum BirthFormControls {
   CalfTag = 'calfTag',
   DOB = 'dob',
   Breed = 'calfBreed',
@@ -77,6 +75,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   };
   public calfSelected: boolean = false;
   public truncNotes: string = '';
+  public newSire = false;
   private subs: Subscription = new Subscription();
   private longLifeSubs: Subscription = new Subscription();
   private breedSelected: boolean = false;
@@ -99,6 +98,13 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.setUpForm();
     this.setInitialSires();
     this.trackBreedChange();
+
+    this.sire.valueChanges.subscribe((sire) => {
+      if (sire === 'addNew') {
+        this.sire.setValue('');
+        this.addSire();
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -106,27 +112,40 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public save() {
+    console.warn(this.birthForm.getRawValue());
+
     this.hasSaved = true;
     this.subs.add(
       this.handleErrors().subscribe((canContinue) => {
         if (canContinue && isAnimal(canContinue)) {
+          const calf = canContinue;
           this.loadingService.setLoadingState(true);
           if (this.isAdd) {
-            this.animalService.addAnimal(canContinue).then(() => {
-              this.saveResult.message = 'Calf added';
-              this.saveResult.success = true;
-              this.loadingService.setLoadingState(false);
-              this.handlePopover(1500);
-            });
+            if (this.newSire) {
+              this.store
+                .select(selectBullByTag(this.sire.value))
+                .pipe(take(1))
+                .subscribe((bull) => {
+                  this.animalService.addBull(bull).then(() => {
+                    this.saveAnimal(calf);
+                  });
+                });
+            } else {
+              this.saveAnimal(calf);
+            }
           } else {
-            this.animalService
-              .updateAnimal(this.calfSelect.value, canContinue)
-              .then(() => {
-                this.saveResult.message = 'Calf updated';
-                this.saveResult.success = true;
-                this.loadingService.setLoadingState(false);
-                this.handlePopover(1500);
-              });
+            if (this.newSire) {
+              this.store
+                .select(selectBullByTag(this.sire.value))
+                .pipe(take(1))
+                .subscribe((bull) => {
+                  this.animalService.addBull(bull).then(() => {
+                    this.updateAnimal(calf);
+                  });
+                });
+            } else {
+              this.updateAnimal(calf);
+            }
           }
         }
       })
@@ -196,6 +215,32 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public getCSSForCalvingStats(): string {
     return this.hasSaved && !this.stat ? 'invalid-label' : '';
+  }
+
+  public addSire(): void {
+    this.sire.markAsPristine()
+    const sireModal = this.modalService.get(Modals.Sire);
+    sireModal.setData({ isAdd: this.isAdd }, true);
+
+    sireModal.open();
+  }
+
+  private updateAnimal(animal: Animal): void {
+    this.animalService.updateAnimal(this.calfSelect.value, animal).then(() => {
+      this.saveResult.message = 'Calf updated';
+      this.saveResult.success = true;
+      this.loadingService.setLoadingState(false);
+      this.handlePopover(1500);
+    });
+  }
+
+  private saveAnimal(animal: Animal): void {
+    this.animalService.addAnimal(animal).then(() => {
+      this.saveResult.message = 'Calf added';
+      this.saveResult.success = true;
+      this.loadingService.setLoadingState(false);
+      this.handlePopover(1500);
+    });
   }
 
   private handleErrors(): BehaviorSubject<boolean | Animal> {
@@ -361,13 +406,20 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
       combineLatest([this.$sires, this.breed.valueChanges]).subscribe(
         ([sires, breed]: [Bull[], string]) => {
           this.breedSelected = true;
+
           this.$filteredSires.next(
-            sires.filter(
-              (sire) =>
-                breed &&
-                (sire.breed === breed ||
-                  sire.breed === this.breedService.getCodeFromBreed(breed))
-            )
+            breed?.length === 0
+              ? sires
+              : sires.filter((sire) => {
+                  const selectedBreed = breed?.toUpperCase();
+                  const sireBreed = sire.breed?.toUpperCase();
+                  return (
+                    breed &&
+                    (sireBreed === selectedBreed ||
+                      sireBreed ===
+                        this.breedService.getCodeFromBreed(selectedBreed))
+                  );
+                })
           );
         }
       )
@@ -462,8 +514,8 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
         updateOn: 'blur',
       }),
       dob: this.fb.control([], [Validators.required, dateValidator()]),
-      calfBreed: this.fb.control([], {
-        validators: [Validators.required, this.breedValidator()],
+      calfBreed: this.fb.control('', {
+        validators: [Validators.required, breedValidator(this.breedService)],
         updateOn: 'blur',
       }),
       calfSire: this.fb.control([], Validators.required),
@@ -479,41 +531,31 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  private breedValidator(): ValidatorFn {
-    return (control: FormControl): { [key: string]: any } | null => {
-      if (this.breedService.breedExists(control.value)) {
-        return null;
-      } else {
-        return { breed: 'Please choose a breed from the dropdown' };
-      }
-    };
-  }
-
   public get dob() {
-    return this.birthForm.get(FormControls.DOB);
+    return this.birthForm.get(BirthFormControls.DOB);
   }
 
   public get calfTag() {
-    return this.birthForm.get(FormControls.CalfTag);
+    return this.birthForm.get(BirthFormControls.CalfTag);
   }
 
   public get breed() {
-    return this.birthForm.get(FormControls.Breed);
+    return this.birthForm.get(BirthFormControls.Breed);
   }
 
   public get sire() {
-    return this.birthForm.get(FormControls.Sire);
+    return this.birthForm.get(BirthFormControls.Sire);
   }
   public get gender() {
-    return this.birthForm.get(FormControls.Gender);
+    return this.birthForm.get(BirthFormControls.Gender);
   }
 
   public get calfSelect() {
-    return this.birthForm.get(FormControls.Calves);
+    return this.birthForm.get(BirthFormControls.Calves);
   }
 
   public get registered() {
-    return this.birthForm.get(FormControls.Registered);
+    return this.birthForm.get(BirthFormControls.Registered);
   }
 
   ngOnDestroy() {

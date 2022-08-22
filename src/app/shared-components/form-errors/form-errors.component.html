@@ -35,8 +35,9 @@
     Intermediate dates should be after initial date:
     <strong>{{ errors.interBeforeInitial }}</strong>
   </span>
-  <span *ngIf="errors.breed"> {{ errors.breed }}</span>
   <span *ngIf="errors.stats">{{ errors.stats }}</span>
+  <span *ngIf="errors.breed">Please choose a breed from the list</span>
+  <span *ngIf="errors.notSameBreed">Please choose the same breed as the calf</span>
 </div>
 <div *ngIf="errors && isRadio">
   <span *ngIf="errors.noInitial"> No initial weight set. </span>

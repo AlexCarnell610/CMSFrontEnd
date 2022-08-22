@@ -34,6 +34,17 @@ export class CullUpdateService {
     }
   }
 
+  public populateCullUpdate():void {
+    this.loadingService.setCullUpdateLoading(true)
+    this.httpService
+    .getCullUpdate()
+    .pipe(take(1))
+    .subscribe((httpUpdate) => {
+      this._cullUpdate.next(this.convertUpdate(httpUpdate));
+      this.loadingService.setCullUpdateLoading(false)
+    });
+  }
+
   private convertUpdate(update: any): ICullUpdate[] {
     let interUpdate = [];
     Object.entries(update).forEach(([key, value]: [string, any]) => {

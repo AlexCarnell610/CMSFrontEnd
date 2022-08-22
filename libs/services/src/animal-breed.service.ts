@@ -20,7 +20,7 @@ export class AnimalBreedService {
   }
 
   public getBreedFromCode(breed: string) {
-    return this._breedMap.get(breed);
+    return this._breedMap.get(breed?.toUpperCase());
   }
 
   public getCodeFromBreed(searchBreed: string) {
@@ -48,7 +48,7 @@ export class AnimalBreedService {
   }
 
   public isBreedCode(breed: string): boolean {
-    return this._breedMap.get(breed) !== undefined;
+    return this._breedMap.get(breed.toUpperCase()) !== undefined;
   }
 
   get breedCodes() {

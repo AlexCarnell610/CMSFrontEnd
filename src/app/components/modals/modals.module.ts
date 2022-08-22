@@ -10,17 +10,18 @@ import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { AnimalModalComponent } from './animal-modal/animal-modal.component';
 import { BirthModalComponent } from './birth-modal/birth-modal.component';
 import { CalvingStatsModalComponent } from './calving-stats-modal/calving-stats-modal.component';
-import { FormErrorsComponent } from './form-errors/form-errors.component';
 import { WarningDisplayComponent } from './warning-display/warning-display.component';
 import { EditWeightModalComponent } from './weight-modal/weight-modal.component';
+import { BullModalComponent } from './bull-modal/bull-modal.component';
+import { SharedComponentsModule } from 'src/app/shared-components/shared-components.module';
 
 const MODALS = [
-  FormErrorsComponent,
   EditWeightModalComponent,
   AnimalModalComponent,
   BirthModalComponent,
   CalvingStatsModalComponent,
   WarningDisplayComponent,
+  BullModalComponent,
 ];
 
 @NgModule({
@@ -32,6 +33,7 @@ const MODALS = [
     NgbAlertModule,
     NgbPopoverModule,
     NgbDropdownModule,
+    SharedComponentsModule
   ],
   exports: [...MODALS, CommonModule, NgxSmartModalModule],
 })

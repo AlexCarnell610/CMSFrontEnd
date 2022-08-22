@@ -21,6 +21,8 @@ export class MappingService {
     let mappedAnimals: Animal[] = [];
 
     for (let value of Object.values<any>(animalData)) {
+      console.warn(value);
+      
       mappedAnimals.push({
         tagNumber: value.tag_number,
         managementTag: value.management_tag,
@@ -53,15 +55,17 @@ export class MappingService {
   public convertBulls(bullData: Object): Bull[] {
     const convertedBulls: Bull[] = [];
     for (let value of Object.values<any>(bullData)) {
-      let newBull: Bull = {
-        breed: value.breed,
-        name: value.name,
-        tagNumber: value.tag_number,
-      };
-
-      convertedBulls.push(newBull);
+      convertedBulls.push(this.convertBull(value));
     }
     return convertedBulls;
+  }
+
+  public convertBull(value: any): Bull {
+    return {
+      breed: value.breed,
+      name: value.name,
+      tagNumber: value.tag_number,
+    };
   }
 
   public convertWeightData(weightData: any[]): AnimalWeight[] {

@@ -55,6 +55,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
           //would need marker to mark session data as old
           this.store.dispatch(new RetrieveAnimalData());
           this.store.dispatch(new RetreieveBullData());
+          this.cullUpdateService.populateCullUpdate()
           this.pusherService.channel.bind(PusherChannels.CullUpdate, (data) => {
             this.cullUpdateService.cullUpdate = data.animal;
           });

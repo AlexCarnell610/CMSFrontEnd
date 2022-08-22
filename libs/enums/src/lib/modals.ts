@@ -5,4 +5,5 @@ export enum Modals {
   Birth = 'birthModal',
   CalvingStats = 'calvingStats',
   Loading = 'loadingModal',
+  Sire = 'sireModal',
 }

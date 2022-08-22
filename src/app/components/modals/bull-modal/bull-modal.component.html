@@ -1,0 +1,55 @@
+<ngx-smart-modal #sireModal identifier="sireModal">
+  <h4 class="text-center">
+    {{ isAdd ? "Add Sire" : "Edit Sire" }}
+  </h4>
+
+  <div class="cms-form">
+      <form [formGroup]="bullForm">
+          <div class="form-group"  [ngClass]="{ 'was-validated': tag.dirty }">
+            <label for="tagNumber">Tag Number</label>
+            <input
+              name="tag"
+              type="text"
+              class="form-control"
+              id="tagNumber"
+              formControlName="tagNumber"
+              required
+              pattern="^UK\d{12}$"
+            />
+            <div class="invalid-feedback">
+              <cms-form-errors [errors]="tag.errors"></cms-form-errors>
+            </div>
+          </div>
+          <cms-breeds-list [form]="bullForm"></cms-breeds-list>
+          <div class="form-group"  [ngClass]="{ 'was-validated': name.dirty }">
+            <label for="name">Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              formControlName="name"
+              required
+            />
+            <div class="invalid-feedback">
+              <cms-form-errors [errors]="name.errors"></cms-form-errors>
+            </div>
+          </div>
+          <div>
+            <button
+              class="btn btn-success mr-3"
+              (click)="save()"
+              ngbPopover="Please fix errors"
+            #errorPop="ngbPopover"
+            placement="bottom"
+            popoverClass="update-error"
+            triggers="manual"
+            >
+              Save
+            </button>
+            <button class="btn btn-danger" (click)="close()">Cancel</button>
+          </div>
+      </form>
+  </div>
+</ngx-smart-modal>
+
+<cms-warning-display></cms-warning-display>

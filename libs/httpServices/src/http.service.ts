@@ -19,7 +19,7 @@ export class HttpService {
 
   public getAnimalData(): Observable<Animal[]> {
     return this.http.get(environment.api + HttpUrls.Animals).pipe(
-      map((response) => {
+      map((response) => {        
         return this.mappingService.importAnimalData(response);
       })
     );
@@ -86,5 +86,13 @@ export class HttpService {
 
   public getCullUpdate(): Observable<any> {
     return this.http.get(environment.api + HttpUrls.CullUpdate);
+  }
+
+  public addBull(bull: Bull): Observable<Bull> {
+    console.warn("ADD BULL HTTP", bull);
+    
+    return this.http
+      .post(environment.api + HttpUrls.Bull, bull)
+      .pipe(map((res) => this.mappingService.convertBull(res)));
   }
 }

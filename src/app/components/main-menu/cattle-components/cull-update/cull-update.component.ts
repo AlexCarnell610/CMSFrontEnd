@@ -4,7 +4,7 @@ import { PageURLs } from '@cms-enums';
 import { Animal, ICullUpdate } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { getAnimalByTag, getCalves } from '@cms-ngrx/animal';
-import { CullUpdateService, ScreenSizeService } from '@cms-services';
+import { CullUpdateService, LoadingPaneService, ScreenSizeService } from '@cms-services';
 import { select, Store } from '@ngrx/store';
 import { ChartDataSets, ChartOptions, ChartPoint } from 'chart.js';
 import { Moment } from 'moment';
@@ -36,10 +36,14 @@ export class CullUpdateComponent implements OnInit, OnDestroy {
     private readonly cullUpdateService: CullUpdateService,
     private readonly router: Router,
     private readonly store: Store<RootState>,
-    private readonly screenSizeService: ScreenSizeService
+    private readonly screenSizeService: ScreenSizeService,
+    private readonly loadingService: LoadingPaneService
   ) {}
 
   ngOnInit(): void {
+    this.loadingService.cullUpdateLoading.subscribe(loading => {
+      this.loadingService.setLoadingState(loading)
+    })
     this.setUpChartOptions();
     this.updateGraph();
     this.cullUpdateService.getCullUpdate().subscribe((cullUpdate) => {

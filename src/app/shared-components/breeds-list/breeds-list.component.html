@@ -1,0 +1,20 @@
+<div class="form-group" [formGroup]="form">
+    <label for="breed">Breed</label>
+    <input
+      type="text"
+      list="breeds"
+      class="form-control"
+      [formControlName]="controlName"
+      onclick="this.select();"
+      [ngClass]="getCSSForBreed()"
+      style="text-transform: uppercase;"
+    />
+    <div class="invalid-feedback">
+      <cms-form-errors [errors]="breed.errors"></cms-form-errors>
+    </div>
+    <datalist id="breeds">
+      <option *ngFor="let breed of breeds" value="{{ breed.code }}">
+        {{ breed.breed }}
+      </option>
+    </datalist>
+  </div>

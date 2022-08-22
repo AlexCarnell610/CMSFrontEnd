@@ -24,7 +24,7 @@ import {
   LoadingPaneService,
   WarningService,
 } from '@cms-services';
-import { dateValidator } from '@cms-validators';
+import { breedValidator, dateValidator } from '@cms-validators';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment';
@@ -367,7 +367,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
       gender: this.fb.control([], Validators.required),
       dob: this.fb.control([], [Validators.required, dateValidator()]),
       breed: this.fb.control([], {
-        validators: this.breedValidator(),
+        validators: breedValidator(this.breedService),
         updateOn: 'blur',
       }),
       dam: this.fb.control(['UK'], {
@@ -445,15 +445,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  private breedValidator(): ValidatorFn {
-    return (control: FormControl): { [key: string]: any } | null => {
-      if (this.breedService.breedExists(control.value)) {
-        return null;
-      } else {
-        return { breed: 'Please choose a breed from the dropdown' };
-      }
-    };
-  }
+  
 
   ngOnDestroy() {
     this.subs.unsubscribe();
