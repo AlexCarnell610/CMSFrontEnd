@@ -1,6 +1,6 @@
 import { waitForAsync } from '@angular/core/testing';
 import { Modals, PageURLs } from '@cms-enums';
-import { Animal } from '@cms-interfaces';
+import { IAnimal } from '@cms-interfaces';
 import { take } from 'rxjs/operators';
 import { AnimalComponent } from './animal.component';
 
@@ -13,7 +13,7 @@ describe('AnimalComponent', () => {
     mockAnimal;
 
   beforeAll(() => {
-    mockAnimal = { tagNumber: 'TAGNUMBER' } as Animal;
+    mockAnimal = { tagNumber: 'TAGNUMBER' } as IAnimal;
   });
 
   beforeEach(() => {

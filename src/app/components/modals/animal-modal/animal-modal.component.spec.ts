@@ -1,7 +1,7 @@
 import { fakeAsync, tick } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { Gender, Modals } from '@cms-enums';
-import { Animal, bull } from '@cms-interfaces';
+import { IAnimal, bull } from '@cms-interfaces';
 import { AnimalBreedService } from '@cms-services';
 import { convertedAnimal, mockAnimal } from '@cms-testing-data';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
@@ -221,7 +221,7 @@ describe('AnimalModalComponent', () => {
         });
 
         it('should call add animal on add animal service', () => {
-          let newAnimal: Animal = {
+          let newAnimal: IAnimal = {
             ai: [],
             birthDate: mockFormValue.dob,
             calvingHistory: [],
@@ -338,7 +338,7 @@ describe('AnimalModalComponent', () => {
 
       it('should show a warnign if dam doesnt exist and add dam if continue is true', fakeAsync(() => {
         let damTag = 'UK111111222222';
-        let newDam: Animal = {
+        let newDam: IAnimal = {
           ai: [],
           birthDate: moment(),
           calvingHistory: [],

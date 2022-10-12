@@ -12,27 +12,27 @@
     >
   </div>
   <ul class="list-group list-group-flush">
-    <li *ngIf="selectedAnimal.managementTag !== 'null'" class="list-group-item">
+    <li *ngIf="selectedAnimal.managementTag && selectedAnimal.managementTag !== 'null'" class="list-group-item">
       <strong>Management Tag - </strong> {{ selectedAnimal.managementTag }}
     </li>
     <li *ngIf="selectedAnimal.name" class="list-group-item">
       <strong>Name - </strong> {{ selectedAnimal.name }}
     </li>
     <li class="list-group-item">
-      <strong>Gender - </strong> {{ selectedAnimal.gender }}
+      <strong>Gender - </strong> {{ selectedAnimal.gender ? selectedAnimal.gender : "M" }}
     </li>
-    <li class="list-group-item">
+    <li *ngIf="selectedAnimal.birthDate" class="list-group-item">
       <strong>Date of Birth - </strong
       >{{ selectedAnimal.birthDate | date: "dd MMM yyyy" }}
     </li>
-    <li class="list-group-item">
+    <li *ngIf="selectedAnimal.registered" class="list-group-item">
       <strong>Registered - </strong
       >{{ selectedAnimal.registered ? "Yes" : "No" }}
     </li>
     <li class="list-group-item">
       <strong>Breed - </strong>{{ getBreedName(selectedAnimal) | titlecase }}
     </li>
-    <li class="list-group-item d-flex">
+    <li *ngIf="selectedAnimal.dam" class="list-group-item d-flex">
       <strong>Dam -&nbsp;</strong
       ><span class="flex-grow-1">{{
         damTagNotProvided() ? "Not provided" : selectedAnimal.dam.tagNumber
@@ -52,7 +52,7 @@
         >
       </div>
     </li>
-    <li
+    <li *ngIf="selectedAnimal.dam"
       class="list-group-item d-flex justify-content-between"
       [formGroup]="notesGroup"
     >

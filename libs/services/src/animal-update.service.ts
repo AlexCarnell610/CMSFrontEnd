@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Animal, AnimalWeight, Bull } from '@cms-interfaces';
+import { IAnimal, AnimalWeight, IBull } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import {
   AddAnimal,
@@ -23,7 +23,7 @@ export class AnimalUpdateService {
   public updateAnimalWeight(
     weightId: number,
     weightUpdate: any,
-    animal: Animal
+    animal: IAnimal
   ): Promise<boolean> {
     return new Promise((resolve) => {
       this.httpService.updateWeight(weightId, weightUpdate).subscribe((res) => {
@@ -58,7 +58,7 @@ export class AnimalUpdateService {
     });
   }
 
-  public addAnimal(animal: Animal): Promise<boolean> {
+  public addAnimal(animal: IAnimal): Promise<boolean> {
     return new Promise((resolve) => {
       this.httpService.addAnimal(animal).subscribe((res) => {
         this.store.dispatch(new AddAnimal({ animal: res }));
@@ -78,7 +78,7 @@ export class AnimalUpdateService {
     });
   }
 
-  public addBull(bull: Bull): Promise<boolean>{
+  public addBull(bull: IBull): Promise<boolean>{
     console.warn("ADD BULL OUTSIDE PROMISE");
     
     return new Promise(resolve => {

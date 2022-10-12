@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { AssistanceReason, CalvingAssistance } from '@cms-enums';
 import {
   AI,
-  Animal,
+  IAnimal,
   AnimalWeight,
-  Bull,
+  IBull,
   CalvingHistory,
   CalvingStat,
   Dam,
@@ -17,12 +17,10 @@ import * as moment from 'moment';
 export class MappingService {
   constructor() {}
 
-  public importAnimalData(animalData: Object): Animal[] {
-    let mappedAnimals: Animal[] = [];
+  public importAnimalData(animalData: Object): IAnimal[] {
+    let mappedAnimals: IAnimal[] = [];
 
     for (let value of Object.values<any>(animalData)) {
-      console.warn(value);
-      
       mappedAnimals.push({
         tagNumber: value.tag_number,
         managementTag: value.management_tag,
@@ -52,15 +50,15 @@ export class MappingService {
     return mappedAnimals;
   }
 
-  public convertBulls(bullData: Object): Bull[] {
-    const convertedBulls: Bull[] = [];
+  public convertBulls(bullData: Object): IBull[] {
+    const convertedBulls: IBull[] = [];
     for (let value of Object.values<any>(bullData)) {
       convertedBulls.push(this.convertBull(value));
     }
     return convertedBulls;
   }
 
-  public convertBull(value: any): Bull {
+  public convertBull(value: any): IBull {
     return {
       breed: value.breed,
       name: value.name,

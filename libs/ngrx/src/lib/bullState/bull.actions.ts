@@ -1,4 +1,4 @@
-import { Bull } from '@cms-interfaces';
+import { IBull } from '@cms-interfaces';
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
 
@@ -28,43 +28,43 @@ export class RetreieveBullData implements Action {
 export class LoadBulls implements Action {
   readonly type = BullActionTypes.LoadBulls;
 
-  constructor(public payload: { bulls: Bull[] }) {}
+  constructor(public payload: { bulls: IBull[] }) {}
 }
 
 export class AddBull implements Action {
   readonly type = BullActionTypes.AddBull;
 
-  constructor(public payload: { bull: Bull }) {}
+  constructor(public payload: { bull: IBull }) {}
 }
 
 export class UpsertBull implements Action {
   readonly type = BullActionTypes.UpsertBull;
 
-  constructor(public payload: { bull: Bull }) {}
+  constructor(public payload: { bull: IBull }) {}
 }
 
 export class AddBulls implements Action {
   readonly type = BullActionTypes.AddBulls;
 
-  constructor(public payload: { bulls: Bull[] }) {}
+  constructor(public payload: { bulls: IBull[] }) {}
 }
 
 export class UpsertBulls implements Action {
   readonly type = BullActionTypes.UpsertBulls;
 
-  constructor(public payload: { bulls: Bull[] }) {}
+  constructor(public payload: { bulls: IBull[] }) {}
 }
 
 export class UpdateBull implements Action {
   readonly type = BullActionTypes.UpdateBull;
 
-  constructor(public payload: { bull: Update<Bull> }) {}
+  constructor(public payload: { bull: Update<IBull> }) {}
 }
 
 export class UpdateBulls implements Action {
   readonly type = BullActionTypes.UpdateBulls;
 
-  constructor(public payload: { bulls: Update<Bull>[] }) {}
+  constructor(public payload: { bulls: Update<IBull>[] }) {}
 }
 
 export class DeleteBull implements Action {

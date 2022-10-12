@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Modals } from '@cms-enums';
-import { Animal } from '@cms-interfaces';
+import { IAnimal } from '@cms-interfaces';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject } from 'rxjs';
 
@@ -10,7 +10,7 @@ export interface IToast {
   buttonText?: string;
   isError?: boolean;
   delay?: number;
-  animal?: Animal;
+  animal?: IAnimal;
   showCloseButton?: boolean;
 }
 
@@ -29,7 +29,7 @@ export class WarningService {
   };
   constructor(private readonly modals: NgxSmartModalService) {}
 
-  public show(toast: IToast, animal: Animal = null) {
+  public show(toast: IToast, animal: IAnimal = null) {
     const warningModal = this.modals.get(Modals.Warning);
     warningModal.layerPosition = this.modals.getHigherIndex();
     warningModal.setData({ ...this.defaultError, ...toast, animal }).open();

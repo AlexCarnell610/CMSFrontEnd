@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Modals } from '@cms-enums';
-import { Animal, AnimalWeight, AnimalWeightType } from '@cms-interfaces';
+import { IAnimal, AnimalWeight, AnimalWeightType } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { getAnimalByTag } from '@cms-ngrx/animal';
 import {
@@ -44,7 +44,7 @@ export enum WeightType {
 export class EditWeightModalComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
-  @Input() animal: Animal = null;
+  @Input() animal: IAnimal = null;
   @Input() isAddMode = false;
   @ViewChild('p') popover: NgbPopover;
   private subs: Subscription = new Subscription();

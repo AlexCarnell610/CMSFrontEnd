@@ -1,19 +1,19 @@
-import { Animal } from '@cms-interfaces';
+import { IAnimal } from '@cms-interfaces';
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { createFeatureSelector } from '@ngrx/store';
 import { AnimalActions, AnimalActionTypes } from './animal.actions';
 
 const animalFeatureKey = 'animal';
 
-function sortByTag(a: Animal, b: Animal): number {
+function sortByTag(a: IAnimal, b: IAnimal): number {
   const tagA = Number.parseInt(a.tagNumber.slice(2));
   const tagB = Number.parseInt(b.tagNumber.slice(2));
 
   return tagA < tagB ? -1 : tagA > tagB ? 1 : 0;
 }
-export interface AnimalState extends EntityState<Animal> {}
+export interface AnimalState extends EntityState<IAnimal> {}
 
-export const animalAdapter: EntityAdapter<Animal> = createEntityAdapter<Animal>(
+export const animalAdapter: EntityAdapter<IAnimal> = createEntityAdapter<IAnimal>(
   {
     selectId: (animal) => animal.tagNumber,
     sortComparer: sortByTag,

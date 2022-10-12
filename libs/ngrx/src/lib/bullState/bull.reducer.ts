@@ -1,4 +1,4 @@
-import { Bull } from '@cms-interfaces';
+import { IBull } from '@cms-interfaces';
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { createFeatureSelector } from '@ngrx/store';
 import { BullActions, BullActionTypes } from './bull.actions';
@@ -6,11 +6,11 @@ import { BullActions, BullActionTypes } from './bull.actions';
 
 export const bullsFeatureKey = 'bull';
 
-export interface BullState extends EntityState<Bull> {
+export interface BullState extends EntityState<IBull> {
   // additional entities state properties
 }
 
-export const adapter: EntityAdapter<Bull> = createEntityAdapter<Bull>({
+export const adapter: EntityAdapter<IBull> = createEntityAdapter<IBull>({
   selectId: (bull) => bull.tagNumber
 });
 

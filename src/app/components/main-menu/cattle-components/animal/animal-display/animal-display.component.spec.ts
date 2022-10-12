@@ -1,5 +1,5 @@
 import { FormBuilder } from '@angular/forms';
-import { Bull } from '@cms-interfaces';
+import { IBull } from '@cms-interfaces';
 import { of } from 'rxjs';
 import { AnimalDisplayComponent } from './animal-display.component';
 
@@ -10,7 +10,7 @@ describe('AnimalDisplayComponent', () => {
     mockAnimalUpdateService,
     mockBreedService,
     mockAnimal,
-    mockBull: Bull,
+    mockBull: IBull,
     mockBreed,
     mockControl;
 

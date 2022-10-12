@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Modals, PageURLs } from '@cms-enums';
-import { Animal } from '@cms-interfaces';
+import { IAnimal } from '@cms-interfaces';
 import { ScreenSizeService } from '@cms-services';
 import { ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
@@ -20,8 +20,8 @@ export class WeightComponent implements OnInit, OnDestroy {
   public chartType = 'line';
   public chartPlugins = [];
   public showLegend = false;
-  public selectedAnimal: Animal;
-  public $selectedAnimal: BehaviorSubject<Animal> = new BehaviorSubject(null);
+  public selectedAnimal: IAnimal;
+  public $selectedAnimal: BehaviorSubject<IAnimal> = new BehaviorSubject(null);
   public isAddMode = false;
   public pageName = PageURLs.Weight;
   private subs = new Subscription();

@@ -14,8 +14,8 @@ import {
 import { AssistanceReason, CalvingAssistance, Modals } from '@cms-enums';
 import {
   age,
-  Animal,
-  Bull,
+  IAnimal,
+  IBull,
   CalvingStat,
   IBreedCode,
   isAnimal,
@@ -59,14 +59,14 @@ export enum BirthFormControls {
   styleUrls: ['./birth-modal.component.scss'],
 })
 export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
-  @Input() animal: Animal;
+  @Input() animal: IAnimal;
   @Input() isAdd: boolean = false;
   @ViewChild('errorPop') statPopover: NgbPopover;
   public birthForm: FormGroup;
-  private $sires: Observable<Bull[]>;
-  public $filteredSires: BehaviorSubject<Bull[]> = new BehaviorSubject(null);
+  private $sires: Observable<IBull[]>;
+  public $filteredSires: BehaviorSubject<IBull[]> = new BehaviorSubject(null);
   public breeds: IBreedCode[] = [];
-  public $calves: Observable<Animal[]> = new Observable();
+  public $calves: Observable<IAnimal[]> = new Observable();
   public stat: CalvingStat = null;
   public statErrors = { stats: 'Please add calving statistic' };
   public saveResult: { message: string; success: boolean } = {
@@ -80,7 +80,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   private longLifeSubs: Subscription = new Subscription();
   private breedSelected: boolean = false;
   private hasSaved: boolean = false;
-  private selectedCalf: Animal;
+  private selectedCalf: IAnimal;
 
   constructor(
     private readonly modalService: NgxSmartModalService,
@@ -225,7 +225,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     sireModal.open();
   }
 
-  private updateAnimal(animal: Animal): void {
+  private updateAnimal(animal: IAnimal): void {
     this.animalService.updateAnimal(this.calfSelect.value, animal).then(() => {
       this.saveResult.message = 'Calf updated';
       this.saveResult.success = true;
@@ -234,7 +234,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private saveAnimal(animal: Animal): void {
+  private saveAnimal(animal: IAnimal): void {
     this.animalService.addAnimal(animal).then(() => {
       this.saveResult.message = 'Calf added';
       this.saveResult.success = true;
@@ -243,9 +243,9 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private handleErrors(): BehaviorSubject<boolean | Animal> {
-    const output: BehaviorSubject<boolean | Animal> = new BehaviorSubject(null);
-    let calf: Animal;
+  private handleErrors(): BehaviorSubject<boolean | IAnimal> {
+    const output: BehaviorSubject<boolean | IAnimal> = new BehaviorSubject(null);
+    let calf: IAnimal;
     if (this.isAdd) {
       this.calfSelect.disable();
     } else {
@@ -298,14 +298,14 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     return output;
   }
 
-  private animalExists(animals: Animal[]) {
+  private animalExists(animals: IAnimal[]) {
     return (
       animals.findIndex((animal) => animal.tagNumber === this.calfTag.value) !==
       -1
     );
   }
 
-  private getNewCalf(): Animal {
+  private getNewCalf(): IAnimal {
     return {
       tagNumber: this.calfTag.value,
       managementTag: 'null',
@@ -355,7 +355,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.registered.markAsDirty();
   }
 
-  private valuesEdited(calf: Animal) {
+  private valuesEdited(calf: IAnimal) {
     return (
       calf.birthDate.format('DD-MM-YYYY') !==
         this.selectedCalf?.birthDate.format('DD-MM-YYYY') ||
@@ -404,7 +404,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   private trackBreedChange() {
     this.longLifeSubs.add(
       combineLatest([this.$sires, this.breed.valueChanges]).subscribe(
-        ([sires, breed]: [Bull[], string]) => {
+        ([sires, breed]: [IBull[], string]) => {
           this.breedSelected = true;
 
           this.$filteredSires.next(
@@ -429,7 +429,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   private trackCalfSelect() {
     this.subs.add(
       combineLatest([this.calfSelect.valueChanges, this.$calves]).subscribe(
-        ([val, calves]: [string, Animal[]]) => {
+        ([val, calves]: [string, IAnimal[]]) => {
           const selectedCalf = calves.find((calf) => calf.tagNumber === val);
           if (!this.isAdd) {
             if (selectedCalf) {

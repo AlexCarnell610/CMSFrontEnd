@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { PageURLs } from '@cms-enums';
-import { Animal } from '@cms-interfaces';
+import { IAnimal } from '@cms-interfaces';
 import {
   AnimalUpdateService,
   LoadingPaneService,
@@ -27,7 +27,7 @@ export class RegistrationComponent {
     this.router.navigate([PageURLs.MainMenu]);
   }
 
-  public registerAnimal(animal: Animal) {
+  public registerAnimal(animal: IAnimal) {
     this.warningService
       .show({
         header: `Confirm reigstration of ${animal.tagNumber}`,
@@ -42,7 +42,7 @@ export class RegistrationComponent {
       });
   }
 
-  private markAsRegistered(animal: Animal) {
+  private markAsRegistered(animal: IAnimal) {
     this.animalUpdateService
       .updateAnimal(animal.tagNumber, { registered: true })
       .then(() => {

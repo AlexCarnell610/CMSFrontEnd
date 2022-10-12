@@ -5,14 +5,13 @@ import {
   ValidationErrors,
   ValidatorFn,
 } from '@angular/forms';
-import { Animal, AnimalWeight } from '@cms-interfaces';
+import { IAnimal, AnimalWeight } from '@cms-interfaces';
 import { AnimalBreedService } from '@cms-services';
 import * as moment from 'moment';
 import { WeightType } from 'src/app/components/modals/weight-modal/weight-modal.component';
 
 export function breedValidator(breedService: AnimalBreedService): ValidatorFn {
   return (control: AbstractControl): ValidationErrors|null => {
-    console.warn(control.errors);
 
     if(control.value?.length ===0 ){
       return null
@@ -57,7 +56,7 @@ export function weighDateValidator(
       animalControl.value &&
       !dateAlreadyHasErrors(weightDate)
     ) {
-      const weights = (animalControl.value as Animal).weightData;
+      const weights = (animalControl.value as IAnimal).weightData;
       const intermediateWeights = getIntermediateWeights(weights);
       const saleWeight = getSaleWeight(weights);
       const initialWeight = getInitialWeight(weights);

@@ -1,5 +1,5 @@
 import { Gender } from '@cms-enums';
-import { age, Animal } from '@cms-interfaces';
+import { age, IAnimal } from '@cms-interfaces';
 import { createSelector } from '@ngrx/store';
 import { selectAll } from './animals.reducer';
 
@@ -8,11 +8,11 @@ export const selectAnimals = createSelector(selectAll, (animals) => {
 });
 
 export const getAnimalByTag = (tagNumber: string) =>
-  createSelector(selectAnimals, (animals: Animal[]) => {
+  createSelector(selectAnimals, (animals: IAnimal[]) => {
     return animals.find((animal) => animal.tagNumber === tagNumber);
   });
 
-export const getDams = createSelector(selectAnimals, (animals: Animal[]) => {
+export const getDams = createSelector(selectAnimals, (animals: IAnimal[]) => {
   return animals.filter(
     (animal) =>
       animal.gender === Gender.Female &&
@@ -22,7 +22,7 @@ export const getDams = createSelector(selectAnimals, (animals: Animal[]) => {
 
 export const getMaleOver36Months = createSelector(
   selectAnimals,
-  (animals: Animal[]) => {
+  (animals: IAnimal[]) => {
     return animals.filter(
       (animal) =>
         animal.gender === Gender.Male &&
@@ -33,13 +33,13 @@ export const getMaleOver36Months = createSelector(
 );
 
 export const getCalves = (tagNumber: string) =>
-  createSelector(selectAnimals, (animals: Animal[]) => {
+  createSelector(selectAnimals, (animals: IAnimal[]) => {
     return animals.filter((animal) => animal.dam.tagNumber === tagNumber);
   });
 
 export const getUnregisteredCalves = createSelector(
   selectAnimals,
-  (animals: Animal[]) => {
+  (animals: IAnimal[]) => {
     return animals.filter((animal) => !animal.registered);
   }
 );

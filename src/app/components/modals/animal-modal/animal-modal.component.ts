@@ -14,7 +14,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Gender, Modals } from '@cms-enums';
-import { Animal, Bull } from '@cms-interfaces';
+import { IAnimal, IBull } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { getDams, selectAnimals } from '@cms-ngrx/animal';
 import { selectBulls as getBulls } from '@cms-ngrx/bull';
@@ -48,11 +48,11 @@ enum FormControls {
   styleUrls: ['./animal-modal.component.scss'],
 })
 export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
-  @Input() animal: Animal = null;
+  @Input() animal: IAnimal = null;
   @ViewChild('p') popover: NgbPopover;
   public animalForm: FormGroup = new FormGroup({});
-  public $dams: Observable<Animal[]>;
-  public $sires: Observable<Bull[]>;
+  public $dams: Observable<IAnimal[]>;
+  public $sires: Observable<IBull[]>;
   public saveResult: { message: string; success: boolean } = {
     message: '',
     success: true,
@@ -60,7 +60,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
   public dropDownHidden = true;
   public breedsList;
   public isAddMode: boolean = false;
-  private $animals: Observable<Animal[]>;
+  private $animals: Observable<IAnimal[]>;
   private previousFormValue;
   private noSireText = 'No sire assigned';
   private subs = new Subscription();
@@ -94,7 +94,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
           this.markAllAsDirty();
           if (canContinue) {
             this.loadingService.setLoadingState(true);
-            const newAnimal: Animal = {
+            const newAnimal: IAnimal = {
               ai: [],
               birthDate: this.dob.value,
               calvingHistory: [],
@@ -276,11 +276,11 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
     return output;
   }
 
-  private getEnteredDam(animals: Animal[]) {
+  private getEnteredDam(animals: IAnimal[]) {
     return animals.find((animal) => animal.tagNumber === this.dam.value);
   }
 
-  private enteredTagIsMale(animals: Animal[]): boolean {
+  private enteredTagIsMale(animals: IAnimal[]): boolean {
     return (
       this.dam.value !== 'UK000000000000' &&
       animals.find((animal) => animal.tagNumber === this.dam.value)?.gender ===
@@ -288,7 +288,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  private damNotExists(animals: Animal[]): boolean {
+  private damNotExists(animals: IAnimal[]): boolean {
     return (
       this.dam.value !== 'UK000000000000' &&
       animals.findIndex((animal) => animal.tagNumber === this.dam.value) === -1
@@ -296,7 +296,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private addDam(tagNumber: string) {
-    const newAnimal: Animal = {
+    const newAnimal: IAnimal = {
       ai: [],
       birthDate: moment(),
       calvingHistory: [],

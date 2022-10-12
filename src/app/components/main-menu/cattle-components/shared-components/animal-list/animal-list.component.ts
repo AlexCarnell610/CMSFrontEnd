@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PageURLs } from '@cms-enums';
-import { Animal } from '@cms-interfaces';
+import { Animal, IAnimal, IBull } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import {
   getAnimalByTag,
@@ -16,9 +16,17 @@ import {
   getUnregisteredCalves,
   selectAnimals,
 } from '@cms-ngrx/animal';
+import { selectBullByTag, selectBulls } from '@cms-ngrx/bull';
 import { select, Store } from '@ngrx/store';
-import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
-import { map, takeWhile } from 'rxjs/operators';
+import {
+  BehaviorSubject,
+  combineLatest,
+  iif,
+  Observable,
+  of,
+  Subscription,
+} from 'rxjs';
+import { map, mergeMap, takeWhile } from 'rxjs/operators';
 
 @Component({
   selector: 'cms-animal-list',
@@ -26,10 +34,11 @@ import { map, takeWhile } from 'rxjs/operators';
   styleUrls: ['./animal-list.component.scss'],
 })
 export class AnimalListComponent implements OnInit, OnDestroy {
-  @Output() add: EventEmitter<Animal> = new EventEmitter();
+  @Output() add: EventEmitter<IAnimal> = new EventEmitter();
   @Output() edit: EventEmitter<any> = new EventEmitter();
   @Output() animalSelected: EventEmitter<Animal> = new EventEmitter();
   @Input() page: PageURLs;
+  @Input() displayBulls = false;
   public searchBarGroup: FormGroup = new FormGroup({});
   public animals$: Observable<Animal[]>;
   public searchedAnimals$: BehaviorSubject<Animal[]> = new BehaviorSubject([]);
@@ -52,7 +61,7 @@ export class AnimalListComponent implements OnInit, OnDestroy {
     this.trackSearch();
   }
 
-  public openAddModal(animal: Animal) {
+  public openAddModal(animal: IAnimal) {
     this.add.emit(animal);
   }
 
@@ -87,7 +96,7 @@ export class AnimalListComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getCSSForButton(animal: Animal) {
+  public getCSSForButton(animal: IAnimal) {
     return animal.tagNumber === this.currentAnimal?.tagNumber ? 'active' : '';
   }
 
@@ -100,23 +109,44 @@ export class AnimalListComponent implements OnInit, OnDestroy {
         );
     } else if (this.page === PageURLs.Registration) {
       this.animals$ = this.store.pipe(select(getUnregisteredCalves));
+    } else if (this.page === PageURLs.Animals) {
+      this.animals$ = combineLatest([
+        this.store.select(selectAnimals),
+        this.store.select(selectBulls),
+      ]).pipe(map(([animals, bulls]) => [...animals, ...bulls]));
     } else {
       this.animals$ = this.store.pipe(select(selectAnimals));
     }
   }
 
-  private notSold(animal: Animal) {
+  private notSold(animal: IAnimal) {
     return animal.weightData.every((weight) => !weight.weightType.isSale);
   }
 
-  private pushNextAnimal(animal: Animal) {
+  private pushNextAnimal(selectedAnimal: Animal) {
+    console.warn(selectedAnimal);
+    
     this.subscriptions.add(
-      this.store
-        .pipe(select(getAnimalByTag(animal.tagNumber)))
+      this.getAnimal(selectedAnimal.tagNumber)
+        .pipe(
+          mergeMap((animal) =>
+            iif(() => !!animal, of(animal), this.getBull(selectedAnimal.tagNumber))
+          )
+        )
         .subscribe((ani) => {
+          console.warn(ani);
+          
           this.$currentAnimal.next(ani);
         })
     );
+  }
+
+  private getAnimal(tagNumber: string): Observable<IAnimal> {
+    return this.store.pipe(select(getAnimalByTag(tagNumber)));
+  }
+
+  private getBull(tagNumber: string): Observable<IBull> {
+    return this.store.select(selectBullByTag(tagNumber));
   }
 
   private setUpList() {

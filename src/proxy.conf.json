@@ -1,6 +1,6 @@
 {
   "/devApi": {
-    "target": "https://cmsbackend.devapi",
+    "target": "https://35.195.114.75/",
     "secure": false,
     "logLevel": "debug",
     "pathRewrite": { "^/devApi": "" }

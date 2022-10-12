@@ -1,5 +1,5 @@
 import { Modals, PageURLs } from '@cms-enums';
-import { Animal } from '@cms-interfaces';
+import { IAnimal } from '@cms-interfaces';
 import { convertedAnimal } from '@cms-testing-data';
 import * as moment from 'moment';
 import { of } from 'rxjs';
@@ -15,7 +15,7 @@ describe('MainMenuComponent', () => {
   let component: MainMenuComponent, mockLoadingState, mockModal;
   const mockAnimal = ({
     tagNumber: 1234,
-  } as unknown) as Animal;
+  } as unknown) as IAnimal;
 
   beforeEach(() => {
     mockModal = { open: () => {} };

@@ -1,5 +1,5 @@
 import { AssistanceReason, CalvingAssistance } from '@cms-enums';
-import { Animal, Bull } from '@cms-interfaces';
+import { IAnimal, IBull } from '@cms-interfaces';
 import { convertedAnimal, rawAnimal } from '@cms-testing-data';
 import { MappingService } from './importData.service';
 
@@ -22,14 +22,14 @@ describe('Import data service', () => {
 
     it('should return empty array for ai history if animal has none', () => {
       let noAiHistAnimal = [{ ...rawAnimal[0], ai_history: [] }];
-      let expectation: Animal[] = [{ ...convertedAnimal, ai: [] }];
+      let expectation: IAnimal[] = [{ ...convertedAnimal, ai: [] }];
 
       expect(service.importAnimalData(noAiHistAnimal)).toEqual(expectation);
     });
 
     it('should return empty array if no calving history', () => {
       let noCalvingHistAnimal = [{ ...rawAnimal[0], calving_history: [] }];
-      let expectation: Animal[] = [{ ...convertedAnimal, calvingHistory: [] }];
+      let expectation: IAnimal[] = [{ ...convertedAnimal, calvingHistory: [] }];
 
       expect(service.importAnimalData(noCalvingHistAnimal)).toEqual(
         expectation
@@ -45,7 +45,7 @@ describe('Import data service', () => {
           calving_stat: { ...rawAnimal[0].calving_stat, assistance: 'n' },
         },
       ];
-      let expectaction: Animal[] = [
+      let expectaction: IAnimal[] = [
         {
           ...convertedAnimal,
           calvingStat: {
@@ -67,7 +67,7 @@ describe('Import data service', () => {
           calving_stat: { ...rawAnimal[0].calving_stat, assistance: 'r' },
         },
       ];
-      let expectaction: Animal[] = [
+      let expectaction: IAnimal[] = [
         {
           ...convertedAnimal,
           calvingStat: {
@@ -89,7 +89,7 @@ describe('Import data service', () => {
           calving_stat: { ...rawAnimal[0].calving_stat, assistance: 'v' },
         },
       ];
-      let expectaction: Animal[] = [
+      let expectaction: IAnimal[] = [
         {
           ...convertedAnimal,
           calvingStat: {
@@ -111,7 +111,7 @@ describe('Import data service', () => {
           calving_stat: { ...rawAnimal[0].calving_stat, assist_reason: null },
         },
       ];
-      let expectaction: Animal[] = [
+      let expectaction: IAnimal[] = [
         {
           ...convertedAnimal,
           calvingStat: {
@@ -136,7 +136,7 @@ describe('Import data service', () => {
           },
         },
       ];
-      let expectaction: Animal[] = [
+      let expectaction: IAnimal[] = [
         {
           ...convertedAnimal,
           calvingStat: {
@@ -164,7 +164,7 @@ describe('Import data service', () => {
           },
         },
       ];
-      let expectaction: Animal[] = [
+      let expectaction: IAnimal[] = [
         {
           ...convertedAnimal,
           calvingStat: {
@@ -181,7 +181,7 @@ describe('Import data service', () => {
   });
 
   describe('convertBulls [method]', () => {
-    let rawBull, convertedBull: Bull;
+    let rawBull, convertedBull: IBull;
     beforeEach(() => {
       rawBull = {
         breed: 'LIM',

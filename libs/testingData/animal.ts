@@ -1,5 +1,5 @@
 import { AssistanceReason, CalvingAssistance, Gender } from '@cms-enums';
-import { Animal, CalvingStat } from '@cms-interfaces';
+import { IAnimal, CalvingStat } from '@cms-interfaces';
 import * as moment from 'moment';
 
 export const mockCalvingStat: CalvingStat = {
@@ -126,7 +126,7 @@ export const rawAnimal = [
   },
 ];
 
-export const convertedAnimal: Animal = {
+export const convertedAnimal: IAnimal = {
   tagNumber: 'UK722218079336',
   managementTag: 'C8',
   gender: Gender.Female,

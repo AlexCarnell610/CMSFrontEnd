@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
 import { Modals, PageURLs } from '@cms-enums';
-import { Animal } from '@cms-interfaces';
+import { IAnimal } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { getMaleOver36Months, getUnregisteredCalves } from '@cms-ngrx/animal';
 import { LoadingPaneService } from '@cms-services';
@@ -18,12 +18,12 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./main-menu.component.scss'],
 })
 export class MainMenuComponent implements OnInit, AfterViewInit {
-  public $oldMales: Observable<Animal[]>;
-  public $allUnregCalves: Observable<{ overdue: Animal[]; unreg: Animal[] }>;
-  public selectedAnimal: Animal;
+  public $oldMales: Observable<IAnimal[]>;
+  public $allUnregCalves: Observable<{ overdue: IAnimal[]; unreg: IAnimal[] }>;
+  public selectedAnimal: IAnimal;
 
-  private $unregCalves: Observable<Animal[]>;
-  private $overdueUnregCalves: Observable<Animal[]>;
+  private $unregCalves: Observable<IAnimal[]>;
+  private $overdueUnregCalves: Observable<IAnimal[]>;
 
   constructor(
     private readonly router: Router,
@@ -60,13 +60,13 @@ export class MainMenuComponent implements OnInit, AfterViewInit {
       this.$unregCalves,
       this.$overdueUnregCalves,
     ]).pipe(
-      map(([unreg, overdue]: [Animal[], Animal[]]) => {
+      map(([unreg, overdue]: [IAnimal[], IAnimal[]]) => {
         return { overdue, unreg };
       })
     );
   }
 
-  public openWeightModal(animal: Animal) {
+  public openWeightModal(animal: IAnimal) {
     this.selectedAnimal = animal;
     this.modalService.get(Modals.Weight).open();
   }

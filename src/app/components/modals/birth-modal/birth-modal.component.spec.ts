@@ -1,7 +1,7 @@
 import { fakeAsync, tick, waitForAsync } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { AssistanceReason, CalvingAssistance, Modals } from '@cms-enums';
-import { Animal, bull, CalvingStat } from '@cms-interfaces';
+import { IAnimal, bull, CalvingStat } from '@cms-interfaces';
 import { mockAnimal, mockCalvingStat } from '@cms-testing-data';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
@@ -531,7 +531,7 @@ describe('BirthModalComponent', () => {
         let damTag = 'TagNumber',
           warningServiceShowSpy;
         beforeEach(() => {
-          component.animal = { tagNumber: damTag } as Animal;
+          component.animal = { tagNumber: damTag } as IAnimal;
           component.stat = mockCalvingStat;
           mockBreedService.breedExists = () => {
             return true;
@@ -563,7 +563,7 @@ describe('BirthModalComponent', () => {
 
         it('Should output the new calf [addMode]', () => {
           component.save();
-          let actualCall: Animal = {
+          let actualCall: IAnimal = {
             ...mockAnimal,
             managementTag: 'null',
             birthDate: moment(mockAnimal.birthDate.format('YYYY-MM-DD')),

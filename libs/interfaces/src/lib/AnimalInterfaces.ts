@@ -1,13 +1,14 @@
 import { AssistanceReason, CalvingAssistance, Gender } from '@cms-enums';
 import * as moment from 'moment';
 
-export interface Bull {
+export type Animal = IAnimal | IBull
+export interface IBull {
   tagNumber: string;
   breed: string;
   name: string;
 }
 
-export const bull: Bull = {
+export const bull: IBull = {
   tagNumber: 'TAGNUMBER',
   breed: 'DAVE',
   name: 'GARY',
@@ -36,7 +37,7 @@ export interface TextAnimal extends BaseAnimal {
   breed: string;
 }
 
-export interface Animal extends BaseAnimal {
+export interface IAnimal extends BaseAnimal {
   dam?: Dam;
   damTag?: string;
   sire: { tagNumber: string };
@@ -95,15 +96,15 @@ export interface ICullUpdate {
   tagNumber: string;
 }
 
-export function isAnimal(animal: any): animal is Animal {
+export function isAnimal(animal: any): animal is IAnimal {
   return 'tagNumber' in animal;
 }
 
-export function isCow(animal: Animal | Bull): animal is Animal {
+export function isCow(animal: IAnimal | IBull): animal is IAnimal {
   return 'weightData' in animal;
 }
 
-export function isBull(animal: Animal | Bull): animal is Bull {
+export function isBull(animal: IAnimal | IBull): animal is IBull {
   return 'name' in animal;
 }
 

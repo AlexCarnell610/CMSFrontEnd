@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HttpUrls } from '@cms-enums';
-import { Animal, AnimalWeight, Bull } from '@cms-interfaces';
+import { IAnimal, AnimalWeight, IBull } from '@cms-interfaces';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -17,7 +17,7 @@ export class HttpService {
     private mappingService: MappingService
   ) {}
 
-  public getAnimalData(): Observable<Animal[]> {
+  public getAnimalData(): Observable<IAnimal[]> {
     return this.http.get(environment.api + HttpUrls.Animals).pipe(
       map((response) => {        
         return this.mappingService.importAnimalData(response);
@@ -25,7 +25,7 @@ export class HttpService {
     );
   }
 
-  public getBullData(): Observable<Bull[]> {
+  public getBullData(): Observable<IBull[]> {
     return this.http.get(environment.api + HttpUrls.Bulls).pipe(
       map((response) => {
         return this.mappingService.convertBulls(response);
@@ -57,7 +57,7 @@ export class HttpService {
       );
   }
 
-  public addAnimal(animal: Animal): Observable<Animal> {
+  public addAnimal(animal: IAnimal): Observable<IAnimal> {
     const newAnimal = {
       ...animal,
       dam: animal.damTag ? animal.damTag : animal.dam,
@@ -68,7 +68,7 @@ export class HttpService {
       .pipe(map((res) => this.mappingService.importAnimalData([res])[0]));
   }
 
-  public updateAnimal(tagNumber: string, update): Observable<Animal> {
+  public updateAnimal(tagNumber: string, update): Observable<IAnimal> {
     const newUpdate = {
       ...update,
     };
@@ -88,7 +88,7 @@ export class HttpService {
     return this.http.get(environment.api + HttpUrls.CullUpdate);
   }
 
-  public addBull(bull: Bull): Observable<Bull> {
+  public addBull(bull: IBull): Observable<IBull> {
     console.warn("ADD BULL HTTP", bull);
     
     return this.http

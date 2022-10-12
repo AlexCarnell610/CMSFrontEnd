@@ -7,7 +7,7 @@ import {
   Output,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Animal, Bull } from '@cms-interfaces';
+import { IAnimal, IBull } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { getAnimalByTag } from '@cms-ngrx/animal';
 import { selectBullByTag } from '@cms-ngrx/bull';
@@ -17,7 +17,7 @@ import {
   ScreenSizeService,
 } from '@cms-services';
 import { select, Store } from '@ngrx/store';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, of, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 @Component({
@@ -26,12 +26,12 @@ import { map, take } from 'rxjs/operators';
   styleUrls: ['./animal-display.component.scss'],
 })
 export class AnimalDisplayComponent implements OnInit, OnDestroy {
-  @Input() $selectedAnimal: BehaviorSubject<Animal> = new BehaviorSubject(null);
+  @Input() $selectedAnimal: BehaviorSubject<IAnimal> = new BehaviorSubject(null);
   @Input() showGoToChild: boolean;
-  @Output() editAnimal: EventEmitter<Animal> = new EventEmitter();
-  @Output() goToDamOutput: EventEmitter<Animal> = new EventEmitter();
+  @Output() editAnimal: EventEmitter<IAnimal> = new EventEmitter();
+  @Output() goToDamOutput: EventEmitter<IAnimal> = new EventEmitter();
   @Output() goToChildEmit: EventEmitter<any> = new EventEmitter();
-  public $sire: Observable<Bull>;
+  public $sire: Observable<IBull>;
   public isEditNotes = false;
   public hasChangedNotes = false;
   public notesGroup: FormGroup = new FormGroup({});
@@ -55,7 +55,7 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
     this.trackNotesChanges();
   }
 
-  public goToDam(animal: Animal) {
+  public goToDam(animal: IAnimal) {
     this.store
       .select(getAnimalByTag(animal.dam.tagNumber))
       .pipe(take(1))
@@ -68,7 +68,7 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
     this.goToChildEmit.emit({});
   }
 
-  public getBreedName(animal: Animal): string {
+  public getBreedName(animal: IAnimal): string {
     return this.breedService.getBreedFromCode(animal.breed);
   }
 
@@ -142,7 +142,7 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
   private trackSire() {
     this.subscriptions.add(
       this.$selectedAnimal.subscribe((animal) => {
-        if (animal) {
+        if (animal?.sire) {
           this.$sire = this.store.pipe(
             select(selectBullByTag(animal.sire.tagNumber)),
             map((bull) => {
@@ -154,6 +154,8 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
               };
             })
           );
+        }else {
+          this.$sire = EMPTY
         }
       })
     );

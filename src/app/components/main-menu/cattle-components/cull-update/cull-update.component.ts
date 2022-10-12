@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PageURLs } from '@cms-enums';
-import { Animal, ICullUpdate } from '@cms-interfaces';
+import { IAnimal, ICullUpdate } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { getAnimalByTag, getCalves } from '@cms-ngrx/animal';
 import { CullUpdateService, LoadingPaneService, ScreenSizeService } from '@cms-services';
@@ -19,8 +19,8 @@ import { take } from 'rxjs/operators';
 })
 export class CullUpdateComponent implements OnInit, OnDestroy {
   public cullUpdate: ICullUpdate[] = null;
-  public $selectedAnimal: BehaviorSubject<Animal> = new BehaviorSubject(null);
-  public $calves: BehaviorSubject<Animal[]> = new BehaviorSubject(null);
+  public $selectedAnimal: BehaviorSubject<IAnimal> = new BehaviorSubject(null);
+  public $calves: BehaviorSubject<IAnimal[]> = new BehaviorSubject(null);
   public selectedCullUpdate: ICullUpdate;
   public chartWeights: ChartDataSets[] = [];
   public aliveVSDeadData: ChartDataSets[] = [];

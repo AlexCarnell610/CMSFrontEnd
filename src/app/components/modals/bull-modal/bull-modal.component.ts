@@ -17,6 +17,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Modals } from '@cms-enums';
+import { IBull } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { AddBull, selectBulls } from '@cms-ngrx/bull';
 import { AnimalBreedService, WarningService } from '@cms-services';
@@ -34,6 +35,7 @@ import { BirthFormControls } from '../birth-modal/birth-modal.component';
 })
 export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() form: FormGroup;
+  @Input() bull: IBull
   @Output() sireAdded: EventEmitter<boolean> = new EventEmitter();
 
   @ViewChild('errorPop') errorPopover: NgbPopover;
@@ -79,6 +81,9 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
       this.isAdd = this.modalService.getModalData(Modals.Sire).isAdd;
       console.warn(this.modalService.getModalData(Modals.Sire));
       this.bullForm.reset({ tagNumber: 'UK' });
+      if(!this.isAdd){
+        this.setData()
+      }
     });
   }
 
@@ -131,6 +136,15 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
       this.errorPopover.open();
     }
   }
+  
+  public close(): void {
+    this.modalService.get(Modals.Sire).close();
+  }
+
+  private setData(): void{
+    this.bullForm.setValue({tagNumber: this.bull.tagNumber, breed: this.bull.breed, name: this.bull.name})
+    this.breed.disable()
+  }
 
   private saveBull(): void {
     this.sireAdded.emit(true);
@@ -143,7 +157,7 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private isSameBreedValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const calfBreed = this.form.get(BirthFormControls.Breed).value;
+      const calfBreed = this.form?.get(BirthFormControls.Breed).value;
       
       if (calfBreed === '') return null;
 
@@ -154,9 +168,6 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
     };
   }
 
-  public close(): void {
-    this.modalService.get(Modals.Sire).close();
-  }
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();

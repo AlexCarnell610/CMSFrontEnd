@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Modals, PageURLs } from '@cms-enums';
-import { Animal, Bull } from '@cms-interfaces';
+import { IAnimal, IBull } from '@cms-interfaces';
 import { ScreenSizeService } from '@cms-services';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'cms-animal',
@@ -13,11 +14,11 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class AnimalComponent {
   public pageName = PageURLs.Animals;
-  public $selectedAnimal: BehaviorSubject<Animal> = new BehaviorSubject(null);
+  public $selectedAnimal: BehaviorSubject<IAnimal> = new BehaviorSubject(null);
   public isAdd: boolean;
-  public $sire: Observable<Bull>;
-  public selectedAnimal: Animal;
-  private previousAnimals: Animal[] = [];
+  public $sire: Observable<IBull>;
+  public selectedAnimal: IAnimal;
+  private previousAnimals: IAnimal[] = [];
 
   constructor(
     private readonly router: Router,
@@ -35,15 +36,20 @@ export class AnimalComponent {
   }
 
   public editAnimal() {
-    this.modalService.get(Modals.Animal).setData({ isAdd: false });
-    this.modalService.get(Modals.Animal).open();
+    this.$selectedAnimal.pipe(take(1)).subscribe(animal => {
+
+      const modal = this.modalService.get(this.getModal(animal));
+      
+      modal.setData({ isAdd: false });
+      modal.open();
+    })
   }
 
-  public animalSelected(event: Animal) {
+  public animalSelected(event: IAnimal) {
     this.$selectedAnimal.next(event);
   }
 
-  public goToDam(dam: Animal): void {
+  public goToDam(dam: IAnimal): void {
     this.previousAnimals.push(this.$selectedAnimal.value);
     this.animalSelected(dam);
   }
@@ -54,5 +60,9 @@ export class AnimalComponent {
 
   public goToPreviousAnimal(): void {
     this.animalSelected(this.previousAnimals.pop());
+  }
+
+  private getModal(animal): Modals {
+    return animal.dam ? Modals.Animal : Modals.Sire;
   }
 }

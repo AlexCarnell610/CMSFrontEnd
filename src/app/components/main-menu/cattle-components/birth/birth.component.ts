@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Modals, PageURLs } from '@cms-enums';
-import { Animal } from '@cms-interfaces';
+import { IAnimal } from '@cms-interfaces';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject } from 'rxjs';
 
@@ -12,7 +12,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class BirthComponent {
   public pageName = PageURLs.Births;
-  public $selectedAnimal: BehaviorSubject<Animal> = new BehaviorSubject(null);
+  public $selectedAnimal: BehaviorSubject<IAnimal> = new BehaviorSubject(null);
   public isAdd: boolean;
   constructor(
     private readonly router: Router,
@@ -33,7 +33,7 @@ export class BirthComponent {
     this.modalSerivce.get(Modals.Birth).open();
   }
 
-  public animalSelected(animal: Animal) {
+  public animalSelected(animal: IAnimal) {
     this.$selectedAnimal.next(animal);
   }
 }
