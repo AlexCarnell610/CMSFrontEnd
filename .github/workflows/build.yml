@@ -16,8 +16,8 @@ jobs:
     
     steps:
     - uses: actions/checkout@v3
-      with: 
-        fetch-depth: 0
+      #with: 
+        #fetch-depth: 0
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
@@ -26,12 +26,10 @@ jobs:
 
     - name: Build
       run: |
-       # npm install
-       # npm run buildProd
-        date +%s > report.txt
+        npm install
+        npm run buildProd
         git config --global user.email "alex.carnell@hotmail.co.uk"
         git config --global user.name "Alex Carnell"
-        git checkout build
         git add .
         git commit -m "built"
         git push
