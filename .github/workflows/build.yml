@@ -24,17 +24,10 @@ jobs:
 
     - name: Build
       run: |
-        npm install
-        npm run buildProd
-        
-   
-   
-       
-        steps:
-          - uses: actions/checkout@v3
-          - run: |
-              date > generated.txt
-              git checkout build
-              git add .
-              git commit -m "build"
-              git push
+       # npm install
+       # npm run buildProd
+        date +%s > report.txt
+        git checkout build
+        git add .
+        git commit -m "built"
+        git push
