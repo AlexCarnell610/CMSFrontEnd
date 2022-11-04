@@ -27,11 +27,14 @@ jobs:
         npm install
         npm run buildProd
         
-    - name: Push
-      uses: s0/git-publish-subdir-action@develop
-      env:
-         REPO: self
-         BRANCH: build # The branch name where you want to push the assets
-         FOLDER: ./ # The directory where your assets are generated
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub will automatically add this - you don't need to bother getting a token
-         MESSAGE: "Build: ({sha}) ${{ github.event.repository.updated_at}}" # The commit message
+   
+   
+       
+        steps:
+          - uses: actions/checkout@v3
+          - run: |
+              date > generated.txt
+              git checkout build
+              git add .
+              git commit -m "build"
+              git push
