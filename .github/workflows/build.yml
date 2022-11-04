@@ -27,7 +27,7 @@ jobs:
        # npm install
        # npm run buildProd
         date +%s > report.txt
-        git checkout build
+        git checkout origin build
        # git add .
        # git commit -m "built"
        # git push
