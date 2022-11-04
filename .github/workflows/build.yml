@@ -32,6 +32,6 @@ jobs:
       env:
          REPO: self
          BRANCH: build # The branch name where you want to push the assets
-         FOLDER: CMSFrontEnd # The directory where your assets are generated
+         FOLDER: ./ # The directory where your assets are generated
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub will automatically add this - you don't need to bother getting a token
          MESSAGE: "Build: ({sha}) ${{ github.event.repository.updated_at}}" # The commit message
