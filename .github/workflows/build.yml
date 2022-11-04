@@ -28,6 +28,6 @@ jobs:
        # npm run buildProd
         date +%s > report.txt
         git checkout build
-        git add .
-        git commit -m "built"
-        git push
+       # git add .
+       # git commit -m "built"
+       # git push
