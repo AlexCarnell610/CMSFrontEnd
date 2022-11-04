@@ -27,6 +27,8 @@ jobs:
        # npm install
        # npm run buildProd
         date +%s > report.txt
+        git config --global user.email "alex.carnell@hotmail.co.uk"
+        git config --global user.name "Alex Carnell"
         git add .
         git commit -m "built"
         git push
