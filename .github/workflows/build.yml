@@ -29,10 +29,12 @@ jobs:
         npm install
         npm run buildProd
     
-    - name: zip
-      uses: montudor/action-zip@v1
-      with:
-        args: zip -qq -r dir.zip dist
+   # - name: zip
+   #   uses: montudor/action-zip@v1
+   #   with:
+   #     args: zip -qq -r dir.zip dist
+    - name: Unzip WiX Toolset
+      run: tar -czvf dir.tar.gz dist
         
     - name: commit
       run: |
