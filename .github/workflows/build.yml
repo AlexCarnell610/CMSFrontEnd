@@ -24,10 +24,10 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Build
-      run: |
-        npm install
-        npm run buildProd
+    #- name: Build
+   #   run: |
+    #    npm install
+   #     npm run buildProd
     
    # - name: zip
    #   uses: montudor/action-zip@v1
@@ -35,6 +35,8 @@ jobs:
    #     args: zip -qq -r dir.zip dist
     - name: Unzip WiX Toolset
       run: |
+        mkdir dist
+        touch dist/hello.txt
         ls
         tar -czvf dir.tar.gz dist
         ls
