@@ -34,7 +34,10 @@ jobs:
    #   with:
    #     args: zip -qq -r dir.zip dist
     - name: Unzip WiX Toolset
-      run: tar -czvf dir.tar.gz dist
+      run: |
+        ls
+        tar -czvf dir.tar.gz dist
+        ls
         
     - name: commit
       run: |
