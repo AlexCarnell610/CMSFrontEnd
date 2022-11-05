@@ -11,5 +11,5 @@ export const environment = {
     key: '2c99d4674e8e6f7e2397',
     cluster: 'eu',
   },
-  api: 'https://35.195.114.75',
+  api: '/api',
 };
