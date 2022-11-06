@@ -36,7 +36,7 @@ jobs:
         zone: 'europe-west1-b'
         ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY }}'
         command: 'sudo deploy'
-        flags: troubleshoot
+        flags: --troubleshoot
 
     - name: Build
       run: |
