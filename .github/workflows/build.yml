@@ -24,6 +24,13 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
+    
+
+    - name: Build
+      run: |
+        npm install
+        npm run buildProd
+        
     - id: 'auth'
       uses: 'google-github-actions/auth@v0'
       with:
@@ -37,11 +44,6 @@ jobs:
         ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY }}'
         command: 'sudo deploy'
         flags: --troubleshoot
-
-    - name: Build
-      run: |
-        npm install
-        npm run buildProd
     
    # - name: zip
    #   uses: montudor/action-zip@v1
