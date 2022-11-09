@@ -39,14 +39,14 @@ jobs:
     - name: Unzip WiX Toolset
       run: |
         ls
-        tar -czvf dir.tar.gz dist
+        tar -czvf dist.tar.gz dist
         ls
         
     - name: commit
       run: |
         git config --global user.email "alex.carnell@hotmail.co.uk"
         git config --global user.name "Alex Carnell"
-        git add .
+        git add dist.tar.gz
         git commit -m "built"
         git push
         
