@@ -124,8 +124,6 @@ export class AnimalListComponent implements OnInit, OnDestroy {
   }
 
   private pushNextAnimal(selectedAnimal: Animal) {
-    console.warn(selectedAnimal);
-    
     this.subscriptions.add(
       this.getAnimal(selectedAnimal.tagNumber)
         .pipe(
@@ -134,8 +132,6 @@ export class AnimalListComponent implements OnInit, OnDestroy {
           )
         )
         .subscribe((ani) => {
-          console.warn(ani);
-          
           this.$currentAnimal.next(ani);
         })
     );

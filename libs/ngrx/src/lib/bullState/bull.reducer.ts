@@ -1,7 +1,7 @@
 import { IBull } from '@cms-interfaces';
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
-import { createFeatureSelector } from '@ngrx/store';
-import { BullActions, BullActionTypes } from './bull.actions';
+import { createFeatureSelector, createReducer, on } from '@ngrx/store';
+import { AddBull, BullActions, BullActionTypes } from './bull.actions';
 
 
 export const bullsFeatureKey = 'bull';
@@ -18,12 +18,13 @@ export const initialBullState: BullState = adapter.getInitialState({
   // additional entity state properties
 });
 
+
 export function bullReducer(
   state = initialBullState,
   action: BullActions
 ): BullState {
   switch (action.type) {
-    case BullActionTypes.AddBull: {
+    case BullActionTypes.LoadBull: {
       return adapter.addOne(action.payload.bull, state);
     }
 

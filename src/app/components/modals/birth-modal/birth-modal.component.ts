@@ -112,8 +112,6 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public save() {
-    console.warn(this.birthForm.getRawValue());
-
     this.hasSaved = true;
     this.subs.add(
       this.handleErrors().subscribe((canContinue) => {

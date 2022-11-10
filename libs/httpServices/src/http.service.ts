@@ -89,7 +89,6 @@ export class HttpService {
   }
 
   public addBull(bull: IBull): Observable<IBull> {
-    console.warn("ADD BULL HTTP", bull);
     
     return this.http
       .post(environment.api + HttpUrls.Bull, bull)

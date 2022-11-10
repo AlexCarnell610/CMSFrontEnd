@@ -44,6 +44,7 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
   public isNewBull = false;
 
   private subs = new Subscription();
+  private persistData: boolean = false;
 
   constructor(
     private readonly modalService: NgxSmartModalService,
@@ -71,15 +72,13 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
       }),
       name: ['', Validators.required],
     });
-    this.bullForm.get('breed').valueChanges.subscribe((val) => {
-      console.warn(val);
-    });
   }
 
   ngAfterViewInit(): void {
     this.modalService.get(Modals.Sire).onOpen.subscribe(() => {
-      this.isAdd = this.modalService.getModalData(Modals.Sire).isAdd;
-      console.warn(this.modalService.getModalData(Modals.Sire));
+      const modalData = this.modalService.resetModalData(Modals.Sire)
+      this.isAdd = modalData.isAdd
+      this.persistData = modalData.persistData
       this.bullForm.reset({ tagNumber: 'UK' });
       if(!this.isAdd){
         this.setData()
@@ -147,9 +146,10 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private saveBull(): void {
+    this.subs.unsubscribe()
     this.sireAdded.emit(true);
     this.isNewBull = true;
-    this.form.get(BirthFormControls.Sire).setValue(this.tag.value);
+    this.form?.get(BirthFormControls.Sire).setValue(this.tag.value);
     this.breed.setValue(this.breed.value.toUpperCase());
     this.store.dispatch(new AddBull({ bull: this.bullForm.getRawValue() }));
     this.close();
@@ -158,12 +158,11 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
   private isSameBreedValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const calfBreed = this.form?.get(BirthFormControls.Breed).value;
-      
-      if (calfBreed === '') return null;
+      if (calfBreed === '' || calfBreed === undefined) return null;
 
       return calfBreed?.toString().toUpperCase() !==
         control.value?.toString().toUpperCase()
-        ? { notSameBreed: true }
+        ? { notSameBreed: calfBreed }
         : null;
     };
   }

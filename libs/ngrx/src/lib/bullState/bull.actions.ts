@@ -1,6 +1,6 @@
 import { IBull } from '@cms-interfaces';
 import { Update } from '@ngrx/entity';
-import { Action } from '@ngrx/store';
+import { Action, createAction, props } from '@ngrx/store';
 
 export enum BullActionTypes {
   LoadBulls = '[Bull] Load Bulls',
@@ -15,6 +15,7 @@ export enum BullActionTypes {
   ClearBulls = '[Bull] Clear Bulls',
   RetrieveBulls = '[Bull] Retrieve Data',
   LoadBullsFinished = '[Bull] Load Finished',
+  LoadBull = "[Bull] Load Bull"
 }
 
 export class LoadBullsFinished implements Action {
@@ -33,6 +34,12 @@ export class LoadBulls implements Action {
 
 export class AddBull implements Action {
   readonly type = BullActionTypes.AddBull;
+
+  constructor(public payload: { bull: IBull }) {}
+}
+
+export class LoadBull implements Action {
+  readonly type = BullActionTypes.LoadBull;
 
   constructor(public payload: { bull: IBull }) {}
 }
@@ -93,4 +100,5 @@ export type BullActions =
   | UpdateBulls
   | DeleteBull
   | DeleteBulls
-  | ClearBulls;
+  | ClearBulls
+  | LoadBull;

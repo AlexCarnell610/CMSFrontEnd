@@ -79,12 +79,8 @@ export class AnimalUpdateService {
   }
 
   public addBull(bull: IBull): Promise<boolean>{
-    console.warn("ADD BULL OUTSIDE PROMISE");
-    
     return new Promise(resolve => {
       this.httpService.addBull(bull).subscribe(res => {
-        console.warn("ADD BULL", res);
-        
         this.store.dispatch(new UpsertBull({bull: res}))
         resolve(true)
       })
