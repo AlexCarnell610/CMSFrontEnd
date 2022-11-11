@@ -7,7 +7,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Modals } from '@cms-enums';
+import { Modals, WeightType } from '@cms-enums';
 import { IAnimal, AnimalWeight, AnimalWeightType } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { getAnimalByTag } from '@cms-ngrx/animal';
@@ -31,11 +31,7 @@ enum FormControls {
   AnimalControl = 'animalControl',
 }
 
-export enum WeightType {
-  Sale = 'isSale',
-  Initial = 'isInitial',
-  Intermediate = 'isIntermediate',
-}
+
 @Component({
   selector: 'cms-weight-modal',
   templateUrl: './weight-modal.component.html',

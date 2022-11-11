@@ -6,10 +6,10 @@ import { selectBulls } from '@cms-ngrx/bull';
 import { AnimalBreedService } from '@cms-services';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { select, Store } from '@ngrx/store';
-import { BirthFormControls } from 'src/app/components/modals/birth-modal/birth-modal.component';
 import { takeWhile } from 'rxjs/operators';
 import { Modals } from '@cms-enums';
 import { NgxSmartModalService } from 'ngx-smart-modal';
+import { BirthFormControls } from '../birth-modal/birth-modal.component';
 
 @Component({
   selector: 'cms-sire-list',

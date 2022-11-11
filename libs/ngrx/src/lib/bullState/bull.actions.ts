@@ -15,7 +15,8 @@ export enum BullActionTypes {
   ClearBulls = '[Bull] Clear Bulls',
   RetrieveBulls = '[Bull] Retrieve Data',
   LoadBullsFinished = '[Bull] Load Finished',
-  LoadBull = "[Bull] Load Bull"
+  LoadBull = '[Bull] Load Bull',
+  UpdateBullFinished = '[Bull] Update Finished',
 }
 
 export class LoadBullsFinished implements Action {
@@ -68,6 +69,12 @@ export class UpdateBull implements Action {
   constructor(public payload: { bull: Update<IBull> }) {}
 }
 
+export class UpdateBullFinished implements Action {
+  readonly type = BullActionTypes.UpdateBullFinished;
+
+  constructor(public payload: { bull: Update<IBull> }) {}
+}
+
 export class UpdateBulls implements Action {
   readonly type = BullActionTypes.UpdateBulls;
 
@@ -101,4 +108,5 @@ export type BullActions =
   | DeleteBull
   | DeleteBulls
   | ClearBulls
-  | LoadBull;
+  | LoadBull
+  | UpdateBullFinished;

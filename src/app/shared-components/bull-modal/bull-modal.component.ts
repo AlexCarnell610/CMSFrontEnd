@@ -21,7 +21,7 @@ import {
 import { Modals } from '@cms-enums';
 import { IBull } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
-import { AddBull, LoadBull, selectBulls } from '@cms-ngrx/bull';
+import { AddBull, LoadBull, selectBulls, UpdateBull } from '@cms-ngrx/bull';
 import { AnimalBreedService, WarningService } from '@cms-services';
 import { breedValidator } from '@cms-validators';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
@@ -84,6 +84,9 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
       this.bullForm.reset({ tagNumber: 'UK' });
       if (!this.isAdd) {
         this.setData();
+        this.tag.disable();
+      } else {
+        this.tag.enable();
       }
     });
   }
@@ -105,34 +108,61 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.tag.markAsDirty();
     this.breed.markAsDirty();
     if (this.bullForm.valid) {
-      this.subs.add(
-        this.store.select(selectBulls).subscribe((bulls) => {
-          const similarIndex = bulls.findIndex(
-            (bull) =>
-              bull.tagNumber === this.tag.value || bull.name === this.name.value
+      if (!this.isAdd) {
+        if (
+          !this.isAdd &&
+          !this.breedService.isSameBreed(this.bull.breed, this.breed.value)
+        ) {
+          const breedName = this.breedService.getBreedFromCode(this.breed.value)
+          this.warningService.show({
+            header: 'Breed has updated',
+            body: `Continuing will update all calves breeds to ${breedName}`,
+          });
+        } else {
+          const update: IBull = {
+            ...this.bullForm.getRawValue(),
+            breed: this.breedCode,
+          };
+          this.store.dispatch(
+            new UpdateBull({
+              bull: { changes: update, id: this.bull.tagNumber },
+            })
           );
-          if (similarIndex > -1 && !this.isNewBull) {
-            const isSameTag = bulls[similarIndex].tagNumber === this.tag.value;
-            this.warningService
-              .show({
-                header: `Bull with that ${
-                  isSameTag ? 'tag' : 'name'
-                } already exists`,
-                body: isSameTag
-                  ? 'Please enter a different tag number'
-                  : 'Are you sure you want to continue?',
-                isError: isSameTag,
-              })
-              .subscribe((proceed) => {
-                if (proceed) {
-                  this.saveBull();
-                }
-              });
-          } else {
-            this.saveBull();
-          }
-        })
-      );
+        }
+      } else {
+        this.subs.add(
+          this.store.select(selectBulls).subscribe((bulls) => {
+            const similarIndex = bulls.findIndex(
+              (bull) =>
+                bull.tagNumber === this.tag.value ||
+                bull.name === this.name.value
+            );
+            if (similarIndex > -1 && !this.isNewBull) {
+              const isSameTag =
+                bulls[similarIndex].tagNumber === this.tag.value;
+              this.subs.add(
+                this.warningService
+                  .show({
+                    header: `Bull with that ${
+                      isSameTag ? 'tag' : 'name'
+                    } already exists`,
+                    body: isSameTag
+                      ? 'Please enter a different tag number'
+                      : 'Are you sure you want to continue?',
+                    isError: isSameTag,
+                  })
+                  .subscribe((proceed) => {
+                    if (proceed) {
+                      this.saveBull();
+                    }
+                  })
+              );
+            } else {
+              this.saveBull();
+            }
+          })
+        );
+      }
     } else {
       this.errorPopover.open();
     }
@@ -148,18 +178,17 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
       breed: this.bull.breed,
       name: this.bull.name,
     });
-    this.breed.disable();
+    // this.breed.disable();
   }
 
   private saveBull(): void {
-    const breedCode = this.breedService.getBreedCode(this.breed.value);
     this.subs.unsubscribe();
     this.sireAdded.emit(true);
     this.isNewBull = true;
     this.form?.get(BirthFormControls.Sire).setValue(this.tag.value);
     const bull: IBull = {
       ...this.bullForm.getRawValue(),
-      breed: breedCode,
+      breed: this.breedCode,
     };
     if (this.persistData) {
       this.store.dispatch(new AddBull({ bull }));
@@ -169,15 +198,10 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.close();
   }
 
-  private isNullOrUndefined(value): boolean {
-    return value === null || value === undefined;
-  }
-
   private isSameBreedValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const calfBreed = this.form?.get(BirthFormControls.Breed).value;
-      
-      
+
       if (calfBreed === '' || !calfBreed || !control.value) return null;
 
       return this.breedService.isSameBreed(
@@ -192,6 +216,10 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
       //   ? { notSameBreed: calfBreed }
       //   : null;
     };
+  }
+
+  private get breedCode(): string {
+    return this.breedService.getBreedCode(this.breed.value);
   }
 
   ngOnDestroy(): void {

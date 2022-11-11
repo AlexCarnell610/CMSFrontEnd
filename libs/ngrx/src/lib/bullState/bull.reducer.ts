@@ -40,7 +40,7 @@ export function bullReducer(
       return adapter.upsertMany(action.payload.bulls, state);
     }
 
-    case BullActionTypes.UpdateBull: {
+    case BullActionTypes.UpdateBullFinished: {
       return adapter.updateOne(action.payload.bull, state);
     }
 

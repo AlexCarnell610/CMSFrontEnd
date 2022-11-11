@@ -9,6 +9,8 @@ import {
   LoadBull,
   LoadBulls,
   LoadBullsFinished,
+  UpdateBull,
+  UpdateBullFinished,
 } from './bull.actions';
 
 @Injectable()
@@ -51,6 +53,19 @@ export class BullEffects {
           .addBull(action.payload.bull)
           .pipe(map((bull) => new LoadBull({ bull })));
       })
+    )
+  );
+
+  $updateBull = createEffect(() =>
+    this.actions$.pipe(
+      ofType(BullActionTypes.UpdateBull),
+      switchMap((action: UpdateBull) =>{
+        const payloadBull = action.payload.bull
+       return  this.httpService
+          .updateBull(payloadBull.changes, '' + payloadBull.id)
+          .pipe(map((bull) => new UpdateBullFinished({bull: {id: ""+payloadBull.id, changes: bull}})))
+      }
+      )
     )
   );
 }

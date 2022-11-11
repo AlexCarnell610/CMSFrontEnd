@@ -56,7 +56,7 @@
           </div>
         </div>
         <cms-breeds-list [form]="birthForm" [controlName]="'calfBreed'"></cms-breeds-list>
-        <cms-sire-list [parentForm]="birthForm" [selectedBreed$]="selectedBreed$" [isAdd]="isAdd"></cms-sire-list>
+        <cms-sire-list [parentForm]="birthForm" [selectedBreed$]="selectedBreed$" [isAdd]="isAdd" (sireAdded)="newSire = $event"></cms-sire-list>
         <!-- <div class="form-group">
           <label for="calfSire">Sire</label>
           <div
