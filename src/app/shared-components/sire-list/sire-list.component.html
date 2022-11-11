@@ -1,0 +1,25 @@
+<div class="form-group" [formGroup]="parentForm">
+    <label for="calfSire">Sire</label>
+    <div
+      class="input-group"
+      *ngIf="$filteredSires | async as sires"
+      [ngClass]="{ 'was-validated': sire.dirty, 'is-invalid': sire.invalid && sire.dirty }"
+    >
+      <select class="custom-select" formControlName="calfSire" required>
+        <option value="">Select sire...</option>
+        <option style="background-color: #ebebeb;" value="addNew">Add new Sire...</option>
+        <option *ngFor="let sire of sires" value="{{ sire.tagNumber }}">
+          {{ sire.name }} - {{ sire.tagNumber }} - {{ sire.breed }}
+        </option>
+       
+      </select>
+    </div>
+    <div class="invalid-feedback">
+      <cms-form-errors
+        [errors]="sire.errors"
+        [isRadio]="true"
+      ></cms-form-errors>
+    </div>
+  </div>
+
+  <cms-bull-modal (sireAdded)="sireAdded.emit($event)" [form]="parentForm"></cms-bull-modal>

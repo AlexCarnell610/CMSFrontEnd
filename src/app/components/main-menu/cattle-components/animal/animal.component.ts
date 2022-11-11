@@ -31,7 +31,9 @@ export class AnimalComponent {
   }
 
   public addAnimal() {
-    this.modalService.get(Modals.Animal).setData({ isAdd: true, persistData: true });
+    this.modalService
+      .get(Modals.Animal)
+      .setData({ isAdd: true, persistData: true });
     this.modalService.get(Modals.Animal).open();
   }
 
@@ -42,22 +44,16 @@ export class AnimalComponent {
   }
 
   public editAnimal() {
-    this.$selectedAnimal.pipe(takeWhile(animal => {
-      console.warn("ANIMAL TAKEWHILE", animal);
-      
-      return !!animal
-    }, false)).subscribe((animal) => {
-      console.warn("SUBSCRIBE", animal);
-      
-      const modal = this.modalService.get(this.getModal(animal));
-      modal.setData({ isAdd: false, persistData: true });
-      modal.open();
-    });
+    this.$selectedAnimal
+      .pipe(take(1))
+      .subscribe((animal) => {
+        const modal = this.modalService.get(this.getModal(animal));
+        modal.setData({ isAdd: false, persistData: true });
+        modal.open();
+      });
   }
 
   public animalSelected(event: IAnimal) {
-    console.warn("SELECTED");
-    
     this.$selectedAnimal.next(event);
   }
 

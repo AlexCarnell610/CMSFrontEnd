@@ -6,3 +6,4 @@ export * from './src/loading-pane.service';
 export * from './src/pusher.service';
 export * from './src/screen-size.service';
 export * from './src/warning.service';
+export * from './src/sire-helper.service'

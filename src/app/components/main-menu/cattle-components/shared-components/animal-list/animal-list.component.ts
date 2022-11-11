@@ -65,7 +65,8 @@ export class AnimalListComponent implements OnInit, OnDestroy {
     this.add.emit(animal);
   }
 
-  public openEditModal() {
+  public openEditModal(animal: Animal) {
+    this.selectAnimal(animal)
     this.edit.emit(null);
   }
 

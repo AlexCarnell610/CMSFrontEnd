@@ -56,7 +56,8 @@
           </div>
         </div>
         <cms-breeds-list [form]="birthForm" [controlName]="'calfBreed'"></cms-breeds-list>
-        <div class="form-group">
+        <cms-sire-list [parentForm]="birthForm" [selectedBreed$]="selectedBreed$" [isAdd]="isAdd"></cms-sire-list>
+        <!-- <div class="form-group">
           <label for="calfSire">Sire</label>
           <div
             class="input-group"
@@ -78,7 +79,7 @@
               [isRadio]="true"
             ></cms-form-errors>
           </div>
-        </div>
+        </div> -->
         <div class="mb-2">
           <label for="registered">Registered on BCMS - &nbsp; </label>
           <div class="btn-group btn-group-toggle" id="registered">
@@ -235,4 +236,4 @@
   (statSaved)="statSaved($event)"
 ></cms-calving-stats-modal>
 
-<cms-bull-modal (sireAdded)="newSire = $event" [form]="birthForm"></cms-bull-modal>
+<!-- <cms-bull-modal (sireAdded)="newSire = $event" [form]="birthForm"></cms-bull-modal> -->

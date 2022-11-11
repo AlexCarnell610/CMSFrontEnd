@@ -41,7 +41,7 @@ export class AnimalBreedService {
 
   public getBreedCode(breed: string) {
     if (this.getBreedFromCode(breed.trim()) !== undefined) {
-      return breed;
+      return breed.toUpperCase();
     } else {
       return this.getCodeFromBreed(breed.trim());
     }
@@ -49,6 +49,16 @@ export class AnimalBreedService {
 
   public isBreedCode(breed: string): boolean {
     return this._breedMap.get(breed.toUpperCase()) !== undefined;
+  }
+
+  public isSameBreed(breed1: string, breed2: string): boolean {
+    console.warn(breed1, breed2);
+    console.warn("1",this.getBreedCode(breed1));
+    console.warn("2",this.getBreedCode(breed2));
+    
+    
+    
+    return this.getBreedCode(breed1) === this.getBreedCode(breed2)
   }
 
   get breedCodes() {
