@@ -184,7 +184,6 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
       breed: this.bull.breed,
       name: this.bull.name,
     });
-    // this.breed.disable();
   }
 
   private saveBull(): void {

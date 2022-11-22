@@ -408,7 +408,6 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
         updateOn: 'blur',
       }),
       sire: this.fb.control(['UK'], {
-        // validators: Validators.pattern(/^UK\d{12}|UK|No sire assigned$/),
         validators: Validators.required,
         updateOn: 'change',
       }),
