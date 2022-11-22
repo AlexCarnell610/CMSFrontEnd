@@ -36,7 +36,7 @@
     "@schematics/angular": "^13.2.5",
     "bootstrap": "^4.5.3",
     "chart.js": "^2.9.4",
-    "jquery": "^1.12.4",
+    "jquery": ">=3.5.0",
     "moment": ">=2.29.4",
     "ng2-charts": "^2.4.2",
     "ngx-smart-modal": "^7.4.1",
