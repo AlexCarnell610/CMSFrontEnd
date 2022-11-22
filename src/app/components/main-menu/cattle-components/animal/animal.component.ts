@@ -5,7 +5,7 @@ import { IAnimal, IBull } from '@cms-interfaces';
 import { ScreenSizeService } from '@cms-services';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { take, takeWhile } from 'rxjs/operators';
 
 @Component({
   selector: 'cms-animal',
@@ -31,18 +31,26 @@ export class AnimalComponent {
   }
 
   public addAnimal() {
-    this.modalService.get(Modals.Animal).setData({ isAdd: true });
+    this.modalService
+      .get(Modals.Animal)
+      .setData({ isAdd: true, persistData: true });
     this.modalService.get(Modals.Animal).open();
   }
 
-  public editAnimal() {
-    this.$selectedAnimal.pipe(take(1)).subscribe(animal => {
+  public addSire() {
+    const sireModal = this.modalService.get(Modals.Sire);
+    sireModal.setData({ isAdd: true }, true);
+    sireModal.open();
+  }
 
-      const modal = this.modalService.get(this.getModal(animal));
-      
-      modal.setData({ isAdd: false });
-      modal.open();
-    })
+  public editAnimal() {
+    this.$selectedAnimal
+      .pipe(take(1))
+      .subscribe((animal) => {
+        const modal = this.modalService.get(this.getModal(animal));
+        modal.setData({ isAdd: false, persistData: true });
+        modal.open();
+      });
   }
 
   public animalSelected(event: IAnimal) {

@@ -14,10 +14,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { Gender, Modals } from '@cms-enums';
-import { IAnimal, IBull } from '@cms-interfaces';
+import { IAnimal, IBreedCode, IBull } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { getDams, selectAnimals } from '@cms-ngrx/animal';
-import { selectBulls as getBulls } from '@cms-ngrx/bull';
+import { selectBullByTag, selectBulls as getBulls } from '@cms-ngrx/bull';
 import {
   AnimalBreedService,
   AnimalUpdateService,
@@ -60,6 +60,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
   public dropDownHidden = true;
   public breedsList;
   public isAddMode: boolean = false;
+  public newSire = false
   private $animals: Observable<IAnimal[]>;
   private previousFormValue;
   private noSireText = 'No sire assigned';
@@ -92,7 +93,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
       this.handlePopoverErrors().subscribe((canContinue) => {
         if (this.isAddMode) {
           this.markAllAsDirty();
-          if (canContinue) {
+          if (canContinue) {            
             this.loadingService.setLoadingState(true);
             const newAnimal: IAnimal = {
               ai: [],
@@ -112,20 +113,13 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
               registered: this.isRegistered,
               name: this.name.value ? this.name.value : null,
             };
-            this.animalUpdateService.addAnimal(newAnimal).then(() => {
-              this.saveResult.message = 'Animal Saved';
-              this.saveResult.success = true;
-
-              this.clearForm();
-              this.loadingService.setLoadingState(false);
-              this.handlePopover(this.previousFormValue ? 500 : 1000);
-            });
+            this.newSire ? this.saveBullAndAnimal(newAnimal) : this.addAnimal(newAnimal)
           }
         } else {
           this.tagNumber.disable();
           if (canContinue) {
             this.loadingService.setLoadingState(true);
-            const animalUpdate = {
+            const animalUpdate: Partial<IAnimal> = {
               birthDate: this.dob.value,
               dam: this.dam.value,
               sire: { tagNumber: this.noSire() ? '' : this.sire.value },
@@ -136,19 +130,46 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
               registered: this.isRegistered,
               name: this.name.value ? this.name.value : null,
             };
-            this.animalUpdateService
-              .updateAnimal(this.animal.tagNumber, animalUpdate)
-              .then(() => {
-                this.saveResult.message = 'Animal Updated';
-                this.saveResult.success = true;
-
-                this.loadingService.setLoadingState(false);
-                this.handlePopover(1000);
-              });
+            
+            this.newSire ? this.saveBullAndAnimal(animalUpdate as IAnimal) : this.updateAnimal(animalUpdate)
           }
         }
       })
     );
+  }
+
+  private saveBullAndAnimal(calf: IAnimal): void {
+    this.store
+      .select(selectBullByTag(this.sire.value))
+      .pipe(take(1))
+      .subscribe((bull) => {
+        this.animalUpdateService.addBull(bull).then(() => {
+          this.isAddMode ? this.addAnimal(calf) : this.updateAnimal(calf);
+        });
+      });
+  }
+
+  private addAnimal(newAnimal:IAnimal): void{
+    this.animalUpdateService.addAnimal(newAnimal).then(() => {
+      this.saveResult.message = 'Animal Saved';
+      this.saveResult.success = true;
+
+      this.clearForm();
+      this.loadingService.setLoadingState(false);
+      this.handlePopover(this.previousFormValue ? 500 : 1000);
+    });
+  }
+
+  private updateAnimal(animal: Partial<IAnimal>): void{
+    this.animalUpdateService
+    .updateAnimal(this.animal.tagNumber, animal)
+    .then(() => {
+      this.saveResult.message = 'Animal Updated';
+      this.saveResult.success = true;
+
+      this.loadingService.setLoadingState(false);
+      this.handlePopover(1000);
+    });
   }
 
   private getCSSForPopover() {
@@ -193,6 +214,18 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
     } else if (this.registered.value === 'yes') {
       return 'active';
     }
+  }
+
+  get selectedBreed$(): Observable<IBreedCode> {
+    return this.breed.valueChanges;
+  }
+
+  get sireControlName(): string {
+    return 'sire';
+  }
+
+  get breedControlName(): string {
+    return 'breed';
   }
 
   public closeModal() {
@@ -303,7 +336,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
       dam: null,
       gender: Gender.Female,
       managementTag: 'null',
-      sire: null,
+      sire: {tagNumber: null},
       tagNumber,
       weightData: [],
       breed: 'UNAV',
@@ -375,11 +408,11 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
         updateOn: 'blur',
       }),
       sire: this.fb.control(['UK'], {
-        validators: Validators.pattern(/^UK\d{12}|UK|No sire assigned$/),
-        updateOn: 'blur',
+        validators: Validators.required,
+        updateOn: 'change',
       }),
       registered: this.fb.control([], Validators.required),
-      name: this.fb.control([], {}),
+      name: this.fb.control('', {}),
     });
   }
 
@@ -424,14 +457,15 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
   private trackModalEvents() {
     const animalModal = this.modals.get(Modals.Animal);
     this.subs.add(
-      animalModal.onAnyCloseEventFinished.subscribe(() => {
-        this.modals.get(Modals.Animal).removeData();
+      animalModal.onAnyCloseEventFinished.subscribe((value) => {
+        animalModal.removeData();
         this.clearForm();
       })
     );
     this.subs.add(
-      this.modals.get(Modals.Animal).onOpenFinished.subscribe(() => {
-        this.isAddMode = this.modals.get(Modals.Animal).getData().isAdd;
+      animalModal.onOpenFinished.subscribe(() => {
+        this.newSire = false
+        this.isAddMode = animalModal.getData().isAdd;
         this.animalForm.enable();
         this.setData();
       })
@@ -440,12 +474,10 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private clearForm() {
     this.animalForm.reset(
-      { newTagNumber: 'UK', sire: 'UK', dam: 'UK' },
+      { newTagNumber: 'UK', dam: 'UK' },
       { emitEvent: false }
     );
   }
-
-  
 
   ngOnDestroy() {
     this.subs.unsubscribe();

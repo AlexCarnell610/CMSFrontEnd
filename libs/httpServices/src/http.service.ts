@@ -89,10 +89,13 @@ export class HttpService {
   }
 
   public addBull(bull: IBull): Observable<IBull> {
-    console.warn("ADD BULL HTTP", bull);
     
     return this.http
       .post(environment.api + HttpUrls.Bull, bull)
       .pipe(map((res) => this.mappingService.convertBull(res)));
+  }
+
+  public updateBull(bull: Partial<IBull>, tagNumber: string):Observable<IBull>{
+    return this.http.patch(`${environment.api + HttpUrls.Bull}/${tagNumber}`, {...bull}).pipe(map(response => this.mappingService.convertBull(response)))
   }
 }

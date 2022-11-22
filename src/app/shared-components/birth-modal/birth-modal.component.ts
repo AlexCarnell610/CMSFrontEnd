@@ -6,11 +6,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AssistanceReason, CalvingAssistance, Modals } from '@cms-enums';
 import {
   age,
@@ -98,13 +94,6 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.setUpForm();
     this.setInitialSires();
     this.trackBreedChange();
-
-    this.sire.valueChanges.subscribe((sire) => {
-      if (sire === 'addNew') {
-        this.sire.setValue('');
-        this.addSire();
-      }
-    });
   }
 
   ngAfterViewInit() {
@@ -112,40 +101,16 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public save() {
-    console.warn(this.birthForm.getRawValue());
-
     this.hasSaved = true;
     this.subs.add(
       this.handleErrors().subscribe((canContinue) => {
         if (canContinue && isAnimal(canContinue)) {
           const calf = canContinue;
           this.loadingService.setLoadingState(true);
-          if (this.isAdd) {
-            if (this.newSire) {
-              this.store
-                .select(selectBullByTag(this.sire.value))
-                .pipe(take(1))
-                .subscribe((bull) => {
-                  this.animalService.addBull(bull).then(() => {
-                    this.saveAnimal(calf);
-                  });
-                });
-            } else {
-              this.saveAnimal(calf);
-            }
+          if (this.newSire) {
+            this.saveBullAndAnimal(calf);
           } else {
-            if (this.newSire) {
-              this.store
-                .select(selectBullByTag(this.sire.value))
-                .pipe(take(1))
-                .subscribe((bull) => {
-                  this.animalService.addBull(bull).then(() => {
-                    this.updateAnimal(calf);
-                  });
-                });
-            } else {
-              this.updateAnimal(calf);
-            }
+            this.isAdd ? this.saveAnimal(calf) : this.updateAnimal(calf);
           }
         }
       })
@@ -217,12 +182,8 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.hasSaved && !this.stat ? 'invalid-label' : '';
   }
 
-  public addSire(): void {
-    this.sire.markAsPristine()
-    const sireModal = this.modalService.get(Modals.Sire);
-    sireModal.setData({ isAdd: this.isAdd }, true);
-
-    sireModal.open();
+  get selectedBreed$(): Observable<string> {
+    return this.birthForm.get(BirthFormControls.Breed).valueChanges;
   }
 
   private updateAnimal(animal: IAnimal): void {
@@ -243,8 +204,21 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  private saveBullAndAnimal(calf: IAnimal): void {
+    this.store
+      .select(selectBullByTag(this.sire.value))
+      .pipe(take(1))
+      .subscribe((bull) => {
+        this.animalService.addBull(bull).then(() => {
+          this.isAdd ? this.saveAnimal(calf) : this.updateAnimal(calf);
+        });
+      });
+  }
+
   private handleErrors(): BehaviorSubject<boolean | IAnimal> {
-    const output: BehaviorSubject<boolean | IAnimal> = new BehaviorSubject(null);
+    const output: BehaviorSubject<boolean | IAnimal> = new BehaviorSubject(
+      null
+    );
     let calf: IAnimal;
     if (this.isAdd) {
       this.calfSelect.disable();
@@ -430,6 +404,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subs.add(
       combineLatest([this.calfSelect.valueChanges, this.$calves]).subscribe(
         ([val, calves]: [string, IAnimal[]]) => {
+          this.newSire = false
           const selectedCalf = calves.find((calf) => calf.tagNumber === val);
           if (!this.isAdd) {
             if (selectedCalf) {
@@ -531,6 +506,14 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
+  get sireControlName(): string {
+    return BirthFormControls.Sire;
+  }
+
+  get breedControlName(): string {
+    return 'calfBreed';
+  }
+
   public get dob() {
     return this.birthForm.get(BirthFormControls.DOB);
   }
@@ -546,6 +529,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   public get sire() {
     return this.birthForm.get(BirthFormControls.Sire);
   }
+
   public get gender() {
     return this.birthForm.get(BirthFormControls.Gender);
   }

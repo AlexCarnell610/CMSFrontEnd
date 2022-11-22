@@ -65,7 +65,8 @@ export class AnimalListComponent implements OnInit, OnDestroy {
     this.add.emit(animal);
   }
 
-  public openEditModal() {
+  public openEditModal(animal: Animal) {
+    this.selectAnimal(animal)
     this.edit.emit(null);
   }
 
@@ -124,8 +125,6 @@ export class AnimalListComponent implements OnInit, OnDestroy {
   }
 
   private pushNextAnimal(selectedAnimal: Animal) {
-    console.warn(selectedAnimal);
-    
     this.subscriptions.add(
       this.getAnimal(selectedAnimal.tagNumber)
         .pipe(
@@ -134,8 +133,6 @@ export class AnimalListComponent implements OnInit, OnDestroy {
           )
         )
         .subscribe((ani) => {
-          console.warn(ani);
-          
           this.$currentAnimal.next(ani);
         })
     );

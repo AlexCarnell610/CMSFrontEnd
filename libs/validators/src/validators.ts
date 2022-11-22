@@ -8,7 +8,7 @@ import {
 import { IAnimal, AnimalWeight } from '@cms-interfaces';
 import { AnimalBreedService } from '@cms-services';
 import * as moment from 'moment';
-import { WeightType } from 'src/app/components/modals/weight-modal/weight-modal.component';
+import { WeightType } from '@cms-enums';
 
 export function breedValidator(breedService: AnimalBreedService): ValidatorFn {
   return (control: AbstractControl): ValidationErrors|null => {

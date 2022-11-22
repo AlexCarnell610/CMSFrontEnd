@@ -129,21 +129,15 @@
             <cms-form-errors [errors]="dam.errors"></cms-form-errors>
           </div>
         </div>
-        <div class="form-group" [ngClass]="{ 'was-validated': sire.dirty }">
-          <label for="sire">Enter Sire Tag</label>
-          <input
-            class="form-control"
-            type="text"
-            name="sire"
-            id="sire"
-            formControlName="sire"
-            pattern="^UK\d{12}|UK|No sire assigned$"
-            autocapitalize="characters"
-          />
-          <div class="invalid-feedback">
-            <cms-form-errors [errors]="sire.errors"></cms-form-errors>
-          </div>
-        </div>
+
+        <cms-sire-list
+          [isAdd]="isAddMode"
+          [parentForm]="animalForm"
+          [selectedBreed$]="selectedBreed$"
+          [controlName]="sireControlName"
+          [breedControlName]="breedControlName"
+        ></cms-sire-list>
+
         <div class="form-check" [ngClass]="{ 'was-validated': gender.dirty }">
           <input
             formControlName="gender"
@@ -194,3 +188,10 @@
     </div>
   </div>
 </ngx-smart-modal>
+
+<cms-bull-modal
+  (sireAdded)="newSire = $event"
+  [form]="animalForm"
+  [breedControlName]="breedControlName"
+  [sireControlName]="sireControlName"
+></cms-bull-modal>

@@ -7,7 +7,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Modals } from '@cms-enums';
+import { Modals, WeightType } from '@cms-enums';
 import { IAnimal, AnimalWeight, AnimalWeightType } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { getAnimalByTag } from '@cms-ngrx/animal';
@@ -31,11 +31,7 @@ enum FormControls {
   AnimalControl = 'animalControl',
 }
 
-export enum WeightType {
-  Sale = 'isSale',
-  Initial = 'isInitial',
-  Intermediate = 'isIntermediate',
-}
+
 @Component({
   selector: 'cms-weight-modal',
   templateUrl: './weight-modal.component.html',
@@ -320,16 +316,6 @@ export class EditWeightModalComponent
   private valuesEdited(): boolean {
     const initialDate = this.selectedWeight?.weightDate.format('YYYY-MM-DD');
     const weightTypeInput = this.getWeightType();
-    console.warn(
-      this.selectedWeight?.weight !== this.weight.value,
-      initialDate !== this.date.value,
-      this.selectedWeight?.weightType.isInitial !== weightTypeInput.isInitial,
-      this.selectedWeight?.weightType.isSale !== weightTypeInput.isSale
-    );
-    console.warn(
-      this.selectedWeight?.weightType.isInitial !== weightTypeInput.isInitial ||
-        this.selectedWeight?.weightType.isSale !== weightTypeInput.isSale
-    );
 
     return (
       this.selectedWeight?.weight !== this.weight.value ||

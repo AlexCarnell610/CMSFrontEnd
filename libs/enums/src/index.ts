@@ -6,3 +6,4 @@ export * from './lib/enums.module';
 export * from './lib/modals';
 export * from './lib/pages';
 export * from './lib/urls';
+export * from './lib/weight-type'
