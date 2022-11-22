@@ -107,32 +107,10 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
         if (canContinue && isAnimal(canContinue)) {
           const calf = canContinue;
           this.loadingService.setLoadingState(true);
-          if (this.isAdd) {
-            if (this.newSire) {
-              this.store
-                .select(selectBullByTag(this.sire.value))
-                .pipe(take(1))
-                .subscribe((bull) => {
-                  this.animalService.addBull(bull).then(() => {
-                    this.saveAnimal(calf);
-                  });
-                });
-            } else {
-              this.saveAnimal(calf);
-            }
+          if (this.newSire) {
+            this.saveBullAndAnimal(calf);
           } else {
-            if (this.newSire) {
-              this.store
-                .select(selectBullByTag(this.sire.value))
-                .pipe(take(1))
-                .subscribe((bull) => {
-                  this.animalService.addBull(bull).then(() => {
-                    this.updateAnimal(calf);
-                  });
-                });
-            } else {
-              this.updateAnimal(calf);
-            }
+            this.isAdd ? this.saveAnimal(calf) : this.updateAnimal(calf);
           }
         }
       })
@@ -204,8 +182,6 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.hasSaved && !this.stat ? 'invalid-label' : '';
   }
 
- 
-
   get selectedBreed$(): Observable<string> {
     return this.birthForm.get(BirthFormControls.Breed).valueChanges;
   }
@@ -226,6 +202,17 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
       this.loadingService.setLoadingState(false);
       this.handlePopover(1500);
     });
+  }
+
+  private saveBullAndAnimal(calf: IAnimal): void {
+    this.store
+      .select(selectBullByTag(this.sire.value))
+      .pipe(take(1))
+      .subscribe((bull) => {
+        this.animalService.addBull(bull).then(() => {
+          this.isAdd ? this.saveAnimal(calf) : this.updateAnimal(calf);
+        });
+      });
   }
 
   private handleErrors(): BehaviorSubject<boolean | IAnimal> {
@@ -417,6 +404,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subs.add(
       combineLatest([this.calfSelect.valueChanges, this.$calves]).subscribe(
         ([val, calves]: [string, IAnimal[]]) => {
+          this.newSire = false
           const selectedCalf = calves.find((calf) => calf.tagNumber === val);
           if (!this.isAdd) {
             if (selectedCalf) {
@@ -516,6 +504,14 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
       { calfTag: 'UK722218', calves: '', calfSire: '' },
       { emitEvent: emit }
     );
+  }
+
+  get sireControlName(): string {
+    return BirthFormControls.Sire;
+  }
+
+  get breedControlName(): string {
+    return 'calfBreed';
   }
 
   public get dob() {

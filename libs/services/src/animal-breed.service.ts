@@ -20,7 +20,7 @@ export class AnimalBreedService {
   }
 
   public getBreedFromCode(breed: string) {
-    return this._breedMap.get(breed?.toUpperCase());
+    return this._breedMap.get(breed?.trim().toUpperCase());
   }
 
   public getCodeFromBreed(searchBreed: string) {
@@ -52,12 +52,6 @@ export class AnimalBreedService {
   }
 
   public isSameBreed(breed1: string, breed2: string): boolean {
-    console.warn(breed1, breed2);
-    console.warn("1",this.getBreedCode(breed1));
-    console.warn("2",this.getBreedCode(breed2));
-    
-    
-    
     return this.getBreedCode(breed1) === this.getBreedCode(breed2)
   }
 

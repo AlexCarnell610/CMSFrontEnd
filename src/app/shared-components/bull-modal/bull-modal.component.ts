@@ -3,12 +3,10 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnChanges,
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import {
   AbstractControl,
@@ -16,7 +14,7 @@ import {
   FormGroup,
   ValidationErrors,
   ValidatorFn,
-  Validators,
+  Validators
 } from '@angular/forms';
 import { Modals } from '@cms-enums';
 import { IBull } from '@cms-interfaces';
@@ -28,7 +26,6 @@ import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { Subscription } from 'rxjs';
-import { BirthFormControls } from '../birth-modal/birth-modal.component';
 
 @Component({
   selector: 'cms-bull-modal',
@@ -38,6 +35,8 @@ import { BirthFormControls } from '../birth-modal/birth-modal.component';
 export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() form: FormGroup;
   @Input() bull: IBull;
+  @Input() breedControlName: string;
+  @Input() sireControlName: string;
   @Output() sireAdded: EventEmitter<boolean> = new EventEmitter();
 
   @ViewChild('errorPop') errorPopover: NgbPopover;
@@ -82,6 +81,7 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
       this.isAdd = modalData.isAdd;
       this.persistData = modalData.persistData;
       this.bullForm.reset({ tagNumber: 'UK' });
+      this.breed.setValue(this.calfBreed);
       if (!this.isAdd) {
         this.setData();
         this.tag.disable();
@@ -113,7 +113,9 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
           !this.isAdd &&
           !this.breedService.isSameBreed(this.bull.breed, this.breed.value)
         ) {
-          const breedName = this.breedService.getBreedFromCode(this.breed.value)
+          const breedName = this.breedService.getBreedFromCode(
+            this.breed.value
+          );
           this.warningService.show({
             header: 'Breed has updated',
             body: `Continuing will update all calves breeds to ${breedName}`,
@@ -172,6 +174,10 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.modalService.get(Modals.Sire).close();
   }
 
+  private get calfBreed(): string {
+    return this.form?.get(this.breedControlName)?.value;
+  }
+
   private setData(): void {
     this.bullForm.setValue({
       tagNumber: this.bull.tagNumber,
@@ -185,7 +191,7 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subs.unsubscribe();
     this.sireAdded.emit(true);
     this.isNewBull = true;
-    this.form?.get(BirthFormControls.Sire).setValue(this.tag.value);
+    this.form?.get(this.sireControlName).setValue(this.tag.value);
     const bull: IBull = {
       ...this.bullForm.getRawValue(),
       breed: this.breedCode,
@@ -200,7 +206,7 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private isSameBreedValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const calfBreed = this.form?.get(BirthFormControls.Breed).value;
+      const calfBreed = this.calfBreed;
 
       if (calfBreed === '' || !calfBreed || !control.value) return null;
 
@@ -210,11 +216,6 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
       )
         ? null
         : { notSameBreed: calfBreed };
-
-      // return calfBreed?.toString().toUpperCase() !==
-      //   control.value?.toString().toUpperCase()
-      //   ? { notSameBreed: calfBreed }
-      //   : null;
     };
   }
 

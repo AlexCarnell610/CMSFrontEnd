@@ -55,8 +55,18 @@
             <cms-form-errors [errors]="dob.errors"></cms-form-errors>
           </div>
         </div>
-        <cms-breeds-list [form]="birthForm" [controlName]="'calfBreed'"></cms-breeds-list>
-        <cms-sire-list [parentForm]="birthForm" [selectedBreed$]="selectedBreed$" [isAdd]="isAdd" (sireAdded)="newSire = $event"></cms-sire-list>
+        <cms-breeds-list
+          [form]="birthForm"
+          [controlName]="'calfBreed'"
+        ></cms-breeds-list>
+        <cms-sire-list
+          [parentForm]="birthForm"
+          [selectedBreed$]="selectedBreed$"
+          [isAdd]="isAdd"
+          [controlName]="sireControlName"
+          [breedControlName]="breedControlName"
+          (sireAdded)="newSire = $event"
+        ></cms-sire-list>
         <!-- <div class="form-group">
           <label for="calfSire">Sire</label>
           <div
@@ -236,4 +246,11 @@
   (statSaved)="statSaved($event)"
 ></cms-calving-stats-modal>
 
+
+<cms-bull-modal
+(sireAdded)="newSire = $event"
+  [form]="birthForm"
+  [breedControlName]="breedControlName"
+  [sireControlName]="sireControlName"
+></cms-bull-modal>
 <!-- <cms-bull-modal (sireAdded)="newSire = $event" [form]="birthForm"></cms-bull-modal> -->
