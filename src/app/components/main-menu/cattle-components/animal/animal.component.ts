@@ -33,13 +33,13 @@ export class AnimalComponent {
   public addAnimal() {
     this.modalService
       .get(Modals.Animal)
-      .setData({ isAdd: true, persistData: true });
+      .setData({ isAdd: true });
     this.modalService.get(Modals.Animal).open();
   }
 
   public addSire() {
     const sireModal = this.modalService.get(Modals.Sire);
-    sireModal.setData({ isAdd: true }, true);
+    sireModal.setData({ isAdd: true, persistData: true }, true);
     sireModal.open();
   }
 

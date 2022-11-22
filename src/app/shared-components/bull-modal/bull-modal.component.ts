@@ -78,6 +78,7 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.modalService.get(Modals.Sire).onOpenFinished.subscribe(() => {
       const modalData = this.modalService.resetModalData(Modals.Sire);
+      
       this.isAdd = modalData.isAdd;
       this.persistData = modalData.persistData;
       this.bullForm.reset({ tagNumber: 'UK' });
@@ -206,6 +207,8 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
   private isSameBreedValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const calfBreed = this.calfBreed;
+
+      if(this.persistData) return null;
 
       if (calfBreed === '' || !calfBreed || !control.value) return null;
 
