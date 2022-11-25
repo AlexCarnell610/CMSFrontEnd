@@ -54,6 +54,11 @@ export class WeightComponent implements OnInit, OnDestroy {
     this.modalService.get(Modals.Weight).open();
   }
 
+  public bulkAddWeight(): void{
+    console.warn("BULK CLICKED");
+    
+  }
+
   private updateGraph() {
     this.$selectedAnimal.subscribe((animal) => {
       if (
