@@ -6,4 +6,5 @@ export enum Modals {
   CalvingStats = 'calvingStats',
   Loading = 'loadingModal',
   Sire = 'sireModal',
+  BulkWeightModal = 'bulkWeightModal'
 }

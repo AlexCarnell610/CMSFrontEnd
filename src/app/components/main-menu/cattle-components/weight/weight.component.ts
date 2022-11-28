@@ -55,7 +55,7 @@ export class WeightComponent implements OnInit, OnDestroy {
   }
 
   public bulkAddWeight(): void{
-    console.warn("BULK CLICKED");
+    this.modalService.get(Modals.BulkWeightModal).open()
     
   }
 

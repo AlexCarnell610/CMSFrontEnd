@@ -1,0 +1,46 @@
+<ngx-smart-modal [identifier]="identifier" #bulkWeightModal>
+  <h4 class="text-center">Add Weights</h4>
+
+  <div class="cms-form">
+    <form [formGroup]="bulkWeightForm">
+      <div class="input-group">
+        <div class="custom-file" style="min-width: 2px;">
+          <input
+          (change)="selectedFile = $event.target.files[0]"
+            formControlName="inputFile"
+            type="file"
+            class="custom-file-input"
+            id="choose-weight-file"
+            aria-describedby="upload-button"
+            accept=".csv, .txt"
+            style="max-width: 150px;"
+            #upload
+          />
+          <label class="custom-file-label text-truncate d-block" for="choose-weight-file"
+            >{{labelText}}</label
+          >
+        </div>
+        <div class="input-group-append">
+            <button
+              class="btn btn-outline-secondary"
+              type="button"
+              id="upload-button"
+              (click)="upload.click()"
+            >
+              Browse
+            </button>
+          </div>
+        <div class="input-group-append">
+          <button
+            class="btn btn-primary"
+            type="button"
+            id="check-button"
+            (click)="checkFile()"
+          >
+            Check
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ngx-smart-modal>
