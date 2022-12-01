@@ -4,32 +4,34 @@
   <div class="cms-form">
     <form [formGroup]="bulkWeightForm">
       <div class="input-group">
-        <div class="custom-file" style="min-width: 2px;">
+        <div class="custom-file" style="min-width: 2px">
           <input
-          (change)="selectedFile = $event.target.files[0]"
+            (change)="selectedFile = $event.target.files[0]"
             formControlName="inputFile"
             type="file"
             class="custom-file-input"
             id="choose-weight-file"
             aria-describedby="upload-button"
             accept=".csv, .txt"
-            style="max-width: 150px;"
+            style="max-width: 150px"
             #upload
           />
-          <label class="custom-file-label text-truncate d-block" for="choose-weight-file"
-            >{{labelText}}</label
+          <label
+            class="custom-file-label text-truncate d-block"
+            for="choose-weight-file"
+            >{{ labelText }}</label
           >
         </div>
         <div class="input-group-append">
-            <button
-              class="btn btn-outline-secondary"
-              type="button"
-              id="upload-button"
-              (click)="upload.click()"
-            >
-              Browse
-            </button>
-          </div>
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            id="upload-button"
+            (click)="upload.click()"
+          >
+            Browse
+          </button>
+        </div>
         <div class="input-group-append">
           <button
             class="btn btn-primary"
@@ -41,6 +43,32 @@
           </button>
         </div>
       </div>
+    
     </form>
   </div>
+  <ng-container [ngTemplateOutlet]="weightTable" [ngTemplateOutletContext]="notFoundWeights?.length > correctWeights?.length ?  {weightArray:correctWeights} : {weightArray:notFoundWeights}"></ng-container>
+  <ng-container [ngTemplateOutlet]="weightTable" [ngTemplateOutletContext]="notFoundWeights?.length > correctWeights?.length ? {weightArray:notFoundWeights} : {weightArray:correctWeights}"></ng-container>
+
+  <cms-warning-display></cms-warning-display>
 </ngx-smart-modal>
+
+<ng-template #weightTable let-weightArray="weightArray">
+    <table class="table table-striped mt-2" *ngIf="weightArray?.length > 0">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Tag Number</th>
+            <th scope="col">Weight</th>
+            <th scope="col">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let weight of weightArray, let number = index">
+                <th scope="row">{{number+1}}</th>
+                <td>{{weight.id}}</td>
+                <td>{{weight.weight}}</td>
+                <td>{{weight.date | date}}</td>
+            </tr>
+        </tbody>
+      </table>
+</ng-template>
