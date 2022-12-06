@@ -3,10 +3,11 @@
 
   <div class="cms-form">
     <form [formGroup]="bulkWeightForm">
-      <div class="input-group">
+      <div [ngClass]="correctWeights?.length > 0 || notFoundWeights?.length > 0 ? 'mb-2 mt-2' : 'mb-5 mt-4'" class="input-group">
+
         <div class="custom-file" style="min-width: 2px">
           <input
-            (change)="selectedFile = $event.target.files[0]"
+            (change)="checkFile($event.target.files[0])"
             formControlName="inputFile"
             type="file"
             class="custom-file-input"
@@ -34,41 +35,59 @@
         </div>
         <div class="input-group-append">
           <button
-            class="btn btn-primary"
+            class="btn btn-success"
             type="button"
             id="check-button"
-            (click)="checkFile()"
+            [disabled]="!selectedFile"
+            (click)="saveWeights()"
           >
-            Check
+            Save Weights
           </button>
         </div>
       </div>
-    
     </form>
   </div>
-  <ng-container [ngTemplateOutlet]="weightTable" [ngTemplateOutletContext]="notFoundWeights?.length > correctWeights?.length ?  {weightArray:correctWeights} : {weightArray:notFoundWeights}"></ng-container>
-  <ng-container [ngTemplateOutlet]="weightTable" [ngTemplateOutletContext]="notFoundWeights?.length > correctWeights?.length ? {weightArray:notFoundWeights} : {weightArray:correctWeights}"></ng-container>
-
-  <cms-warning-display></cms-warning-display>
+  <ng-container
+    [ngTemplateOutlet]="weightTable"
+    [ngTemplateOutletContext]="
+      notFoundWeights?.length > correctWeights?.length
+        ? correctWeightsTemplateData
+        : notFoundWeightsTemplateData
+    "
+  ></ng-container>
+  <ng-container
+    [ngTemplateOutlet]="weightTable"
+    [ngTemplateOutletContext]="
+      notFoundWeights?.length > correctWeights?.length
+        ? notFoundWeightsTemplateData
+        : correctWeightsTemplateData
+    "
+  ></ng-container>
 </ngx-smart-modal>
 
-<ng-template #weightTable let-weightArray="weightArray">
-    <table class="table table-striped mt-2" *ngIf="weightArray?.length > 0">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Tag Number</th>
-            <th scope="col">Weight</th>
-            <th scope="col">Date</th>
-          </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let weight of weightArray, let number = index">
-                <th scope="row">{{number+1}}</th>
-                <td>{{weight.id}}</td>
-                <td>{{weight.weight}}</td>
-                <td>{{weight.date | date}}</td>
-            </tr>
-        </tbody>
-      </table>
+<ng-template #weightTable let-weightArray="weightArray" let-title="title">
+  <div *ngIf="weightArray?.length > 0">
+
+    <strong>
+      {{ title }}
+    </strong>
+    <table class="table table-striped mt-2" >
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Tag Number</th>
+          <th scope="col">Weight</th>
+          <th scope="col">Date</th>
+        </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let weight of weightArray; let number = index">
+        <th scope="row">{{ number + 1 }}</th>
+        <td>{{ weight.id }}</td>
+        <td>{{ weight.weight }}</td>
+        <td>{{ weight.date | date }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 </ng-template>

@@ -6,17 +6,14 @@ import {
   Validators,
 } from '@angular/forms';
 import { Modals } from '@cms-enums';
-import { Animal } from '@cms-interfaces';
+import { Animal, IBulkWeight } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
-import { selectAnimals } from '@cms-ngrx/animal';
+import { AddManyWeights, selectAnimals } from '@cms-ngrx/animal';
+import { WarningService } from '@cms-services';
 import { Store } from '@ngrx/store';
 import * as moment from 'moment';
+import { Subscription } from 'rxjs';
 
-interface IBulkWeight {
-  id: string;
-  weight: string;
-  date: Date;
-}
 @Component({
   selector: 'cms-bulk-weight-modal',
   templateUrl: './bulk-weight-modal.component.html',
@@ -28,10 +25,13 @@ export class BulkWeightModalComponent implements OnInit {
   bulkWeightForm: FormGroup;
   correctWeights: IBulkWeight[];
   notFoundWeights: IBulkWeight[];
+  duplicateWeights: IBulkWeight[];
+  private subs = new Subscription();
 
   constructor(
     private fb: FormBuilder,
-    private readonly store: Store<RootState>
+    private readonly store: Store<RootState>,
+    private readonly warningService: WarningService
   ) {}
 
   ngOnInit(): void {
@@ -40,16 +40,15 @@ export class BulkWeightModalComponent implements OnInit {
     });
   }
 
-  checkFile(): void {
-    if (this.selectedFile) {
+  checkFile(selectedFile: File): void {
+    if (selectedFile) {
+      this.selectedFile = selectedFile;
       let fileReader = new FileReader();
       this.store.select(selectAnimals).subscribe((animals) => {
         fileReader.onload = (e) => {
           const weightData: string = fileReader.result as string;
           const weightDataArray: string[] = weightData.split('\r\n');
 
-          console.warn(weightDataArray.shift());
-          console.log(weightDataArray);
           weightDataArray.pop();
           const mappedWeights = weightDataArray.map((weight) => {
             const currWeight = weight.split(',');
@@ -64,12 +63,11 @@ export class BulkWeightModalComponent implements OnInit {
             };
             return newWeight;
           });
-          console.warn(mappedWeights);
 
           this.correctWeights = mappedWeights.filter(
             (weight) => this.getAnimalIndex(weight, animals) > -1
           );
-          
+
           this.correctWeights.forEach(
             (weight) =>
               (weight.id = animals.find((animal) =>
@@ -83,20 +81,61 @@ export class BulkWeightModalComponent implements OnInit {
             );
           }
 
-          if (this.notFoundWeights?.length > 0) {
-            console.warn(
-              'Following tag numbers were not found',
-              this.notFoundWeights
+          if (this.correctWeights.length > 0) {
+            const dupedWeightIndexes = []
+            this.duplicateWeights = this.correctWeights.filter(
+              (weight, index) => {
+                const weightIndex = animals
+                  .find((animal) => animal.tagNumber === weight.id)
+                  .weightData.findIndex(
+                    (animalWeight) =>
+                      animalWeight.weight === +weight.weight &&
+                      animalWeight.weightDate.toDate() === weight.date
+                  );
+                    if(weightIndex !== -1)dupedWeightIndexes.push(weightIndex)
+                  return weightIndex
+              }
             );
-            console.warn(
-              'Do you still want to add these weights?',
-              this.correctWeights
-            );
+            dupedWeightIndexes.forEach(index => this.correctWeights.splice(index, 0))
           }
+          console.warn(this.correctWeights)
+          console.warn(this.notFoundWeights);
+          console.warn(this.duplicateWeights);
+          
+          
         };
       });
-      fileReader.readAsText(this.selectedFile);
+      fileReader.readAsText(selectedFile);
     }
+  }
+
+  saveWeights(): void {
+    if (this.selectedFile && this.correctWeights?.length < 1) {
+      this.warningService.show({
+        header: 'No Animals found from the file provided',
+        body: 'Please check the file and try again',
+        isError: true,
+        showCloseButton: false,
+        buttonText: 'Close',
+      });
+    } else if (
+      this.selectedFile &&
+      this.notFoundWeights?.length > 0 &&
+      this.correctWeights?.length > 0
+    ) {
+      this.warningService
+        .show({ header: 'Animals not found for all weights' })
+        .subscribe((result) => {
+          if (result) {
+            this.addWeights();
+          }
+        })
+        .unsubscribe();
+    }
+  }
+
+  private addWeights(): void {
+    this.store.dispatch(new AddManyWeights({ weights: this.correctWeights }));
   }
 
   fileChange(file) {
@@ -113,6 +152,23 @@ export class BulkWeightModalComponent implements OnInit {
 
   get fileInputControl(): AbstractControl {
     return this.bulkWeightForm.get('inputFile');
+  }
+
+  get correctWeightsTemplateData(): {
+    weightArray: IBulkWeight[];
+    title: string;
+  } {
+    return { weightArray: this.correctWeights, title: 'Weights Found' };
+  }
+
+  get notFoundWeightsTemplateData(): {
+    weightArray: IBulkWeight[];
+    title: string;
+  } {
+    return {
+      weightArray: this.notFoundWeights,
+      title: 'The following tags were not found',
+    };
   }
 
   getAnimalIndex(weight: IBulkWeight, animals: Animal[]): number {

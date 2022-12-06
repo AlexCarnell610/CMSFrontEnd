@@ -80,6 +80,7 @@ export interface AnimalWeight {
   weightDate: moment.Moment;
   weight: number;
   weightType: AnimalWeightType;
+  tag?:string
 }
 
 export interface AnimalWeightType {
@@ -94,6 +95,12 @@ export interface ICullUpdate {
   age: number;
   score: number;
   tagNumber: string;
+}
+
+export interface IBulkWeight {
+  id: string;
+  weight: string;
+  date: Date;
 }
 
 export function isAnimal(animal: any): animal is IAnimal {

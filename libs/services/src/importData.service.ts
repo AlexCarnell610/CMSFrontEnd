@@ -66,8 +66,15 @@ export class MappingService {
     };
   }
 
-  public convertWeightData(weightData: any[]): AnimalWeight[] {
-    return weightData.map((weight) => this.convertWeight(weight));
+  public convertWeightData(
+    weightData: any[],
+    includeTag = false
+  ): AnimalWeight[] {
+    return weightData.map((weight) => {
+      return includeTag
+        ? { ...this.convertWeight(weight), tag: weight.animal_tag_number }
+        : this.convertWeight(weight);
+    });
   }
 
   public convertWeight(weight: any): AnimalWeight {
