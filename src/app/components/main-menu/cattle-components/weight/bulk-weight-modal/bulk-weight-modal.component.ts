@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -6,12 +6,13 @@ import {
   Validators,
 } from '@angular/forms';
 import { Modals } from '@cms-enums';
-import { Animal, IBulkWeight } from '@cms-interfaces';
+import { Animal, AnimalWeight, IAnimal, IBulkWeight } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { AddManyWeights, selectAnimals } from '@cms-ngrx/animal';
 import { WarningService } from '@cms-services';
 import { Store } from '@ngrx/store';
 import * as moment from 'moment';
+import { NgxSmartModalService } from 'ngx-smart-modal';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -19,7 +20,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './bulk-weight-modal.component.html',
   styleUrls: ['./bulk-weight-modal.component.scss'],
 })
-export class BulkWeightModalComponent implements OnInit {
+export class BulkWeightModalComponent implements OnInit, AfterViewInit {
   selectedFile: File;
   identifier = Modals.BulkWeightModal;
   bulkWeightForm: FormGroup;
@@ -31,7 +32,8 @@ export class BulkWeightModalComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private readonly store: Store<RootState>,
-    private readonly warningService: WarningService
+    private readonly warningService: WarningService,
+    private readonly modalService: NgxSmartModalService
   ) {}
 
   ngOnInit(): void {
@@ -40,8 +42,18 @@ export class BulkWeightModalComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit(): void {
+    this.modalService.get(Modals.BulkWeightModal).onAnyCloseEventFinished.subscribe(() => {
+      console.warn("CLEAR");
+      
+      this.clearFileAndWeights()
+    })
+  }
+
   checkFile(selectedFile: File): void {
     if (selectedFile) {
+      console.warn("HAS SELECTED FILE");
+      
       this.selectedFile = selectedFile;
       let fileReader = new FileReader();
       this.store.select(selectAnimals).subscribe((animals) => {
@@ -50,6 +62,7 @@ export class BulkWeightModalComponent implements OnInit {
           const weightDataArray: string[] = weightData.split('\r\n');
 
           weightDataArray.pop();
+          weightDataArray.shift();
           const mappedWeights = weightDataArray.map((weight) => {
             const currWeight = weight.split(',');
 
@@ -63,6 +76,8 @@ export class BulkWeightModalComponent implements OnInit {
             };
             return newWeight;
           });
+
+          console.warn(mappedWeights);
 
           this.correctWeights = mappedWeights.filter(
             (weight) => this.getAnimalIndex(weight, animals) > -1
@@ -82,32 +97,44 @@ export class BulkWeightModalComponent implements OnInit {
           }
 
           if (this.correctWeights.length > 0) {
-            const dupedWeightIndexes = []
-            this.duplicateWeights = this.correctWeights.filter(
-              (weight, index) => {
-                const weightIndex = animals
-                  .find((animal) => animal.tagNumber === weight.id)
-                  .weightData.findIndex(
-                    (animalWeight) =>
-                      animalWeight.weight === +weight.weight &&
-                      animalWeight.weightDate.toDate() === weight.date
-                  );
-                    if(weightIndex !== -1)dupedWeightIndexes.push(weightIndex)
-                  return weightIndex
-              }
+            const dupedWeightIndexes = [];
+            this.duplicateWeights = this.correctWeights.filter((weight) => {
+              return this.getAnimalWeightData(weight.id, animals).findIndex(
+                (animalWeight) =>
+                  animalWeight.weight === +weight.weight && animalWeight.weightDate.toDate() === weight.date 
+              ) !== -1;
+            });
+            dupedWeightIndexes.forEach((index) =>
+              this.correctWeights.splice(index, 0)
             );
-            dupedWeightIndexes.forEach(index => this.correctWeights.splice(index, 0))
           }
-          console.warn(this.correctWeights)
+          console.warn(this.correctWeights);
           console.warn(this.notFoundWeights);
-          console.warn(this.duplicateWeights);
-          
-          
+          console.warn('Duped weights', this.duplicateWeights);
         };
       });
       fileReader.readAsText(selectedFile);
     }
   }
+
+  private getAnimalWeightData(
+    tagNumber: string,
+    animals: IAnimal[]
+  ): AnimalWeight[] {
+    return animals.find((animal) => animal.tagNumber === tagNumber).weightData;
+  }
+
+  // const weightIndex = animals
+  //                 .find((animal) => animal.tagNumber === weight.id)
+  //                 .weightData.findIndex(
+  //                   (animalWeight) =>
+  //                     animalWeight.weight.toString() === weight.weight &&
+  //                     animalWeight.weightDate.toDate() === weight.date
+  //                 );
+  //                 console.warn(weightIndex);
+
+  //                   if(weightIndex !== -1)dupedWeightIndexes.push(weightIndex)
+  //                 return weightIndex
 
   saveWeights(): void {
     if (this.selectedFile && this.correctWeights?.length < 1) {
@@ -130,12 +157,20 @@ export class BulkWeightModalComponent implements OnInit {
             this.addWeights();
           }
         })
-        .unsubscribe();
+        ;
     }
   }
 
   private addWeights(): void {
     this.store.dispatch(new AddManyWeights({ weights: this.correctWeights }));
+    this.clearFileAndWeights()
+  }
+
+  private clearFileAndWeights(): void{
+    this.selectedFile = null
+    this.correctWeights = []
+    this.notFoundWeights = []
+    this.duplicateWeights = []
   }
 
   fileChange(file) {
@@ -144,10 +179,6 @@ export class BulkWeightModalComponent implements OnInit {
 
   get labelText(): string {
     return this.selectedFile?.name || 'Choose File...';
-  }
-
-  get fileName(): string {
-    return (this.fileInputControl.value as string).split('\\')[2];
   }
 
   get fileInputControl(): AbstractControl {
