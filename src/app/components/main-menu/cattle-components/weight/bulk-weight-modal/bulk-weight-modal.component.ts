@@ -43,17 +43,21 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.modalService.get(Modals.BulkWeightModal).onAnyCloseEventFinished.subscribe(() => {
-      console.warn("CLEAR");
-      
-      this.clearFileAndWeights()
-    })
+    this.modalService
+      .get(Modals.BulkWeightModal)
+      .onAnyCloseEventFinished.subscribe(() => {
+        console.warn('CLEAR');
+
+        this.clearFileAndWeights();
+      });
   }
 
   checkFile(selectedFile: File): void {
+    console.warn('SELECTed file', selectedFile);
+    this.clearFileAndWeights();
     if (selectedFile) {
-      console.warn("HAS SELECTED FILE");
-      
+      console.warn('HAS SELECTED FILE');
+
       this.selectedFile = selectedFile;
       let fileReader = new FileReader();
       this.store.select(selectAnimals).subscribe((animals) => {
@@ -62,7 +66,19 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
           const weightDataArray: string[] = weightData.split('\r\n');
 
           weightDataArray.pop();
-          weightDataArray.shift();
+          const keys = weightDataArray.shift();
+
+          if (!this.keysCorrect(keys?.split(','))) {
+            this.warningService.show({
+              header: 'File format incorrect',
+              body: 'Please correct or choose a different file',
+              buttonText: 'Close',
+              isError: true,
+              showCloseButton: false,
+            });
+            this.clearFileAndWeights();
+            return;
+          }
           const mappedWeights = weightDataArray.map((weight) => {
             const currWeight = weight.split(',');
 
@@ -98,15 +114,8 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
 
           if (this.correctWeights.length > 0) {
             const dupedWeightIndexes = [];
-            this.duplicateWeights = this.correctWeights.filter((weight) => {
-              return this.getAnimalWeightData(weight.id, animals).findIndex(
-                (animalWeight) =>
-                  animalWeight.weight === +weight.weight && animalWeight.weightDate.toDate() === weight.date 
-              ) !== -1;
-            });
-            dupedWeightIndexes.forEach((index) =>
-              this.correctWeights.splice(index, 0)
-            );
+            this.duplicateWeights = this.getDuplicatedWeights(animals)
+           
           }
           console.warn(this.correctWeights);
           console.warn(this.notFoundWeights);
@@ -115,6 +124,30 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
       });
       fileReader.readAsText(selectedFile);
     }
+  }
+
+  private keysCorrect(keys: string[]): boolean {
+    return (
+      !!keys &&
+      keys[0] === 'VID' &&
+      keys[1] === 'Weight' &&
+      keys[2] === 'Draft' &&
+      keys[3] === 'Date' &&
+      keys[4] === 'Time' &&
+      keys[5] === 'EID'
+    );
+  }
+
+  private getDuplicatedWeights(animals: IAnimal[]):IBulkWeight[]{
+    return this.correctWeights.filter((weight) => {
+      return (
+        this.getAnimalWeightData(weight.id, animals).findIndex(
+          (animalWeight) =>
+            animalWeight.weight === +weight.weight &&
+            animalWeight.weightDate.isSame(weight.date, 'day')
+        ) !== -1
+      );
+    });
   }
 
   private getAnimalWeightData(
@@ -156,21 +189,21 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
           if (result) {
             this.addWeights();
           }
-        })
-        ;
+        });
     }
   }
 
   private addWeights(): void {
     this.store.dispatch(new AddManyWeights({ weights: this.correctWeights }));
-    this.clearFileAndWeights()
+    this.clearFileAndWeights();
   }
 
-  private clearFileAndWeights(): void{
-    this.selectedFile = null
-    this.correctWeights = []
-    this.notFoundWeights = []
-    this.duplicateWeights = []
+  private clearFileAndWeights(): void {
+    this.selectedFile = null;
+    this.correctWeights = [];
+    this.notFoundWeights = [];
+    this.duplicateWeights = [];
+    this.bulkWeightForm.reset();
   }
 
   fileChange(file) {
