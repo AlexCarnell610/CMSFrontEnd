@@ -25,7 +25,9 @@
       ></cms-animal-list>
     </div>
     <div *ngIf="!screenSize.isSmallScreen" class="col">
+      
       <div class="chart-wrapper cms-sticky" *ngIf="chartWeights.length > 0">
+        <ng-container [ngTemplateOutlet]="avgDailyWeightGain"></ng-container>
         <canvas
           baseChart
           [datasets]="chartWeights"
@@ -46,6 +48,7 @@
         class="chart-wrapper small-screen-graph"
         *ngIf="chartWeights.length > 0"
       >
+      <ng-container [ngTemplateOutlet]="avgDailyWeightGain"></ng-container>
         <canvas
           baseChart
           [datasets]="chartWeights"
@@ -61,6 +64,14 @@
     </div>
   </div>
 </div>
+
+<ng-template #avgDailyWeightGain>
+  <div>
+    <strong>Avg Daily Weight Gain:</strong> {{dailyWeightGain}} Kg/day
+
+  </div>
+
+</ng-template>
 
 <cms-weight-modal
   [isAddMode]="isAddMode"

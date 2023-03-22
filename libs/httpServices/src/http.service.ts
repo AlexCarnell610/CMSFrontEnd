@@ -119,12 +119,10 @@ export class HttpService {
     return this.http
       .post(`${environment.api + HttpUrls.Weights}`, { weights:payload })
       .pipe(map((response) => {
-        console.warn(response);
         let weightData: AnimalWeight[][] = []
         for(let value of Object.values<any>(response)){
           weightData.push(this.mappingService.convertWeightData(value, true))
         }
-        console.warn(weightData);
         
         return weightData
       }));

@@ -104,7 +104,7 @@ export interface IBulkWeight {
 }
 
 export function isAnimal(animal: any): animal is IAnimal {
-  return 'tagNumber' in animal;
+  return 'managementTag' in animal;
 }
 
 export function isCow(animal: IAnimal | IBull): animal is IAnimal {

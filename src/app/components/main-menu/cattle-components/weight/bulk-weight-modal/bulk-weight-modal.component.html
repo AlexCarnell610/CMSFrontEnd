@@ -1,9 +1,8 @@
 <ngx-smart-modal [identifier]="identifier" #bulkWeightModal>
   <h4 class="text-center">Add Weights</h4>
-
   <div class="cms-form">
     <form [formGroup]="bulkWeightForm">
-      <div [ngClass]="correctWeights?.length > 0 || notFoundWeights?.length > 0 ? 'mb-2 mt-2' : 'mb-5 mt-4'" class="input-group">
+      <div [ngClass]="correctWeights?.length > 0 || notFoundWeights?.length > 0 || duplicateWeights?.length > 0 ? 'mb-2 mt-2' : 'mb-5 mt-4'" class="input-group">
 
         <div class="custom-file" style="min-width: 2px">
           <input
@@ -40,6 +39,11 @@
             id="check-button"
             [disabled]="!selectedFile"
             (click)="saveWeights()"
+            ngbPopover="Weights Added!"
+            #saveConfirm="ngbPopover"
+            placement="bottom"
+            popoverClass="update-success"
+            triggers="manual"
           >
             Save Weights
           </button>
@@ -49,20 +53,22 @@
   </div>
   <ng-container
     [ngTemplateOutlet]="weightTable"
-    [ngTemplateOutletContext]="
-      notFoundWeights?.length > correctWeights?.length
-        ? correctWeightsTemplateData
-        : notFoundWeightsTemplateData
-    "
+    [ngTemplateOutletContext]="correctWeightsTemplateData"
   ></ng-container>
   <ng-container
     [ngTemplateOutlet]="weightTable"
-    [ngTemplateOutletContext]="
+    [ngTemplateOutletContext]="duplicateWeightsTemplateData"
+  ></ng-container>
+  <ng-container
+    [ngTemplateOutlet]="weightTable"
+    [ngTemplateOutletContext]="notFoundWeightsTemplateData"
+  ></ng-container>
+
+  <!--"
       notFoundWeights?.length > correctWeights?.length
         ? notFoundWeightsTemplateData
         : correctWeightsTemplateData
-    "
-  ></ng-container>
+    "-->
 </ngx-smart-modal>
 
 <ng-template #weightTable let-weightArray="weightArray" let-title="title">

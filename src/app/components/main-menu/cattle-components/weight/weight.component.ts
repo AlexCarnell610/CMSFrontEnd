@@ -4,6 +4,7 @@ import { Modals, PageURLs } from '@cms-enums';
 import { IAnimal } from '@cms-interfaces';
 import { ScreenSizeService } from '@cms-services';
 import { ChartDataSets } from 'chart.js';
+import * as moment from 'moment';
 import { Label } from 'ng2-charts';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject, Subscription } from 'rxjs';
@@ -54,9 +55,8 @@ export class WeightComponent implements OnInit, OnDestroy {
     this.modalService.get(Modals.Weight).open();
   }
 
-  public bulkAddWeight(): void{
-    this.modalService.get(Modals.BulkWeightModal).open()
-    
+  public bulkAddWeight(): void {
+    this.modalService.get(Modals.BulkWeightModal).open();
   }
 
   private updateGraph() {
@@ -79,6 +79,19 @@ export class WeightComponent implements OnInit, OnDestroy {
         this.chartWeights = [];
       }
     });
+  }
+
+  get dailyWeightGain() {
+    const weights = this.selectedAnimal?.weightData
+    if(weights?.length > 1){
+      const initialWeight = weights[0]
+      const lastWeight = weights[weights.length-1]
+      const weightGain = lastWeight.weight-initialWeight.weight
+      const dateDiff = lastWeight.weightDate.diff(initialWeight.weightDate, "days")
+
+      return (weightGain/dateDiff).toPrecision(3)
+    }
+    return "-"
   }
 
   ngOnDestroy() {

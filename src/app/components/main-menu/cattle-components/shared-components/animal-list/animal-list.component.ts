@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PageURLs } from '@cms-enums';
-import { Animal, IAnimal, IBull } from '@cms-interfaces';
+import { Animal, IAnimal, IBull, isAnimal } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import {
   getAnimalByTag,
@@ -168,7 +168,7 @@ export class AnimalListComponent implements OnInit, OnDestroy {
       combineLatest([this.searchBarValChange, this.animals$]).subscribe(
         ([value, animals]: [string, Animal[]]) => {
           this.searched = true;
-          if (value.length > 2) {
+          if (value.length > 1) {
             if (document.getElementById('animalList')) {
               document.getElementById('animalList').scrollTop = 0;
             }
@@ -196,7 +196,9 @@ export class AnimalListComponent implements OnInit, OnDestroy {
     return animals.filter(
       (animal) =>
         animal.tagNumber.toLowerCase().includes(value.toLowerCase()) ||
-        animal.name?.toLowerCase().includes(value.toLowerCase())
+        animal.name?.toLowerCase().includes(value.toLowerCase()) ||
+        (isAnimal(animal) && animal.managementTag.toLowerCase().includes(value.toLowerCase()))
+        
     );
   }
 

@@ -7,13 +7,11 @@ import { of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { LoadingPaneService } from '../../../../services/src/loading-pane.service';
 import {
-  AddAnimal,
   AddManyWeights,
   AnimalActionTypes,
   HTTPError,
   LoadAnimalData,
   LoadAnimalsFinished,
-  UpdateAnimal,
   UpdateManyAnimals,
 } from './animal.actions';
 

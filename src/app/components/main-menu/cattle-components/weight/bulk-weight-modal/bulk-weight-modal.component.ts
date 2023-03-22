@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -8,32 +8,51 @@ import {
 import { Modals } from '@cms-enums';
 import { Animal, AnimalWeight, IAnimal, IBulkWeight } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
-import { AddManyWeights, selectAnimals } from '@cms-ngrx/animal';
+import {
+  AddManyWeights,
+  AnimalActionTypes,
+  selectAnimals,
+} from '@cms-ngrx/animal';
 import { WarningService } from '@cms-services';
+import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
+import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import * as moment from 'moment';
 import { NgxSmartModalService } from 'ngx-smart-modal';
-import { Subscription } from 'rxjs';
+import { Observable, of, Subscription, timer } from 'rxjs';
+import { filter, map, switchMap } from 'rxjs/operators';
 
+interface TableData {
+  weightArray: IBulkWeight[];
+  title: string;
+}
 @Component({
   selector: 'cms-bulk-weight-modal',
   templateUrl: './bulk-weight-modal.component.html',
   styleUrls: ['./bulk-weight-modal.component.scss'],
 })
 export class BulkWeightModalComponent implements OnInit, AfterViewInit {
+  @ViewChild('saveConfirm') saveConfirm: NgbPopover;
   selectedFile: File;
   identifier = Modals.BulkWeightModal;
   bulkWeightForm: FormGroup;
   correctWeights: IBulkWeight[];
   notFoundWeights: IBulkWeight[];
   duplicateWeights: IBulkWeight[];
-  private subs = new Subscription();
+  saveResult: { message: string; success: boolean } = {
+    message: '',
+    success: true,
+  };
+
+  private annoyingWarningSub: Subscription;
+  private subs: Subscription = new Subscription();
 
   constructor(
     private fb: FormBuilder,
     private readonly store: Store<RootState>,
     private readonly warningService: WarningService,
-    private readonly modalService: NgxSmartModalService
+    private readonly modalService: NgxSmartModalService,
+    private readonly actions$: Actions
   ) {}
 
   ngOnInit(): void {
@@ -46,18 +65,14 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
     this.modalService
       .get(Modals.BulkWeightModal)
       .onAnyCloseEventFinished.subscribe(() => {
-        console.warn('CLEAR');
-
         this.clearFileAndWeights();
       });
   }
 
   checkFile(selectedFile: File): void {
-    console.warn('SELECTed file', selectedFile);
     this.clearFileAndWeights();
     if (selectedFile) {
-      console.warn('HAS SELECTED FILE');
-
+      console.warn('SELECTED FILE');
       this.selectedFile = selectedFile;
       let fileReader = new FileReader();
       this.store.select(selectAnimals).subscribe((animals) => {
@@ -65,7 +80,10 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
           const weightData: string = fileReader.result as string;
           const weightDataArray: string[] = weightData.split('\r\n');
 
-          weightDataArray.pop();
+          if (weightDataArray[weightDataArray.length - 1] === '') {
+            weightDataArray.pop();
+          }
+
           const keys = weightDataArray.shift();
 
           if (!this.keysCorrect(keys?.split(','))) {
@@ -93,8 +111,6 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
             return newWeight;
           });
 
-          console.warn(mappedWeights);
-
           this.correctWeights = mappedWeights.filter(
             (weight) => this.getAnimalIndex(weight, animals) > -1
           );
@@ -113,13 +129,13 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
           }
 
           if (this.correctWeights.length > 0) {
-            const dupedWeightIndexes = [];
-            this.duplicateWeights = this.getDuplicatedWeights(animals)
-           
+            this.duplicateWeights = this.getDuplicatedWeights(animals);
+            this.correctWeights = this.correctWeights.filter(
+              (correctWeight) => {
+                return !this.duplicateWeights.includes(correctWeight);
+              }
+            );
           }
-          console.warn(this.correctWeights);
-          console.warn(this.notFoundWeights);
-          console.warn('Duped weights', this.duplicateWeights);
         };
       });
       fileReader.readAsText(selectedFile);
@@ -138,7 +154,7 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
     );
   }
 
-  private getDuplicatedWeights(animals: IAnimal[]):IBulkWeight[]{
+  private getDuplicatedWeights(animals: IAnimal[]): IBulkWeight[] {
     return this.correctWeights.filter((weight) => {
       return (
         this.getAnimalWeightData(weight.id, animals).findIndex(
@@ -157,20 +173,11 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
     return animals.find((animal) => animal.tagNumber === tagNumber).weightData;
   }
 
-  // const weightIndex = animals
-  //                 .find((animal) => animal.tagNumber === weight.id)
-  //                 .weightData.findIndex(
-  //                   (animalWeight) =>
-  //                     animalWeight.weight.toString() === weight.weight &&
-  //                     animalWeight.weightDate.toDate() === weight.date
-  //                 );
-  //                 console.warn(weightIndex);
-
-  //                   if(weightIndex !== -1)dupedWeightIndexes.push(weightIndex)
-  //                 return weightIndex
-
   saveWeights(): void {
-    if (this.selectedFile && this.correctWeights?.length < 1) {
+    if (!this.selectedFile) {
+      return;
+    }
+    if (!this.hasCorrectWeights && !this.hasDuplicateWeights) {
       this.warningService.show({
         header: 'No Animals found from the file provided',
         body: 'Please check the file and try again',
@@ -179,23 +186,107 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
         buttonText: 'Close',
       });
     } else if (
-      this.selectedFile &&
       this.notFoundWeights?.length > 0 &&
-      this.correctWeights?.length > 0
+      this.hasCorrectWeights &&
+      this.hasDuplicateWeights
     ) {
-      this.warningService
-        .show({ header: 'Animals not found for all weights' })
-        .subscribe((result) => {
-          if (result) {
-            this.addWeights();
+      this.annoyingWarningSub = this.animalsNotFoundForAllWeightsError()
+        .pipe(
+          switchMap((result) => {
+            return result
+              ? this.duplicateWeightsWarning().pipe(
+                  map((addDupes) => {
+                    return { notAllFound: result, dupes: addDupes };
+                  })
+                )
+              : of({ notAllFound: result, dupes: false });
+          })
+        )
+        .subscribe(
+          (actualResult: { notAllFound: boolean; dupes: boolean }) => {
+            if (actualResult.notAllFound && actualResult.dupes) {
+              this.addWeights(true);
+            } else if (actualResult.notAllFound) {
+              this.addWeights(false);
+            }
+
+            this.annoyingWarningSub.unsubscribe();
+          },
+          () => {
+            console.error('ERRRO');
+          },
+          () => {
+            console.error('complete');
           }
-        });
+        );
+    } else if (this.hasDuplicateWeights) {
+      let subscription = this.duplicateWeightsWarning().subscribe((result) => {
+        if (result) {
+          this.addWeights(true);
+        }
+        subscription.unsubscribe();
+      });
+    } else if (this.hasCorrectWeights && this.hasNotFoundTags) {
+      let subscription = this.animalsNotFoundForAllWeightsError().subscribe(
+        (result) => {
+          if (result) {
+            this.addWeights(false);
+          }
+          subscription.unsubscribe();
+        }
+      );
+    } else {
+      this.addWeights(false);
     }
   }
 
-  private addWeights(): void {
-    this.store.dispatch(new AddManyWeights({ weights: this.correctWeights }));
-    this.clearFileAndWeights();
+  private get hasDuplicateWeights(): boolean {
+    return this.duplicateWeights?.length > 0;
+  }
+
+  private get hasCorrectWeights(): boolean {
+    return this.correctWeights?.length > 0;
+  }
+
+  private get hasNotFoundTags(): boolean {
+    return this.notFoundWeights?.length > 0;
+  }
+
+  private duplicateWeightsWarning(): Observable<boolean> {
+    return this.warningService
+      .show(
+        {
+          header: 'Duplicate Weights found',
+          body: 'Do you want to add them anyway?',
+        },
+        null,
+        false
+      )
+      .pipe(filter((result) => result !== null));
+  }
+
+  private animalsNotFoundForAllWeightsError(): Observable<boolean> {
+    return this.warningService
+      .show({ header: 'Animals not found for all weights' }, null, false)
+      .pipe(filter((result) => result !== null));
+  }
+
+  private addWeights(includeDuplicates: boolean): void {
+    const payload = [
+      ...this.correctWeights,
+      ...(includeDuplicates ? this.duplicateWeights : []),
+    ];
+    this.subs.add(
+      this.actions$
+        .pipe(ofType(AnimalActionTypes.UpdateManyAnimalsType))
+        .subscribe((val) => {
+          console.warn(val);
+          
+          this.clearFileAndWeights();
+          this.handlePopover();
+        })
+    );
+    this.store.dispatch(new AddManyWeights({ weights: payload }));
   }
 
   private clearFileAndWeights(): void {
@@ -206,8 +297,13 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
     this.bulkWeightForm.reset();
   }
 
-  fileChange(file) {
-    console.warn(file);
+  private handlePopover() {
+    this.saveConfirm.open();
+    // this.subs.add(
+    //   timer(1500).subscribe(() => {
+    //     this.saveConfirm.close();
+    //   })
+    // );
   }
 
   get labelText(): string {
@@ -218,17 +314,18 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
     return this.bulkWeightForm.get('inputFile');
   }
 
-  get correctWeightsTemplateData(): {
-    weightArray: IBulkWeight[];
-    title: string;
-  } {
+  get correctWeightsTemplateData(): TableData {
     return { weightArray: this.correctWeights, title: 'Weights Found' };
   }
 
-  get notFoundWeightsTemplateData(): {
-    weightArray: IBulkWeight[];
-    title: string;
-  } {
+  get duplicateWeightsTemplateData(): TableData {
+    return {
+      title: 'Ducplicate Weights found',
+      weightArray: this.duplicateWeights,
+    };
+  }
+
+  get notFoundWeightsTemplateData(): TableData {
     return {
       weightArray: this.notFoundWeights,
       title: 'The following tags were not found',
