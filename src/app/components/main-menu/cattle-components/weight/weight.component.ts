@@ -4,7 +4,6 @@ import { Modals, PageURLs } from '@cms-enums';
 import { IAnimal } from '@cms-interfaces';
 import { ScreenSizeService } from '@cms-services';
 import { ChartDataSets } from 'chart.js';
-import * as moment from 'moment';
 import { Label } from 'ng2-charts';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject, Subscription } from 'rxjs';

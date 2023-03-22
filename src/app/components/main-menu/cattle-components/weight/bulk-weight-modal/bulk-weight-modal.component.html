@@ -63,17 +63,10 @@
     [ngTemplateOutlet]="weightTable"
     [ngTemplateOutletContext]="notFoundWeightsTemplateData"
   ></ng-container>
-
-  <!--"
-      notFoundWeights?.length > correctWeights?.length
-        ? notFoundWeightsTemplateData
-        : correctWeightsTemplateData
-    "-->
 </ngx-smart-modal>
 
 <ng-template #weightTable let-weightArray="weightArray" let-title="title">
   <div *ngIf="weightArray?.length > 0">
-
     <strong>
       {{ title }}
     </strong>
