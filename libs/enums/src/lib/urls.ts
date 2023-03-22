@@ -9,7 +9,8 @@ export enum HttpUrls {
   Calf = '/calf',
   CullUpdate = '/cullUpdate',
   Root = '/',
-  Bull = '/bull'
+  Bull = '/bull',
+  Weights = '/weights'
 }
 
 export const BackendURL = 'https://cmsBackend.api/';

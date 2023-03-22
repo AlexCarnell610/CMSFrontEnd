@@ -1,7 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HttpUrls } from '@cms-enums';
-import { IAnimal, AnimalWeight, IBull } from '@cms-interfaces';
+import {
+  IAnimal,
+  AnimalWeight,
+  IBull,
+  IBulkWeight,
+  Animal,
+} from '@cms-interfaces';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -19,7 +25,7 @@ export class HttpService {
 
   public getAnimalData(): Observable<IAnimal[]> {
     return this.http.get(environment.api + HttpUrls.Animals).pipe(
-      map((response) => {        
+      map((response) => {
         return this.mappingService.importAnimalData(response);
       })
     );
@@ -89,13 +95,36 @@ export class HttpService {
   }
 
   public addBull(bull: IBull): Observable<IBull> {
-    
     return this.http
       .post(environment.api + HttpUrls.Bull, bull)
       .pipe(map((res) => this.mappingService.convertBull(res)));
   }
 
-  public updateBull(bull: Partial<IBull>, tagNumber: string):Observable<IBull>{
-    return this.http.patch(`${environment.api + HttpUrls.Bull}/${tagNumber}`, {...bull}).pipe(map(response => this.mappingService.convertBull(response)))
+  public updateBull(
+    bull: Partial<IBull>,
+    tagNumber: string
+  ): Observable<IBull> {
+    return this.http
+      .patch(`${environment.api + HttpUrls.Bull}/${tagNumber}`, { ...bull })
+      .pipe(map((response) => this.mappingService.convertBull(response)));
+  }
+
+  public addManyWeights(weights: IBulkWeight[]): Observable<AnimalWeight[][]> {
+    const payload = weights.map((weight) => {
+      return {
+        ...weight,
+        date: moment(weight.date).format("YYYY-MM-DD HH:mm:SS")
+      };
+    });
+    return this.http
+      .post(`${environment.api + HttpUrls.Weights}`, { weights:payload })
+      .pipe(map((response) => {
+        let weightData: AnimalWeight[][] = []
+        for(let value of Object.values<any>(response)){
+          weightData.push(this.mappingService.convertWeightData(value, true))
+        }
+        
+        return weightData
+      }));
   }
 }

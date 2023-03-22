@@ -12,6 +12,11 @@
 <div class="container mb-3 mt-3">
   <div class="row">
     <div class="col">
+      <button class="btn btn-success mb-2" (click)="bulkAddWeight()">Add Bulk Weights</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
       <cms-animal-list
         [page]="pageName"
         (add)="openAddModal()"
@@ -20,7 +25,9 @@
       ></cms-animal-list>
     </div>
     <div *ngIf="!screenSize.isSmallScreen" class="col">
+      
       <div class="chart-wrapper cms-sticky" *ngIf="chartWeights.length > 0">
+        <ng-container [ngTemplateOutlet]="avgDailyWeightGain"></ng-container>
         <canvas
           baseChart
           [datasets]="chartWeights"
@@ -41,6 +48,7 @@
         class="chart-wrapper small-screen-graph"
         *ngIf="chartWeights.length > 0"
       >
+      <ng-container [ngTemplateOutlet]="avgDailyWeightGain"></ng-container>
         <canvas
           baseChart
           [datasets]="chartWeights"
@@ -57,8 +65,16 @@
   </div>
 </div>
 
+<ng-template #avgDailyWeightGain>
+  <div>
+    <strong>Avg Daily Weight Gain:</strong> {{dailyWeightGain}} Kg/day
+  </div>
+</ng-template>
+
 <cms-weight-modal
   [isAddMode]="isAddMode"
   [animal]="selectedAnimal"
 ></cms-weight-modal>
 <cms-warning-display></cms-warning-display>
+
+<cms-bulk-weight-modal style="min-height: 400px;"></cms-bulk-weight-modal>

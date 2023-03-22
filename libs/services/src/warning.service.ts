@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Modals } from '@cms-enums';
 import { IAnimal } from '@cms-interfaces';
-import { NgxSmartModalService } from 'ngx-smart-modal';
+import { NgxSmartModalComponent, NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 export interface IToast {
   header: string;
@@ -27,19 +28,41 @@ export class WarningService {
     isError: false,
     showCloseButton: true,
   };
+  private complete: boolean = true;
   constructor(private readonly modals: NgxSmartModalService) {}
 
-  public show(toast: IToast, animal: IAnimal = null) {
+  public show(
+    toast: IToast,
+    animal: IAnimal = null,
+    complete = true
+  ): BehaviorSubject<boolean> {
+    this.complete = complete;
+    this._result = new BehaviorSubject(null);
     const warningModal = this.modals.get(Modals.Warning);
+    if (warningModal.isVisible()) {
+      warningModal.onAnyCloseEventFinished.pipe(take(1)).subscribe(() => {
+        this.showModal(warningModal, toast, animal);
+      });
+    } else {
+      this.showModal(warningModal, toast, animal);
+    }
+
+    return this._result;
+  }
+
+  private showModal(
+    warningModal: NgxSmartModalComponent,
+    toast: IToast,
+    animal: IAnimal = null
+  ): void {
     warningModal.layerPosition = this.modals.getHigherIndex();
     warningModal.setData({ ...this.defaultError, ...toast, animal }).open();
-
-    this._result = new BehaviorSubject(null);
-    return this._result;
   }
 
   public setResult(result: boolean) {
     this._result.next(result);
-    this._result.complete();
+    if (this.complete) {
+      this._result.complete();
+    }
   }
 }

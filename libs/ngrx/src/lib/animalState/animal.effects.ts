@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
+import { Animal } from '@cms-interfaces';
 import { HttpService } from '@cms-services/http';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Update } from '@ngrx/entity';
 import { of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { LoadingPaneService } from '../../../../services/src/loading-pane.service';
 import {
+  AddManyWeights,
   AnimalActionTypes,
   HTTPError,
   LoadAnimalData,
   LoadAnimalsFinished,
+  UpdateManyAnimals,
 } from './animal.actions';
 
 @Injectable()
@@ -44,6 +48,27 @@ export class AnimalEffects {
       switchMap(() => {
         this.loadingPaneService.setLoadingState(false);
         return of(new LoadAnimalsFinished());
+      })
+    )
+  );
+
+  $addManyWeights = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AnimalActionTypes.AddManyWeightsType),
+      switchMap((action: AddManyWeights) => {
+        this.loadingPaneService.setLoadingState(true);
+        return this.httpService.addManyWeights(action.payload.weights).pipe(
+          map((updatedWeights) => {
+            const animalUpdates: Update<Animal>[] = updatedWeights.map(weight => {
+              return {
+                id: weight[0].tag,
+                changes: {weightData: weight}
+              }
+            })
+            this.loadingPaneService.setLoadingState(false)
+            return new UpdateManyAnimals(animalUpdates);
+          })
+        );
       })
     )
   );

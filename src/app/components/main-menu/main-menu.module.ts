@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChartsModule } from 'ng2-charts';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { AnimalDisplayComponent } from './cattle-components/animal/animal-display/animal-display.component';
@@ -15,6 +15,7 @@ import { MainMenuRoutingModule } from './main-menu.routing';
 import { RegistrationComponent } from './cattle-components/registration/registration.component';
 import { MedicationComponent } from './medication-components/medication/medication.component';
 import { SharedComponentsModule } from 'src/app/shared-components/shared-components.module';
+import { BulkWeightModalComponent } from './cattle-components/weight/bulk-weight-modal/bulk-weight-modal.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { SharedComponentsModule } from 'src/app/shared-components/shared-compone
     CullUpdateComponent,
     RegistrationComponent,
     MedicationComponent,
+    BulkWeightModalComponent,
   ],
   imports: [
     CommonModule,
@@ -35,7 +37,8 @@ import { SharedComponentsModule } from 'src/app/shared-components/shared-compone
     ReactiveFormsModule,
     NgxSmartModalModule.forChild(),
     NgbModule,
-    SharedComponentsModule
+    SharedComponentsModule,
+    NgbPopoverModule
   ],
   exports: [MainMenuComponent],
 })
