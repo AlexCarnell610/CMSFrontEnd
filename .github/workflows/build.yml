@@ -46,7 +46,7 @@ jobs:
         git config --global user.name "Alex Carnell"
         git add dist.tar.gz
         git commit -m "built"
-        git push
+        git push --force
         
    # - id: 'auth'
     #  uses: 'google-github-actions/auth@v0'
