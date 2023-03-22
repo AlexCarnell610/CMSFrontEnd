@@ -72,7 +72,6 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
   checkFile(selectedFile: File): void {
     this.clearFileAndWeights();
     if (selectedFile) {
-      console.warn('SELECTED FILE');
       this.selectedFile = selectedFile;
       let fileReader = new FileReader();
       this.store.select(selectAnimals).subscribe((animals) => {
@@ -209,14 +208,7 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
             } else if (actualResult.notAllFound) {
               this.addWeights(false);
             }
-
             this.annoyingWarningSub.unsubscribe();
-          },
-          () => {
-            console.error('ERRRO');
-          },
-          () => {
-            console.error('complete');
           }
         );
     } else if (this.hasDuplicateWeights) {
@@ -279,9 +271,7 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
     this.subs.add(
       this.actions$
         .pipe(ofType(AnimalActionTypes.UpdateManyAnimalsType))
-        .subscribe((val) => {
-          console.warn(val);
-          
+        .subscribe(() => {
           this.clearFileAndWeights();
           this.handlePopover();
         })
@@ -299,11 +289,11 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
 
   private handlePopover() {
     this.saveConfirm.open();
-    // this.subs.add(
-    //   timer(1500).subscribe(() => {
-    //     this.saveConfirm.close();
-    //   })
-    // );
+    this.subs.add(
+      timer(1500).subscribe(() => {
+        this.saveConfirm.close();
+      })
+    );
   }
 
   get labelText(): string {
