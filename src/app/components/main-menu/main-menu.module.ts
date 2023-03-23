@@ -15,6 +15,7 @@ import { MainMenuRoutingModule } from './main-menu.routing';
 import { RegistrationComponent } from './cattle-components/registration/registration.component';
 import { MedicationComponent } from './medication-components/medication/medication.component';
 import { SharedComponentsModule } from 'src/app/shared-components/shared-components.module';
+import { AnimalDobSortPipe } from 'src/app/pipes/animal-dob-sort.pipe';
 import { BulkWeightModalComponent } from './cattle-components/weight/bulk-weight-modal/bulk-weight-modal.component';
 
 @NgModule({
@@ -29,6 +30,7 @@ import { BulkWeightModalComponent } from './cattle-components/weight/bulk-weight
     RegistrationComponent,
     MedicationComponent,
     BulkWeightModalComponent,
+    AnimalDobSortPipe
   ],
   imports: [
     CommonModule,

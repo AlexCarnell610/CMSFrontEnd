@@ -1,9 +1,11 @@
+
 <ul
   class="list-group cms-animal-list"
   id="animalList"
   *ngIf="searchedAnimals$ | async as animals"
   [formGroup]="searchBarGroup"
 >
+
   <input
     class="list-group-item animal-button cms-sticky"
     type="text"
@@ -12,7 +14,7 @@
   />
   <button
     class="list-group-item list-group-item-action d-flex justify-content-between align-items-center animal-button"
-    *ngFor="let animal of animals"
+    *ngFor="let animal of animals | animalDobSort : sortOldToYoung : sortYoungToOld"
     [ngClass]="getCSSForButton(animal)"
     (click)="selectAnimal(animal)"
   >

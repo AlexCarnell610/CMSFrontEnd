@@ -1,24 +1,30 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Modals, PageURLs } from '@cms-enums';
 import { IAnimal, IBull } from '@cms-interfaces';
 import { ScreenSizeService } from '@cms-services';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { take, takeWhile } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 
+const YOUNG_TO_OLD = 'youngToOld';
+const OLD_TO_YOUNG = 'oldToYoung';
 @Component({
   selector: 'cms-animal',
   templateUrl: './animal.component.html',
   styleUrls: ['./animal.component.scss'],
 })
-export class AnimalComponent {
+export class AnimalComponent implements OnInit {
   public pageName = PageURLs.Animals;
   public $selectedAnimal: BehaviorSubject<IAnimal> = new BehaviorSubject(null);
   public isAdd: boolean;
   public $sire: Observable<IBull>;
   public selectedAnimal: IAnimal;
   private previousAnimals: IAnimal[] = [];
+  public sortingFormGroup: FormGroup;
+  public youngToOld: Observable<boolean>;
+  public oldToYoung: Observable<boolean>;
 
   constructor(
     private readonly router: Router,
@@ -26,14 +32,25 @@ export class AnimalComponent {
     public readonly screenService: ScreenSizeService
   ) {}
 
+  ngOnInit(): void {
+    this.sortingFormGroup = new FormGroup({
+      sortRadio: new FormControl(''),
+    });
+
+    this.youngToOld = this.radioSortControl.valueChanges.pipe(
+      map((val) => val === YOUNG_TO_OLD)
+    );
+    this.oldToYoung = this.radioSortControl.valueChanges.pipe(
+      map((val) => val === OLD_TO_YOUNG)
+    );
+  }
+
   public backToMain() {
     this.router.navigate([PageURLs.MainMenu]);
   }
 
   public addAnimal() {
-    this.modalService
-      .get(Modals.Animal)
-      .setData({ isAdd: true });
+    this.modalService.get(Modals.Animal).setData({ isAdd: true });
     this.modalService.get(Modals.Animal).open();
   }
 
@@ -44,13 +61,11 @@ export class AnimalComponent {
   }
 
   public editAnimal() {
-    this.$selectedAnimal
-      .pipe(take(1))
-      .subscribe((animal) => {
-        const modal = this.modalService.get(this.getModal(animal));
-        modal.setData({ isAdd: false, persistData: true });
-        modal.open();
-      });
+    this.$selectedAnimal.pipe(take(1)).subscribe((animal) => {
+      const modal = this.modalService.get(this.getModal(animal));
+      modal.setData({ isAdd: false, persistData: true });
+      modal.open();
+    });
   }
 
   public animalSelected(event: IAnimal) {
@@ -60,6 +75,14 @@ export class AnimalComponent {
   public goToDam(dam: IAnimal): void {
     this.previousAnimals.push(this.$selectedAnimal.value);
     this.animalSelected(dam);
+  }
+
+  get OLD_TO_YOUNG(): string {
+    return OLD_TO_YOUNG;
+  }
+
+  get YOUNG_TO_OLD(): string {
+    return YOUNG_TO_OLD;
   }
 
   public get showGoToChild(): boolean {
@@ -72,5 +95,9 @@ export class AnimalComponent {
 
   private getModal(animal): Modals {
     return animal.dam ? Modals.Animal : Modals.Sire;
+  }
+
+  private get radioSortControl(): AbstractControl {
+    return this.sortingFormGroup.get('sortRadio');
   }
 }

@@ -22,7 +22,6 @@ import { FooterComponent } from './components/footer/footer.component';
 import { LoadingModalComponent } from './components/loading-modal/loading-modal.component';
 import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
-import { BreedsListComponent } from './shared-components/breeds-list/breeds-list.component';
 
 @NgModule({
   declarations: [

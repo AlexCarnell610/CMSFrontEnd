@@ -11,10 +11,43 @@
 </div>
 <div class="container mb-3 mt-3">
   <button class="btn btn-success mb-3" (click)="addAnimal()">Add Animal</button>
-  <button class="btn btn-success mb-3 ml-2" (click)="addSire()">Add Sire</button>
+  <button class="btn btn-success mb-3 ml-2" (click)="addSire()">
+    Add Sire
+  </button>
+  <br />
+  <div [formGroup]="sortingFormGroup">
+    <div class="custom-control-inline custom-control custom-radio">
+      <input
+        type="radio"
+        class="custom-control-input"
+        name="sortRadio"
+        [value]="YOUNG_TO_OLD"
+        id="sort-young-old"
+        formControlName="sortRadio"
+      />
+      <label class="custom-control-label" for="sort-young-old"
+        >Youngest to Oldest</label
+      >
+    </div>
+    <div class="custom-control-inline custom-control custom-radio">
+      <input
+        type="radio"
+        class="custom-control-input"
+        name="sortRadio"
+        [value]="OLD_TO_YOUNG"
+        id="sort-old-young"
+        formControlName="sortRadio"
+      />
+      <label class="custom-control-label" for="sort-old-young"
+        >Oldest to Youngest</label
+      >
+    </div>
+  </div>
   <div class="row">
     <div class="col">
       <cms-animal-list
+        [sortYoungToOld]="youngToOld | async"
+        [sortOldToYoung]="oldToYoung | async"
         [page]="pageName"
         (edit)="editAnimal()"
         (animalSelected)="animalSelected($event)"

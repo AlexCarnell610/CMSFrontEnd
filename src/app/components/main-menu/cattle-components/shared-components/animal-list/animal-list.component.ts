@@ -39,6 +39,8 @@ export class AnimalListComponent implements OnInit, OnDestroy {
   @Output() animalSelected: EventEmitter<Animal> = new EventEmitter();
   @Input() page: PageURLs;
   @Input() displayBulls = false;
+  @Input() sortOldToYoung = false;
+  @Input() sortYoungToOld = false;
   public searchBarGroup: FormGroup = new FormGroup({});
   public animals$: Observable<Animal[]>;
   public searchedAnimals$: BehaviorSubject<Animal[]> = new BehaviorSubject([]);
@@ -66,7 +68,7 @@ export class AnimalListComponent implements OnInit, OnDestroy {
   }
 
   public openEditModal(animal: Animal) {
-    this.selectAnimal(animal)
+    this.selectAnimal(animal);
     this.edit.emit(null);
   }
 
@@ -129,7 +131,11 @@ export class AnimalListComponent implements OnInit, OnDestroy {
       this.getAnimal(selectedAnimal.tagNumber)
         .pipe(
           mergeMap((animal) =>
-            iif(() => !!animal, of(animal), this.getBull(selectedAnimal.tagNumber))
+            iif(
+              () => !!animal,
+              of(animal),
+              this.getBull(selectedAnimal.tagNumber)
+            )
           )
         )
         .subscribe((ani) => {
@@ -156,6 +162,10 @@ export class AnimalListComponent implements OnInit, OnDestroy {
         this.animalSelected.emit(animal);
       })
     );
+  }
+
+  private trackSort(): void {
+    // this.searchedAnimals$ = combineLatest([this.sortOldToYoung, this.sortYoungToOld, this.searchedAnimals$]).pipe(map(([oldToYoung, youngToOld, animals]) => animals))
   }
 
   private trackSearch() {
@@ -197,8 +207,8 @@ export class AnimalListComponent implements OnInit, OnDestroy {
       (animal) =>
         animal.tagNumber.toLowerCase().includes(value.toLowerCase()) ||
         animal.name?.toLowerCase().includes(value.toLowerCase()) ||
-        (isAnimal(animal) && animal.managementTag.toLowerCase().includes(value.toLowerCase()))
-        
+        (isAnimal(animal) &&
+          animal.managementTag.toLowerCase().includes(value.toLowerCase()))
     );
   }
 
