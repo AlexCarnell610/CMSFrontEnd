@@ -79,7 +79,7 @@ export interface AnimalWeight {
   id?: number;
   weightDate: moment.Moment;
   weight: number;
-  weightType: AnimalWeightType;
+  isSaleWeight: boolean;
   tag?:string
 }
 
