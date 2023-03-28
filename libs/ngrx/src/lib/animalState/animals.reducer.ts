@@ -54,8 +54,6 @@ export function animalReducer(
       return animalAdapter.updateMany(action.payload, state)
     }
     case AnimalActionTypes.DeleteWeightSuccess: {
-      console.warn("HELLO");
-      
       return animalAdapter.updateOne(action.payload.animal, state)
     }
     default: {

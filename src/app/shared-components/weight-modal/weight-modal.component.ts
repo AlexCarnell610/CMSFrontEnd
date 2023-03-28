@@ -124,13 +124,9 @@ export class EditWeightModalComponent
     this.warningService
       .show({ header: 'Are you sure you want to delete this weight?', body:'', buttonText: "Continue" })
       .subscribe((result) => {
-        console.warn(this.selectedWeight.tag);
-        
         if (result) {
           
           const loadingSub = this.loadingService.currentLoadingState.pipe(filter(loading => loading)).subscribe(() => {
-            console.warn("CLEAR");
-            
             this.clearForm()
             loadingSub.unsubscribe()
           })
@@ -300,26 +296,7 @@ export class EditWeightModalComponent
   public getCSSForPopover() {
     return this.saveResult.success ? 'update-success' : 'update-error';
   }
-
-  // private getWeightType(): AnimalWeightType {
-  //   let output: AnimalWeightType = {
-  //     isInitial: false,
-  //     isSale: false,
-  //   };
-
-  //   switch (this.isSaleWeightControl.value) {
-  //     case WeightType.Initial:
-  //       output.isInitial = true;
-  //       break;
-  //     case WeightType.Sale:
-  //       output.isSale = true;
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  //   return output;
-  // }
-
+  
   private trackWeightSelectChanges(): void {
     this.weightSelect.valueChanges.subscribe((value) => {
       this.markAsClean();

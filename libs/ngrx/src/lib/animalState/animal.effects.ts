@@ -82,10 +82,6 @@ export class AnimalEffects {
       this.loadingPaneService.setLoadingState(true);
       return this.httpService.deleteWeight(action.payload.weightID).pipe(map(weights => {
         this.loadingPaneService.setLoadingState(false)
-        console.warn("STOP LOADING");
-        
-        console.warn(action.payload);
-        
         const payload: Update<IAnimal> = {
           id: action.payload.animalID,
           changes: {
