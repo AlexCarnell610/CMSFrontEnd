@@ -12,6 +12,8 @@ export enum AnimalActionTypes {
   UpdateAnimalType = '[Animal] Update Animal',
   UpdateManyAnimalsType = '[Animal] Update Many Animals',
   AddManyWeightsType = '[Animal] Add Many Weights',
+  DeleteWeight = '[Animal] Delete Weight',
+  DeleteWeightSuccess = '[Animal] Delete Weight Success',
   HTTPErrorType = '[HTTP] Error',
 }
 
@@ -64,6 +66,16 @@ export class AddManyWeights implements Action {
   constructor(public payload: { weights: IBulkWeight[] }) {}
 }
 
+export class DeleteWeight implements Action {
+  readonly type = AnimalActionTypes.DeleteWeight
+  constructor(public payload: {weightID: number, animalID: string}){}
+}
+
+export class DeleteWeightSuccess implements Action {
+  readonly type = AnimalActionTypes.DeleteWeightSuccess
+  constructor(public payload: {animal: Update<IAnimal>}){}
+}
+
 export type AnimalActions =
   | LoadAnimalData
   | RetrieveAnimalData
@@ -74,4 +86,6 @@ export type AnimalActions =
   | UpdateAnimal
   | AddManyWeights
   | UpdateManyAnimals
+  | DeleteWeight
+  | DeleteWeightSuccess
   | HTTPError;

@@ -70,25 +70,27 @@ export class MappingService {
     weightData: any[],
     includeTag = false
   ): AnimalWeight[] {
-    return weightData.map((weight) => {
-      return includeTag
-        ? { ...this.convertWeight(weight), tag: weight.animal_tag_number }
-        : this.convertWeight(weight);
-    });
+    return weightData
+      .map((weight) => {
+        return includeTag
+          ? { ...this.convertWeight(weight), tag: weight.animal_tag_number }
+          : this.convertWeight(weight);
+      })
+      .sort((weightA: AnimalWeight, weightB: AnimalWeight) =>
+        weightA.isSaleWeight && !weightB.isSaleWeight
+          ? 1
+          : !weightA.isSaleWeight && weightB.isSaleWeight
+          ? -1
+          : 0
+      );
   }
 
   public convertWeight(weight: any): AnimalWeight {
     return {
       id: weight.id,
       weightDate: this.convertDate(weight.weight_date),
-      weightType: {
-        isInitial:
-          weight.is_initial_weight === 1 || weight.is_initial_weight
-            ? true
-            : false,
-        isSale:
-          weight.is_sale_weight === 1 || weight.is_sale_weight ? true : false,
-      },
+      isSaleWeight:
+        weight.is_sale_weight === 1 || weight.is_sale_weight ? true : false,
       weight: weight.weight,
     };
   }

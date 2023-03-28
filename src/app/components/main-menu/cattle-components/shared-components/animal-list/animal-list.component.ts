@@ -123,7 +123,7 @@ export class AnimalListComponent implements OnInit, OnDestroy {
   }
 
   private notSold(animal: IAnimal) {
-    return animal.weightData.every((weight) => !weight.weightType.isSale);
+    return animal.weightData.every((weight) => !weight.isSaleWeight);
   }
 
   private pushNextAnimal(selectedAnimal: Animal) {

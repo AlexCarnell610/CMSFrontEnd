@@ -68,7 +68,7 @@ describe('EditWeightModalComponent', () => {
     it('should set up the form', () => {
       expect(component.weight).toBeTruthy();
       expect(component.date).toBeTruthy();
-      expect(component.weightType).toBeTruthy();
+      expect(component.isSaleWeightControl).toBeTruthy();
       expect(component.weightSelect).toBeTruthy();
       expect(component.animalControl).toBeTruthy();
     });
@@ -76,25 +76,25 @@ describe('EditWeightModalComponent', () => {
     it('should mark controls as clean on weight select value changes', () => {
       component.weight.markAsDirty();
       component.date.markAsDirty();
-      component.weightType.markAsDirty();
+      component.isSaleWeightControl.markAsDirty();
       component.weightSelect.setValue('');
 
       expect(component.date.pristine).toBeTrue();
       expect(component.weight.pristine).toBeTrue();
-      expect(component.weightType.pristine).toBeTrue();
+      expect(component.isSaleWeightControl.pristine).toBeTrue();
     });
 
     it('Should clear form if weight select value is empty', () => {
       component.weight.setValue('123');
       component.date.setValue('12-12-2002');
-      component.weightType.setValue('initial');
+      component.isSaleWeightControl.setValue('initial');
 
       component.weightSelect.setValue('');
 
       expect(component.weight.value).toEqual('');
       expect(component.date.value).toEqual('');
       expect(component.weightSelect.value).toEqual('');
-      expect(component.weightType.value).toEqual('');
+      expect(component.isSaleWeightControl.value).toEqual('');
     });
 
     it('Should set the form values when weight selected', () => {
@@ -106,7 +106,7 @@ describe('EditWeightModalComponent', () => {
       expect(component.date.value).toEqual(
         selectedWeight.weightDate.format('YYYY-MM-DD')
       );
-      expect(component.weightType.value).toEqual('isSale');
+      expect(component.isSaleWeightControl.value).toEqual('isSale');
     });
 
     describe('convertWeightType [method]', () => {
@@ -124,7 +124,7 @@ describe('EditWeightModalComponent', () => {
           ],
         };
         component.weightSelect.setValue(component.animal.weightData[0].id);
-        expect(component.weightType.value).toEqual('isInitial');
+        expect(component.isSaleWeightControl.value).toEqual('isInitial');
       });
 
       it('Should set the weight type to intermediate if initial and sale is false', () => {
@@ -140,7 +140,7 @@ describe('EditWeightModalComponent', () => {
           ],
         };
         component.weightSelect.setValue(component.animal.weightData[0].id);
-        expect(component.weightType.value).toEqual('isIntermediate');
+        expect(component.isSaleWeightControl.value).toEqual('isIntermediate');
       });
 
       it('Should set the weight type to sale if initial false and sale true', () => {
@@ -156,7 +156,7 @@ describe('EditWeightModalComponent', () => {
           ],
         };
         component.weightSelect.setValue(component.animal.weightData[0].id);
-        expect(component.weightType.value).toEqual('isSale');
+        expect(component.isSaleWeightControl.value).toEqual('isSale');
       });
     });
   });
@@ -178,14 +178,14 @@ describe('EditWeightModalComponent', () => {
       it('Should clear the form', () => {
         component.weight.setValue('123');
         component.date.setValue('12-12-2002');
-        component.weightType.setValue('initial');
+        component.isSaleWeightControl.setValue('initial');
 
         closeEvent.next('');
 
         expect(component.weight.value).toEqual('');
         expect(component.date.value).toEqual('');
         expect(component.weightSelect.value).toEqual('');
-        expect(component.weightType.value).toEqual('');
+        expect(component.isSaleWeightControl.value).toEqual('');
       });
 
       it('Should set selected weight to null', () => {
@@ -224,21 +224,21 @@ describe('EditWeightModalComponent', () => {
     });
 
     it('Should return is-invalid if control is invalid and dirty', () => {
-      component.weightType.setValue('');
-      component.weightType.markAsDirty();
+      component.isSaleWeightControl.setValue('');
+      component.isSaleWeightControl.markAsDirty();
 
       expect(component.getCSSForRadio()).toEqual('is-invalid');
     });
 
     it('Should return is-valid if control is valid and dirty', () => {
-      component.weightType.setValue('isInitial');
-      component.weightType.markAsDirty();
+      component.isSaleWeightControl.setValue('isInitial');
+      component.isSaleWeightControl.markAsDirty();
 
       expect(component.getCSSForRadio()).toEqual('is-valid');
     });
 
     it('Should return nothing if control is not dirty', () => {
-      component.weightType.markAsPristine();
+      component.isSaleWeightControl.markAsPristine();
 
       expect(component.getCSSForRadio()).toBeUndefined();
     });
@@ -335,7 +335,7 @@ describe('EditWeightModalComponent', () => {
           };
           component.weight.setValue(newWeight.weight);
           component.date.setValue(newWeight.weightDate);
-          component.weightType.setValue('isInitial');
+          component.isSaleWeightControl.setValue('isInitial');
 
           component.saveChanges();
 
@@ -352,7 +352,7 @@ describe('EditWeightModalComponent', () => {
 
           component.weight.setValue(123);
           component.date.setValue(moment().format('YYYY-MM-DD'));
-          component.weightType.setValue('isInitial');
+          component.isSaleWeightControl.setValue('isInitial');
 
           await component.saveChanges();
 
@@ -416,7 +416,7 @@ describe('EditWeightModalComponent', () => {
           };
           component.weight.setValue(newWeight.weight);
           component.date.setValue(newWeight.date);
-          component.weightType.setValue('isInitial');
+          component.isSaleWeightControl.setValue('isInitial');
 
           component.saveChanges();
 
@@ -434,7 +434,7 @@ describe('EditWeightModalComponent', () => {
           component.weightSelect.setValue(convertedAnimal.weightData[0].id);
           component.weight.setValue(123);
           component.date.setValue(moment().format('YYYY-MM-DD'));
-          component.weightType.setValue('isInitial');
+          component.isSaleWeightControl.setValue('isInitial');
 
           await component.saveChanges();
 
@@ -477,7 +477,7 @@ describe('EditWeightModalComponent', () => {
         component.weight.setValue(selectedWeight.weight);
         component.weightSelect.setValue(selectedWeight.id);
         component.date.setValue(selectedWeight.weightDate.format('YYYY-MM-DD'));
-        component.weightType.setValue('isInitial');
+        component.isSaleWeightControl.setValue('isInitial');
 
         component.saveChanges();
 

@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
-import { Animal } from '@cms-interfaces';
+import { Animal, IAnimal } from '@cms-interfaces';
 import { HttpService } from '@cms-services/http';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Update } from '@ngrx/entity';
+import * as moment from 'moment';
 import { of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { LoadingPaneService } from '../../../../services/src/loading-pane.service';
 import {
   AddManyWeights,
   AnimalActionTypes,
+  DeleteWeight,
+  DeleteWeightSuccess,
   HTTPError,
   LoadAnimalData,
   LoadAnimalsFinished,
@@ -72,6 +75,23 @@ export class AnimalEffects {
       })
     )
   );
+
+  $deleteWeight = createEffect(() => this.actions$.pipe(
+    ofType(AnimalActionTypes.DeleteWeight),
+    switchMap((action: DeleteWeight) => {
+      this.loadingPaneService.setLoadingState(true);
+      return this.httpService.deleteWeight(action.payload.weightID).pipe(map(weights => {
+        this.loadingPaneService.setLoadingState(false)
+        const payload: Update<IAnimal> = {
+          id: action.payload.animalID,
+          changes: {
+            weightData: weights
+          }
+        }
+        return new DeleteWeightSuccess({animal: payload})
+      }))
+    })
+  ))
 
   $httpError = createEffect(
     () =>

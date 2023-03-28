@@ -38,6 +38,8 @@
   <span *ngIf="errors.stats">{{ errors.stats }}</span>
   <span *ngIf="errors.breed">Please choose a breed from the list</span>
   <span *ngIf="errors.notSameBreed">Please choose the same breed as the calf: {{errors.notSameBreed}}</span>
+  <span *ngIf="errors.saleWeightNotLast">Sale weight must be the final weight</span>
+  <span *ngIf="errors.newWeightAfterSaleWeight">New weight is after the sale weight</span>
 </div>
 <div *ngIf="errors && isRadio">
   <span *ngIf="errors.noInitial"> No initial weight set. </span>

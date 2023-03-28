@@ -39,13 +39,13 @@
       }}</span>
       <div>
         <span
-          *ngIf="showGoToChild"
+          *ngIf="showGoToChild && !basicMode"
           (click)="goToChildEmit.emit({})"
           class="btn badge badge-pill badge-danger mr-1"
           >Back</span
         >
         <span
-          *ngIf="!damTagNotProvided()"
+          *ngIf="!damTagNotProvided() && !basicMode"
           (click)="goToDam(selectedAnimal)"
           class="btn badge badge-pill badge-info"
           >Go to Dam</span

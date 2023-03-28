@@ -1,12 +1,16 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { PageURLs } from '@cms-enums';
+import { Modals, PageURLs } from '@cms-enums';
 import { IAnimal } from '@cms-interfaces';
 import {
   AnimalUpdateService,
   LoadingPaneService,
+  ScreenSizeService,
   WarningService,
 } from '@cms-services';
+import { NgxSmartModalService } from 'ngx-smart-modal';
+import { BehaviorSubject } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'cms-registration',
@@ -15,12 +19,15 @@ import {
 })
 export class RegistrationComponent {
   public pageName = PageURLs.Registration;
+  public $selectedAnimal: BehaviorSubject<IAnimal> = new BehaviorSubject(null);
 
   constructor(
     private readonly router: Router,
     private readonly warningService: WarningService,
     private readonly animalUpdateService: AnimalUpdateService,
-    private readonly loadingPaneService: LoadingPaneService
+    private readonly loadingPaneService: LoadingPaneService,
+    public readonly screenService: ScreenSizeService,
+    private readonly modalService: NgxSmartModalService
   ) {}
 
   public backToMain() {
@@ -40,6 +47,22 @@ export class RegistrationComponent {
           this.markAsRegistered(animal);
         }
       });
+  }
+
+  public animalSelected(event: IAnimal) {
+    this.$selectedAnimal.next(event);
+  }
+
+  public editAnimal() {
+    this.$selectedAnimal.pipe(take(1)).subscribe((animal) => {
+      const modal = this.modalService.get(this.getModal(animal));
+      modal.setData({ isAdd: false, persistData: true });
+      modal.open();
+    });
+  }
+
+  private getModal(animal): Modals {
+    return animal.dam ? Modals.Animal : Modals.Sire;
   }
 
   private markAsRegistered(animal: IAnimal) {

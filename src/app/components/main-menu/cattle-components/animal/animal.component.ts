@@ -69,12 +69,13 @@ export class AnimalComponent implements OnInit {
   }
 
   public animalSelected(event: IAnimal) {
+    this.previousAnimals = []
     this.$selectedAnimal.next(event);
   }
 
   public goToDam(dam: IAnimal): void {
     this.previousAnimals.push(this.$selectedAnimal.value);
-    this.animalSelected(dam);
+    this.$selectedAnimal.next(dam);
   }
 
   get OLD_TO_YOUNG(): string {
@@ -90,7 +91,7 @@ export class AnimalComponent implements OnInit {
   }
 
   public goToPreviousAnimal(): void {
-    this.animalSelected(this.previousAnimals.pop());
+    this.$selectedAnimal.next(this.previousAnimals.pop());
   }
 
   private getModal(animal): Modals {

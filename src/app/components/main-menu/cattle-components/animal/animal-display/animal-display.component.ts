@@ -26,6 +26,7 @@ import { map, take } from 'rxjs/operators';
   styleUrls: ['./animal-display.component.scss'],
 })
 export class AnimalDisplayComponent implements OnInit, OnDestroy {
+  @Input() basicMode = false
   @Input() $selectedAnimal: BehaviorSubject<IAnimal> = new BehaviorSubject(null);
   @Input() showGoToChild: boolean;
   @Output() editAnimal: EventEmitter<IAnimal> = new EventEmitter();
