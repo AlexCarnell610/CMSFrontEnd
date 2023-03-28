@@ -10,7 +10,8 @@ export enum HttpUrls {
   CullUpdate = '/cullUpdate',
   Root = '/',
   Bull = '/bull',
-  Weights = '/weights'
+  Weights = '/weights',
+  DeleteWeight = '/weight'
 }
 
 export const BackendURL = 'https://cmsBackend.api/';

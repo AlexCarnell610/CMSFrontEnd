@@ -40,30 +40,36 @@ export function dateValidator(): ValidatorFn {
   };
 }
 
-export function saleWeightValidator(isAddMode: boolean): ValidatorFn {
-  editing with is sale weight already true
+export function saleWeightValidator(isAddMode2: boolean): ValidatorFn {
   return (formGroup: FormGroup): { [key: string]: any } | null => {
     const animalControl = formGroup.get('animalControl');
     const isSaleWeightControl = formGroup.get('isSaleWeight');
     const weightDateControl = formGroup.get('date');
+    const selectedWeight = formGroup.get('weightSelect').value;
+    const isAddMode = selectedWeight === '';
 
     let output: { [key: string]: any } = null;
-console.warn("WORKING");
 
-    if (!animalControl.value || dateAlreadyHasErrors(weightDateControl)) {
-      weightDateControl.setErrors(null);
-    } else {
-      const weights = (animalControl.value as IAnimal).weightData;
+    if (animalControl.value && !dateAlreadyHasErrors(weightDateControl)) {
+      let weights = (animalControl.value as IAnimal).weightData;
       const inputDate = moment(weightDateControl.value);
+      if (!isAddMode) {
+        weights = weights.filter((weight) => weight.id !== +selectedWeight);
+      }
       if (isSaleWeightControl.value) {
-        if (hasSaleWeight(weights)) {
+        if (getSaleWeights(weights).length >= 1) {
           isSaleWeightControl.setErrors({ saleWeightExists: true });
-          console.warn(1);
-          
-        } else if (weights.length > 0 && !saleWeightIsAfterLastWeight(weights, inputDate)) {
-          console.warn(2);
-          
-          weightDateControl.setErrors({saleWeightNotLast: true})
+        } else if (
+          weights.length > 0 &&
+          !saleWeightIsSameAsLastWeightOrAfter(weights, inputDate)
+        ) {
+          weightDateControl.setErrors({ saleWeightNotLast: true });
+        }
+      } else {
+        console.warn(isSaleWeightControl.value);
+        
+        if (weights.length > 0 && !newWeightBeforeSaleWeight(weights, inputDate) && getSaleWeights(weights).length > 0) {
+          weightDateControl.setErrors({ newWeightAfterSaleWeight: true });
         }
       }
     }
@@ -72,25 +78,54 @@ console.warn("WORKING");
   };
 }
 
+function newWeightBeforeSaleWeight(
+  weights: AnimalWeight[],
+  inputDate: moment.Moment
+): boolean {
+  let weights2 = sortWeightsByDate(weights);
+  console.warn(weights2);
+  
+
+  return inputDate.isSameOrBefore(
+    weights2[weights2.length - 1].weightDate,
+    'day'
+  );
+}
+
 function saleWeightIsAfterLastWeight(
   weights: AnimalWeight[],
   inputDate: moment.Moment
 ): boolean {
-  weights.sort((weightA: AnimalWeight, weightB: AnimalWeight) =>
-    weightA.weightDate.diff(weightB.weightDate)
-  );
+  let weights2 = sortWeightsByDate(weights);
 
-  return weights[weights.length -1].weightDate.isAfter(inputDate)
+  return weights2[weights2.length - 1].weightDate.isAfter(inputDate, 'days');
 }
 
-function hasSaleWeight(weights: AnimalWeight[]): boolean {
-  return weights.some((weight) => weight.isSaleWeight);
+function saleWeightIsSameAsLastWeightOrAfter(
+  weights: AnimalWeight[],
+  inputDate: moment.Moment
+): boolean {
+  let weights2 = sortWeightsByDate(weights);
+  return inputDate.isSameOrAfter(
+    weights2[weights2.length - 1].weightDate,
+    'days'
+  );
+}
+
+function getSaleWeights(weights: AnimalWeight[]): AnimalWeight[] {
+  return weights.filter((weight) => weight.isSaleWeight);
 }
 
 function dateAlreadyHasErrors(dateControl: AbstractControl): boolean {
   return (
     (dateControl.errors?.required || dateControl.errors?.date) &&
     dateControl.dirty
+  );
+}
+
+function sortWeightsByDate(weights: AnimalWeight[]): AnimalWeight[] {
+  return [...weights].sort((weightA: AnimalWeight, weightB: AnimalWeight) =>
+    weightA.weightDate.diff(weightB.weightDate)
   );
 }
 
@@ -242,5 +277,3 @@ function dateAlreadyHasErrors(dateControl: AbstractControl): boolean {
 // ): boolean {
 //   return weights.every((weight) => date.isBefore(weight.weightDate, 'day'));
 // }
-
-

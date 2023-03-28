@@ -127,4 +127,10 @@ export class HttpService {
         return weightData
       }));
   }
+
+  public deleteWeight(weightID: number): Observable<AnimalWeight[]>{
+    return this.http.delete(`${environment.api + HttpUrls.DeleteWeight}/${weightID}`).pipe(map(response => {
+      return this.mappingService.convertWeightData(response as any[])
+    }))
+  }
 }

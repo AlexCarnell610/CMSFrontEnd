@@ -84,54 +84,6 @@
             ></cms-form-errors>
           </div>
         </div>
-        <!-- <div class="form-check">
-          <input
-            formControlName="weightType"
-            value="isInitial"
-            type="radio"
-            name="weightType"
-            class="form-check-input"
-            id="isInitialRadio"
-            [ngClass]="getCSSForRadio()"
-          />
-          <label for="isInitialRadio" class="form-check-label">
-            &nbsp; Is initial weight?</label
-          >
-        </div>
-        <div class="form-check">
-          <input
-            formControlName="weightType"
-            value="isIntermediate"
-            type="radio"
-            name="weightType"
-            class="form-check-input"
-            id="isIntermediate"
-            [ngClass]="getCSSForRadio()"
-          />
-          <label for="isIntermediate" class="form-check-label">
-            &nbsp; Is intermediate weight?</label
-          >
-        </div>
-        <div class="form-check mb-3">
-          <input
-            formControlName="weightType"
-            value="isSale"
-            type="radio"
-            name="weightType"
-            class="form-check-input"
-            id="isSaleRadio"
-            [ngClass]="getCSSForRadio()"
-          />
-          <label for="isSaleRadio" class="form-check-label"
-            >&nbsp; Is sale weight?</label
-          >
-          <div class="invalid-feedback">
-            <cms-form-errors
-              [errors]="weightType.errors"
-              [isRadio]="true"
-            ></cms-form-errors>
-          </div>
-        </div> -->
 
         <button
           class="btn btn-success mr-3"
@@ -147,6 +99,15 @@
         <button type="button" class="btn btn-danger" (click)="closeModal()">
           Close
         </button>
+        <button *ngIf="!isAddMode" class="btn btn-warning float-right" [disabled]="!selectedWeight" (click)="deleteWeight()">Delete</button>
+
+        <button
+        *ngIf="showOverride"
+          class="btn btn-danger mr-3"
+          (click)="saveChanges(true)"
+        >
+          Override Errors!
+        </button>        
       </form>
     </div>
   </div>

@@ -10,7 +10,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Modals } from '@cms-enums';
 import { IAnimal, AnimalWeight } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
-import { getAnimalByTag } from '@cms-ngrx/animal';
+import { DeleteWeight, getAnimalByTag } from '@cms-ngrx/animal';
 import {
   AnimalUpdateService,
   LoadingPaneService,
@@ -22,6 +22,7 @@ import { select, Store } from '@ngrx/store';
 import * as moment from 'moment';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject, Observable, Subscription, timer } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 enum FormControls {
   Weight = 'weight',
@@ -30,7 +31,6 @@ enum FormControls {
   IsSaleWeight = 'isSaleWeight',
   AnimalControl = 'animalControl',
 }
-
 
 @Component({
   selector: 'cms-weight-modal',
@@ -52,6 +52,7 @@ export class EditWeightModalComponent
     message: '',
     success: true,
   };
+  showOverride = false;
 
   constructor(
     private readonly modalService: NgxSmartModalService,
@@ -72,6 +73,7 @@ export class EditWeightModalComponent
     weightModal.onAnyCloseEventFinished.subscribe(() => {
       this.clearForm();
       this.selectedWeight = null;
+      this.showOverride = false;
       this.shortLifeSubs.unsubscribe();
     });
 
@@ -98,7 +100,10 @@ export class EditWeightModalComponent
   public getCSSForRadio() {
     if (this.isSaleWeightControl.invalid && this.isSaleWeightControl.dirty) {
       return 'is-invalid';
-    } else if (this.isSaleWeightControl.valid && this.isSaleWeightControl.dirty) {
+    } else if (
+      this.isSaleWeightControl.valid &&
+      this.isSaleWeightControl.dirty
+    ) {
       return 'is-valid';
     }
   }
@@ -115,21 +120,37 @@ export class EditWeightModalComponent
     this.modalService.get(Modals.Weight).close();
   }
 
-  public saveChanges() {
+  public deleteWeight() {
+    this.warningService
+      .show({ header: 'Are you sure you want to delete this weight?', body:'', buttonText: "Continue" })
+      .subscribe((result) => {
+        console.warn(this.selectedWeight.tag);
+        
+        if (result) {
+          
+          const loadingSub = this.loadingService.currentLoadingState.pipe(filter(loading => loading)).subscribe(() => {
+            console.warn("CLEAR");
+            
+            this.clearForm()
+            loadingSub.unsubscribe()
+          })
+          this.store.dispatch(new DeleteWeight({weightID: this.selectedWeight.id, animalID: this.animal.tagNumber}))
+        }
+      });
+  }
+
+  public saveChanges(override = false) {
     this.editWeightForm.markAllAsTouched();
     this.markAllAsDirty();
-    
-    if (this.editWeightForm.valid) {
+    if (this.editWeightForm.valid || override) {
       this.handlePopoverErrors().subscribe((canContinue) => {
         if (this.isAddMode) {
           if (canContinue) {
             this.loadingService.setLoadingState(true);
-            console.warn(this.isSaleWeightControl.value);
-            
             const weight: AnimalWeight = {
               weight: this.weight.value,
               weightDate: this.date.value,
-              isSaleWeight: this.isSaleWeightControl.value
+              isSaleWeight: this.isSaleWeightControl.value,
             };
             this.updateService
               .addAnimalWeight(this.animal.tagNumber, weight)
@@ -144,10 +165,10 @@ export class EditWeightModalComponent
         } else {
           if (canContinue) {
             this.loadingService.setLoadingState(true);
-            const weightUpdate:AnimalWeight = {
+            const weightUpdate: AnimalWeight = {
               weight: this.weight.value,
               weightDate: this.date.value,
-              isSaleWeight: this.isSaleWeightControl.value
+              isSaleWeight: this.isSaleWeightControl.value,
             };
 
             this.updateService
@@ -166,6 +187,11 @@ export class EditWeightModalComponent
           }
         }
       });
+      this.showOverride = false
+    } else {
+      this.showOverride =
+        this.isSaleWeightControl.errors !== null ||
+        this.editWeightForm.get(FormControls.Date).errors !== null;
     }
   }
 
@@ -173,7 +199,7 @@ export class EditWeightModalComponent
     this.editWeightForm = this.fb.group(
       {
         animalControl: null,
-        weightSelect: this.fb.control([], Validators.required),
+        weightSelect: this.fb.control('', Validators.required),
         weight: this.fb.control([], {
           validators: [
             Validators.required,
@@ -185,7 +211,7 @@ export class EditWeightModalComponent
         date: this.fb.control([], [Validators.required, dateValidator()]),
         isSaleWeight: this.fb.control(false),
       },
-      { validators: saleWeightValidator(this.isAddMode)}
+      { validators: saleWeightValidator(this.isAddMode) }
     );
     this.weightSelect.setValue('');
   }
@@ -327,9 +353,7 @@ export class EditWeightModalComponent
   private updateForm() {
     this.weight.setValue(this.selectedWeight.weight);
     this.date.setValue(this.selectedWeight.weightDate.format('YYYY-MM-DD'));
-    this.isSaleWeightControl.setValue(
-      this.selectedWeight.isSaleWeight
-    );
+    this.isSaleWeightControl.setValue(this.selectedWeight.isSaleWeight);
   }
 
   private clearForm() {

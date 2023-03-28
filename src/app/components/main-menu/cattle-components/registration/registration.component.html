@@ -15,7 +15,27 @@
       <cms-animal-list
         [page]="pageName"
         (add)="registerAnimal($event)"
+        (animalSelected)="animalSelected($event)"
       ></cms-animal-list>
+    </div>
+    <div *ngIf="!screenService.isSmallScreen" class="col">
+      <ng-container *ngTemplateOutlet="animalDisplay"></ng-container>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col" *ngIf="screenService.isSmallScreen">
+      <ng-container *ngTemplateOutlet="animalDisplay"></ng-container>
     </div>
   </div>
 </div>
+
+<ng-template #animalDisplay>
+  <cms-animal-display
+    [basicMode]="true"
+    [$selectedAnimal]="$selectedAnimal"
+    [showGoToChild]="false"
+    (editAnimal)="editAnimal()"
+  ></cms-animal-display>
+</ng-template>
+<cms-animal-modal [animal]="$selectedAnimal | async"></cms-animal-modal>
+<cms-warning-display></cms-warning-display>
