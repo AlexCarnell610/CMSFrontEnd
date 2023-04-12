@@ -12,7 +12,9 @@
 <div class="container mb-3 mt-3">
   <div class="row">
     <div class="col">
-      <button class="btn btn-success mb-2" (click)="bulkAddWeight()">Add Bulk Weights</button>
+      <button class="btn btn-success mb-2" (click)="bulkAddWeight()">
+        Add Bulk Weights
+      </button>
     </div>
   </div>
   <div class="row">
@@ -25,8 +27,37 @@
       ></cms-animal-list>
     </div>
     <div *ngIf="!screenSize.isSmallScreen" class="col">
-      
-      <div class="chart-wrapper cms-sticky" *ngIf="chartWeights.length > 0">
+      <div class=" mb-4">
+        <div class="chart-wrapper cms-sticky" *ngIf="chartWeights.length > 0">
+          <ng-container [ngTemplateOutlet]="avgDailyWeightGain"></ng-container>
+          <canvas
+            baseChart
+            [datasets]="chartWeights"
+            [labels]="chartLabels"
+            [options]="chartOptions"
+            [colors]=""
+            [legend]="showLegend"
+            [chartType]="chartType"
+            [plugins]="chartPlugins"
+          >
+          </canvas>
+        </div>
+      </div>
+      <div class="">
+        <cms-animal-display
+          [$selectedAnimal]="$selectedAnimal"
+          [basicMode]="true"
+          [showGoToChild]="false"
+        ></cms-animal-display>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div *ngIf="screenSize.isSmallScreen" class="col">
+      <div
+        class="chart-wrapper small-screen-graph mb-4"
+        *ngIf="chartWeights.length > 0"
+      >
         <ng-container [ngTemplateOutlet]="avgDailyWeightGain"></ng-container>
         <canvas
           baseChart
@@ -40,34 +71,18 @@
         >
         </canvas>
       </div>
-    </div>
-  </div>
-  <div class="row mt-3">
-    <div *ngIf="screenSize.isSmallScreen" class="col">
-      <div
-        class="chart-wrapper small-screen-graph"
-        *ngIf="chartWeights.length > 0"
-      >
-      <ng-container [ngTemplateOutlet]="avgDailyWeightGain"></ng-container>
-        <canvas
-          baseChart
-          [datasets]="chartWeights"
-          [labels]="chartLabels"
-          [options]="chartOptions"
-          [colors]=""
-          [legend]="showLegend"
-          [chartType]="chartType"
-          [plugins]="chartPlugins"
-        >
-        </canvas>
-      </div>
+      <cms-animal-display
+        [$selectedAnimal]="$selectedAnimal"
+        [basicMode]="true"
+        [showGoToChild]="false"
+      ></cms-animal-display>
     </div>
   </div>
 </div>
 
 <ng-template #avgDailyWeightGain>
   <div>
-    <strong>Avg Daily Weight Gain:</strong> {{dailyWeightGain}} Kg/day
+    <strong>Avg Daily Weight Gain:</strong> {{ dailyWeightGain }} Kg/day
   </div>
 </ng-template>
 
@@ -77,4 +92,4 @@
 ></cms-weight-modal>
 <cms-warning-display></cms-warning-display>
 
-<cms-bulk-weight-modal style="min-height: 400px;"></cms-bulk-weight-modal>
+<cms-bulk-weight-modal style="min-height: 400px"></cms-bulk-weight-modal>

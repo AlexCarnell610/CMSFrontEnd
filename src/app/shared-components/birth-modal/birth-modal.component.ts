@@ -37,7 +37,7 @@ import {
   Subscription,
   timer,
 } from 'rxjs';
-import { take, takeWhile } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 
 export enum BirthFormControls {
   CalfTag = 'calfTag',
@@ -92,8 +92,6 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.$sires = this.store.pipe(select(selectBulls));
     this.breeds = this.breedService.breedCodeObjects;
     this.setUpForm();
-    this.setInitialSires();
-    this.trackBreedChange();
   }
 
   ngAfterViewInit() {
@@ -221,7 +219,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     );
     let calf: IAnimal;
     if (this.isAdd) {
-      this.calfSelect.disable();
+      this.calfSelect.disable({ emitEvent: false });
     } else {
       this.calfTag.disable();
     }
@@ -367,44 +365,11 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  private setInitialSires() {
-    this.$sires
-      .pipe(takeWhile(() => !this.breedSelected, true))
-      .subscribe((sires) => {
-        this.$filteredSires.next(sires);
-      });
-  }
-
-  private trackBreedChange() {
-    this.longLifeSubs.add(
-      combineLatest([this.$sires, this.breed.valueChanges]).subscribe(
-        ([sires, breed]: [IBull[], string]) => {
-          this.breedSelected = true;
-
-          this.$filteredSires.next(
-            breed?.length === 0
-              ? sires
-              : sires.filter((sire) => {
-                  const selectedBreed = breed?.toUpperCase();
-                  const sireBreed = sire.breed?.toUpperCase();
-                  return (
-                    breed &&
-                    (sireBreed === selectedBreed ||
-                      sireBreed ===
-                        this.breedService.getCodeFromBreed(selectedBreed))
-                  );
-                })
-          );
-        }
-      )
-    );
-  }
-
   private trackCalfSelect() {
     this.subs.add(
       combineLatest([this.calfSelect.valueChanges, this.$calves]).subscribe(
         ([val, calves]: [string, IAnimal[]]) => {
-          this.newSire = false
+          this.newSire = false;
           const selectedCalf = calves.find((calf) => calf.tagNumber === val);
           if (!this.isAdd) {
             if (selectedCalf) {
@@ -477,7 +442,6 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       this.$calves = this.store.pipe(select(getCalves(this.animal.tagNumber)));
       this.trackCalfSelect();
-      this.setInitialSires();
     });
   }
 

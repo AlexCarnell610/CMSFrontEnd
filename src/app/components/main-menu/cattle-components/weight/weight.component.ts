@@ -16,7 +16,10 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 export class WeightComponent implements OnInit, OnDestroy {
   public chartWeights: ChartDataSets[] = [];
   public chartLabels: Label[];
-  public chartOptions = { responsive: true };
+  public chartOptions = { maintainAspectRatio: false, responsive: true, scales: { yAxes: [{
+    beginAtZero: true,
+    ticks:{min: 0, suggestedMax: 1000, stepSize: 50}
+  }] } };
   public chartType = 'line';
   public chartPlugins = [];
   public showLegend = false;
@@ -81,16 +84,19 @@ export class WeightComponent implements OnInit, OnDestroy {
   }
 
   get dailyWeightGain() {
-    const weights = this.selectedAnimal?.weightData
-    if(weights?.length > 1){
-      const initialWeight = weights[0]
-      const lastWeight = weights[weights.length-1]
-      const weightGain = lastWeight.weight-initialWeight.weight
-      const dateDiff = lastWeight.weightDate.diff(initialWeight.weightDate, "days")
+    const weights = this.selectedAnimal?.weightData;
+    if (weights?.length > 1) {
+      const initialWeight = weights[0];
+      const lastWeight = weights[weights.length - 1];
+      const weightGain = lastWeight.weight - initialWeight.weight;
+      const dateDiff = lastWeight.weightDate.diff(
+        initialWeight.weightDate,
+        'days'
+      );
 
-      return (weightGain/dateDiff).toPrecision(3)
+      return (weightGain / dateDiff).toPrecision(3);
     }
-    return "-"
+    return '-';
   }
 
   ngOnDestroy() {

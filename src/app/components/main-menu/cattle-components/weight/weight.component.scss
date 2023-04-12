@@ -1,3 +1,10 @@
 .small-screen-graph {
+  max-width: 450px !important;
+}
+
+.chart-wrapper {
+  position: relative;
+  height: 40vh;
+  max-height: 100%;
   width: 100%;
 }

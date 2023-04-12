@@ -66,7 +66,6 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
           Validators.compose([
             Validators.required,
             breedValidator(this.breedService),
-            this.isSameBreedValidator(),
           ]),
         ],
         updateOn: 'blur',
@@ -202,23 +201,6 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
       this.store.dispatch(new LoadBull({ bull }));
     }
     this.close();
-  }
-
-  private isSameBreedValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const calfBreed = this.calfBreed;
-
-      if(this.persistData) return null;
-
-      if (calfBreed === '' || !calfBreed || !control.value) return null;
-
-      return this.breedService.isSameBreed(
-        calfBreed?.toString(),
-        control.value?.toString()
-      )
-        ? null
-        : { notSameBreed: calfBreed };
-    };
   }
 
   private get breedCode(): string {

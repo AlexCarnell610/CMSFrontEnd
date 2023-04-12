@@ -2,7 +2,7 @@
   <label for="calfSire">Sire</label>
   <div
     class="input-group"
-    *ngIf="$filteredSires | async as sires"
+    *ngIf="$sires | async as sires"
     [ngClass]="{
       'was-validated': sire.dirty,
       'is-invalid': sire.invalid && sire.dirty

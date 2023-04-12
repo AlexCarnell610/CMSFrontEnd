@@ -23,7 +23,7 @@ export class SireListComponent implements OnInit, OnDestroy {
   @Input() breedControlName: string
   @Output() sireAdded: EventEmitter<boolean> = new EventEmitter();
   breedSelected: boolean = false;
-  private $sires: Observable<IBull[]>;
+  public $sires: Observable<IBull[]>;
   public $filteredSires: BehaviorSubject<IBull[]> = new BehaviorSubject(null);
   public breeds: IBreedCode[] = [];
   private subs: Subscription = new Subscription()
