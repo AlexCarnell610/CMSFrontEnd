@@ -57,6 +57,11 @@ export class WeightComponent implements OnInit, OnDestroy {
     this.modalService.get(Modals.Weight).open();
   }
 
+  public editAnimal(){
+    this.modalService.get(Modals.Animal).setData({isAdd: false})
+    this.modalService.get(Modals.Animal).open()
+  }
+
   public bulkAddWeight(): void {
     this.modalService.get(Modals.BulkWeightModal).open();
   }

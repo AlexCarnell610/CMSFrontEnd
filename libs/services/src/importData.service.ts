@@ -23,7 +23,7 @@ export class MappingService {
     for (let value of Object.values<any>(animalData)) {
       mappedAnimals.push({
         tagNumber: value.tag_number,
-        managementTag: value.management_tag,
+        managementTag: value.management_tag.toUpperCase(),
         name: value.name,
         gender: value.sex,
         ai:
@@ -99,7 +99,7 @@ export class MappingService {
     return {
       birthDate: this.convertDate(dam.birth_date),
       gender: dam.sex,
-      managementTag: dam.management_tag,
+      managementTag: dam.management_tag.toUpperCase(),
       tagNumber: dam.tag_number,
       damTag: dam.dam_tag_number,
       sireTag: dam.sire_tag_number,

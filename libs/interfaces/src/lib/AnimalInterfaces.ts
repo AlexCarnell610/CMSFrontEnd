@@ -14,6 +14,8 @@ export const bull: IBull = {
   name: 'GARY',
 };
 
+export const UNKNOWN_DAM_TAG: string = "UK000000000000"
+
 export interface BaseAnimal {
   tagNumber: string;
   birthDate: moment.Moment;

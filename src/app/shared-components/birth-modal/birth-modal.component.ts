@@ -47,6 +47,7 @@ export enum BirthFormControls {
   Gender = 'gender',
   Calves = 'calves',
   Registered = 'registered',
+  ManagementTag = 'managementTag'
 }
 
 @Component({
@@ -280,7 +281,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   private getNewCalf(): IAnimal {
     return {
       tagNumber: this.calfTag.value,
-      managementTag: 'null',
+      managementTag: this.managementTag.value.toUpperCase(),
       damTag: this.animal.tagNumber,
       sire: { tagNumber: this.sire.value },
       birthDate: moment(this.dob.value),
@@ -325,6 +326,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.gender.markAsDirty();
     this.calfTag.markAsDirty();
     this.registered.markAsDirty();
+    this.managementTag.markAsDirty()
   }
 
   private valuesEdited(calf: IAnimal) {
@@ -335,7 +337,8 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
       calf.sire.tagNumber !== this.selectedCalf?.sire.tagNumber ||
       calf.gender !== this.selectedCalf?.gender ||
       this.statChanged() ||
-      calf.registered !== this.selectedCalf?.registered
+      calf.registered !== this.selectedCalf?.registered ||
+      calf.managementTag !== this.selectedCalf?.managementTag
     );
   }
 
@@ -383,6 +386,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
               this.sire.setValue(selectedCalf.sire.tagNumber);
               this.gender.setValue(selectedCalf.gender);
               this.registered.setValue(selectedCalf.registered ? 'yes' : 'no');
+              this.managementTag.setValue(selectedCalf.managementTag)
               this.stat = selectedCalf.calvingStat;
             } else {
               this.stat = null;
@@ -460,6 +464,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
       calfSire: this.fb.control([], Validators.required),
       gender: this.fb.control([], Validators.required),
       registered: this.fb.control([], Validators.required),
+      managementTag: this.fb.control([])
     });
   }
 
@@ -504,6 +509,10 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public get registered() {
     return this.birthForm.get(BirthFormControls.Registered);
+  }
+
+  public get managementTag() {
+    return this.birthForm.get(BirthFormControls.ManagementTag);
   }
 
   ngOnDestroy() {

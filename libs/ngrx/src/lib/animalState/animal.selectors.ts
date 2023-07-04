@@ -1,10 +1,10 @@
 import { Gender } from '@cms-enums';
-import { age, IAnimal } from '@cms-interfaces';
+import { age, IAnimal, UNKNOWN_DAM_TAG } from '@cms-interfaces';
 import { createSelector } from '@ngrx/store';
 import { selectAll } from './animals.reducer';
 
 export const selectAnimals = createSelector(selectAll, (animals) => {
-  return animals.filter((animal) => animal.tagNumber !== 'UK000000000000');
+  return animals.filter((animal) => !animal.tagNumber.includes("UK000000"));
 });
 
 export const getAnimalByTag = (tagNumber: string) =>
@@ -16,7 +16,7 @@ export const getDams = createSelector(selectAnimals, (animals: IAnimal[]) => {
   return animals.filter(
     (animal) =>
       animal.gender === Gender.Female &&
-      (age(animal.birthDate) > 2 || animal.dam.tagNumber == 'UK000000000000')
+      (age(animal.birthDate) > 2 || animal.dam.tagNumber == UNKNOWN_DAM_TAG)
   );
 });
 

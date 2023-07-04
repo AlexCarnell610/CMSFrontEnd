@@ -10,4 +10,5 @@ export class FormErrorsComponent {
   constructor() {}
   @Input() errors: ValidationErrors;
   @Input() isRadio: boolean = false;
+  @Input() isManagementTag=false
 }
