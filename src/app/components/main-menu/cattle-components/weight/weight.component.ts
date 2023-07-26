@@ -61,6 +61,12 @@ export class WeightComponent implements OnInit, OnDestroy {
     this.modalService.get(Modals.BulkWeightModal).open();
   }
 
+  public openEditAnimalModal():void {
+    const modal = this.modalService.get(Modals.Animal)
+    modal.setData({ isAdd: false, persistData: true });
+      modal.open();
+  }
+
   private updateGraph() {
     this.$selectedAnimal.subscribe((animal) => {
       if (

@@ -48,6 +48,7 @@
           [$selectedAnimal]="$selectedAnimal"
           [basicMode]="true"
           [showGoToChild]="false"
+          (editAnimal)="openEditAnimalModal()"
         ></cms-animal-display>
       </div>
     </div>
@@ -75,6 +76,7 @@
         [$selectedAnimal]="$selectedAnimal"
         [basicMode]="true"
         [showGoToChild]="false"
+        (editAnimal)="openEditAnimalModal()"
       ></cms-animal-display>
     </div>
   </div>
@@ -93,3 +95,4 @@
 <cms-warning-display></cms-warning-display>
 
 <cms-bulk-weight-modal style="min-height: 400px"></cms-bulk-weight-modal>
+<cms-animal-modal [animal]="$selectedAnimal | async"></cms-animal-modal>
