@@ -139,6 +139,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
                 : this.breedService.getCodeFromBreed(this.breed.value),
               registered: this.isRegistered,
               name: this.name.value ? this.name.value : null,
+              managementTag: this.managementTag.value
             };
 
             this.newSire
@@ -391,7 +392,8 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
       this.breedChanged() ||
       this.animal?.registered !== this.isRegistered ||
       this.animal?.name !== this.name.value ||
-      (this.animal?.dam.tagNumber !== UNKNOWN_DAM_TAG && this.damTagUnknown.value)
+      (this.animal?.dam.tagNumber !== UNKNOWN_DAM_TAG && this.damTagUnknown.value) ||
+      this.animal?.managementTag !==this.managementTag.value
     );
   }
 
@@ -458,7 +460,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
       }),
       registered: this.fb.control([], Validators.required),
       name: this.fb.control('', {}),
-      managementTag: this.fb.control(''),
+      managementTag: this.fb.control('', [Validators.required, Validators.pattern(/^[a-zA-Z]{1,10}\d*$/)]),
       damTagUnknown: this.fb.control(''),
     });
   }
