@@ -158,7 +158,7 @@ describe('CullUpdateComponent', () => {
   describe('back to main [method]', () => {
     it('should naviaget to main menu', () => {
       let navSpy = spyOn(mockRouter, 'navigate');
-      component.backToMain();
+      component.backToMenu();
       expect(navSpy).toHaveBeenCalled();
     });
   });

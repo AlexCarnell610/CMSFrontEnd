@@ -34,7 +34,7 @@
   font-size: clamp(10pt, 2vw, 15pt);
   min-width: min-content;
   width: fit-content;
-  height: fit-content;
+  min-height: 100%;
 }
 
 .dropdown-menu {

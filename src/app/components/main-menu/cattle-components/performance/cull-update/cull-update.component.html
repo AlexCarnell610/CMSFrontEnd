@@ -1,13 +1,13 @@
 <div class="cms-container">
   <span class="cms-flex-item">
     <span
-      (click)="backToMain()"
+      (click)="backToMenu()"
       class="fas fa-arrow-left ml-md-5 ml-3"
       placement="right"
-      ngbTooltip="Back to Main Menu"
+      ngbTooltip="Back to Menu"
     ></span>
   </span>
-  <h1 class="page-title cms-flex-item">Cow Performance</h1>
+  <h1 class="page-title cms-flex-item">Cull Update</h1>
 </div>
 <div class="container">
   <div class="row">
@@ -43,7 +43,7 @@
         <ul class="list-group list-group-flush">
           <li class="list-group-item" *ngIf="selectedCullUpdate.score">
             <strong>Animal score - </strong
-            >{{ selectedCullUpdate.score | number: "1.0-0" }}
+            >{{ selectedCullUpdate.score | number : "1.0-0" }}
           </li>
           <li
             class="list-group-item"
@@ -59,7 +59,7 @@
             class="list-group-item"
           >
             <strong>Calf average daily weight gain - </strong>
-            {{ selectedCullUpdate.calfDailyWeightGain | number: "1.0-3" }} Kg
+            {{ selectedCullUpdate.calfDailyWeightGain | number : "1.0-3" }} Kg
           </li>
           <li
             *ngIf="selectedCullUpdate.totalCalves > 0"
@@ -74,34 +74,31 @@
           </li>
         </ul>
       </div>
-      <div class="chart-wrapper mt-2" *ngIf="chartWeights.length > 0">
+      <div class="chart-wrapper mt-2" *ngIf="chartWeights">
         <span class="ml-2 mb-1" style="color: #7e7e7e"
           ><strong>Calf Weight Gain</strong></span
         >
         <canvas
           baseChart
-          [datasets]="chartWeights"
-          [labels]="chartLabels"
+          [data]="chartWeights"
           [options]="weightChartOptions"
-          [colors]=""
           [legend]="false"
-          [chartType]="'line'"
+          [type]="'line'"
           [plugins]="[]"
         >
         </canvas>
       </div>
-      <div class="chart-wrapper mt-2" *ngIf="chartWeights.length > 0">
+      <div class="chart-wrapper mt-2" *ngIf="aliveVSDeadData">
         <span class="ml-2 mb-1" style="color: #7e7e7e"
           ><strong>Alive vs Dead Calves</strong></span
         >
         <canvas
           baseChart
-          [datasets]="aliveVSDeadData"
-          [labels]="aliveVSDeadLabels"
+          class="chart"
+          [data]="aliveVSDeadData"
           [options]="aliveDeadChartOptions"
           [legend]="true"
-          [chartType]="'pie'"
-          [plugins]="[]"
+          [type]="'pie'"
         >
         </canvas>
       </div>

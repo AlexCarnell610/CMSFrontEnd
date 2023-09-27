@@ -1,0 +1,246 @@
+<div class="cms-container">
+  <span class="cms-flex-item">
+    <span
+      (click)="backToMenu()"
+      class="fas fa-arrow-left ml-md-5 ml-3"
+      placement="right"
+      ngbTooltip="Back to Menu"
+    ></span>
+  </span>
+  <h1 class="page-title cms-flex-item">Weight Analysis</h1>
+</div>
+
+<div class="container">
+  <div class="row mb-2">
+    <div class="col-md">
+      <div class="dp-hidden position-absolute">
+        <div class="input-group">
+          <input
+            name="datepicker"
+            class="form-control"
+            ngbDatepicker
+            #datepicker="ngbDatepicker"
+            [autoClose]="'outside'"
+            [minDate]="minDate$ | async"
+            [maxDate]="maxDate$ | async"
+            (dateSelect)="onDateSelection($event)"
+            [displayMonths]="2"
+            [dayTemplate]="dayTemplate"
+            outsideDays="hidden"
+            [startDate]="fromDateValue!"
+            tabindex="-1"
+            [placement]="'bottom'"
+            id="fromInput"
+          />
+          <ng-template #dayTemplate let-date let-focused="focused">
+            <span
+              class="custom-day"
+              [class.focused]="focused"
+              [class.range]="isRange(date)"
+              [class.faded]="isHovered(date) || isInside(date)"
+              (mouseenter)="hoveredDate = date"
+              (mouseleave)="hoveredDate = null"
+            >
+              {{ date.day }}
+            </span>
+          </ng-template>
+        </div>
+      </div>
+      <div class="input-group mb-2 mb-md-0">
+        <div class="input-group-prepend">
+          <span class="input-group-text">From</span>
+        </div>
+        <input
+          #dpFromDate
+          class="form-control"
+          placeholder="dd/mm/yyyy"
+          name="dpFromDate"
+          [value]="formatter.format(fromDateValue)"
+          onkeydown="return false"
+          (click)="toggle()"
+        />
+        <div class="input-group-append">
+          <button
+            id="fromDate"
+            class="btn btn-outline-secondary"
+            (click)="toggle()"
+            type="button"
+          >
+            <i class="fa-regular fa-calendar-days"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md">
+      <div class="input-group">
+        <div id="toDate" class="input-group-prepend">
+          <span class="input-group-text">To</span>
+        </div>
+        <input
+          [formControl]="toDateControl"
+          #dpToDate
+          class="form-control"
+          placeholder="dd/mm/yyyy"
+          name="dpToDate"
+          [value]="formatter.format(toDateValue)"
+          onkeydown="return false"
+          (click)="toggle()"
+        />
+        <div class="input-group-append">
+          <button
+            class="btn btn-outline-secondary"
+            (click)="toggle()"
+            type="button"
+          >
+            <i class="fa-regular fa-calendar-days"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-auto mt-1 mt-md-0">
+      <button class="btn-danger btn" (click)="clearDateFilter()">Clear</button>
+    </div>
+  </div>
+  <!-- DONT DELETE!! -->
+  <div class="row" style="max-width: 100%" id="datePicker"></div>
+  <div class="row">
+    <div class="col-md">
+      <cms-animal-list
+        [multiSelect]="true"
+        [dobRange$]="dobRange"
+        [filterByDOB]="true"
+        (mutiAnimalsSelected)="multiAnimalsSelected($event)"
+      ></cms-animal-list>
+    </div>
+    <div class="col-md">
+      <!-- <div>
+        <canvas
+        id="avgDailyWeightGain"
+          baseChart
+          class="chart"
+          [data]="avgDailyWeightChartData | async"
+          [options]="avgDailyWeightGainChartOptions"
+          [type]="barChartType"
+        >
+        </canvas>
+      </div> -->
+      <div>
+        <canvas
+        id="actualDailyWeightGain"
+          baseChart
+          class="chart"
+          [data]="actualDailyWeightChartData$ | async"
+          [options]="actualDailyWeightOptions"
+          [type]="lineChartType"
+        >
+        </canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="container" [formGroup]="performanceForm">
+  <div class="col">
+    <div class="form-group mt-2">
+      Birth Date:
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text"> From </span>
+        </div>
+        <input
+          class="form-control"
+          placeholder="yyyy-mm-dd"
+          name="dp"
+          ngbDatepicker
+          #d="ngbDatepicker"
+        />
+        <div class="input-group-append">
+          <button
+            class="btn btn-outline-secondary calendar"
+            (click)="d.toggle()"
+            type="button"
+          >
+            <i class="fa-regular fa-calendar-days"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text"> To </span>
+        </div>
+        <input
+          class="form-control"
+          placeholder="yyyy-mm-dd"
+          name="dp"
+          ngbDatepicker
+          #d="ngbDatepicker"
+        />
+        <div class="input-group-append">
+          <button
+            class="btn btn-outline-secondary calendar"
+            (click)="d.toggle()"
+            type="button"
+          >
+            <i class="fa-regular fa-calendar-days"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  
+
+    <ul class="list-group">
+      <li
+        class="list-group-item d-flex justify-content-between align-items-center"
+      >
+        Cras justo odio
+        <span class="badge badge-primary badge-pill">14</span>
+      </li>
+      <li
+        class="list-group-item d-flex justify-content-between align-items-center"
+      >
+        Dapibus ac facilisis in
+        <span class="badge badge-primary badge-pill">2</span>
+      </li>
+      <li
+        class="list-group-item d-flex justify-content-between align-items-center"
+      >
+        Morbi leo risus
+        <span class="badge badge-primary badge-pill">1</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+ -->
+
+<!-- <ng-container
+  [ngTemplateOutlet]="datePicker"
+  [ngTemplateOutletContext]="{ controlName: 'startDate', spanText: 'From' }"
+></ng-container> -->
+
+<!-- <ng-template #datePicker let-controlName="controlName" let-spanText="spanText">
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text"> {{ spanText }} </span>
+    </div>
+    <input
+      [formControl]="getFormControl(controlName)"
+      class="form-control"
+      placeholder="yyyy-mm-dd"
+      name="dp"
+      ngbDatepicker
+      #d="ngbDatepicker"
+    />
+    <div class="input-group-append">
+      <button
+        class="btn btn-outline-secondary calendar"
+        (click)="d.toggle()"
+        type="button"
+      >
+        <i class="fa-regular fa-calendar-days"></i>
+      </button>
+    </div>
+  </div>
+</ng-template> -->

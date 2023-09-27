@@ -8,6 +8,7 @@ import { reducers } from '@cms-ngrx';
 import { AnimalEffects } from '@cms-ngrx/animal';
 import { BullEffects } from '@cms-ngrx/bull';
 import {
+  NgbDatepickerModule,
   NgbDropdownModule,
   NgbTooltipModule,
 } from '@ng-bootstrap/ng-bootstrap';
@@ -22,6 +23,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { LoadingModalComponent } from './components/loading-modal/loading-modal.component';
 import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -49,6 +51,7 @@ import { LogoutComponent } from './components/logout/logout.component';
     NgxSmartModalModule.forRoot(),
     NgbTooltipModule,
     NgbDropdownModule,
+    NgbDatepickerModule,
     AuthModule.forRoot({
       ...environment.auth,
       httpInterceptor: {

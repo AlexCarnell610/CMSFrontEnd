@@ -1,6 +1,6 @@
 import { PageURLs } from '@cms-enums';
 export const environment = {
-  production: false,
+  production: true,
   auth: {
     domain: 'cattle-management-system.eu.auth0.com',
     clientId: 'HkkCv3GXyrOhjDwK4y7evcP757A22BPS',

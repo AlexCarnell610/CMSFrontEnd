@@ -2,9 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Modals, PageURLs } from '@cms-enums';
 import { IAnimal } from '@cms-interfaces';
-import { ScreenSizeService } from '@cms-services';
-import { ChartDataSets } from 'chart.js';
-import { Label } from 'ng2-charts';
+import { PerformanceService, ScreenSizeService } from '@cms-services';
+import { ChartConfiguration, ChartType } from 'chart.js';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
@@ -14,13 +13,32 @@ import { BehaviorSubject, Subscription } from 'rxjs';
   styleUrls: ['./weight.component.scss'],
 })
 export class WeightComponent implements OnInit, OnDestroy {
-  public chartWeights: ChartDataSets[] = [];
-  public chartLabels: Label[];
-  public chartOptions = { maintainAspectRatio: false, responsive: true, scales: { yAxes: [{
-    beginAtZero: true,
-    ticks:{min: 0, suggestedMax: 1000, stepSize: 50}
-  }] } };
-  public chartType = 'line';
+  public chartWeights: ChartConfiguration['data'];
+  public chartOptions: ChartConfiguration['options'] = {
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        callbacks: {
+          label: (label) =>
+            `${label.dataset.label}: ${label.formattedValue} Kg`,
+        },
+      },
+    },
+    elements: { line: { tension: 0.3 } },
+    maintainAspectRatio: false,
+    responsive: true,
+    scales: {
+      y: {
+        beginAtZero: true,
+        min: 0,
+        suggestedMax: 1000,
+        ticks: { stepSize: 50 },
+      },
+    },
+  };
+  public chartType: ChartType = 'line';
   public chartPlugins = [];
   public showLegend = false;
   public selectedAnimal: IAnimal;
@@ -32,7 +50,8 @@ export class WeightComponent implements OnInit, OnDestroy {
   constructor(
     private readonly modalService: NgxSmartModalService,
     private readonly router: Router,
-    public readonly screenSize: ScreenSizeService
+    public readonly screenSize: ScreenSizeService,
+    private readonly perfService: PerformanceService
   ) {}
 
   ngOnInit(): void {
@@ -57,52 +76,64 @@ export class WeightComponent implements OnInit, OnDestroy {
     this.modalService.get(Modals.Weight).open();
   }
 
+  // public editAnimal(){
+  //   this.modalService.get(Modals.Animal).setData({isAdd: false})
+  //   this.modalService.get(Modals.Animal).open()
+  // }
+
   public bulkAddWeight(): void {
     this.modalService.get(Modals.BulkWeightModal).open();
   }
 
-  public openEditAnimalModal():void {
-    const modal = this.modalService.get(Modals.Animal)
+  public openEditAnimalModal(): void {
+    const modal = this.modalService.get(Modals.Animal);
     modal.setData({ isAdd: false, persistData: true });
-      modal.open();
+    modal.open();
   }
 
   private updateGraph() {
     this.$selectedAnimal.subscribe((animal) => {
-      if (
-        animal &&
-        (this.selectedAnimal !== animal || this.chartWeights.length == 0)
-      ) {
+      if (animal && (this.selectedAnimal !== animal || !this.chartWeights)) {
         this.selectedAnimal = animal;
-        this.chartWeights = [
-          {
-            data: animal.weightData.map((weight) => weight.weight),
-            label: animal.tagNumber,
-          },
-        ];
-        this.chartLabels = animal.weightData.map((weight) =>
-          weight.weightDate.format('L')
-        );
+        this.chartWeights = {
+          datasets: [
+            {
+              data: animal.weightData.map((weight) => weight.weight),
+              label: animal.tagNumber,
+            },
+          ],
+          labels: animal.weightData.map((weight) =>
+            weight.weightDate.format('L')
+          ),
+        };
+        console.warn(this.chartWeights)
       } else if (animal == undefined) {
-        this.chartWeights = [];
+        this.chartWeights = null;
       }
     });
   }
 
   get dailyWeightGain() {
-    const weights = this.selectedAnimal?.weightData;
-    if (weights?.length > 1) {
-      const initialWeight = weights[0];
-      const lastWeight = weights[weights.length - 1];
-      const weightGain = lastWeight.weight - initialWeight.weight;
-      const dateDiff = lastWeight.weightDate.diff(
-        initialWeight.weightDate,
-        'days'
-      );
-
-      return (weightGain / dateDiff).toPrecision(3);
+    if (this.selectedAnimal?.weightData.length > 1) {
+      
+      return (this.perfService.calculateAvgDailyWeightGain(this.selectedAnimal)).toPrecision(3)
+    }else{
+      return '-'
     }
-    return '-';
+    // const weights = this.selectedAnimal?.weightData;
+    // if (weights?.length > 1) {
+    //   const initialWeight = weights[0];
+    //   const lastWeight = weights[weights.length - 1];
+    //   const weightGain = lastWeight.weight - initialWeight.weight;
+    //   const dateDiff = lastWeight.weightDate.diff(
+    //     initialWeight.weightDate,
+    //     'days'
+    //   );
+
+    //   return (weightGain / dateDiff).toPrecision(3);
+    // }
+    // return '-';
+
   }
 
   ngOnDestroy() {
