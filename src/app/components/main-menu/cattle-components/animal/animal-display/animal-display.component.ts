@@ -7,7 +7,7 @@ import {
   Output,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { IAnimal, IBull } from '@cms-interfaces';
+import { IAnimal, IBull, UNKNOWN_DAM_TAG } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { getAnimalByTag } from '@cms-ngrx/animal';
 import { selectBullByTag } from '@cms-ngrx/bull';
@@ -97,7 +97,7 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
   }
 
   public damTagNotProvided(): boolean {
-    return this.$selectedAnimal.value.dam.tagNumber === 'UK000000000000';
+    return this.$selectedAnimal.value.dam.tagNumber === UNKNOWN_DAM_TAG;
   }
 
   public getCSSForNotesEdit() {

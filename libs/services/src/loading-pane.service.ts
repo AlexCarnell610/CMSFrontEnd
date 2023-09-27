@@ -5,7 +5,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class LoadingPaneService {
-  private _cullUpdateLoading: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  private _cullUpdateLoading: BehaviorSubject<boolean> = new BehaviorSubject(
+    false
+  );
   private _loadingState: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private counter = 0;
 
@@ -29,10 +31,10 @@ export class LoadingPaneService {
   }
 
   get cullUpdateLoading(): Observable<boolean> {
-    return this._cullUpdateLoading.asObservable()
+    return this._cullUpdateLoading.asObservable();
   }
 
   setCullUpdateLoading(updating: boolean) {
-    this._cullUpdateLoading.next(updating)
+    this._cullUpdateLoading.next(updating);
   }
 }

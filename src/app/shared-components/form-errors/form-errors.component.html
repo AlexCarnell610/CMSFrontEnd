@@ -6,8 +6,11 @@
   <span *ngIf="errors.max"
     >Value should be less than {{ errors.max.max }}Kg.
   </span>
-  <span *ngIf="errors.pattern"
+  <span *ngIf="errors.pattern && !isManagementTag"
     >Should follow the pattern: "UK" followed by 12 numbers.</span
+  >
+  <span *ngIf="errors.pattern && isManagementTag"
+    >Should be letter(s) and numbers.</span
   >
   <span *ngIf="errors.date">Date can't be in the future.</span>
   <span *ngIf="errors.initialBeforeInter"

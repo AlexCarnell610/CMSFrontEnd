@@ -63,7 +63,7 @@ export class AnimalComponent implements OnInit {
   public editAnimal() {
     this.$selectedAnimal.pipe(take(1)).subscribe((animal) => {
       const modal = this.modalService.get(this.getModal(animal));
-      modal.setData({ isAdd: false, persistData: true });
+      modal.setData({ isAdd: false, persistData: true, bull: animal });
       modal.open();
     });
   }

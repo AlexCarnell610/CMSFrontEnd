@@ -43,6 +43,25 @@
             <cms-form-errors [errors]="calfTag.errors"></cms-form-errors>
           </div>
         </div>
+        <div
+          class="form-group"
+          [ngClass]="{ 'was-validated': managementTag.dirty }"
+        >
+          <label for="managementTag">Management Tag</label>
+          <input
+            name="managementTag"
+            type="text"
+            class="form-control"
+            id="managementTag"
+            formControlName="managementTag"
+            required
+            pattern="^[a-zA-Z]{1,10}\d*$"
+            autocapitalize="characters"
+          />
+          <div class="invalid-feedback">
+            <cms-form-errors [errors]="managementTag.errors" [isManagementTag]="true"></cms-form-errors>
+          </div>
+        </div>
         <div class="form-group">
           <label for="dob">Date of Birth</label>
           <input

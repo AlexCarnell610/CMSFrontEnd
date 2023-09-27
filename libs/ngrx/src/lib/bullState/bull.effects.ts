@@ -49,9 +49,13 @@ export class BullEffects {
     this.actions$.pipe(
       ofType(BullActionTypes.AddBull),
       switchMap((action: AddBull) => {
-        return this.httpService
-          .addBull(action.payload.bull)
-          .pipe(map((bull) => new LoadBull({ bull })));
+        this.loadingService.setLoadingState(true);
+        return this.httpService.addBull(action.payload.bull).pipe(
+          map((bull) => {
+            this.loadingService.setLoadingState(false);
+            return new LoadBull({ bull });
+          })
+        );
       })
     )
   );
@@ -59,13 +63,20 @@ export class BullEffects {
   $updateBull = createEffect(() =>
     this.actions$.pipe(
       ofType(BullActionTypes.UpdateBull),
-      switchMap((action: UpdateBull) =>{
-        const payloadBull = action.payload.bull
-       return  this.httpService
+      switchMap((action: UpdateBull) => {
+        this.loadingService.setLoadingState(true);
+        const payloadBull = action.payload.bull;
+        return this.httpService
           .updateBull(payloadBull.changes, '' + payloadBull.id)
-          .pipe(map((bull) => new UpdateBullFinished({bull: {id: ""+payloadBull.id, changes: bull}})))
-      }
-      )
+          .pipe(
+            map((bull) => {
+              this.loadingService.setLoadingState(false);
+              return new UpdateBullFinished({
+                bull: { id: '' + payloadBull.id, changes: bull },
+              });
+            })
+          );
+      })
     )
   );
 }

@@ -8,13 +8,11 @@ import {
 } from '@angular/core';
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
-  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { Gender, Modals } from '@cms-enums';
-import { IAnimal, IBreedCode, IBull } from '@cms-interfaces';
+import { IAnimal, IBreedCode, IBull, UNKNOWN_DAM_TAG } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { getDams, selectAnimals } from '@cms-ngrx/animal';
 import { selectBullByTag, selectBulls as getBulls } from '@cms-ngrx/bull';
@@ -41,6 +39,8 @@ enum FormControls {
   Breed = 'breed',
   Registered = 'registered',
   Name = 'name',
+  ManagementTag = 'managementTag',
+  DamTagUnknown = 'damTagUnknown',
 }
 @Component({
   selector: 'cms-animal-modal',
@@ -60,9 +60,11 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
   public dropDownHidden = true;
   public breedsList;
   public isAddMode: boolean = false;
-  public newSire = false
+  public newSire = false;
   private $animals: Observable<IAnimal[]>;
   private previousFormValue;
+  private wasAdding;
+  private prevAnimal;
   private noSireText = 'No sire assigned';
   private subs = new Subscription();
 
@@ -78,6 +80,12 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.setUpForm();
+
+    this.damTagUnknown.valueChanges.subscribe((val) => {
+      if (val) this.dam.disable();
+      else this.dam.enable();
+    });
+
     this.breedsList = this.breedService.breedCodeObjects;
     this.$dams = this.store.pipe(select(getDams));
     this.$sires = this.store.pipe(select(getBulls));
@@ -93,15 +101,15 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
       this.handlePopoverErrors().subscribe((canContinue) => {
         if (this.isAddMode) {
           this.markAllAsDirty();
-          if (canContinue) {            
+          if (canContinue) {
             this.loadingService.setLoadingState(true);
             const newAnimal: IAnimal = {
               ai: [],
               birthDate: this.dob.value,
               calvingHistory: [],
-              dam: this.dam.value,
+              dam: this.damTagUnknown.value ? UNKNOWN_DAM_TAG : this.dam.value,
               gender: this.gender.value,
-              managementTag: 'null',
+              managementTag: this.managementTag.value.toUpperCase(),
               sire: {
                 tagNumber: this.sire.value == 'UK' ? '' : this.sire.value,
               },
@@ -113,7 +121,9 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
               registered: this.isRegistered,
               name: this.name.value ? this.name.value : null,
             };
-            this.newSire ? this.saveBullAndAnimal(newAnimal) : this.addAnimal(newAnimal)
+            this.newSire
+              ? this.saveBullAndAnimal(newAnimal)
+              : this.addAnimal(newAnimal);
           }
         } else {
           this.tagNumber.disable();
@@ -121,7 +131,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
             this.loadingService.setLoadingState(true);
             const animalUpdate: Partial<IAnimal> = {
               birthDate: this.dob.value,
-              dam: this.dam.value,
+              dam: this.damTagUnknown.value ? UNKNOWN_DAM_TAG : this.dam.value,
               sire: { tagNumber: this.noSire() ? '' : this.sire.value },
               gender: this.gender.value,
               breed: this.breedService.isBreedCode(this.breed.value)
@@ -129,9 +139,12 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
                 : this.breedService.getCodeFromBreed(this.breed.value),
               registered: this.isRegistered,
               name: this.name.value ? this.name.value : null,
+              managementTag: this.managementTag.value
             };
-            
-            this.newSire ? this.saveBullAndAnimal(animalUpdate as IAnimal) : this.updateAnimal(animalUpdate)
+
+            this.newSire
+              ? this.saveBullAndAnimal(animalUpdate as IAnimal)
+              : this.updateAnimal(animalUpdate);
           }
         }
       })
@@ -149,7 +162,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  private addAnimal(newAnimal:IAnimal): void{
+  private addAnimal(newAnimal: IAnimal): void {
     this.animalUpdateService.addAnimal(newAnimal).then(() => {
       this.saveResult.message = 'Animal Saved';
       this.saveResult.success = true;
@@ -160,16 +173,16 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private updateAnimal(animal: Partial<IAnimal>): void{
+  private updateAnimal(animal: Partial<IAnimal>): void {
     this.animalUpdateService
-    .updateAnimal(this.animal.tagNumber, animal)
-    .then(() => {
-      this.saveResult.message = 'Animal Updated';
-      this.saveResult.success = true;
+      .updateAnimal(this.animal.tagNumber, animal)
+      .then(() => {
+        this.saveResult.message = 'Animal Updated';
+        this.saveResult.success = true;
 
-      this.loadingService.setLoadingState(false);
-      this.handlePopover(1000);
-    });
+        this.loadingService.setLoadingState(false);
+        this.handlePopover(1000);
+      });
   }
 
   private getCSSForPopover() {
@@ -255,7 +268,15 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
       } else {
         this.subs.add(
           this.$animals.pipe(take(1)).subscribe((animals) => {
-            if (this.damNotExists(animals)) {
+            if (this.isAddMode && this.tagExists(animals)) {
+              this.warningService.show({
+                header: 'The tag number you entered already exists',
+                body: 'Please correct to continue',
+                isError: true,
+                buttonText: 'Close',
+                showCloseButton: false,
+              });
+            } else if (this.damNotExists(animals)) {
               this.warningService
                 .show({
                   header: 'The dam tag you entered does not exist',
@@ -285,7 +306,14 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
                 .subscribe((result) => {
                   if (result) {
                     output.next(false);
-                    this.previousFormValue = this.animalForm.value;
+                    this.previousFormValue = {
+                      ...this.animalForm.value,
+                      newTagNumber: this.isAddMode
+                        ? this.tagNumber.value
+                        : this.animal.tagNumber,
+                    };
+                    this.wasAdding = this.isAddMode
+                    this.prevAnimal = this.animal
                     this.animal = this.getEnteredDam(animals);
                     this.isAddMode = false;
                     this.setData();
@@ -309,13 +337,21 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
     return output;
   }
 
+  private tagExists(animals: IAnimal[]): boolean {
+    return (
+      animals.findIndex(
+        (animal) => animal.tagNumber === this.tagNumber.value
+      ) !== -1
+    );
+  }
+
   private getEnteredDam(animals: IAnimal[]) {
     return animals.find((animal) => animal.tagNumber === this.dam.value);
   }
 
   private enteredTagIsMale(animals: IAnimal[]): boolean {
     return (
-      this.dam.value !== 'UK000000000000' &&
+      this.dam.value !== UNKNOWN_DAM_TAG &&
       animals.find((animal) => animal.tagNumber === this.dam.value)?.gender ===
         Gender.Male
     );
@@ -323,7 +359,8 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private damNotExists(animals: IAnimal[]): boolean {
     return (
-      this.dam.value !== 'UK000000000000' &&
+      this.dam.value !== UNKNOWN_DAM_TAG &&
+      !this.damTagUnknown.value &&
       animals.findIndex((animal) => animal.tagNumber === this.dam.value) === -1
     );
   }
@@ -336,7 +373,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
       dam: null,
       gender: Gender.Female,
       managementTag: 'null',
-      sire: {tagNumber: null},
+      sire: { tagNumber: null },
       tagNumber,
       weightData: [],
       breed: 'UNAV',
@@ -354,7 +391,9 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
       this.animal?.gender !== this.gender.value ||
       this.breedChanged() ||
       this.animal?.registered !== this.isRegistered ||
-      this.animal?.name !== this.name.value
+      this.animal?.name !== this.name.value ||
+      (this.animal?.dam.tagNumber !== UNKNOWN_DAM_TAG && this.damTagUnknown.value) ||
+      this.animal?.managementTag !==this.managementTag.value
     );
   }
 
@@ -376,7 +415,14 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
   private setData() {
     if (!this.isAddMode) {
       this.dob.setValue(this.animal.birthDate.format('yyyy-MM-DD'));
-      this.dam.setValue(this.animal.dam.tagNumber);
+      this.dam.setValue(
+        this.animal.dam.tagNumber === UNKNOWN_DAM_TAG
+          ? 'UK'
+          : this.animal.dam.tagNumber
+      );
+      this.damTagUnknown.setValue(
+        this.animal.dam.tagNumber === UNKNOWN_DAM_TAG
+      );
       this.sire.setValue(
         this.animal.sire.tagNumber !== 'null'
           ? this.animal.sire.tagNumber
@@ -388,6 +434,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
       );
       this.registered.setValue(this.animal.registered ? 'yes' : 'no');
       this.name.setValue(this.animal.name);
+      this.managementTag.setValue(this.animal.managementTag);
     }
   }
 
@@ -413,6 +460,8 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
       }),
       registered: this.fb.control([], Validators.required),
       name: this.fb.control('', {}),
+      managementTag: this.fb.control('', [Validators.required, Validators.pattern(/^[a-zA-Z]{1,10}\d*$/)]),
+      damTagUnknown: this.fb.control(''),
     });
   }
 
@@ -425,9 +474,10 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
       this.popover.close();
       if (this.saveResult.success) {
         if (this.previousFormValue) {
-          this.isAddMode = true;
+          this.isAddMode = this.wasAdding;
           this.animalForm.setValue(this.previousFormValue);
-          this.tagNumber.enable();
+          if(!this.wasAdding) this.animal = this.prevAnimal
+          this.wasAdding ? this.tagNumber.enable() : this.tagNumber.disable();
           this.previousFormValue = null;
         } else {
           this.closeModal();
@@ -464,7 +514,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
     );
     this.subs.add(
       animalModal.onOpenFinished.subscribe(() => {
-        this.newSire = false
+        this.newSire = false;
         this.isAddMode = animalModal.getData().isAdd;
         this.animalForm.enable();
         this.setData();
@@ -511,5 +561,13 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public get name() {
     return this.animalForm.get(FormControls.Name);
+  }
+
+  public get managementTag() {
+    return this.animalForm.get(FormControls.ManagementTag);
+  }
+
+  public get damTagUnknown() {
+    return this.animalForm.get(FormControls.DamTagUnknown);
   }
 }

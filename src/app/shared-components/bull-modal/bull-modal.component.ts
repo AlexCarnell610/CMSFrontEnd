@@ -6,26 +6,28 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
   FormGroup,
-  ValidationErrors,
-  ValidatorFn,
-  Validators
+  Validators,
 } from '@angular/forms';
 import { Modals } from '@cms-enums';
 import { IBull } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { AddBull, LoadBull, selectBulls, UpdateBull } from '@cms-ngrx/bull';
-import { AnimalBreedService, WarningService } from '@cms-services';
+import {
+  AnimalBreedService,
+  LoadingPaneService,
+  WarningService,
+} from '@cms-services';
 import { breedValidator } from '@cms-validators';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { NgxSmartModalService } from 'ngx-smart-modal';
-import { Subscription } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
 
 @Component({
   selector: 'cms-bull-modal',
@@ -34,7 +36,6 @@ import { Subscription } from 'rxjs';
 })
 export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() form: FormGroup;
-  @Input() bull: IBull;
   @Input() breedControlName: string;
   @Input() sireControlName: string;
   @Output() sireAdded: EventEmitter<boolean> = new EventEmitter();
@@ -44,18 +45,23 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
   public bullForm = new FormGroup({});
   public isNewBull = false;
 
+  private bull: IBull;
   private subs = new Subscription();
+  private longLifeSubs = new Subscription();
   private persistData: boolean = false;
+  private readyToClose = false;
 
   constructor(
     private readonly modalService: NgxSmartModalService,
     private readonly formBuilder: FormBuilder,
     private readonly store: Store<RootState>,
     private readonly warningService: WarningService,
-    private readonly breedService: AnimalBreedService
+    private readonly breedService: AnimalBreedService,
+    private readonly loadingService: LoadingPaneService
   ) {}
 
   ngOnInit(): void {
+    this.handleModalClose();
     this.bullForm = this.formBuilder.group({
       tagNumber: this.formBuilder.control(['UK'], {
         validators: [Validators.pattern(/^UK\d{12}$/), Validators.required],
@@ -77,7 +83,8 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.modalService.get(Modals.Sire).onOpenFinished.subscribe(() => {
       const modalData = this.modalService.resetModalData(Modals.Sire);
-      
+
+      this.bull = modalData.bull;
       this.isAdd = modalData.isAdd;
       this.persistData = modalData.persistData;
       this.bullForm.reset({ tagNumber: 'UK' });
@@ -88,6 +95,10 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
       } else {
         this.tag.enable();
       }
+    });
+
+    this.modalService.get(Modals.Sire).onAnyCloseEventFinished.subscribe(() => {
+      this.subs.unsubscribe();
     });
   }
 
@@ -109,10 +120,7 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.breed.markAsDirty();
     if (this.bullForm.valid) {
       if (!this.isAdd) {
-        if (
-          !this.isAdd &&
-          !this.breedService.isSameBreed(this.bull.breed, this.breed.value)
-        ) {
+        if (!this.breedService.isSameBreed(this.bull.breed, this.breed.value)) {
           const breedName = this.breedService.getBreedFromCode(
             this.breed.value
           );
@@ -125,6 +133,7 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
             ...this.bullForm.getRawValue(),
             breed: this.breedCode,
           };
+          this.readyToClose = true;
           this.store.dispatch(
             new UpdateBull({
               bull: { changes: update, id: this.bull.tagNumber },
@@ -174,6 +183,25 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.modalService.get(Modals.Sire).close();
   }
 
+  private handleModalClose(): void {
+    let loadingStarted = false;
+    this.longLifeSubs.add(
+      this.loadingService.currentLoadingState.subscribe(
+        (loading) => {
+          if (loading) {
+            loadingStarted = true;
+          } else if (!loading && loadingStarted && this.readyToClose) {
+            timer(500).subscribe(() => {
+              loadingStarted = false;
+              this.readyToClose = false;
+              this.modalService.get(Modals.Sire).close();
+            });
+          }
+        }
+      )
+    );
+  }
+
   private get calfBreed(): string {
     return this.form?.get(this.breedControlName)?.value;
   }
@@ -187,7 +215,6 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private saveBull(): void {
-    this.subs.unsubscribe();
     this.sireAdded.emit(true);
     this.isNewBull = true;
     this.form?.get(this.sireControlName).setValue(this.tag.value);
@@ -196,6 +223,7 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
       breed: this.breedCode,
     };
     if (this.persistData) {
+      this.handleModalClose();
       this.store.dispatch(new AddBull({ bull }));
     } else {
       this.store.dispatch(new LoadBull({ bull }));
@@ -208,6 +236,6 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subs.unsubscribe();
+    this.longLifeSubs.unsubscribe();
   }
 }

@@ -7,7 +7,7 @@ import {
   UpdateAnimal,
   UpdateAnimalWeight,
 } from '@cms-ngrx/animal';
-import { AddBull, UpdateBull, UpsertBull } from '@cms-ngrx/bull';
+import { UpsertBull } from '@cms-ngrx/bull';
 import { HttpService } from '@cms-services/http';
 import { Store } from '@ngrx/store';
 
