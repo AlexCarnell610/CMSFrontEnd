@@ -10,9 +10,13 @@ export class AnimalDobSortPipe implements PipeTransform {
     oldToYoung: boolean,
     youngToOld: boolean
   ): IAnimal[] {
+    
     if (oldToYoung) {
+      console.warn("111111111",oldToYoung, youngToOld);
       animals.sort(this.sortOldToYoung);
     } else if (youngToOld) {
+      console.warn("222222222",oldToYoung, youngToOld);
+      
       animals.sort(this.sortYoungToOld);
     }
 

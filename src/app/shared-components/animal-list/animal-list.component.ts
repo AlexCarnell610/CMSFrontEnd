@@ -37,7 +37,7 @@ export class AnimalListComponent implements OnInit, OnDestroy {
   @Output() add: EventEmitter<IAnimal> = new EventEmitter();
   @Output() edit: EventEmitter<any> = new EventEmitter();
   @Output() animalSelected: EventEmitter<Animal> = new EventEmitter();
-  @Output() mutiAnimalsSelected: EventEmitter<Animal[]> = new EventEmitter()
+  @Output() mutiAnimalsSelected: EventEmitter<Animal[]> = new EventEmitter();
   @Input() page: PageURLs;
   @Input() displayBulls = false;
   @Input() sortOldToYoung = false;
@@ -80,9 +80,14 @@ export class AnimalListComponent implements OnInit, OnDestroy {
     this.edit.emit(null);
   }
 
-  public resetSelection():void{
-    this.multiSelectedAnimals = []
-    this.mutiAnimalsSelected.emit(this.multiSelectedAnimals)
+  public resetSelection(): void {
+    this.multiSelectedAnimals = [];
+    this.mutiAnimalsSelected.emit(this.multiSelectedAnimals);
+  }
+
+  public selectAll(): void {
+    this.multiSelectedAnimals = [...this.searchedAnimals$.getValue()];
+    this.mutiAnimalsSelected.emit(this.multiSelectedAnimals);
   }
 
   public selectAnimal(animal: Animal) {
@@ -121,15 +126,16 @@ export class AnimalListComponent implements OnInit, OnDestroy {
   }
 
   private trackFilteredAnimalsForMultiSelect(): void {
-    this.animals$.subscribe((filteredAnimals) => {
-      this.multiSelectedAnimals = this.multiSelectedAnimals.filter(
-        (animal) =>
-          filteredAnimals.findIndex(
-            (filteredAnimal) => animal.tagNumber === filteredAnimal.tagNumber
-          ) > -1
-      );
-      this.mutiAnimalsSelected.emit(this.multiSelectedAnimals)
-    });
+    // this.animals$.subscribe((filteredAnimals) => {
+    //   console.error("trackFilteredAnimalsForMultiSelect", this.multiSelectedAnimals);
+    //   this.multiSelectedAnimals = this.multiSelectedAnimals.filter(
+    //     (animal) =>
+    //       filteredAnimals.findIndex(
+    //         (filteredAnimal) => animal.tagNumber === filteredAnimal.tagNumber
+    //       ) > -1
+    //   );
+    //   this.mutiAnimalsSelected.emit(this.multiSelectedAnimals);
+    // });
   }
 
   private populateAnimals() {
@@ -147,12 +153,19 @@ export class AnimalListComponent implements OnInit, OnDestroy {
         this.store.select(selectBulls),
       ]).pipe(map(([animals, bulls]) => [...animals, ...bulls]));
     } else if (this.filterByDOB) {
+      console.warn('FILTER BY DOB');
+
+      this.subscriptions.add(
+        this.dobRange$.subscribe(() => {
+          this.resetSelection();
+        })
+      );
       this.animals$ = combineLatest([
         this.dobRange$.pipe(startWith({ from: null, to: null })),
-        this.store.pipe(select(selectAnimals)),
+        this.selectAnimals$,
       ]).pipe(
-        map(([dobRange, animals]) =>
-          dobRange.from && dobRange.to
+        map(([dobRange, animals]) => {
+          return dobRange.from && dobRange.to
             ? animals.filter((animal) =>
                 animal.birthDate.isBetween(
                   dobRange.from,
@@ -161,12 +174,20 @@ export class AnimalListComponent implements OnInit, OnDestroy {
                   '[]'
                 )
               )
-            : animals
-        )
+            : animals;
+        })
       );
     } else {
-      this.animals$ = this.store.pipe(select(selectAnimals));
+      console.warn('NOTHING');
+
+      this.animals$ = this.selectAnimals$;
     }
+  }
+
+  private get selectAnimals$(): Observable<IAnimal[]> {
+    return this.store
+      .select(selectAnimals)
+      .pipe(map((animals) => [...animals]));
   }
 
   private notSold(animal: IAnimal) {
@@ -189,15 +210,27 @@ export class AnimalListComponent implements OnInit, OnDestroy {
           if (!this.multiSelect) {
             this.$currentAnimal.next(ani);
           } else {
+            console.warn('IS MUTLISELECT');
+
             if (this.animalMultiSelected(ani)) {
+              console.warn(
+                'Select animals 206',
+                this.searchedAnimals$.value.length
+              );
+              console.warn('IS MULTISELECTED');
+
               this.multiSelectedAnimals.splice(
                 this.findMultiSelectedAnimalIndex(ani),
                 1
               );
-              this.mutiAnimalsSelected.emit(this.multiSelectedAnimals)
+              console.warn(
+                'Select animals 213',
+                this.searchedAnimals$.value.length
+              );
+              this.mutiAnimalsSelected.emit(this.multiSelectedAnimals);
             } else {
               this.multiSelectedAnimals.push(ani);
-              this.mutiAnimalsSelected.emit(this.multiSelectedAnimals)
+              this.mutiAnimalsSelected.emit(this.multiSelectedAnimals);
             }
           }
         })

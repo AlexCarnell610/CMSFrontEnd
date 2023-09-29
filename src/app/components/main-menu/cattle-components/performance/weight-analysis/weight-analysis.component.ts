@@ -25,7 +25,13 @@ import {
   NgbInputDatepicker,
 } from '@ng-bootstrap/ng-bootstrap';
 import { Store, select } from '@ngrx/store';
-import { CategoryScale, Chart, ChartConfiguration, ChartData, ChartType } from 'chart.js';
+import {
+  CategoryScale,
+  Chart,
+  ChartConfiguration,
+  ChartData,
+  ChartType,
+} from 'chart.js';
 import * as moment from 'moment';
 import { BehaviorSubject, Observable, zip } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -55,7 +61,7 @@ export class WeightAnalysisComponent implements OnInit {
           label: (label) =>
             `${label.dataset.label}: ${label.formattedValue} Kg`,
         },
-      },      
+      },
     },
     elements: { line: { tension: 0.3 } },
     maintainAspectRatio: false,
@@ -68,13 +74,13 @@ export class WeightAnalysisComponent implements OnInit {
         ticks: { stepSize: 50 },
       },
       x: {
-       ticks: {
-        callback: function(value, index, ticks) {
-          console.warn()
-          return moment(this.getLabelForValue(index)).format('L')
-      }
-       }
-      }
+        ticks: {
+          callback: function (value, index, ticks) {
+            console.warn();
+            return moment(this.getLabelForValue(index)).format('L');
+          },
+        },
+      },
     },
   };
   avgDailyWeightChartData: Observable<ChartConfiguration['data']>;
@@ -134,7 +140,6 @@ export class WeightAnalysisComponent implements OnInit {
 
     this.actualDailyWeightChartData$ = this.selectedAnimals$.pipe(
       map((selectedAnimals) => {
-        console.warn(selectedAnimals);
         const filteredAnimals = selectedAnimals.filter(
           (animal) => isAnimal(animal) && animal.weightData.length > 1
         );
@@ -143,7 +148,6 @@ export class WeightAnalysisComponent implements OnInit {
             datasets: filteredAnimals.map((animal) => {
               return {
                 data: animal.weightData.map((weight) => {
-                  console.warn(weight.weightDate.valueOf())
                   return {
                     y: weight.weight,
                     x: weight.weightDate.valueOf(),
@@ -163,7 +167,7 @@ export class WeightAnalysisComponent implements OnInit {
 
     this.avgDailyWeightChartData = this.selectedAnimals$.pipe(
       map((selectedAnimals) => {
-        const filteredAnimals = selectedAnimals.filter(
+        const filteredAnimals = selectedAnimals?.filter(
           (animal) => isAnimal(animal) && animal.weightData.length > 1
         );
         if (isAnimalArray(filteredAnimals)) {
@@ -184,11 +188,10 @@ export class WeightAnalysisComponent implements OnInit {
     );
 
     //sort based on highest total weigh, totasl weight gain avg daily weight gain
-    const animals$ = this.store.pipe(
-      select(selectAnimals),
+    const animals$ = this.store.select(selectAnimals).pipe(
       filter((animals) => animals.length > 0),
       map((animals) =>
-        animals.sort((animalA, animalB) =>
+        [...animals].sort((animalA, animalB) =>
           animalA.birthDate.isSameOrBefore(animalB.birthDate) ? -1 : 1
         )
       )
@@ -202,16 +205,12 @@ export class WeightAnalysisComponent implements OnInit {
       map((animals) => this.toNgbDateStruct(animals.pop().birthDate))
     );
 
+    this.minDate$.subscribe(date => console.warn(date))
+    this.maxDate$.subscribe(date => console.warn(date))
+
     this.performanceForm = new FormGroup({
       startDate: new FormControl(null, Validators.required),
       endDate: new FormControl(null, Validators.required),
-    });
-
-    this.fromDateControl.valueChanges.subscribe((val) => {
-      console.warn('from', val);
-    });
-    this.toDateControl.valueChanges.subscribe((val) => {
-      console.warn('to', val);
     });
   }
 
@@ -230,6 +229,8 @@ export class WeightAnalysisComponent implements OnInit {
       },
       []
     );
+
+    arrayOfUniqueWeightDates.sort((a, b) => (a < b ? -1 : 1));
 
     return arrayOfUniqueWeightDates;
   }
