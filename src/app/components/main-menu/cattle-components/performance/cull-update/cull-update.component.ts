@@ -136,7 +136,6 @@ export class CullUpdateComponent implements OnInit, OnDestroy {
           callbacks: {
             title: (event) => event[0].dataset.label,
             label: (event) => {
-              console.warn(event);
               return `${event.formattedValue} Kg`;
             },
           },

@@ -63,9 +63,6 @@ export class AnimalListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.trackAnimalSelect();
     this.populateAnimals();
-    if (this.multiSelect) {
-      this.trackFilteredAnimalsForMultiSelect();
-    }
 
     this.setUpList();
     this.trackSearch();
@@ -94,11 +91,9 @@ export class AnimalListComponent implements OnInit, OnDestroy {
     if (this.page === PageURLs.Animals) {
       this.currentAnimal = animal;
       this.pushNextAnimal(animal);
-    } else {
-      if (animal.tagNumber !== this.currentAnimal?.tagNumber) {
-        this.currentAnimal = this.multiSelect ? null : animal;
-        this.pushNextAnimal(animal);
-      }
+    } else if (animal.tagNumber !== this.currentAnimal?.tagNumber) {
+      this.currentAnimal = this.multiSelect ? null : animal;
+      this.pushNextAnimal(animal);
     }
   }
 
@@ -125,19 +120,6 @@ export class AnimalListComponent implements OnInit, OnDestroy {
     }
   }
 
-  private trackFilteredAnimalsForMultiSelect(): void {
-    // this.animals$.subscribe((filteredAnimals) => {
-    //   console.error("trackFilteredAnimalsForMultiSelect", this.multiSelectedAnimals);
-    //   this.multiSelectedAnimals = this.multiSelectedAnimals.filter(
-    //     (animal) =>
-    //       filteredAnimals.findIndex(
-    //         (filteredAnimal) => animal.tagNumber === filteredAnimal.tagNumber
-    //       ) > -1
-    //   );
-    //   this.mutiAnimalsSelected.emit(this.multiSelectedAnimals);
-    // });
-  }
-
   private populateAnimals() {
     if (this.page === PageURLs.Births) {
       this.animals$ = this.store
@@ -153,8 +135,6 @@ export class AnimalListComponent implements OnInit, OnDestroy {
         this.store.select(selectBulls),
       ]).pipe(map(([animals, bulls]) => [...animals, ...bulls]));
     } else if (this.filterByDOB) {
-      console.warn('FILTER BY DOB');
-
       this.subscriptions.add(
         this.dobRange$.subscribe(() => {
           this.resetSelection();
@@ -178,8 +158,6 @@ export class AnimalListComponent implements OnInit, OnDestroy {
         })
       );
     } else {
-      console.warn('NOTHING');
-
       this.animals$ = this.selectAnimals$;
     }
   }
@@ -210,22 +188,10 @@ export class AnimalListComponent implements OnInit, OnDestroy {
           if (!this.multiSelect) {
             this.$currentAnimal.next(ani);
           } else {
-            console.warn('IS MUTLISELECT');
-
             if (this.animalMultiSelected(ani)) {
-              console.warn(
-                'Select animals 206',
-                this.searchedAnimals$.value.length
-              );
-              console.warn('IS MULTISELECTED');
-
               this.multiSelectedAnimals.splice(
                 this.findMultiSelectedAnimalIndex(ani),
                 1
-              );
-              console.warn(
-                'Select animals 213',
-                this.searchedAnimals$.value.length
               );
               this.mutiAnimalsSelected.emit(this.multiSelectedAnimals);
             } else {

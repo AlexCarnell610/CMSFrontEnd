@@ -103,8 +103,23 @@
   </div>
   <!-- DONT DELETE!! -->
   <div class="row" style="max-width: 100%" id="datePicker"></div>
+
   <div class="row">
     <div class="col-md">
+      <!-- <a class="badge badge-success"
+        ><i class="fa-solid fa-sort-up"></i>Lowest to Highest Avg Daily Weight
+        Gain</a
+      >
+      <br />
+      <a class="badge badge-success"
+        ><i class="fa-solid fa-sort-up"></i>Lowest to Highest Total Weight
+        Gain</a
+      >
+      <br />
+      <a class="badge badge-success"
+        ><i class="fa-solid fa-sort-up"></i>Lowest to Highest Total Weight</a
+      >
+      <br /> -->
       <cms-animal-list
         [multiSelect]="true"
         [dobRange$]="dobRange"
@@ -115,7 +130,7 @@
     <div class="col-md">
       <div class="h-50">
         <canvas
-        id="avgDailyWeightGain"
+          id="avgDailyWeightGain"
           baseChart
           class="chart"
           [data]="avgDailyWeightChartData | async"
@@ -126,7 +141,7 @@
       </div>
       <div class="h-50">
         <canvas
-        id="actualDailyWeightGain"
+          id="actualDailyWeightGain"
           baseChart
           class="chart"
           [data]="actualDailyWeightChartData$ | async"
@@ -138,109 +153,3 @@
     </div>
   </div>
 </div>
-
-<!-- <div class="container" [formGroup]="performanceForm">
-  <div class="col">
-    <div class="form-group mt-2">
-      Birth Date:
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text"> From </span>
-        </div>
-        <input
-          class="form-control"
-          placeholder="yyyy-mm-dd"
-          name="dp"
-          ngbDatepicker
-          #d="ngbDatepicker"
-        />
-        <div class="input-group-append">
-          <button
-            class="btn btn-outline-secondary calendar"
-            (click)="d.toggle()"
-            type="button"
-          >
-            <i class="fa-regular fa-calendar-days"></i>
-          </button>
-        </div>
-      </div>
-
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text"> To </span>
-        </div>
-        <input
-          class="form-control"
-          placeholder="yyyy-mm-dd"
-          name="dp"
-          ngbDatepicker
-          #d="ngbDatepicker"
-        />
-        <div class="input-group-append">
-          <button
-            class="btn btn-outline-secondary calendar"
-            (click)="d.toggle()"
-            type="button"
-          >
-            <i class="fa-regular fa-calendar-days"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-
-  
-
-    <ul class="list-group">
-      <li
-        class="list-group-item d-flex justify-content-between align-items-center"
-      >
-        Cras justo odio
-        <span class="badge badge-primary badge-pill">14</span>
-      </li>
-      <li
-        class="list-group-item d-flex justify-content-between align-items-center"
-      >
-        Dapibus ac facilisis in
-        <span class="badge badge-primary badge-pill">2</span>
-      </li>
-      <li
-        class="list-group-item d-flex justify-content-between align-items-center"
-      >
-        Morbi leo risus
-        <span class="badge badge-primary badge-pill">1</span>
-      </li>
-    </ul>
-  </div>
-</div>
-
- -->
-
-<!-- <ng-container
-  [ngTemplateOutlet]="datePicker"
-  [ngTemplateOutletContext]="{ controlName: 'startDate', spanText: 'From' }"
-></ng-container> -->
-
-<!-- <ng-template #datePicker let-controlName="controlName" let-spanText="spanText">
-  <div class="input-group">
-    <div class="input-group-prepend">
-      <span class="input-group-text"> {{ spanText }} </span>
-    </div>
-    <input
-      [formControl]="getFormControl(controlName)"
-      class="form-control"
-      placeholder="yyyy-mm-dd"
-      name="dp"
-      ngbDatepicker
-      #d="ngbDatepicker"
-    />
-    <div class="input-group-append">
-      <button
-        class="btn btn-outline-secondary calendar"
-        (click)="d.toggle()"
-        type="button"
-      >
-        <i class="fa-regular fa-calendar-days"></i>
-      </button>
-    </div>
-  </div>
-</ng-template> -->

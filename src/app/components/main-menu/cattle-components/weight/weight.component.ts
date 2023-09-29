@@ -76,11 +76,6 @@ export class WeightComponent implements OnInit, OnDestroy {
     this.modalService.get(Modals.Weight).open();
   }
 
-  // public editAnimal(){
-  //   this.modalService.get(Modals.Animal).setData({isAdd: false})
-  //   this.modalService.get(Modals.Animal).open()
-  // }
-
   public bulkAddWeight(): void {
     this.modalService.get(Modals.BulkWeightModal).open();
   }
@@ -106,7 +101,6 @@ export class WeightComponent implements OnInit, OnDestroy {
             weight.weightDate.format('L')
           ),
         };
-        console.warn(this.chartWeights)
       } else if (animal == undefined) {
         this.chartWeights = null;
       }
@@ -120,20 +114,6 @@ export class WeightComponent implements OnInit, OnDestroy {
     }else{
       return '-'
     }
-    // const weights = this.selectedAnimal?.weightData;
-    // if (weights?.length > 1) {
-    //   const initialWeight = weights[0];
-    //   const lastWeight = weights[weights.length - 1];
-    //   const weightGain = lastWeight.weight - initialWeight.weight;
-    //   const dateDiff = lastWeight.weightDate.diff(
-    //     initialWeight.weightDate,
-    //     'days'
-    //   );
-
-    //   return (weightGain / dateDiff).toPrecision(3);
-    // }
-    // return '-';
-
   }
 
   ngOnDestroy() {
