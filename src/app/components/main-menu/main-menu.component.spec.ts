@@ -134,7 +134,7 @@ describe('MainMenuComponent', () => {
     });
 
     it('should navigate to cullupdate screen', () => {
-      component.cullUpdate();
+      component.performance();
       expect(navigateSpy).toHaveBeenCalledWith([PageURLs.CullUpdate], {
         relativeTo: mockRoute,
       });

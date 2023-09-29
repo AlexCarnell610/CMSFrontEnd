@@ -1,11 +1,13 @@
 export enum PageURLs {
-  MainMenu = 'main-menu',
+  MainMenu = 'mainmenu',
   Login = 'login',
   Weight = 'weight',
   Logout = 'logout',
   Animals = 'animals',
   Births = 'births',
-  CullUpdate = 'performance',
+  Performance = 'performance',
   Registration = 'registration',
   Medication = 'medication',
+  CullUpdate = 'cullupdate',
+  WeightAnalysis='weightanalysis'
 }

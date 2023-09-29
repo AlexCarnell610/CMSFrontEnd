@@ -4,11 +4,14 @@ import { PageURLs } from '@cms-enums';
 import { IAnimal, ICullUpdate } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { getAnimalByTag, getCalves } from '@cms-ngrx/animal';
-import { CullUpdateService, LoadingPaneService, ScreenSizeService } from '@cms-services';
+import {
+  CullUpdateService,
+  LoadingPaneService,
+  ScreenSizeService,
+} from '@cms-services';
 import { select, Store } from '@ngrx/store';
-import { ChartDataSets, ChartOptions, ChartPoint } from 'chart.js';
+import { ChartConfiguration } from 'chart.js';
 import { Moment } from 'moment';
-import { Label } from 'ng2-charts';
 import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 
@@ -22,12 +25,12 @@ export class CullUpdateComponent implements OnInit, OnDestroy {
   public $selectedAnimal: BehaviorSubject<IAnimal> = new BehaviorSubject(null);
   public $calves: BehaviorSubject<IAnimal[]> = new BehaviorSubject(null);
   public selectedCullUpdate: ICullUpdate;
-  public chartWeights: ChartDataSets[] = [];
-  public aliveVSDeadData: ChartDataSets[] = [];
-  public aliveVSDeadLabels: Label[];
-  public chartLabels: Label[];
-  public weightChartOptions: ChartOptions;
-  public aliveDeadChartOptions: ChartOptions = { responsive: true };
+  public chartWeights: ChartConfiguration['data'];
+  public aliveVSDeadData: ChartConfiguration['data'];
+  public weightChartOptions: ChartConfiguration['options'];
+  public aliveDeadChartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+  };
   public showLegend = false;
   public isSmallScreen = false;
 
@@ -41,9 +44,9 @@ export class CullUpdateComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.loadingService.cullUpdateLoading.subscribe(loading => {
-      this.loadingService.setLoadingState(loading)
-    })
+    this.loadingService.cullUpdateLoading.subscribe((loading) => {
+      this.loadingService.setLoadingState(loading);
+    });
     this.setUpChartOptions();
     this.updateGraph();
     this.cullUpdateService.getCullUpdate().subscribe((cullUpdate) => {
@@ -74,8 +77,8 @@ export class CullUpdateComponent implements OnInit, OnDestroy {
     );
   }
 
-  public backToMain() {
-    this.router.navigate([PageURLs.MainMenu]);
+  public backToMenu() {
+    this.router.navigate([PageURLs.MainMenu, PageURLs.Performance]);
   }
 
   private updateGraph() {
@@ -83,27 +86,25 @@ export class CullUpdateComponent implements OnInit, OnDestroy {
       combineLatest([this.$calves, this.$selectedAnimal]).subscribe(
         ([calves, animal]) => {
           if (animal) {
-            this.aliveVSDeadData = [
-              {
-                data: [
-                  this.selectedCullUpdate.aliveCalves,
-                  this.selectedCullUpdate.totalCalves -
+            this.aliveVSDeadData = {
+              datasets: [
+                {
+                  data: [
                     this.selectedCullUpdate.aliveCalves,
-                ],
-                label: 'Calves',
-              },
-            ];
+                    this.selectedCullUpdate.totalCalves -
+                      this.selectedCullUpdate.aliveCalves,
+                  ],
+                  label: 'Calves',
+                },
+              ],
+              labels: ['Number alive calves', 'Number dead calves'],
+            };
 
-            this.aliveVSDeadLabels = [
-              'Number alive calves',
-              'Number dead calves',
-            ];
-            this.chartWeights = [];
-            this.chartLabels = [];
+            this.chartWeights = { datasets: [], labels: [] };
             if (calves?.length > 0) {
               let dates: Moment[] = [];
               calves.forEach((calf) => {
-                let chartPoint: ChartPoint[] = [];
+                let chartPoint: any[] = [];
                 calf.weightData.forEach((weight) => {
                   dates.push(weight.weightDate);
                   chartPoint.push({
@@ -112,13 +113,13 @@ export class CullUpdateComponent implements OnInit, OnDestroy {
                   });
                 });
 
-                this.chartWeights.push({
+                this.chartWeights.datasets.push({
                   data: chartPoint,
                   label: calf.tagNumber,
                 });
               });
               dates.forEach((date) => {
-                this.chartLabels.push(date.format('L'));
+                this.chartWeights.labels.push(date.format('L'));
               });
             }
           }
@@ -130,14 +131,14 @@ export class CullUpdateComponent implements OnInit, OnDestroy {
   private setUpChartOptions() {
     this.weightChartOptions = {
       responsive: true,
-      tooltips: {
-        custom: (toolTip) => {
-          if (toolTip.title) {
-            toolTip.title = [toolTip.body[0].lines[0].substring(0, 14)];
-            toolTip.body[0].lines[0] =
-              toolTip.body[0].lines[0].substring(16) + ' Kg';
-          }
-          return toolTip;
+      plugins: {
+        tooltip: {
+          callbacks: {
+            title: (event) => event[0].dataset.label,
+            label: (event) => {
+              return `${event.formattedValue} Kg`;
+            },
+          },
         },
       },
     };

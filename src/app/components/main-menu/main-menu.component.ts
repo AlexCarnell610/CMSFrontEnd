@@ -93,8 +93,8 @@ export class MainMenuComponent implements OnInit, AfterViewInit {
     this.router.navigate([PageURLs.Registration], { relativeTo: this.route });
   }
 
-  public cullUpdate(): void {
-    this.router.navigate([PageURLs.CullUpdate], { relativeTo: this.route });
+  public performance(): void {
+    this.router.navigate([PageURLs.Performance], { relativeTo: this.route });
   }
 
   public medicationScreen(): void {

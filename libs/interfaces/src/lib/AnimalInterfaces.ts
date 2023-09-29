@@ -1,7 +1,7 @@
 import { AssistanceReason, CalvingAssistance, Gender } from '@cms-enums';
 import * as moment from 'moment';
 
-export type Animal = IAnimal | IBull
+export type Animal = IAnimal | IBull;
 export interface IBull {
   tagNumber: string;
   breed: string;
@@ -82,7 +82,7 @@ export interface AnimalWeight {
   weightDate: moment.Moment;
   weight: number;
   isSaleWeight: boolean;
-  tag?:string
+  tag?: string;
 }
 
 export interface AnimalWeightType {
@@ -103,6 +103,15 @@ export interface IBulkWeight {
   id: string;
   weight: string;
   date: Date;
+}
+
+export interface IDobRange {
+  from: moment.Moment;
+  to: moment.Moment;
+}
+
+export function isAnimalArray(valArray: any[]): valArray is IAnimal[] {
+  return valArray.every(val => isAnimal(val))
 }
 
 export function isAnimal(animal: any): animal is IAnimal {

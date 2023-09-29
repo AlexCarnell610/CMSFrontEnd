@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PageURLs } from '@cms-enums';
-import { Animal, IAnimal, IBull, isAnimal } from '@cms-interfaces';
+import { Animal, IAnimal, IBull, IDobRange, isAnimal } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import {
   getAnimalByTag,
@@ -26,7 +26,7 @@ import {
   of,
   Subscription,
 } from 'rxjs';
-import { map, mergeMap, takeWhile } from 'rxjs/operators';
+import { map, mergeMap, startWith, takeWhile } from 'rxjs/operators';
 
 @Component({
   selector: 'cms-animal-list',
@@ -37,10 +37,14 @@ export class AnimalListComponent implements OnInit, OnDestroy {
   @Output() add: EventEmitter<IAnimal> = new EventEmitter();
   @Output() edit: EventEmitter<any> = new EventEmitter();
   @Output() animalSelected: EventEmitter<Animal> = new EventEmitter();
+  @Output() mutiAnimalsSelected: EventEmitter<Animal[]> = new EventEmitter();
   @Input() page: PageURLs;
   @Input() displayBulls = false;
   @Input() sortOldToYoung = false;
   @Input() sortYoungToOld = false;
+  @Input() dobRange$: Observable<IDobRange>;
+  @Input() filterByDOB = false;
+  @Input() multiSelect = false;
   public searchBarGroup: FormGroup = new FormGroup({});
   public animals$: Observable<Animal[]>;
   public searchedAnimals$: BehaviorSubject<Animal[]> = new BehaviorSubject([]);
@@ -49,6 +53,7 @@ export class AnimalListComponent implements OnInit, OnDestroy {
   private $currentAnimal: BehaviorSubject<Animal> = new BehaviorSubject(null);
   private subscriptions: Subscription = new Subscription();
   private searched = false;
+  private multiSelectedAnimals: Animal[] = [];
 
   constructor(
     private readonly fb: FormBuilder,
@@ -72,15 +77,23 @@ export class AnimalListComponent implements OnInit, OnDestroy {
     this.edit.emit(null);
   }
 
+  public resetSelection(): void {
+    this.multiSelectedAnimals = [];
+    this.mutiAnimalsSelected.emit(this.multiSelectedAnimals);
+  }
+
+  public selectAll(): void {
+    this.multiSelectedAnimals = [...this.searchedAnimals$.getValue()];
+    this.mutiAnimalsSelected.emit(this.multiSelectedAnimals);
+  }
+
   public selectAnimal(animal: Animal) {
     if (this.page === PageURLs.Animals) {
       this.currentAnimal = animal;
       this.pushNextAnimal(animal);
-    } else {
-      if (animal.tagNumber !== this.currentAnimal?.tagNumber) {
-        this.currentAnimal = animal;
-        this.pushNextAnimal(animal);
-      }
+    } else if (animal.tagNumber !== this.currentAnimal?.tagNumber) {
+      this.currentAnimal = this.multiSelect ? null : animal;
+      this.pushNextAnimal(animal);
     }
   }
 
@@ -99,8 +112,12 @@ export class AnimalListComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getCSSForButton(animal: IAnimal) {
-    return animal.tagNumber === this.currentAnimal?.tagNumber ? 'active' : '';
+  public getCSSForButton(animal: IAnimal): 'active' | '' {
+    if (!this.multiSelect) {
+      return animal.tagNumber === this.currentAnimal?.tagNumber ? 'active' : '';
+    } else {
+      return this.animalMultiSelected(animal) ? 'active' : '';
+    }
   }
 
   private populateAnimals() {
@@ -117,9 +134,38 @@ export class AnimalListComponent implements OnInit, OnDestroy {
         this.store.select(selectAnimals),
         this.store.select(selectBulls),
       ]).pipe(map(([animals, bulls]) => [...animals, ...bulls]));
+    } else if (this.filterByDOB) {
+      this.subscriptions.add(
+        this.dobRange$.subscribe(() => {
+          this.resetSelection();
+        })
+      );
+      this.animals$ = combineLatest([
+        this.dobRange$.pipe(startWith({ from: null, to: null })),
+        this.selectAnimals$,
+      ]).pipe(
+        map(([dobRange, animals]) => {
+          return dobRange.from && dobRange.to
+            ? animals.filter((animal) =>
+                animal.birthDate.isBetween(
+                  dobRange.from,
+                  dobRange.to,
+                  'day',
+                  '[]'
+                )
+              )
+            : animals;
+        })
+      );
     } else {
-      this.animals$ = this.store.pipe(select(selectAnimals));
+      this.animals$ = this.selectAnimals$;
     }
+  }
+
+  private get selectAnimals$(): Observable<IAnimal[]> {
+    return this.store
+      .select(selectAnimals)
+      .pipe(map((animals) => [...animals]));
   }
 
   private notSold(animal: IAnimal) {
@@ -139,8 +185,31 @@ export class AnimalListComponent implements OnInit, OnDestroy {
           )
         )
         .subscribe((ani) => {
-          this.$currentAnimal.next(ani);
+          if (!this.multiSelect) {
+            this.$currentAnimal.next(ani);
+          } else {
+            if (this.animalMultiSelected(ani)) {
+              this.multiSelectedAnimals.splice(
+                this.findMultiSelectedAnimalIndex(ani),
+                1
+              );
+              this.mutiAnimalsSelected.emit(this.multiSelectedAnimals);
+            } else {
+              this.multiSelectedAnimals.push(ani);
+              this.mutiAnimalsSelected.emit(this.multiSelectedAnimals);
+            }
+          }
         })
+    );
+  }
+
+  private animalMultiSelected(animal: Animal): boolean {
+    return this.findMultiSelectedAnimalIndex(animal) > -1;
+  }
+
+  private findMultiSelectedAnimalIndex(animal): number {
+    return this.multiSelectedAnimals.findIndex(
+      (multiAnimal) => multiAnimal.tagNumber === animal.tagNumber
     );
   }
 
