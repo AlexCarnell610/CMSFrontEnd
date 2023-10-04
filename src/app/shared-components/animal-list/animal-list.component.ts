@@ -6,7 +6,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { PageURLs } from '@cms-enums';
 import { Animal, IAnimal, IBull, IDobRange, isAnimal } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
@@ -45,7 +45,7 @@ export class AnimalListComponent implements OnInit, OnDestroy {
   @Input() dobRange$: Observable<IDobRange>;
   @Input() filterByDOB = false;
   @Input() multiSelect = false;
-  public searchBarGroup: FormGroup = new FormGroup({});
+  public searchBarGroup: UntypedFormGroup = new UntypedFormGroup({});
   public animals$: Observable<Animal[]>;
   public searchedAnimals$: BehaviorSubject<Animal[]> = new BehaviorSubject([]);
 
@@ -56,7 +56,7 @@ export class AnimalListComponent implements OnInit, OnDestroy {
   private multiSelectedAnimals: Animal[] = [];
 
   constructor(
-    private readonly fb: FormBuilder,
+    private readonly fb: UntypedFormBuilder,
     private readonly store: Store<RootState>
   ) {}
 

@@ -10,8 +10,8 @@ import {
 } from '@angular/core';
 import {
   AbstractControl,
-  FormBuilder,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import { Modals } from '@cms-enums';
@@ -35,14 +35,14 @@ import { Subscription, timer } from 'rxjs';
   styleUrls: ['./bull-modal.component.scss'],
 })
 export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
-  @Input() form: FormGroup;
+  @Input() form: UntypedFormGroup;
   @Input() breedControlName: string;
   @Input() sireControlName: string;
   @Output() sireAdded: EventEmitter<boolean> = new EventEmitter();
 
   @ViewChild('errorPop') errorPopover: NgbPopover;
   public isAdd = false;
-  public bullForm = new FormGroup({});
+  public bullForm = new UntypedFormGroup({});
   public isNewBull = false;
 
   private bull: IBull;
@@ -53,7 +53,7 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private readonly modalService: NgxSmartModalService,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly store: Store<RootState>,
     private readonly warningService: WarningService,
     private readonly breedService: AnimalBreedService,

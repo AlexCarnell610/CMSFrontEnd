@@ -1,7 +1,7 @@
 import {
   AbstractControl,
-  FormControl,
-  FormGroup,
+  UntypedFormControl,
+  UntypedFormGroup,
   ValidationErrors,
   ValidatorFn,
 } from '@angular/forms';
@@ -19,7 +19,7 @@ export function breedValidator(breedService: AnimalBreedService): ValidatorFn {
   };
 }
 
-export const selectValidator: ValidatorFn = (control: FormControl) => {
+export const selectValidator: ValidatorFn = (control: UntypedFormControl) => {
   if (control.value !== 'invalid') {
     return null;
   } else {
@@ -40,7 +40,7 @@ export function dateValidator(): ValidatorFn {
 }
 
 export function saleWeightValidator(isAddMode2: boolean): ValidatorFn {
-  return (formGroup: FormGroup): { [key: string]: any } | null => {
+  return (formGroup: UntypedFormGroup): { [key: string]: any } | null => {
     const animalControl = formGroup.get('animalControl');
     const isSaleWeightControl = formGroup.get('isSaleWeight');
     const weightDateControl = formGroup.get('date');

@@ -1,4 +1,4 @@
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { CalvingAssistance, Modals } from '@cms-enums';
 import { mockCalvingStat } from '@cms-testing-data';
 import { Subject } from 'rxjs';
@@ -17,7 +17,7 @@ describe('CalvingStatsModalComponent', () => {
   beforeEach(() => {
     openEvent = new Subject();
     closeEvent = new Subject();
-    formBuilder = new FormBuilder();
+    formBuilder = new UntypedFormBuilder();
     mockModalService = { get: () => mockModal };
     mockModal = {
       onAnyCloseEventFinished: closeEvent,

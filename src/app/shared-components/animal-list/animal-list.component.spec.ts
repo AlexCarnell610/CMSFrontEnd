@@ -1,4 +1,4 @@
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { PageURLs } from '@cms-enums';
 import { convertedAnimal, mockAnimal } from '@cms-testing-data';
 import { of } from 'rxjs';
@@ -7,7 +7,7 @@ import { AnimalListComponent } from './animal-list.component';
 describe('AnimalListComponent', () => {
   let component: AnimalListComponent, mockStore, fb, animalArray;
   beforeEach(() => {
-    fb = new FormBuilder();
+    fb = new UntypedFormBuilder();
     animalArray = [convertedAnimal, mockAnimal];
     mockStore = {
       pipe: () => {

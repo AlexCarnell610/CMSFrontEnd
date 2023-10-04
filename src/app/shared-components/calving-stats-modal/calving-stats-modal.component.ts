@@ -6,7 +6,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AssistanceReason, CalvingAssistance, Modals } from '@cms-enums';
 import { CalvingStat } from '@cms-interfaces';
 import { NgxSmartModalService } from 'ngx-smart-modal';
@@ -31,12 +31,12 @@ enum FormControls {
 export class CalvingStatsModalComponent implements OnInit, AfterViewInit {
   @Output() statSaved: EventEmitter<CalvingStat | false> = new EventEmitter();
   @Input() stat: CalvingStat;
-  public calvingStatForm: FormGroup;
+  public calvingStatForm: UntypedFormGroup;
   private subs: Subscription = new Subscription();
   private notesChanged: boolean = false;
 
   constructor(
-    private readonly fb: FormBuilder,
+    private readonly fb: UntypedFormBuilder,
     private readonly modals: NgxSmartModalService
   ) {}
 

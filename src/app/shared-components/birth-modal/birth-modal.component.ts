@@ -6,7 +6,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AssistanceReason, CalvingAssistance, Modals } from '@cms-enums';
 import {
   age,
@@ -59,7 +59,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() animal: IAnimal;
   @Input() isAdd: boolean = false;
   @ViewChild('errorPop') statPopover: NgbPopover;
-  public birthForm: FormGroup;
+  public birthForm: UntypedFormGroup;
   private $sires: Observable<IBull[]>;
   public $filteredSires: BehaviorSubject<IBull[]> = new BehaviorSubject(null);
   public breeds: IBreedCode[] = [];
@@ -81,7 +81,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private readonly modalService: NgxSmartModalService,
-    private readonly fb: FormBuilder,
+    private readonly fb: UntypedFormBuilder,
     private readonly animalService: AnimalUpdateService,
     private readonly store: Store<RootState>,
     private readonly breedService: AnimalBreedService,

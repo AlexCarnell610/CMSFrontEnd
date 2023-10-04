@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Modals, PageURLs } from '@cms-enums';
 import { IAnimal, IBull } from '@cms-interfaces';
@@ -22,7 +22,7 @@ export class AnimalComponent implements OnInit {
   public $sire: Observable<IBull>;
   public selectedAnimal: IAnimal;
   private previousAnimals: IAnimal[] = [];
-  public sortingFormGroup: FormGroup;
+  public sortingFormGroup: UntypedFormGroup;
   public youngToOld: Observable<boolean>;
   public oldToYoung: Observable<boolean>;
 
@@ -33,8 +33,8 @@ export class AnimalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.sortingFormGroup = new FormGroup({
-      sortRadio: new FormControl(''),
+    this.sortingFormGroup = new UntypedFormGroup({
+      sortRadio: new UntypedFormControl(''),
     });
 
     this.youngToOld = this.radioSortControl.valueChanges.pipe(

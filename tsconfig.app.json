@@ -7,7 +7,7 @@
       "es2019",
       "DOM"
     ],
-    "target": "ES5"
+    "target": "es2020"
   },
   "files": [
     "src/main.ts",

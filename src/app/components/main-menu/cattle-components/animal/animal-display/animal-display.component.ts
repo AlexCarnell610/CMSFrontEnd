@@ -6,7 +6,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { IAnimal, IBull, UNKNOWN_DAM_TAG } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { getAnimalByTag } from '@cms-ngrx/animal';
@@ -35,7 +35,7 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
   public $sire: Observable<IBull>;
   public isEditNotes = false;
   public hasChangedNotes = false;
-  public notesGroup: FormGroup = new FormGroup({});
+  public notesGroup: UntypedFormGroup = new UntypedFormGroup({});
   public saving = false;
   private subscriptions: Subscription = new Subscription();
   private animalTagNumber: string = null;
@@ -44,7 +44,7 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
   constructor(
     private readonly store: Store<RootState>,
     public readonly screenService: ScreenSizeService,
-    private readonly fb: FormBuilder,
+    private readonly fb: UntypedFormBuilder,
     private readonly animalUpdate: AnimalUpdateService,
     private readonly breedService: AnimalBreedService
   ) {}

@@ -1,5 +1,5 @@
 import { fakeAsync, tick } from '@angular/core/testing';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { Gender, Modals } from '@cms-enums';
 import { IAnimal, bull } from '@cms-interfaces';
 import { AnimalBreedService } from '@cms-services';
@@ -27,7 +27,7 @@ describe('AnimalModalComponent', () => {
   beforeEach(() => {
     closeEvent = new Subject();
     openEvent = new Subject();
-    formBuilder = new FormBuilder();
+    formBuilder = new UntypedFormBuilder();
     mockStore = {
       pipe: () => {},
     };

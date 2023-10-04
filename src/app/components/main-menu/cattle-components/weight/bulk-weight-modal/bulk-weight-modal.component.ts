@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import {
   AbstractControl,
-  FormBuilder,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import { Modals } from '@cms-enums';
@@ -35,7 +35,7 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
   @ViewChild('saveConfirm') saveConfirm: NgbPopover;
   selectedFile: File;
   identifier = Modals.BulkWeightModal;
-  bulkWeightForm: FormGroup;
+  bulkWeightForm: UntypedFormGroup;
   correctWeights: IBulkWeight[];
   notFoundWeights: IBulkWeight[];
   duplicateWeights: IBulkWeight[];
@@ -48,7 +48,7 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
   private subs: Subscription = new Subscription();
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private readonly store: Store<RootState>,
     private readonly warningService: WarningService,
     private readonly modalService: NgxSmartModalService,

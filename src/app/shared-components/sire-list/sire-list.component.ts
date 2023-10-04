@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import {  FormGroup } from '@angular/forms';
+import {  UntypedFormGroup } from '@angular/forms';
 import { IBreedCode, IBull } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { selectBulls } from '@cms-ngrx/bull';
@@ -16,7 +16,7 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
   styleUrls: ['./sire-list.component.scss'],
 })
 export class SireListComponent implements OnInit, OnDestroy {
-  @Input() parentForm: FormGroup;
+  @Input() parentForm: UntypedFormGroup;
   @Input() selectedBreed$: Observable<string>;
   @Input() isAdd: boolean;
   @Input() controlName: string

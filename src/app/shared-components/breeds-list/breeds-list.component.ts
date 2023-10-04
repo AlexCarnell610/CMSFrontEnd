@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AbstractControl, FormGroup } from '@angular/forms';
+import { AbstractControl, UntypedFormGroup } from '@angular/forms';
 import { IBreedCode } from '@cms-interfaces';
 import { AnimalBreedService } from '@cms-services';
 
@@ -10,7 +10,7 @@ import { AnimalBreedService } from '@cms-services';
 })
 export class BreedsListComponent implements OnInit {
 
-  @Input()form: FormGroup
+  @Input()form: UntypedFormGroup
   @Input() controlName = "breed";
   public breeds: IBreedCode[] = [];
 

@@ -268,9 +268,10 @@
 				}
 			}
 		}
-	},
-	"defaultProject": "CMSFrontEnd",
-	"cli": {
-		"defaultCollection": "@ngrx/schematics"
+  },
+  "cli": {
+    "schematicCollections": [
+      "@ngrx/schematics"
+    ]
 	}
 }

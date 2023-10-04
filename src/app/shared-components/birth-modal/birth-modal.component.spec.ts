@@ -1,5 +1,5 @@
 import { fakeAsync, tick, waitForAsync } from '@angular/core/testing';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { AssistanceReason, CalvingAssistance, Modals } from '@cms-enums';
 import { IAnimal, bull, CalvingStat } from '@cms-interfaces';
 import { mockAnimal, mockCalvingStat } from '@cms-testing-data';
@@ -71,7 +71,7 @@ describe('BirthModalComponent', () => {
 
     component = new BirthModalComponent(
       mockModalService,
-      new FormBuilder(),
+      new UntypedFormBuilder(),
       mockAnimalUpdateService,
       mockStore,
       mockBreedService,

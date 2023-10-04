@@ -1,4 +1,4 @@
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { Modals } from '@cms-enums';
 import { AnimalWeight } from '@cms-interfaces';
 import { convertedAnimal } from '@cms-testing-data';
@@ -30,7 +30,7 @@ describe('EditWeightModalComponent', () => {
         return mockModal;
       },
     };
-    formBuilder = new FormBuilder();
+    formBuilder = new UntypedFormBuilder();
     mockLoadingService = { setLoadingState: () => {} };
     mockAnimalUpdateService = {
       addAnimalWeight: () => {

@@ -6,7 +6,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Modals } from '@cms-enums';
 import { IAnimal, AnimalWeight } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
@@ -45,7 +45,7 @@ export class EditWeightModalComponent
   @ViewChild('p') popover: NgbPopover;
   private subs: Subscription = new Subscription();
   private shortLifeSubs: Subscription = new Subscription();
-  public editWeightForm: FormGroup = new FormGroup({});
+  public editWeightForm: UntypedFormGroup = new UntypedFormGroup({});
   public selectedWeight: AnimalWeight = null;
   public showSuccess = false;
   public saveResult: { message: string; success: boolean } = {
@@ -56,7 +56,7 @@ export class EditWeightModalComponent
 
   constructor(
     private readonly modalService: NgxSmartModalService,
-    private readonly fb: FormBuilder,
+    private readonly fb: UntypedFormBuilder,
     private readonly loadingService: LoadingPaneService,
     private readonly updateService: AnimalUpdateService,
     private readonly warningService: WarningService,

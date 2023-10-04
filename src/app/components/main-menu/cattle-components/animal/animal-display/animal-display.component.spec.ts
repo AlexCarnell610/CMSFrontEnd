@@ -1,4 +1,4 @@
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { IBull } from '@cms-interfaces';
 import { of } from 'rxjs';
 import { AnimalDisplayComponent } from './animal-display.component';
@@ -39,7 +39,7 @@ describe('AnimalDisplayComponent', () => {
     component = new AnimalDisplayComponent(
       mockStore,
       mockScreenService,
-      new FormBuilder(),
+      new UntypedFormBuilder(),
       mockAnimalUpdateService,
       mockBreedService
     );

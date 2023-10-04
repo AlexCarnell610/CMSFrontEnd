@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   AbstractControl,
-  FormControl,
-  FormGroup,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -38,7 +38,7 @@ import { filter, map } from 'rxjs/operators';
 export class WeightAnalysisComponent implements OnInit {
   @ViewChild('datepicker') datePicker: NgbInputDatepicker;
   hoveredDate: NgbDate | null = null;
-  performanceForm: FormGroup;
+  performanceForm: UntypedFormGroup;
   maxDate$: Observable<NgbDateStruct>;
   minDate$: Observable<NgbDateStruct>;
   averageWeightsChart: ChartData<'bar'>;
@@ -190,9 +190,9 @@ export class WeightAnalysisComponent implements OnInit {
       map((animals) => this.toNgbDateStruct(animals.pop().birthDate))
     );
 
-    this.performanceForm = new FormGroup({
-      startDate: new FormControl(null, Validators.required),
-      endDate: new FormControl(null, Validators.required),
+    this.performanceForm = new UntypedFormGroup({
+      startDate: new UntypedFormControl(null, Validators.required),
+      endDate: new UntypedFormControl(null, Validators.required),
     });
   }
 

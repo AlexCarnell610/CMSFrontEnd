@@ -7,8 +7,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  FormBuilder,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import { Gender, Modals } from '@cms-enums';
@@ -50,7 +50,7 @@ enum FormControls {
 export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() animal: IAnimal = null;
   @ViewChild('p') popover: NgbPopover;
-  public animalForm: FormGroup = new FormGroup({});
+  public animalForm: UntypedFormGroup = new UntypedFormGroup({});
   public $dams: Observable<IAnimal[]>;
   public $sires: Observable<IBull[]>;
   public saveResult: { message: string; success: boolean } = {
@@ -69,7 +69,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
   private subs = new Subscription();
 
   constructor(
-    private readonly fb: FormBuilder,
+    private readonly fb: UntypedFormBuilder,
     private readonly store: Store<RootState>,
     private readonly modals: NgxSmartModalService,
     private readonly animalUpdateService: AnimalUpdateService,
