@@ -26,6 +26,13 @@ interface TableData {
   weightArray: IBulkWeight[];
   title: string;
 }
+
+interface WeightDataIndexes {
+  id: number;
+  weight: number;
+  date: number;
+  time: number;
+}
 @Component({
   selector: 'cms-bulk-weight-modal',
   templateUrl: './bulk-weight-modal.component.html',
@@ -83,11 +90,14 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
             weightDataArray.pop();
           }
 
-          const keys = weightDataArray.shift();
+          const keys = weightDataArray
+            .shift()
+            ?.split(',')
+            .map((key) => key.toLowerCase());
 
-          if (!this.keysCorrect(keys?.split(','))) {
+          if (!this.keysCorrect(keys)) {
             this.warningService.show({
-              header: 'File format incorrect',
+              header: 'Some keys have not been found',
               body: 'Please correct or choose a different file',
               buttonText: 'Close',
               isError: true,
@@ -96,19 +106,10 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
             this.clearFileAndWeights();
             return;
           }
-          const mappedWeights = weightDataArray.map((weight) => {
-            const currWeight = weight.split(',');
 
-            const newWeight: IBulkWeight = {
-              id: currWeight[0],
-              weight: currWeight[1],
-              date: moment(
-                `${currWeight[3]},${currWeight[4]}`,
-                'DD/MM/yyyy,HH:mm:SS'
-              ).toDate(),
-            };
-            return newWeight;
-          });
+          const indexes: WeightDataIndexes = this.determineIndexes(keys);
+
+          const mappedWeights = this.mapWeights(weightDataArray, indexes);
 
           this.correctWeights = mappedWeights.filter(
             (weight) => this.getAnimalIndex(weight, animals) > -1
@@ -141,15 +142,40 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
     }
   }
 
+  private mapWeights(
+    weightDataArray: string[],
+    indexes: WeightDataIndexes
+  ): IBulkWeight[] {
+    return weightDataArray.map((weight) => {
+      const currWeight = weight.split(',');
+
+      const newWeight: IBulkWeight = {
+        id: currWeight[indexes.id],
+        weight: currWeight[indexes.weight],
+        date: moment(
+          `${currWeight[indexes.date]},${currWeight[indexes.time]}`,
+          'DD/MM/yyyy,HH:mm:SS'
+        ).toDate(),
+      };
+      return newWeight;
+    });
+  }
+
+  private determineIndexes(keys: string[]): WeightDataIndexes {
+    return {
+      id: keys.indexOf('vid'),
+      date: keys.indexOf('date'),
+      time: keys.indexOf('time'),
+      weight: keys.indexOf('weight'),
+    };
+  }
+
   private keysCorrect(keys: string[]): boolean {
     return (
       !!keys &&
-      keys[0] === 'VID' &&
-      keys[1] === 'Weight' &&
-      keys[2] === 'Draft' &&
-      keys[3] === 'Date' &&
-      keys[4] === 'Time' &&
-      keys[5] === 'EID'
+      ['VID', 'weight', 'date', 'time'].every((checkKey) =>
+        keys.includes(checkKey.toLowerCase())
+      )
     );
   }
 
@@ -201,16 +227,14 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
               : of({ notAllFound: result, dupes: false });
           })
         )
-        .subscribe(
-          (actualResult: { notAllFound: boolean; dupes: boolean }) => {
-            if (actualResult.notAllFound && actualResult.dupes) {
-              this.addWeights(true);
-            } else if (actualResult.notAllFound) {
-              this.addWeights(false);
-            }
-            this.annoyingWarningSub.unsubscribe();
+        .subscribe((actualResult: { notAllFound: boolean; dupes: boolean }) => {
+          if (actualResult.notAllFound && actualResult.dupes) {
+            this.addWeights(true);
+          } else if (actualResult.notAllFound) {
+            this.addWeights(false);
           }
-        );
+          this.annoyingWarningSub.unsubscribe();
+        });
     } else if (this.hasDuplicateWeights) {
       let subscription = this.duplicateWeightsWarning().subscribe((result) => {
         if (result) {
