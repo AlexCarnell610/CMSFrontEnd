@@ -347,6 +347,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   private statChanged() {
     const selectedCalfStat = this.selectedCalf?.calvingStat;
     return (
+      selectedCalfStat === null ||
       this.stat.alive !== selectedCalfStat.alive ||
       this.stat.assistance !== selectedCalfStat.assistance ||
       this.stat.damHealth !== selectedCalfStat.damHealth ||
