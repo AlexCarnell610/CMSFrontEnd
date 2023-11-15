@@ -289,7 +289,6 @@ export class WeightAnalysisComponent implements OnInit {
 
   validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
     const parsed = this.formatter.parse(input);
-    console.error(parsed, currentValue, input);
 
     if (input === '') {
       return null;

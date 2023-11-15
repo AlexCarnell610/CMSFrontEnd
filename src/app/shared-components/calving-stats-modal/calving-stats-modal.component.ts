@@ -61,6 +61,10 @@ export class CalvingStatsModalComponent implements OnInit, AfterViewInit {
     });
   }
 
+  public get isDirty():boolean{
+    return this.calvingStatForm.dirty
+  }
+
   public save() {
     this.markAllAsDirty();
     if (this.calvingStatForm.valid) {

@@ -1,4 +1,4 @@
-<ngx-smart-modal #weightModal identifier="weightModal">
+<ngx-smart-modal #weightModal identifier="weightModal" [closable]="false" [dismissable]="!isDirty" [escapable]="!isDirty">
   <div *ngIf="animal">
     <h4 class="text-center">
       {{ isAddMode ? "Add" : "Edit" }} Weight for

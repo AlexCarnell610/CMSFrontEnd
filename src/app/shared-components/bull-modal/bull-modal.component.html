@@ -1,4 +1,4 @@
-<ngx-smart-modal #sireModal identifier="sireModal">
+<ngx-smart-modal #sireModal identifier="sireModal" [closable]="false" [dismissable]="!isDirty" [escapable]="!isDirty">
   <h4 class="text-center">
     {{ isAdd ? "Add Sire" : "Edit Sire" }}
   </h4>

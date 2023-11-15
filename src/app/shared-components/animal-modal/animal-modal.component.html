@@ -1,4 +1,4 @@
-<ngx-smart-modal justify-content-center #animalModal identifier="animalModal">
+<ngx-smart-modal justify-content-center #animalModal identifier="animalModal" [closable]="false" [dismissable]="!isDirty" [escapable]="!isDirty">
   <div *ngIf="animal || isAddMode">
     <h2 class="text-center">
       {{ isAddMode ? "Add Animal" : "Edit " }}

@@ -102,6 +102,10 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  get isDirty():boolean{
+    return this.bullForm.dirty
+  }
+
   get tag(): AbstractControl {
     return this.bullForm.get('tagNumber');
   }

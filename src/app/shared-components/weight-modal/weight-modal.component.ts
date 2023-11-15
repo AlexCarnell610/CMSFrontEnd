@@ -97,6 +97,10 @@ export class EditWeightModalComponent
     });
   }
 
+  public get isDirty():boolean{
+    return this.editWeightForm.dirty
+  }
+
   public getCSSForRadio() {
     if (this.isSaleWeightControl.invalid && this.isSaleWeightControl.dirty) {
       return 'is-invalid';

@@ -18,7 +18,7 @@ import {
 } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { getCalves, selectAnimals } from '@cms-ngrx/animal';
-import { selectBullByTag, selectBulls } from '@cms-ngrx/bull';
+import { selectBullByTag } from '@cms-ngrx/bull';
 import {
   AnimalBreedService,
   AnimalUpdateService,
@@ -60,7 +60,6 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() isAdd: boolean = false;
   @ViewChild('errorPop') statPopover: NgbPopover;
   public birthForm: UntypedFormGroup;
-  private $sires: Observable<IBull[]>;
   public $filteredSires: BehaviorSubject<IBull[]> = new BehaviorSubject(null);
   public breeds: IBreedCode[] = [];
   public $calves: Observable<IAnimal[]> = new Observable();
@@ -75,7 +74,6 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   public newSire = false;
   private subs: Subscription = new Subscription();
   private longLifeSubs: Subscription = new Subscription();
-  private breedSelected: boolean = false;
   private hasSaved: boolean = false;
   private selectedCalf: IAnimal;
 
@@ -90,13 +88,16 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.$sires = this.store.pipe(select(selectBulls));
     this.breeds = this.breedService.breedCodeObjects;
     this.setUpForm();
   }
 
   ngAfterViewInit() {
     this.trackModalEvents();
+  }
+
+  public get isDirty():boolean{
+    return this.birthForm.dirty
   }
 
   public save() {
@@ -133,7 +134,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
     return output;
   }
 
-  public get assistRequired() {
+  public get assistRequired(): string {
     switch (this.stat.assistance) {
       case CalvingAssistance.Required:
         return 'Assistance required';
@@ -141,6 +142,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
         return 'Vet required';
       case CalvingAssistance.None:
         return 'No assistance';
+      default: return "Error"
     }
   }
 
@@ -428,7 +430,6 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
         this.hasSaved = false;
         this.truncNotes = '';
         this.resetForm();
-        this.breedSelected = false;
         this.calfSelected = false;
       });
 

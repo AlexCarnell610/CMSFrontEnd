@@ -1,4 +1,4 @@
-<ngx-smart-modal #birthModal identifier="birthModal">
+<ngx-smart-modal #birthModal identifier="birthModal" [closable]="false" [dismissable]="!isDirty" [escapable]="!isDirty">
   <div *ngIf="animal">
     <h4 class="text-center">
       {{ isAdd ? "Add Birth" : "Edit Births" }} for

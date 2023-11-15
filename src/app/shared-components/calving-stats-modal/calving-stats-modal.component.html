@@ -1,4 +1,4 @@
-<ngx-smart-modal #calvingStats identifier="calvingStats">
+<ngx-smart-modal #calvingStats identifier="calvingStats" [closable]="false" [dismissable]="!isDirty" [escapable]="!isDirty">
   <h4 class="text-center">Calving Stat</h4>
   <div class="cms-form">
     <form [formGroup]="calvingStatForm">

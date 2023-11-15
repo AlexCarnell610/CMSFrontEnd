@@ -96,6 +96,10 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.trackModalEvents();
   }
 
+  public get isDirty():boolean{
+    return this.animalForm.dirty
+  }
+
   public save() {
     this.subs.add(
       this.handlePopoverErrors().subscribe((canContinue) => {
