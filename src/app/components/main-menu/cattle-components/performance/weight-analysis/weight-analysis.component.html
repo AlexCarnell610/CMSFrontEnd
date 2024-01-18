@@ -13,6 +13,26 @@
 <div class="container">
   <div class="row mb-2">
     <div class="col-md">
+      <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label
+          class="btn btn-secondary"
+          (click)="dateFilterDob = true; triggerDateChange()"
+          [ngClass]="dateFilterDob ? 'active' : ''"
+        >
+          <input type="radio" name="options" id="option1" /> Date Of Birth
+        </label>
+        <label
+          class="btn btn-secondary"
+          (click)="dateFilterDob = false; triggerDateChange()"
+          [ngClass]="!dateFilterDob ? 'active' : ''"
+        >
+          <input type="radio" name="options" id="option2" /> Date of Weight
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-2">
+    <div class="col-md">
       <div class="dp-hidden position-absolute">
         <div class="input-group">
           <input
@@ -22,7 +42,7 @@
             #datepicker="ngbDatepicker"
             [autoClose]="'outside'"
             [minDate]="minDate$ | async"
-            [maxDate]="maxDate$ | async"
+            [maxDate]="maxDate"
             (dateSelect)="onDateSelection($event)"
             [displayMonths]="2"
             [dayTemplate]="dayTemplate"
@@ -121,9 +141,10 @@
       >
       <br /> -->
       <cms-animal-list
+        [page]="page"
         [multiSelect]="true"
-        [dobRange$]="dobRange"
-        [filterByDOB]="true"
+        [dateRange$]="dateRange"
+        [filterByDOB]="dateFilterDob"
         (mutiAnimalsSelected)="multiAnimalsSelected($event)"
       ></cms-animal-list>
     </div>
