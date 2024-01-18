@@ -37,9 +37,11 @@ import { filter, map } from 'rxjs/operators';
 })
 export class WeightAnalysisComponent implements OnInit {
   @ViewChild('datepicker') datePicker: NgbInputDatepicker;
+  page = PageURLs.WeightAnalysis;
+  dateFilterDob = true;
   hoveredDate: NgbDate | null = null;
   performanceForm: UntypedFormGroup;
-  maxDate$: Observable<NgbDateStruct>;
+  maxDate: NgbDateStruct;
   minDate$: Observable<NgbDateStruct>;
   averageWeightsChart: ChartData<'bar'>;
   barChartType: ChartType = 'bar';
@@ -186,9 +188,7 @@ export class WeightAnalysisComponent implements OnInit {
       map((animals) => this.toNgbDateStruct(animals[0].birthDate))
     );
 
-    this.maxDate$ = animals$.pipe(
-      map((animals) => this.toNgbDateStruct(animals.pop().birthDate))
-    );
+    this.maxDate = this.toNgbDateStruct(moment());
 
     this.performanceForm = new UntypedFormGroup({
       startDate: new UntypedFormControl(null, Validators.required),
@@ -217,9 +217,14 @@ export class WeightAnalysisComponent implements OnInit {
     return arrayOfUniqueWeightDates;
   }
 
-  get dobRange(): Observable<IDobRange> {
+  triggerDateChange(): void {
+    this.fromDateControl.updateValueAndValidity();
+    this.toDateControl.updateValueAndValidity();
+  }
+
+  get dateRange(): Observable<IDobRange> {
     return zip(
-      this.fromDateControl.valueChanges,
+      this.fromDateControl.valueChanges.pipe(filter((val) => val !== null)),
       this.toDateControl.valueChanges.pipe(filter((val) => val !== null))
     ).pipe(
       map((range: [NgbDate, NgbDate]) => {
@@ -326,7 +331,7 @@ export class WeightAnalysisComponent implements OnInit {
 
   private toMoment(date: NgbDate): moment.Moment | null {
     return date
-      ? moment().year(date.year).month(date.month).date(date.day)
+      ? moment().year(date.year).month(date.month -1).date(date.day)
       : undefined;
   }
 

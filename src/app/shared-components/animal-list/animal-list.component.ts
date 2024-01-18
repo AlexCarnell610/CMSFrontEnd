@@ -42,7 +42,7 @@ export class AnimalListComponent implements OnInit, OnDestroy {
   @Input() displayBulls = false;
   @Input() sortOldToYoung = false;
   @Input() sortYoungToOld = false;
-  @Input() dobRange$: Observable<IDobRange>;
+  @Input() dateRange$: Observable<IDobRange>;
   @Input() filterByDOB = false;
   @Input() multiSelect = false;
   public searchBarGroup: UntypedFormGroup = new UntypedFormGroup({});
@@ -134,31 +134,42 @@ export class AnimalListComponent implements OnInit, OnDestroy {
         this.store.select(selectAnimals),
         this.store.select(selectBulls),
       ]).pipe(map(([animals, bulls]) => [...animals, ...bulls]));
-    } else if (this.filterByDOB) {
+    } else if (this.page === PageURLs.WeightAnalysis) {
       this.subscriptions.add(
-        this.dobRange$.subscribe(() => {
+        this.dateRange$.subscribe(() => {
           this.resetSelection();
         })
       );
       this.animals$ = combineLatest([
-        this.dobRange$.pipe(startWith({ from: null, to: null })),
+        this.dateRange$.pipe(startWith({ from: null, to: null })),
         this.selectAnimals$,
       ]).pipe(
-        map(([dobRange, animals]) => {
-          return dobRange.from && dobRange.to
-            ? animals.filter((animal) =>
-                animal.birthDate.isBetween(
-                  dobRange.from,
-                  dobRange.to,
-                  'day',
-                  '[]'
-                )
-              )
+        map(([dateRange, animals]) => {
+          return dateRange.from && dateRange.to
+            ? this.dateRangeFilters(this.filterByDOB, dateRange, animals)
             : animals;
         })
       );
     } else {
       this.animals$ = this.selectAnimals$;
+    }
+  }
+
+  private dateRangeFilters(
+    filterDob: boolean,
+    dateRange: IDobRange,
+    animals: IAnimal[]
+  ): IAnimal[] {
+    if (filterDob) {
+      return animals.filter((animal) =>
+        animal.birthDate.isBetween(dateRange.from, dateRange.to, 'day', '[]')
+      );
+    } else if (!filterDob) {
+      return animals.filter((animal) => 
+        animal.weightData.some((data) =>
+          data.weightDate.isBetween(dateRange.from, dateRange.to, 'day', '[]')
+        )
+      );
     }
   }
 
