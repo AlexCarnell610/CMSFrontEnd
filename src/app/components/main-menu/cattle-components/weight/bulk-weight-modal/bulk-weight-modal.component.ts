@@ -361,4 +361,8 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
       return { tag: weight.id, weight: weight.weight };
     });
   }
+
+  openEdit(weight, index){
+    this.modalService.open("editBulkWeightModal")
+  }
 }
