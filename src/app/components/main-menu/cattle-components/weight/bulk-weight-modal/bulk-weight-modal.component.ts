@@ -212,7 +212,6 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
       });
     } else if (
       this.notFoundWeights?.length > 0 &&
-      this.hasCorrectWeights &&
       this.hasDuplicateWeights
     ) {
       this.annoyingWarningSub = this.animalsNotFoundForAllWeightsError()
@@ -242,7 +241,7 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
         }
         subscription.unsubscribe();
       });
-    } else if (this.hasCorrectWeights && this.hasNotFoundTags) {
+    } else if ( this.hasNotFoundTags) {
       let subscription = this.animalsNotFoundForAllWeightsError().subscribe(
         (result) => {
           if (result) {
@@ -274,6 +273,10 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
         {
           header: 'Duplicate Weights found',
           body: 'Do you want to add them anyway?',
+          buttonText: 'Yes',
+          isYesNo: true,
+          showCloseButton:false,
+          allowEscaping: true
         },
         null,
         false
@@ -292,15 +295,18 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
       ...this.correctWeights,
       ...(includeDuplicates ? this.duplicateWeights : []),
     ];
-    this.subs.add(
-      this.actions$
+    if(payload.length > 0){
+
+      this.subs.add(
+        this.actions$
         .pipe(ofType(AnimalActionTypes.UpdateManyAnimalsType))
         .subscribe(() => {
           this.clearFileAndWeights();
           this.handlePopover();
         })
-    );
-    this.store.dispatch(new AddManyWeights({ weights: payload }));
+        );
+        this.store.dispatch(new AddManyWeights({ weights: payload }));
+      }
   }
 
   private clearFileAndWeights(): void {
