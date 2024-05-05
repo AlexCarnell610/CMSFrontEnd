@@ -1,5 +1,5 @@
 <ngx-smart-modal [identifier]="identifier" #bulkWeightModal>
-  <h4 class="text-center">Add Weights</h4>
+  <h4 class="text-center">Add Weights {{editWeight?.weight}}</h4>
   <div class="cms-form">
     <form [formGroup]="bulkWeightForm">
       <div
@@ -105,7 +105,4 @@
   </div>
 </ng-template>
 
-
-<ngx-smart-modal [identifier]="'editBulkWeightModal'" #editBulkWeightModal>
-  <p>It Works</p>
-</ngx-smart-modal>
+<cms-edit-bulk-weight-modal (weight)="editWeight" [weightChange]="updateWeight(event)"></cms-edit-bulk-weight-modal>

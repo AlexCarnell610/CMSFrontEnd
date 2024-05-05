@@ -14,6 +14,7 @@ import { MedicationComponent } from './medication-components/medication/medicati
 import { SharedComponentsModule } from 'src/app/shared-components/shared-components.module';
 import { BulkWeightModalComponent } from './cattle-components/weight/bulk-weight-modal/bulk-weight-modal.component';
 import { NgChartsModule } from 'ng2-charts';
+import { EditBulkWeightModalComponent } from './cattle-components/weight/bulk-weight-modal/edit-bulk-weight-modal/edit-bulk-weight-modal.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { NgChartsModule } from 'ng2-charts';
     RegistrationComponent,
     MedicationComponent,
     BulkWeightModalComponent,
+    EditBulkWeightModalComponent,
   ],
   imports: [
     CommonModule,

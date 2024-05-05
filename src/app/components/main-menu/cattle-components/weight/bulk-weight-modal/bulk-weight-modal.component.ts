@@ -50,6 +50,7 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
     message: '',
     success: true,
   };
+  editWeight: IBulkWeight = null
 
   private annoyingWarningSub: Subscription;
   private subs: Subscription = new Subscription();
@@ -362,7 +363,14 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
     });
   }
 
-  openEdit(weight, index){
-    this.modalService.open("editBulkWeightModal")
+  openEdit(weight: IBulkWeight, index): void{
+    console.warn(weight);
+    
+    this.editWeight = weight
+    this.modalService.open(Modals.EditBulkWeightModal)
+  }
+
+  updateWeight(weight: IBulkWeight):void {
+    
   }
 }
