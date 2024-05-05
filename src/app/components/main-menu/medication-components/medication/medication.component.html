@@ -1,1 +1,18 @@
-<p>medication works!</p>
+<div class="cms-container">
+  <span class="cms-flex-item">
+    <span
+      (click)="backToMain()"
+      class="fas fa-arrow-left ml-md-5 ml-3"
+      placement="right"
+      ngbTooltip="Back to Main Menu"
+    ></span>
+  </span>
+  <h1 class="page-title cms-flex-item">Medication</h1>
+</div>
+<div class="container">
+    <div class="row mb-2">
+        <button class="btn btn-success" (click)="openCamera()">Add Medication</button>
+    </div>
+</div>
+
+<video id="video" [autoplay]="true" [height]="1280" [width]="720" [srcObject]="mediaStream"></video>
