@@ -1,7 +1,65 @@
 <ngx-smart-modal [identifier]="'editBulkWeightModal'" #editBulkWeightModal>
     <p>It Works</p>
-    {{weight?.id}}
+    {{weight?.tagNumber}}
     {{weight?.date}}
     {{weight?.weight}}
+    <form [formGroup]="editBulkWeightForm">
+      <div
+      class="form-group"
+      [ngClass]="{ 'was-validated': tagNumberControl.dirty }"
+    >
+      <label for="tagNumber">Tag Number</label>
+      <input
+        name="tag"
+        type="text"
+        class="form-control"
+        id="tagNumber"
+        formControlName="tagNumber"
+        required
+        pattern="^UK\d{12}$"
+      />
+      <div class="invalid-feedback">
+        <cms-form-errors [errors]="tagNumberControl.errors"></cms-form-errors>
+      </div>
+    </div>
+      <div class="form-group">
+        <label for="newWeight">Weight</label>
+        <div
+          class="input-group"
+          [ngClass]="{ 'was-validated': weightControl.dirty}"
+        >
+          <input
+            formControlName="weight"
+            class="form-control"
+            type="number"
+            step="1"
+            name="weight"
+            required
+            min="10"
+            max="1000"
+          />
+          <div class="input-group-append">
+            <span class="input-group-text">Kg</span>
+          </div>
+          <div class="invalid-feedback">
+            <cms-form-errors [errors]="weightControl.errors"></cms-form-errors>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="newDate">Weigh date</label>
+        <input
+          formControlName="date"
+          class="form-control"
+          type="date"
+          name="date"
+          id="newDate"
+          [ngClass]="getCSSClassForDate()"
+        />
+        <div class="invalid-feedback">
+          <cms-form-errors [errors]="dateControl.errors"></cms-form-errors>
+        </div>
+      </div>
+    </form>
   </ngx-smart-modal>
   

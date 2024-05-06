@@ -91,11 +91,11 @@
       <tbody>
         <tr *ngFor="let weight of weightArray; let number = index">
           <th scope="row">{{ number + 1 }}</th>
-          <td>{{ weight.id }}</td>
+          <td>{{ weight.tagNumber }}</td>
           <td>{{ weight.weight }}</td>
           <td>{{ weight.date | date }}</td>
           <td>
-            <a class="btn p-0" (click)="openEdit(weight, number)">
+            <a class="btn p-0" (click)="openEdit(weight)">
               <i class="fa-regular fa-pen-to-square my-auto"></i>
             </a>
           </td>
@@ -105,4 +105,4 @@
   </div>
 </ng-template>
 
-<cms-edit-bulk-weight-modal (weight)="editWeight" [weightChange]="updateWeight(event)"></cms-edit-bulk-weight-modal>
+<cms-edit-bulk-weight-modal (weightChange)="updateWeight($event)" [weight]="editWeight"></cms-edit-bulk-weight-modal>

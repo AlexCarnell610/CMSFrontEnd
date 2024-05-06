@@ -82,7 +82,7 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
     if (selectedFile) {
       this.selectedFile = selectedFile;
       let fileReader = new FileReader();
-      this.store.select(selectAnimals).subscribe((animals) => {
+      // this.store.select(selectAnimals).subscribe((animals) => {
         fileReader.onload = (e) => {
           const weightData: string = fileReader.result as string;
           const weightDataArray: string[] = weightData.split('\r\n');
@@ -111,53 +111,89 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
           const indexes: WeightDataIndexes = this.determineIndexes(keys);
 
           const mappedWeights = this.mapWeights(weightDataArray, indexes);
+this.sortWeights(mappedWeights);
+          // this.correctWeights = mappedWeights.filter(
+          //   (weight) => this.getAnimalIndex(weight, animals) > -1
+          // );
 
-          this.correctWeights = mappedWeights.filter(
-            (weight) => this.getAnimalIndex(weight, animals) > -1
-          );
+          // this.correctWeights.forEach(
+          //   (weight) =>
+          //     (weight.tagNumber = animals.find((animal) =>
+          //       animal.tagNumber.endsWith(weight.tagNumber)
+          //     ).tagNumber)
+          // );
 
-          this.correctWeights.forEach(
-            (weight) =>
-              (weight.id = animals.find((animal) =>
-                animal.tagNumber.endsWith(weight.id)
-              ).tagNumber)
-          );
+          // if (this.correctWeights.length < mappedWeights.length) {
+          //   this.notFoundWeights = mappedWeights.filter(
+          //     (weight) => this.getAnimalIndex(weight, animals) === -1
+          //   );
+          // }
 
-          if (this.correctWeights.length < mappedWeights.length) {
-            this.notFoundWeights = mappedWeights.filter(
-              (weight) => this.getAnimalIndex(weight, animals) === -1
-            );
-          }
-
-          if (this.correctWeights.length > 0) {
-            this.duplicateWeights = this.getDuplicatedWeights(animals);
-            this.correctWeights = this.correctWeights.filter(
-              (correctWeight) => {
-                return !this.duplicateWeights.includes(correctWeight);
-              }
-            );
-          }
+          // if (this.correctWeights.length > 0) {
+          //   this.duplicateWeights = this.getDuplicatedWeights(animals);
+          //   this.correctWeights = this.correctWeights.filter(
+          //     (correctWeight) => {
+          //       return !this.duplicateWeights.includes(correctWeight);
+          //     }
+          //   );
+          // }
         };
-      });
+      // });
       fileReader.readAsText(selectedFile);
     }
+  }
+
+  private sortWeights(mappedWeights: IBulkWeight[]): void{
+    this.store.select(selectAnimals).subscribe((animals) => {
+      this.correctWeights = []
+      this.notFoundWeights = []
+      this.duplicateWeights = []
+
+    this.correctWeights = mappedWeights.filter(
+      (weight) => this.getAnimalIndex(weight, animals) > -1
+    );
+
+    this.correctWeights.forEach(
+      (weight) =>
+        (weight.tagNumber = animals.find((animal) =>
+          animal.tagNumber.endsWith(weight.tagNumber)
+        ).tagNumber)
+    );
+
+    if (this.correctWeights.length < mappedWeights.length) {
+      this.notFoundWeights = mappedWeights.filter(
+        (weight) => this.getAnimalIndex(weight, animals) === -1
+      );
+    }
+
+    if (this.correctWeights.length > 0) {
+      this.duplicateWeights = this.getDuplicatedWeights(animals);
+      this.correctWeights = this.correctWeights.filter(
+        (correctWeight) => {
+          return !this.duplicateWeights.includes(correctWeight);
+        }
+      );
+    }
+  })
   }
 
   private mapWeights(
     weightDataArray: string[],
     indexes: WeightDataIndexes
   ): IBulkWeight[] {
+    let id: number = 0
     return weightDataArray.map((weight) => {
       const currWeight = weight.split(',');
-
       const newWeight: IBulkWeight = {
-        id: currWeight[indexes.id],
+        id,
+        tagNumber: currWeight[indexes.id],
         weight: currWeight[indexes.weight],
         date: moment(
           `${currWeight[indexes.date]},${currWeight[indexes.time]}`,
           'DD/MM/yyyy,HH:mm:SS'
         ).toDate(),
       };
+      id++
       return newWeight;
     });
   }
@@ -183,7 +219,7 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
   private getDuplicatedWeights(animals: IAnimal[]): IBulkWeight[] {
     return this.correctWeights.filter((weight) => {
       return (
-        this.getAnimalWeightData(weight.id, animals).findIndex(
+        this.getAnimalWeightData(weight.tagNumber, animals).findIndex(
           (animalWeight) =>
             animalWeight.weight === +weight.weight &&
             animalWeight.weightDate.isSame(weight.date, 'day')
@@ -354,23 +390,25 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
   }
 
   getAnimalIndex(weight: IBulkWeight, animals: Animal[]): number {
-    return animals.findIndex((animal) => animal.tagNumber.endsWith(weight.id));
+    return animals.findIndex((animal) => animal.tagNumber.endsWith(weight.tagNumber));
   }
 
   mapToTagAndWeight(weights: IBulkWeight[]): { tag: string; weight: string }[] {
     return weights.map((weight) => {
-      return { tag: weight.id, weight: weight.weight };
+      return { tag: weight.tagNumber, weight: weight.weight };
     });
   }
 
-  openEdit(weight: IBulkWeight, index): void{
-    console.warn(weight);
-    
+  openEdit(weight: IBulkWeight): void{
     this.editWeight = weight
     this.modalService.open(Modals.EditBulkWeightModal)
   }
 
   updateWeight(weight: IBulkWeight):void {
-    
+    let allWeights = this.correctWeights.concat(this.notFoundWeights).concat(this.duplicateWeights)
+    const editedWeightIndex = allWeights.findIndex(bulkWeight => bulkWeight.id === weight.id)
+    allWeights.splice(editedWeightIndex,1)
+    allWeights.push(weight)
+    this.sortWeights(allWeights)
   }
 }
