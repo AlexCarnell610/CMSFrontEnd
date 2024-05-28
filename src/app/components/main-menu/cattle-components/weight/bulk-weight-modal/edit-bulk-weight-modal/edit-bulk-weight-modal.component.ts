@@ -5,31 +5,31 @@ import {
   Output,
   EventEmitter,
   AfterViewInit,
+  OnDestroy,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Modals } from '@cms-enums';
 import { IBulkWeight } from '@cms-interfaces';
 import { dateValidator } from '@cms-validators';
 import { NgxSmartModalService } from 'ngx-smart-modal';
+import { formatDate } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'cms-edit-bulk-weight-modal',
   templateUrl: './edit-bulk-weight-modal.component.html',
   styleUrls: ['./edit-bulk-weight-modal.component.scss'],
 })
-export class EditBulkWeightModalComponent implements OnInit, AfterViewInit {
-  @Input() tagNumber: string = '';
-  @Output() tagNumberChange: EventEmitter<string> = new EventEmitter();
-  // @Input() weight: string = '';
-  // @Output() weightChange: EventEmitter<string> = new EventEmitter()
-  @Input() weightDate: Date = new Date();
-  @Output() weightDateChange: EventEmitter<Date> = new EventEmitter();
-
+export class EditBulkWeightModalComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   @Input() weight: IBulkWeight = null;
   @Output() weightChange: EventEmitter<IBulkWeight> =
     new EventEmitter<IBulkWeight>();
+  openFinishedSub = new Subscription();
+  modalIdentifier = Modals.EditBulkWeightModal;
 
-  public editBulkWeightForm = new FormGroup<{
+  editBulkWeightForm = new FormGroup<{
     weight: FormControl<string>;
     date: FormControl<string>;
     tagNumber: FormControl<string>;
@@ -44,7 +44,10 @@ export class EditBulkWeightModalComponent implements OnInit, AfterViewInit {
     }),
     date: new FormControl(null, [Validators.required, dateValidator()]),
     tagNumber: new FormControl(null, {
-      validators: [Validators.pattern(/^UK\d{12}$/), Validators.required],
+      validators: [
+        Validators.pattern(/^UK\d{12}$|^\d{3}$|^\d{6}$/),
+        Validators.required,
+      ],
       updateOn: 'blur',
     }),
   });
@@ -55,24 +58,39 @@ export class EditBulkWeightModalComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     const modal = this.modalService.get(Modals.EditBulkWeightModal);
-
-    modal.onOpenFinished.subscribe(() => {
-      console.warn(this.weight);
-      
-      this.editBulkWeightForm.patchValue({
-        date: "2024-05-06",
-        tagNumber: this.weight.tagNumber,
-        weight: this.weight.weight,
-      });
-    });
+    this.openFinishedSub.add(
+      modal.onOpenFinished.subscribe(() => {
+        this.editBulkWeightForm.patchValue({
+          date: formatDate(this.weight.date, 'yyyy-MM-dd', 'en-EN'),
+          tagNumber: this.weight.tagNumber,
+          weight: this.weight.weight,
+        });
+      })
+    );
   }
 
-  public getCSSClassForDate() {
+  getCSSClassForDate() {
     if (this.dateControl.invalid && this.dateControl.dirty) {
       return 'is-invalid';
     } else if (this.dateControl.valid && this.dateControl.dirty) {
       return 'is-valid';
     }
+  }
+
+  save(): void {
+    console.warn(this.editBulkWeightForm.errors);
+    if (this.editBulkWeightForm.valid) {
+      this.weightChange.emit({
+        ...this.weight,
+        ...this.editBulkWeightForm.value,
+        date: new Date(this.dateControl.value),
+      });
+      this.close();
+    }
+  }
+
+  close(): void {
+    this.modalService.get(Modals.EditBulkWeightModal).close();
   }
 
   get weightControl(): FormControl {
@@ -84,5 +102,9 @@ export class EditBulkWeightModalComponent implements OnInit, AfterViewInit {
 
   get tagNumberControl(): FormControl {
     return this.editBulkWeightForm.controls.tagNumber;
+  }
+
+  ngOnDestroy(): void {
+    this.openFinishedSub.unsubscribe();
   }
 }

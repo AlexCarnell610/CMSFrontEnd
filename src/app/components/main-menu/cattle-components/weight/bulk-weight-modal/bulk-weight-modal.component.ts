@@ -50,7 +50,7 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
     message: '',
     success: true,
   };
-  editWeight: IBulkWeight = null
+  editWeight: IBulkWeight = null;
 
   private annoyingWarningSub: Subscription;
   private subs: Subscription = new Subscription();
@@ -82,106 +82,77 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
     if (selectedFile) {
       this.selectedFile = selectedFile;
       let fileReader = new FileReader();
-      // this.store.select(selectAnimals).subscribe((animals) => {
-        fileReader.onload = (e) => {
-          const weightData: string = fileReader.result as string;
-          const weightDataArray: string[] = weightData.split('\r\n');
+      fileReader.onload = (e) => {
+        const weightData: string = fileReader.result as string;
+        const weightDataArray: string[] = weightData.split('\r\n');
 
-          if (weightDataArray[weightDataArray.length - 1] === '') {
-            weightDataArray.pop();
-          }
+        if (weightDataArray[weightDataArray.length - 1] === '') {
+          weightDataArray.pop();
+        }
 
-          const keys = weightDataArray
-            .shift()
-            ?.split(',')
-            .map((key) => key.toLowerCase());
+        const keys = weightDataArray
+          .shift()
+          ?.split(',')
+          .map((key) => key.toLowerCase());
 
-          if (!this.keysCorrect(keys)) {
-            this.warningService.show({
-              header: 'Some keys have not been found',
-              body: 'Please correct or choose a different file',
-              buttonText: 'Close',
-              isError: true,
-              showCloseButton: false,
-            });
-            this.clearFileAndWeights();
-            return;
-          }
+        if (!this.keysCorrect(keys)) {
+          this.warningService.show({
+            header: 'Some keys have not been found',
+            body: 'Please correct or choose a different file',
+            buttonText: 'Close',
+            isError: true,
+            showCloseButton: false,
+          });
+          this.clearFileAndWeights();
+          return;
+        }
 
-          const indexes: WeightDataIndexes = this.determineIndexes(keys);
+        const indexes: WeightDataIndexes = this.determineIndexes(keys);
 
-          const mappedWeights = this.mapWeights(weightDataArray, indexes);
-this.sortWeights(mappedWeights);
-          // this.correctWeights = mappedWeights.filter(
-          //   (weight) => this.getAnimalIndex(weight, animals) > -1
-          // );
-
-          // this.correctWeights.forEach(
-          //   (weight) =>
-          //     (weight.tagNumber = animals.find((animal) =>
-          //       animal.tagNumber.endsWith(weight.tagNumber)
-          //     ).tagNumber)
-          // );
-
-          // if (this.correctWeights.length < mappedWeights.length) {
-          //   this.notFoundWeights = mappedWeights.filter(
-          //     (weight) => this.getAnimalIndex(weight, animals) === -1
-          //   );
-          // }
-
-          // if (this.correctWeights.length > 0) {
-          //   this.duplicateWeights = this.getDuplicatedWeights(animals);
-          //   this.correctWeights = this.correctWeights.filter(
-          //     (correctWeight) => {
-          //       return !this.duplicateWeights.includes(correctWeight);
-          //     }
-          //   );
-          // }
-        };
-      // });
+        const mappedWeights = this.mapWeights(weightDataArray, indexes);
+        this.sortWeights(mappedWeights);
+      };
       fileReader.readAsText(selectedFile);
     }
   }
 
-  private sortWeights(mappedWeights: IBulkWeight[]): void{
+  private sortWeights(mappedWeights: IBulkWeight[]): void {
     this.store.select(selectAnimals).subscribe((animals) => {
-      this.correctWeights = []
-      this.notFoundWeights = []
-      this.duplicateWeights = []
+      this.correctWeights = [];
+      this.notFoundWeights = [];
+      this.duplicateWeights = [];
 
-    this.correctWeights = mappedWeights.filter(
-      (weight) => this.getAnimalIndex(weight, animals) > -1
-    );
-
-    this.correctWeights.forEach(
-      (weight) =>
-        (weight.tagNumber = animals.find((animal) =>
-          animal.tagNumber.endsWith(weight.tagNumber)
-        ).tagNumber)
-    );
-
-    if (this.correctWeights.length < mappedWeights.length) {
-      this.notFoundWeights = mappedWeights.filter(
-        (weight) => this.getAnimalIndex(weight, animals) === -1
+      this.correctWeights = mappedWeights.filter(
+        (weight) => this.getAnimalIndex(weight, animals) > -1
       );
-    }
 
-    if (this.correctWeights.length > 0) {
-      this.duplicateWeights = this.getDuplicatedWeights(animals);
-      this.correctWeights = this.correctWeights.filter(
-        (correctWeight) => {
+      this.correctWeights.forEach(
+        (weight) =>
+          (weight.tagNumber = animals.find((animal) =>
+            animal.tagNumber.endsWith(weight.tagNumber)
+          ).tagNumber)
+      );
+
+      if (this.correctWeights.length < mappedWeights.length) {
+        this.notFoundWeights = mappedWeights.filter(
+          (weight) => this.getAnimalIndex(weight, animals) === -1
+        );
+      }
+
+      if (this.correctWeights.length > 0) {
+        this.duplicateWeights = this.getDuplicatedWeights(animals);
+        this.correctWeights = this.correctWeights.filter((correctWeight) => {
           return !this.duplicateWeights.includes(correctWeight);
-        }
-      );
-    }
-  })
+        });
+      }
+    });
   }
 
   private mapWeights(
     weightDataArray: string[],
     indexes: WeightDataIndexes
   ): IBulkWeight[] {
-    let id: number = 0
+    let id: number = 0;
     return weightDataArray.map((weight) => {
       const currWeight = weight.split(',');
       const newWeight: IBulkWeight = {
@@ -193,7 +164,7 @@ this.sortWeights(mappedWeights);
           'DD/MM/yyyy,HH:mm:SS'
         ).toDate(),
       };
-      id++
+      id++;
       return newWeight;
     });
   }
@@ -247,10 +218,7 @@ this.sortWeights(mappedWeights);
         showCloseButton: false,
         buttonText: 'Close',
       });
-    } else if (
-      this.notFoundWeights?.length > 0 &&
-      this.hasDuplicateWeights
-    ) {
+    } else if (this.notFoundWeights?.length > 0 && this.hasDuplicateWeights) {
       this.annoyingWarningSub = this.animalsNotFoundForAllWeightsError()
         .pipe(
           switchMap((result) => {
@@ -278,7 +246,7 @@ this.sortWeights(mappedWeights);
         }
         subscription.unsubscribe();
       });
-    } else if ( this.hasNotFoundTags) {
+    } else if (this.hasNotFoundTags) {
       let subscription = this.animalsNotFoundForAllWeightsError().subscribe(
         (result) => {
           if (result) {
@@ -312,8 +280,8 @@ this.sortWeights(mappedWeights);
           body: 'Do you want to add them anyway?',
           buttonText: 'Yes',
           isYesNo: true,
-          showCloseButton:false,
-          allowEscaping: true
+          showCloseButton: false,
+          allowEscaping: true,
         },
         null,
         false
@@ -332,18 +300,17 @@ this.sortWeights(mappedWeights);
       ...this.correctWeights,
       ...(includeDuplicates ? this.duplicateWeights : []),
     ];
-    if(payload.length > 0){
-
+    if (payload.length > 0) {
       this.subs.add(
         this.actions$
-        .pipe(ofType(AnimalActionTypes.UpdateManyAnimalsType))
-        .subscribe(() => {
-          this.clearFileAndWeights();
-          this.handlePopover();
-        })
-        );
-        this.store.dispatch(new AddManyWeights({ weights: payload }));
-      }
+          .pipe(ofType(AnimalActionTypes.UpdateManyAnimalsType))
+          .subscribe(() => {
+            this.clearFileAndWeights();
+            this.handlePopover();
+          })
+      );
+      this.store.dispatch(new AddManyWeights({ weights: payload }));
+    }
   }
 
   private clearFileAndWeights(): void {
@@ -390,7 +357,9 @@ this.sortWeights(mappedWeights);
   }
 
   getAnimalIndex(weight: IBulkWeight, animals: Animal[]): number {
-    return animals.findIndex((animal) => animal.tagNumber.endsWith(weight.tagNumber));
+    return animals.findIndex((animal) =>
+      animal.tagNumber.endsWith(weight.tagNumber)
+    );
   }
 
   mapToTagAndWeight(weights: IBulkWeight[]): { tag: string; weight: string }[] {
@@ -399,16 +368,20 @@ this.sortWeights(mappedWeights);
     });
   }
 
-  openEdit(weight: IBulkWeight): void{
-    this.editWeight = weight
-    this.modalService.open(Modals.EditBulkWeightModal)
+  openEdit(weight: IBulkWeight): void {
+    this.editWeight = weight;
+    this.modalService.open(Modals.EditBulkWeightModal);
   }
 
-  updateWeight(weight: IBulkWeight):void {
-    let allWeights = this.correctWeights.concat(this.notFoundWeights).concat(this.duplicateWeights)
-    const editedWeightIndex = allWeights.findIndex(bulkWeight => bulkWeight.id === weight.id)
-    allWeights.splice(editedWeightIndex,1)
-    allWeights.push(weight)
-    this.sortWeights(allWeights)
+  updateWeight(weight: IBulkWeight): void {
+    let allWeights = this.correctWeights
+      .concat(this.notFoundWeights)
+      .concat(this.duplicateWeights);
+    const editedWeightIndex = allWeights.findIndex(
+      (bulkWeight) => bulkWeight.id === weight.id
+    );
+    allWeights.splice(editedWeightIndex, 1);
+    allWeights.push(weight);
+    this.sortWeights(allWeights);
   }
 }
