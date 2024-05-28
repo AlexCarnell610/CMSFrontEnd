@@ -145,7 +145,7 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
           return !this.duplicateWeights.includes(correctWeight);
         });
       }
-    });
+    }).unsubscribe();
   }
 
   private mapWeights(

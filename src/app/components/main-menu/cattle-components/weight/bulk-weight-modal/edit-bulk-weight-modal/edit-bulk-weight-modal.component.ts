@@ -78,7 +78,6 @@ export class EditBulkWeightModalComponent
   }
 
   save(): void {
-    console.warn(this.editBulkWeightForm.errors);
     if (this.editBulkWeightForm.valid) {
       this.weightChange.emit({
         ...this.weight,
