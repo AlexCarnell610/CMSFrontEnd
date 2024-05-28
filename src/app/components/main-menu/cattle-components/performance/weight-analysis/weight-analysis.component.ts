@@ -338,7 +338,7 @@ export class WeightAnalysisComponent implements OnInit {
   private toNgbDateStruct(date: moment.Moment): NgbDateStruct {
     return {
       day: date.date(),
-      month: date.month(),
+      month: date.month() +1,
       year: date.year(),
     };
   }

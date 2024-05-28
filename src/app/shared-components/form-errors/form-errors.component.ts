@@ -11,4 +11,5 @@ export class FormErrorsComponent {
   @Input() errors: ValidationErrors;
   @Input() isRadio: boolean = false;
   @Input() isManagementTag=false
+  @Input() bulkWeightEdit=false
 }

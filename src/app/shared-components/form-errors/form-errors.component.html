@@ -7,7 +7,7 @@
     >Value should be less than {{ errors.max.max }}Kg.
   </span>
   <span *ngIf="errors.pattern && !isManagementTag"
-    >Should follow the pattern: "UK" followed by 12 numbers.</span
+    >Should follow the pattern: "UK" followed by 12 numbers<span *ngIf="!bulkWeightEdit">.</span> <span *ngIf="bulkWeightEdit">, or enter the last 3 or 6 digits of the tag</span></span
   >
   <span *ngIf="errors.pattern && isManagementTag"
     >Should be letter(s) and numbers.</span

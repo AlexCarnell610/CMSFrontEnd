@@ -2,9 +2,9 @@
   #warningModal
   identifier="warningModal"
   [ngClass]="getCSSForWarning()"
-  [closable]="false"
-  [escapable]="false"
-  [dismissable]="false"
+  [closable]="toast?.allowEscaping"
+  [escapable]="toast?.allowEscaping"
+  [dismissable]="toast?.allowEscaping"
   [customClass]="'nsm-centered'"
 >
   <div *ngIf="toast">
@@ -23,6 +23,13 @@
         (click)="cancelClick()"
       >
         {{ toast.isError ? "Close" : "Cancel" }}
+      </button>
+      <button
+        *ngIf="toast.isYesNo"
+        class="btn btn-dark"
+        (click)="cancelClick()"
+      >
+        No
       </button>
     </div>
   </div>

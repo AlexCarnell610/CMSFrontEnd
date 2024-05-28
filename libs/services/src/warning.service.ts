@@ -13,6 +13,8 @@ export interface IToast {
   delay?: number;
   animal?: IAnimal;
   showCloseButton?: boolean;
+  isYesNo?:boolean,
+  allowEscaping?:boolean
 }
 
 @Injectable({
@@ -27,6 +29,8 @@ export class WarningService {
     buttonText: this.defaultButtonText,
     isError: false,
     showCloseButton: true,
+    isYesNo: false,
+    allowEscaping: false
   };
   private complete: boolean = true;
   constructor(private readonly modals: NgxSmartModalService) {}
