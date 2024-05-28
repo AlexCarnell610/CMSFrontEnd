@@ -100,7 +100,8 @@ export interface ICullUpdate {
 }
 
 export interface IBulkWeight {
-  id: string;
+  id: number
+  tagNumber: string;
   weight: string;
   date: Date;
 }

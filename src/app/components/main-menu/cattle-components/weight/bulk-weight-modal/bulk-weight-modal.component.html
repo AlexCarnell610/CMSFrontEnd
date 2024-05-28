@@ -2,8 +2,16 @@
   <h4 class="text-center">Add Weights</h4>
   <div class="cms-form">
     <form [formGroup]="bulkWeightForm">
-      <div [ngClass]="correctWeights?.length > 0 || notFoundWeights?.length > 0 || duplicateWeights?.length > 0 ? 'mb-2 mt-2' : 'mb-5 mt-4'" class="input-group">
-
+      <div
+        [ngClass]="
+          correctWeights?.length > 0 ||
+          notFoundWeights?.length > 0 ||
+          duplicateWeights?.length > 0
+            ? 'mb-2 mt-2'
+            : 'mb-5 mt-4'
+        "
+        class="input-group"
+      >
         <div class="custom-file" style="min-width: 2px">
           <input
             (change)="checkFile($event.target.files[0])"
@@ -70,23 +78,31 @@
     <strong>
       {{ title }}
     </strong>
-    <table class="table table-striped mt-2" >
+    <table class="table table-striped mt-2">
       <thead>
         <tr>
           <th scope="col">#</th>
           <th scope="col">Tag Number</th>
           <th scope="col">Weight</th>
           <th scope="col">Date</th>
+          <th scope="col"></th>
         </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let weight of weightArray; let number = index">
-        <th scope="row">{{ number + 1 }}</th>
-        <td>{{ weight.id }}</td>
-        <td>{{ weight.weight }}</td>
-        <td>{{ weight.date | date }}</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+      </thead>
+      <tbody>
+        <tr *ngFor="let weight of weightArray; let number = index">
+          <th scope="row">{{ number + 1 }}</th>
+          <td>{{ weight.tagNumber }}</td>
+          <td>{{ weight.weight }}</td>
+          <td>{{ weight.date | date }}</td>
+          <td>
+            <a class="btn p-0" (click)="openEdit(weight)">
+              <i class="fa-regular fa-pen-to-square my-auto"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </ng-template>
+
+<cms-edit-bulk-weight-modal (weightChange)="updateWeight($event)" [weight]="editWeight"></cms-edit-bulk-weight-modal>
