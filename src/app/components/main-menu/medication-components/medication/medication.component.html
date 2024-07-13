@@ -10,9 +10,17 @@
   <h1 class="page-title cms-flex-item">Medication</h1>
 </div>
 <div class="container">
-    <div class="row mb-2">
-        <button class="btn btn-success" (click)="openCamera()">Add Medication</button>
+  <div class="row mb-2">
+    <div class="col">
+      <button class="btn btn-success" (click)="addMedication()">
+        Add Medication
+      </button>
     </div>
+  </div>
+  <div class="row">
+    <div class="col mb-2">
+      <cms-medication-list [data$]="medications$" (editEmit)="edit($event)"></cms-medication-list>
+    </div>
+  </div>
 </div>
-
-<video id="video" [autoplay]="true" [height]="1280" [width]="720" [srcObject]="mediaStream"></video>
+<cms-medication-add-modal></cms-medication-add-modal>

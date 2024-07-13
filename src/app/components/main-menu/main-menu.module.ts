@@ -15,6 +15,9 @@ import { SharedComponentsModule } from 'src/app/shared-components/shared-compone
 import { BulkWeightModalComponent } from './cattle-components/weight/bulk-weight-modal/bulk-weight-modal.component';
 import { NgChartsModule } from 'ng2-charts';
 import { EditBulkWeightModalComponent } from './cattle-components/weight/bulk-weight-modal/edit-bulk-weight-modal/edit-bulk-weight-modal.component';
+import { MedicationAddModalComponent } from './medication-components/medication-add-modal/medication-add-modal.component';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { MedicationListComponent } from './medication-components/medication-list/medication-list.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +30,8 @@ import { EditBulkWeightModalComponent } from './cattle-components/weight/bulk-we
     MedicationComponent,
     BulkWeightModalComponent,
     EditBulkWeightModalComponent,
+    MedicationAddModalComponent,
+    MedicationListComponent
   ],
   imports: [
     CommonModule,
@@ -36,7 +41,8 @@ import { EditBulkWeightModalComponent } from './cattle-components/weight/bulk-we
     NgxSmartModalModule.forChild(),
     NgbModule,
     SharedComponentsModule,
-    NgbPopoverModule
+    NgbPopoverModule,
+    ZXingScannerModule
   ],
   exports: [MainMenuComponent],
 })

@@ -1,0 +1,94 @@
+<ngx-smart-modal [identifier]="modalIdentifier" #medicationAddModal>
+  <h4 class="text-center">{{isEdit ? 'Edit' : 'Add new'}} medication</h4>
+  <form [formGroup]="medicationForm" class="mb-2">
+    <div
+      class="form-group"
+      [ngClass]="{ 'was-validated': medicationNameControl.dirty }"
+    >
+      <label for="medicationName"> Medication Name </label>
+      <input
+        type="text"
+        name="medicationName"
+        id="medicationName"
+        class="form-control"
+        formControlName="medicationName"
+        required
+      />
+      <div class="invalid-feedback">
+        <cms-form-errors
+          [errors]="medicationNameControl.errors"
+        ></cms-form-errors>
+      </div>
+    </div>
+    <div
+    class="form-group"
+    [ngClass]="{ 'was-validated': withdrawalPeriodControl.dirty }"
+  >
+    <label for="withdrawalPeriod"> Withdrawal Period</label>
+    <input
+      type="number"
+      name="withdrawalPeriod"
+      id="withdrawalPeriod"
+      class="form-control"
+      formControlName="withdrawalPeriod"
+      required
+    />
+    <div class="invalid-feedback">
+      <cms-form-errors [errors]="withdrawalPeriodControl.errors"></cms-form-errors>
+    </div>
+  </div>
+    <div
+      class="form-group"
+      [ngClass]="{ 'was-validated': expiryDateControl.dirty }"
+    >
+      <label for="expiryDate"> Expiry Date </label>
+      <input
+        type="date"
+        name="expiryDate"
+        id="expiryDate"
+        class="form-control"
+        formControlName="expiryDate"
+        required
+      />
+      <div class="invalid-feedback">
+        <cms-form-errors [errors]="expiryDateControl.errors"></cms-form-errors>
+      </div>
+    </div>
+    <div
+      class="form-group"
+      [ngClass]="{ 'was-validated': batchNumberControl.dirty }"
+    >
+      <label for="batchNumber"> Batch Number </label>
+      <input
+        type="text"
+        name="batchNumber"
+        id="batchNumber"
+        class="form-control"
+        formControlName="batchNumber"
+        required
+      />
+      <div class="invalid-feedback">
+        <cms-form-errors [errors]="batchNumberControl.errors"></cms-form-errors>
+      </div>
+    </div>
+    <button class="btn btn-success mr-2" (click)="save()">Save</button>
+    <button class="btn btn-danger" (click)="close()">Close</button>
+  </form>
+
+  <!-- <video
+    id="video"
+    [autoplay]="true"
+    height="100%"
+    width="100%"
+    [srcObject]="mediaStream"
+  ></video> -->
+
+  <zxing-scanner
+    #scanner
+    [tryHarder]="true"
+    (scanSuccess)="codeFound($event)"
+    (scanComplete)="scanned($event)"
+    [formats]="allowedFormats"
+    [autostart]="false"
+  ></zxing-scanner>
+</ngx-smart-modal>

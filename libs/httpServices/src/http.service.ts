@@ -7,6 +7,8 @@ import {
   IBull,
   IBulkWeight,
   Animal,
+  IMedication,
+  ITreatment,
 } from '@cms-interfaces';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
@@ -113,24 +115,71 @@ export class HttpService {
     const payload = weights.map((weight) => {
       return {
         ...weight,
-        date: moment(weight.date).format("YYYY-MM-DD HH:mm:SS")
+        date: moment(weight.date).format('YYYY-MM-DD HH:mm:SS'),
       };
     });
     return this.http
-      .post(`${environment.api + HttpUrls.Weights}`, { weights:payload })
-      .pipe(map((response) => {
-        let weightData: AnimalWeight[][] = []
-        for(let value of Object.values<any>(response)){
-          weightData.push(this.mappingService.convertWeightData(value, true))
-        }
-        
-        return weightData
-      }));
+      .post(`${environment.api + HttpUrls.Weights}`, { weights: payload })
+      .pipe(
+        map((response) => {
+          let weightData: AnimalWeight[][] = [];
+          for (let value of Object.values<any>(response)) {
+            weightData.push(this.mappingService.convertWeightData(value, true));
+          }
+
+          return weightData;
+        })
+      );
   }
 
-  public deleteWeight(weightID: number): Observable<AnimalWeight[]>{
-    return this.http.delete(`${environment.api + HttpUrls.DeleteWeight}/${weightID}`).pipe(map(response => {
-      return this.mappingService.convertWeightData(response as any[])
-    }))
+  public deleteWeight(weightID: number): Observable<AnimalWeight[]> {
+    return this.http
+      .delete(`${environment.api + HttpUrls.DeleteWeight}/${weightID}`)
+      .pipe(
+        map((response) => {
+          return this.mappingService.convertWeightData(response as any[]);
+        })
+      );
+  }
+
+  public addMedication(medication: IMedication): Observable<IMedication> {
+    return this.http
+      .post(`${environment.api + HttpUrls.Medication}`, medication)
+      .pipe(
+        map((response) =>
+          this.mappingService.convertSingleMedication(response as any)
+        )
+      );
+  }
+
+  public getMedicationData(): Observable<{
+    medications: IMedication[];
+    treatments: ITreatment[];
+  }> {
+    return this.http.get(`${environment.api + HttpUrls.Medication}`).pipe(
+      map((response) => {
+        return {
+          medications: this.mappingService.convertMedications(
+            (response as any).medications as any[]
+          ),
+          treatments: this.mappingService.convertTreatments(
+            (response as any).treatments as any[]
+          ),
+        };
+      })
+    );
+  }
+
+  public updateMedication(
+    medication: Partial<IMedication>,
+    id: string
+  ): Observable<IMedication> {
+    return this.http
+      .patch(`${environment.api + HttpUrls.Medication}/${id}`, {
+        ...medication,
+      })
+      .pipe(
+        map((response) => this.mappingService.convertSingleMedication(response))
+      );
   }
 }

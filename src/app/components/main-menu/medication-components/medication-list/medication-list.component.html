@@ -1,0 +1,51 @@
+<ul
+  class="list-group cms-list"
+  *ngIf="searchedData$ | async as data"
+  [formGroup]="searchBarGroup"
+>
+  <input
+    type="text"
+    placeholder="Search..."
+    class="list-group-item animal-button cms-sticky"
+    formControlName="searchBar"
+  />
+
+  <button
+    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center animal-button"
+    *ngFor="let datum of data | convertToGenericDataType"
+  >
+  <div class="col-9">
+
+    <ul class="mr-1 list-group list-group-flush">
+      <li class="list-group">
+        <strong style="font-size: larger">
+          {{ datum.firstRow }}
+        </strong>
+      </li>
+      <li class="list-group">
+        <p class="mb-0">
+          <b>{{ datum.isMedication ? "Batch Number: " : "" }}</b>
+          {{ datum.secondRow }}
+        </p>
+      </li>
+      <li class="list-group">
+        <p class="mb-0">
+          <b>{{ datum.isMedication ? "Withdrawal Period: " : "" }}</b>
+          {{ datum.thirdRow }}
+        </p>
+      </li>
+      <li class="list-group">
+        <p class="mb-0">
+          <b>{{ datum.isMedication ? "Expiry Date: " : "" }}</b>
+          {{ datum.fourthRow }}
+        </p>
+      </li>
+    </ul>
+  </div>
+  <div class="col">
+    <span class="btn badge badge-info badge-pill align-self-center" (click)="edit(datum)">Edit</span>
+  </div>
+
+    
+  </button>
+</ul>

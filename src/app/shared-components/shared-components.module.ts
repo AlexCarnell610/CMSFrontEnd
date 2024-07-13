@@ -18,6 +18,7 @@ import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { CalvingStatsModalComponent } from './calving-stats-modal/calving-stats-modal.component';
 import { AnimalListComponent } from './animal-list/animal-list.component';
 import { AnimalDobSortPipe } from '../pipes/animal-dob-sort.pipe';
+import { ConvertToGenericDataTypePipe } from '../pipes/convert-to-generic-data-type.pipe';
 
 const COMPONENTS = [
   BreedsListComponent,
@@ -30,7 +31,8 @@ const COMPONENTS = [
   WarningDisplayComponent,
   CalvingStatsModalComponent,
   AnimalListComponent,
-  AnimalDobSortPipe
+  AnimalDobSortPipe,
+  ConvertToGenericDataTypePipe
 ];
 
 @NgModule({

@@ -11,6 +11,7 @@ import { Modals, PageURLs } from '@cms-enums';
 import { RootState } from '@cms-ngrx';
 import { RetrieveAnimalData } from '@cms-ngrx/animal';
 import { RetreieveBullData } from '@cms-ngrx/bull';
+import { initialLoadMedications } from '@cms-ngrx/medication';
 import {
   CullUpdateService,
   LoadingPaneService,
@@ -55,6 +56,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
           //would need marker to mark session data as old
           this.store.dispatch(new RetrieveAnimalData());
           this.store.dispatch(new RetreieveBullData());
+          this.store.dispatch(initialLoadMedications());
           this.cullUpdateService.populateCullUpdate()
           this.pusherService.channel.bind(PusherChannels.CullUpdate, (data) => {
             this.cullUpdateService.cullUpdate = data.animal;
