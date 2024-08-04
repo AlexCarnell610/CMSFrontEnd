@@ -94,6 +94,7 @@ export class MedicationAddModalComponent implements OnInit, AfterViewInit {
       .add(
         modal.onAnyCloseEvent.subscribe(() => {
           this.scanner.enable = false;
+          this.scanner.scanStop()
           modal.removeData();
         })
       );
@@ -154,6 +155,7 @@ export class MedicationAddModalComponent implements OnInit, AfterViewInit {
   }
 
   close(): void {
+    this.scanner.scanStop()
     this.modalService.get(this.modalIdentifier).close();
   }
   scanned(out): void {
