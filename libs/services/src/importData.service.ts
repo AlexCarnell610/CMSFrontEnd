@@ -104,7 +104,7 @@ export class MappingService {
   public convertSingleMedication(medication:any): IMedication {
     return {
       batchNumber: medication.batch_number,
-      expiryDate: this.convertDate(medication.expiry_date, "YYYY/MM"),
+      expiryDate: this.convertDate(medication.expiry_date),
       id: medication.id,
       name: medication.name,
       withdrawalPeriod: medication.withdrawal_period
@@ -119,9 +119,10 @@ export class MappingService {
     return {
       id: treatment.id,
       administerer: treatment.administerer,
-      date: this.convertDate(treatment.treatment_date, "YYYY/MM"),
+      treatmentDate: this.convertDate(treatment.treatment_date),
       medication: treatment.medication_id,
-      treatmentGroup: treatment.treatment_group
+      treatmentGroup: treatment.treatment_group,
+      createdAt: this.convertDate(treatment.created_at)
     }
   }
 

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { AnimalDisplayComponent } from './cattle-components/animal/animal-display/animal-display.component';
@@ -18,6 +18,7 @@ import { EditBulkWeightModalComponent } from './cattle-components/weight/bulk-we
 import { MedicationAddModalComponent } from './medication-components/medication-add-modal/medication-add-modal.component';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { MedicationListComponent } from './medication-components/medication-list/medication-list.component';
+import { TreatmentModalComponent } from './medication-components/treatment-modal/treatment-modal.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { MedicationListComponent } from './medication-components/medication-list
     BulkWeightModalComponent,
     EditBulkWeightModalComponent,
     MedicationAddModalComponent,
-    MedicationListComponent
+    MedicationListComponent,
+    TreatmentModalComponent
   ],
   imports: [
     CommonModule,
@@ -42,7 +44,8 @@ import { MedicationListComponent } from './medication-components/medication-list
     NgbModule,
     SharedComponentsModule,
     NgbPopoverModule,
-    ZXingScannerModule
+    ZXingScannerModule,
+    FormsModule
   ],
   exports: [MainMenuComponent],
 })

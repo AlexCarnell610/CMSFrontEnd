@@ -8,6 +8,10 @@ import {
   updateTreatmentSuccess,
 } from './treatment.actions';
 
+function sortByCreatedDate(a: ITreatment, b: ITreatment): number {
+  return a.createdAt.isAfter(b.createdAt) ? -1 : b.createdAt.isAfter(a.createdAt) ? 1 : 0
+}
+
 export const treatmentFeatureKey = 'treatment';
 
 export interface TreatmentState extends EntityState<ITreatment> {}
@@ -15,6 +19,7 @@ export interface TreatmentState extends EntityState<ITreatment> {}
 export const adapter: EntityAdapter<ITreatment> =
   createEntityAdapter<ITreatment>({
     selectId: (treatment) => treatment.id,
+    sortComparer:sortByCreatedDate
   });
 
 export const initialTreatmentState: TreatmentState = adapter.getInitialState(

@@ -21,21 +21,21 @@ export class TreatmentEffects {
     private readonly httpService: HttpService
   ) {}
 
-  // readonly addTreatment$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(addTreatment),
-  //     switchMap((action) => {
-  //       this.loadingService.setLoadingState(true);
-  //       return this.httpService
-  //         .addTreatment(action.treatment)
-  //         .pipe(
-  //           map((treatment) =>
-  //             loadTreatmentSuccess({ treatments: [treatment] })
-  //           )
-  //         );
-  //     })
-  //   )
-  // );
+  readonly addTreatment$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(addTreatment),
+      switchMap((action) => {
+        this.loadingService.setLoadingState(true);
+        return this.httpService
+          .storeTreatment(action.treatment)
+          .pipe(
+            map((treatment) =>
+              loadTreatmentSuccess({ treatments: [treatment] })
+            )
+          );
+      })
+    )
+  );
 
   readonly dataReceived$ = createEffect(() =>
     this.actions$.pipe(
@@ -68,26 +68,26 @@ export class TreatmentEffects {
     { dispatch: false }
   );
 
-  // readonly updateTreatment = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(updateTreatment),
-  //     switchMap((action) => {
-  //       this.loadingService.setLoadingState(true);
-  //       return this.httpService
-  //         .updateTreatment(
-  //           action.treatment.changes,
-  //           '' + action.treatment.id
-  //         )
-  //         .pipe(
-  //           map((response) =>
-  //             updateTreatmentSuccess({
-  //               treatment: { changes: response, id: response.id },
-  //             })
-  //           )
-  //         );
-  //     })
-  //   )
-  // );
+  readonly updateTreatment = createEffect(() =>
+    this.actions$.pipe(
+      ofType(updateTreatment),
+      switchMap((action) => {
+        this.loadingService.setLoadingState(true);
+        return this.httpService
+          .updateTreatment(
+            action.treatment.changes,
+            '' + action.treatment.id
+          )
+          .pipe(
+            map((response) =>
+              updateTreatmentSuccess({
+                treatment: { changes: response, id: response.id },
+              })
+            )
+          );
+      })
+    )
+  );
 
   readonly updateTreatmentSuccess = createEffect(() =>
     this.actions$.pipe(

@@ -8,5 +8,6 @@ export enum Modals {
   Sire = 'sireModal',
   BulkWeightModal = 'bulkWeightModal',
   EditBulkWeightModal= 'editBulkWeightModal',
-  MedicationAddModal = 'medicationAddModal'
+  MedicationAddModal = 'medicationAddModal',
+  TreatmentModal = 'treatmentModal'
 }

@@ -7,7 +7,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Modals } from '@cms-enums';
+import { FORM_DATE_FORMAT, Modals } from '@cms-enums';
 import { IMedication } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { Store } from '@ngrx/store';
@@ -75,7 +75,7 @@ export class MedicationAddModalComponent implements OnInit, AfterViewInit {
             this.medicationToEdit = modal.getData().medicationToEdit;
             this.medicationForm.patchValue({
               batchNumber: this.medicationToEdit.batchNumber,
-              expiryDate: this.medicationToEdit.expiryDate.format('yyyy-MM-DD'),
+              expiryDate: this.medicationToEdit.expiryDate.format(FORM_DATE_FORMAT),
               medicationName: this.medicationToEdit.name,
               withdrawalPeriod: this.medicationToEdit.withdrawalPeriod,
             });
@@ -109,10 +109,6 @@ export class MedicationAddModalComponent implements OnInit, AfterViewInit {
   }
 
   codeFound(code: string): void {
-    console.warn('code found', code);
-    console.warn(code.slice(19, 21));
-    console.warn(code.slice(21, 23));
-    console.warn(code.slice(23, 25));
     const day = code.slice(23, 25);
     const month = code.slice(21, 23);
     const year = 20 + code.slice(19, 21);

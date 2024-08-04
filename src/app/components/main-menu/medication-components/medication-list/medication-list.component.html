@@ -22,21 +22,27 @@
           {{ datum.firstRow }}
         </strong>
       </li>
-      <li class="list-group">
+      <li *ngIf="datum.isMedication" class="list-group">
         <p class="mb-0">
-          <b>{{ datum.isMedication ? "Batch Number: " : "" }}</b>
+          <b>Batch Number: </b>
           {{ datum.secondRow }}
+        </p>
+      </li>
+      <li *ngIf="!datum.isMedication" class="list-group">
+        <p class="mb-0">
+          <b>Medication: </b>
+          {{ datum.treatmentMedicationName|async }}
         </p>
       </li>
       <li class="list-group">
         <p class="mb-0">
-          <b>{{ datum.isMedication ? "Withdrawal Period: " : "" }}</b>
+          <b>{{ datum.isMedication ? "Withdrawal Period: " : "Date: " }}</b>
           {{ datum.thirdRow }}
         </p>
       </li>
       <li class="list-group">
         <p class="mb-0">
-          <b>{{ datum.isMedication ? "Expiry Date: " : "" }}</b>
+          <b>{{ datum.isMedication ? "Expiry Date: " : "Administerer: " }}</b>
           {{ datum.fourthRow }}
         </p>
       </li>

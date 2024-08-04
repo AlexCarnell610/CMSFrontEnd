@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpUrls } from '@cms-enums';
+import { FORM_DATE_FORMAT, HttpUrls } from '@cms-enums';
 import {
   IAnimal,
   AnimalWeight,
@@ -69,7 +69,7 @@ export class HttpService {
     const newAnimal = {
       ...animal,
       dam: animal.damTag ? animal.damTag : animal.dam,
-      birthDate: moment(animal.birthDate).format('yyyy-MM-DD'),
+      birthDate: moment(animal.birthDate).format(FORM_DATE_FORMAT),
     };
     return this.http
       .post(environment.api + HttpUrls.Animal, newAnimal)
@@ -180,6 +180,29 @@ export class HttpService {
       })
       .pipe(
         map((response) => this.mappingService.convertSingleMedication(response))
+      );
+  }
+
+  public storeTreatment(treatment: ITreatment): Observable<ITreatment> {
+    return this.http
+      .post(`${environment.api + HttpUrls.Treatment}`, treatment)
+      .pipe(
+        map((response) =>
+          this.mappingService.convertSingleTreatment(response as any)
+        )
+      );
+  }
+
+  public updateTreatment(
+    treatment: Partial<ITreatment>,
+    id: string
+  ): Observable<ITreatment> {
+    return this.http
+      .patch(`${environment.api + HttpUrls.Treatment}/${id}`, {
+        ...treatment
+      })
+      .pipe(
+        map((response) => this.mappingService.convertSingleTreatment(response))
       );
   }
 }
