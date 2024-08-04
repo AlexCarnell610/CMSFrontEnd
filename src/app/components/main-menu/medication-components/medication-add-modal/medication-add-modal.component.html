@@ -1,5 +1,5 @@
 <ngx-smart-modal [identifier]="modalIdentifier" #medicationAddModal>
-  <h4 class="text-center">{{isEdit ? 'Edit' : 'Add new'}} medication</h4>
+  <h4 class="text-center">{{ isEdit ? "Edit" : "Add new" }} medication</h4>
   <form [formGroup]="medicationForm" class="mb-2">
     <div
       class="form-group"
@@ -21,22 +21,24 @@
       </div>
     </div>
     <div
-    class="form-group"
-    [ngClass]="{ 'was-validated': withdrawalPeriodControl.dirty }"
-  >
-    <label for="withdrawalPeriod"> Withdrawal Period</label>
-    <input
-      type="number"
-      name="withdrawalPeriod"
-      id="withdrawalPeriod"
-      class="form-control"
-      formControlName="withdrawalPeriod"
-      required
-    />
-    <div class="invalid-feedback">
-      <cms-form-errors [errors]="withdrawalPeriodControl.errors"></cms-form-errors>
+      class="form-group"
+      [ngClass]="{ 'was-validated': withdrawalPeriodControl.dirty }"
+    >
+      <label for="withdrawalPeriod"> Withdrawal Period</label>
+      <input
+        type="number"
+        name="withdrawalPeriod"
+        id="withdrawalPeriod"
+        class="form-control"
+        formControlName="withdrawalPeriod"
+        required
+      />
+      <div class="invalid-feedback">
+        <cms-form-errors
+          [errors]="withdrawalPeriodControl.errors"
+        ></cms-form-errors>
+      </div>
     </div>
-  </div>
     <div
       class="form-group"
       [ngClass]="{ 'was-validated': expiryDateControl.dirty }"
@@ -74,14 +76,6 @@
     <button class="btn btn-success mr-2" (click)="save()">Save</button>
     <button class="btn btn-danger" (click)="close()">Close</button>
   </form>
-
-  <!-- <video
-    id="video"
-    [autoplay]="true"
-    height="100%"
-    width="100%"
-    [srcObject]="mediaStream"
-  ></video> -->
 
   <zxing-scanner
     #scanner
