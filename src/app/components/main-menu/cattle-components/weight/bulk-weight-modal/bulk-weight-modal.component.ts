@@ -358,7 +358,7 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
 
   getAnimalIndex(weight: IBulkWeight, animals: Animal[]): number {
     return animals.findIndex((animal) =>
-      animal.tagNumber.endsWith(weight.tagNumber)
+      weight.tagNumber.length >=3 && animal.tagNumber.endsWith(weight.tagNumber)
     );
   }
 
