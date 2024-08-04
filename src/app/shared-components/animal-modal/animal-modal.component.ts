@@ -11,7 +11,7 @@ import {
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
-import { Gender, Modals } from '@cms-enums';
+import { FORM_DATE_FORMAT, Gender, Modals } from '@cms-enums';
 import { IAnimal, IBreedCode, IBull, UNKNOWN_DAM_TAG } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { getDams, selectAnimals } from '@cms-ngrx/animal';
@@ -391,7 +391,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
     return (
       this.animal?.sire.tagNumber !== this.convertSireValue(this.sire.value) ||
       this.animal?.dam.tagNumber !== this.dam.value ||
-      this.animal?.birthDate.format('yyyy-MM-DD') !== this.dob.value ||
+      this.animal?.birthDate.format(FORM_DATE_FORMAT) !== this.dob.value ||
       this.animal?.gender !== this.gender.value ||
       this.breedChanged() ||
       this.animal?.registered !== this.isRegistered ||
@@ -418,7 +418,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private setData() {
     if (!this.isAddMode) {
-      this.dob.setValue(this.animal.birthDate.format('yyyy-MM-DD'));
+      this.dob.setValue(this.animal.birthDate.format(FORM_DATE_FORMAT));
       this.dam.setValue(
         this.animal.dam.tagNumber === UNKNOWN_DAM_TAG
           ? 'UK'

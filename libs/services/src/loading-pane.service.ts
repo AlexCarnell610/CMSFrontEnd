@@ -8,6 +8,10 @@ export class LoadingPaneService {
   private _cullUpdateLoading: BehaviorSubject<boolean> = new BehaviorSubject(
     false
   );
+
+  private _medicationUpdateLoading: BehaviorSubject<boolean> = new BehaviorSubject(
+    false
+  );
   private _loadingState: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private counter = 0;
 

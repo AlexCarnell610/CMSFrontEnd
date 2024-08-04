@@ -1,0 +1,72 @@
+<ngx-smart-modal [identifier]="modalIdentifier" #treatmentModal>
+  <h4 class="text-center">{{ isEdit ? "Edit" : "Add new" }} treatment</h4>
+  <form [formGroup]="treatmentForm" class="mb-2">
+    <div
+      class="form-group"
+      [ngClass]="{ 'was-validated': treatmentGroupControl.dirty }"
+    >
+      <label for="treatmentGroup"> Treatment Group</label>
+      <input
+        type="text"
+        class="form-control"
+        name="treatmentGroup"
+        id="treatmentGroup"
+        formControlName="treatmentGroup"
+        required
+      />
+      <div class="invalid-feedback">
+        <cms-form-errors
+          [errors]="treatmentGroupControl.errors"
+        ></cms-form-errors>
+      </div>
+    </div>
+    <div
+      class="form-group"
+      [ngClass]="{ 'was-validated': medicationControl.dirty }"
+    >
+      <cms-searchable-dropdown
+        [label]="'Medication'"
+        [inputFormControl]="medicationControl"
+        [data]="medications$ | async"
+      ></cms-searchable-dropdown>
+      <div class="invalid-feedback">
+        <cms-form-errors [errors]="medicationControl.errors"></cms-form-errors>
+      </div>
+    </div>
+    <div class="form-group" [ngClass]="{ 'was-validated': dateControl.dirty }">
+      <label for="treatmentDate"> Treatment Date</label>
+      <input
+        type="date"
+        class="form-control"
+        name="treatmentDate"
+        id="treatmentDate"
+        formControlName="treatmentDate"
+        required
+      />
+      <div class="invalid-feedback">
+        <cms-form-errors [errors]="dateControl.errors"></cms-form-errors>
+      </div>
+    </div>
+    <div
+      class="form-group"
+      [ngClass]="{ 'was-validated': treatmentGroupControl.dirty }"
+    >
+      <label for="administerer"> Administerer</label>
+      <input
+        type="text"
+        class="form-control"
+        name="administerer"
+        id="administerer"
+        formControlName="administerer"
+        required
+      />
+      <div class="invalid-feedback">
+        <cms-form-errors
+          [errors]="administererControl.errors"
+        ></cms-form-errors>
+      </div>
+    </div>
+    <button class="btn btn-success mr-2" (click)="save()">Save</button>
+    <button class="btn btn-danger" (click)="close()">Close</button>
+  </form>
+</ngx-smart-modal>

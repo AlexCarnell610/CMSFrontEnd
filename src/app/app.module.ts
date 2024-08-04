@@ -7,6 +7,7 @@ import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
 import { reducers } from '@cms-ngrx';
 import { AnimalEffects } from '@cms-ngrx/animal';
 import { BullEffects } from '@cms-ngrx/bull';
+import { MedicationEffects } from '@cms-ngrx/medication';
 import {
   NgbDatepickerModule,
   NgbDropdownModule,
@@ -23,6 +24,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { LoadingModalComponent } from './components/loading-modal/loading-modal.component';
 import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
+import { TreatmentEffects } from '@cms-ngrx/treatment';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,7 @@ import { LogoutComponent } from './components/logout/logout.component';
     LogoutComponent,
     FooterComponent,
     LoadingModalComponent,
-  ],
+ ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -41,7 +43,7 @@ import { LogoutComponent } from './components/logout/logout.component';
         strictActionImmutability: true,
       },
     }),
-    EffectsModule.forRoot([AnimalEffects, BullEffects]),
+    EffectsModule.forRoot([AnimalEffects, BullEffects, MedicationEffects, TreatmentEffects]),
     environment.production ? [] : StoreDevtoolsModule.instrument(),
     HttpClientModule,
     FormsModule,

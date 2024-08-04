@@ -1,0 +1,15 @@
+<label for="typeahead-focus">{{label}}</label>
+<input
+  id="typeahead-focus"
+  type="text"
+  class="form-control"
+  [formControl]="inputFormControl"
+  [ngbTypeahead]="search"
+  (focus)="focus$.next($any($event).target.value)"
+  (click)="click$.next($any($event).target.value)"
+  [editable]="false"
+  [resultFormatter]="formatter"
+  [inputFormatter]="formatter"
+  #instance="ngbTypeahead"
+  [required]="isRequired"
+/>

@@ -20,6 +20,8 @@
       "@cms-interfaces": ["libs/interfaces/src"],
       "@cms-ngrx/animal": ["libs/ngrx/src/lib/animalState"],
       "@cms-ngrx/bull": ["libs/ngrx/src/lib/bullState"],
+      "@cms-ngrx/medication": ["libs/ngrx/src/lib/medicationState"],
+      "@cms-ngrx/treatment": ["libs/ngrx/src/lib/treatmentState"],
       "@cms-ngrx": ["libs/ngrx/src/lib"],
       "@cms-services/http": ["libs/httpServices"],
       "@cms-services": ["libs/services"],

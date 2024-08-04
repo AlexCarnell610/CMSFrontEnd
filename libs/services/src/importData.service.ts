@@ -8,6 +8,8 @@ import {
   CalvingHistory,
   CalvingStat,
   Dam,
+  IMedication,
+  ITreatment,
 } from '@cms-interfaces';
 import * as moment from 'moment';
 
@@ -95,6 +97,35 @@ export class MappingService {
     };
   }
 
+  public convertMedications(medications:any[]): IMedication[] {
+    return medications.map(medication => this.convertSingleMedication(medication))
+  }
+
+  public convertSingleMedication(medication:any): IMedication {
+    return {
+      batchNumber: medication.batch_number,
+      expiryDate: this.convertDate(medication.expiry_date),
+      id: medication.id,
+      name: medication.name,
+      withdrawalPeriod: medication.withdrawal_period
+    }
+  }
+
+  public convertTreatments(treatments: any[]):ITreatment[] {
+    return treatments.map(treatment => this.convertSingleTreatment(treatment))
+  }
+
+  public convertSingleTreatment(treatment: any): ITreatment {
+    return {
+      id: treatment.id,
+      administerer: treatment.administerer,
+      treatmentDate: this.convertDate(treatment.treatment_date),
+      medication: treatment.medication_id,
+      treatmentGroup: treatment.treatment_group,
+      createdAt: this.convertDate(treatment.created_at)
+    }
+  }
+
   private convertDam(dam: any): Dam {
     return {
       birthDate: this.convertDate(dam.birth_date),
@@ -178,7 +209,7 @@ export class MappingService {
     });
   }
 
-  private convertDate(date: string) {
-    return moment(date, 'YYYY-MM-DD');
+  private convertDate(date: string, format:string = 'YYYY-MM-DD') {
+    return moment(date, format);
   }
 }
