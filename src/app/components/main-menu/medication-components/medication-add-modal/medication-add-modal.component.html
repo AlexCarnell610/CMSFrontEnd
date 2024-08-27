@@ -74,9 +74,9 @@
       </div>
     </div>
     <button class="btn btn-success mr-2" (click)="save()">Save</button>
+    <button class="btn btn-secondary mr-2" (click)="clear()">Clear</button>
     <button class="btn btn-danger" (click)="close()">Close</button>
   </form>
-
   <zxing-scanner
     #scanner
     [tryHarder]="true"
@@ -84,5 +84,6 @@
     (scanComplete)="scanned($event)"
     [formats]="allowedFormats"
     [autostart]="false"
+
   ></zxing-scanner>
 </ngx-smart-modal>

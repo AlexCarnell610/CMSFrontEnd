@@ -2,6 +2,7 @@ import { formatDate } from '@angular/common';
 import {
   AfterViewInit,
   Component,
+  ElementRef,
   Input,
   OnInit,
   ViewChild,
@@ -10,13 +11,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FORM_DATE_FORMAT, Modals } from '@cms-enums';
 import { IMedication } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
+import { addMedication, updateMedication } from '@cms-ngrx/medication';
 import { Store } from '@ngrx/store';
 import { BarcodeFormat } from '@zxing/library';
 import { ZXingScannerComponent } from '@zxing/ngx-scanner';
-import {
-  addMedication,
-  updateMedication,
-} from 'libs/ngrx/src/lib/medicationState';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { Subscription } from 'rxjs';
 
@@ -32,16 +30,7 @@ export class MedicationAddModalComponent implements OnInit, AfterViewInit {
   @ViewChild('scanner', { static: false }) scanner: ZXingScannerComponent;
   mediaStreamLoaded = false;
   mediaStream: MediaStream;
-  allowedFormats = [
-    BarcodeFormat.UPC_A,
-    BarcodeFormat.UPC_E,
-    BarcodeFormat.UPC_EAN_EXTENSION,
-    BarcodeFormat.EAN_13,
-    BarcodeFormat.EAN_8,
-    BarcodeFormat.CODE_128,
-    BarcodeFormat.CODE_39,
-    BarcodeFormat.DATA_MATRIX,
-  ];
+  allowedFormats = [BarcodeFormat.DATA_MATRIX];
   medicationForm = new FormGroup<{
     medicationName: FormControl<string>;
     batchNumber: FormControl<string>;
@@ -75,17 +64,23 @@ export class MedicationAddModalComponent implements OnInit, AfterViewInit {
             this.medicationToEdit = modal.getData().medicationToEdit;
             this.medicationForm.patchValue({
               batchNumber: this.medicationToEdit.batchNumber,
-              expiryDate: this.medicationToEdit.expiryDate.format(FORM_DATE_FORMAT),
+              expiryDate:
+                this.medicationToEdit.expiryDate.format(FORM_DATE_FORMAT),
               medicationName: this.medicationToEdit.name,
               withdrawalPeriod: this.medicationToEdit.withdrawalPeriod,
             });
           }
+
           this.scanner.restart();
           this.scanner.enable = true;
+
           this.scanner.askForPermission().then((permission) => {
             if (permission) {
               this.scanner.updateVideoInputDevices().then((devices) => {
-                this.scanner.device = devices[0];
+                this.scanner.device =
+                  devices.find((device) =>
+                    device.label.includes('facing back')
+                  ) || devices[0];
               });
             }
           });
@@ -94,10 +89,11 @@ export class MedicationAddModalComponent implements OnInit, AfterViewInit {
       .add(
         modal.onAnyCloseEvent.subscribe(() => {
           this.scanner.enable = false;
-          this.scanner.scanStop()
+          this.scanner.scanStop();
           modal.removeData();
         })
-      );
+      )
+      .add(modal.onOpenFinished.subscribe(() => {}));
   }
 
   openCamera(): void {
@@ -155,11 +151,17 @@ export class MedicationAddModalComponent implements OnInit, AfterViewInit {
   }
 
   close(): void {
-    this.scanner.scanStop()
+    this.scanner.scanStop();
     this.modalService.get(this.modalIdentifier).close();
   }
+
+  clear(): void {
+    this.medicationForm.reset();
+    this.scanner.scanStart();
+    this.scanner.enable = true;
+  }
   scanned(out): void {
-    // console.warn("scanned", out)
+    // console.warn('scanned', out);
   }
 
   get medicationNameControl(): FormControl {
