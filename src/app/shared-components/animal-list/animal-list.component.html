@@ -34,7 +34,7 @@
   >
     <span *ngIf="!animal.name && !animal.managementTag" class="mr-1"
       ><strong>
-        {{ animal.tagNumber }}
+        {{ animal.tagNumber | tagNumberDisplay}}
       </strong></span
     >
     <ul
@@ -43,7 +43,7 @@
     >
       <li class="list-group">
         <strong>
-          {{ animal.tagNumber }}
+          {{ animal.tagNumber | tagNumberDisplay}}
         </strong>
       </li>
       <li class="list-group" *ngIf="animal.name">

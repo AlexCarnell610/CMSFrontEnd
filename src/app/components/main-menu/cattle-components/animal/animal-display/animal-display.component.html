@@ -4,7 +4,7 @@
   [ngClass]="getCSS()"
 >
   <div class="card-header d-flex justify-content-between">
-    <strong>Tag number - {{ selectedAnimal.tagNumber }}</strong>
+    <strong>Tag number - {{ selectedAnimal.tagNumber | tagNumberDisplay}}</strong>
     <span
       class="btn badge badge-info badge-pill align-self-center"
       (click)="openEditModal()"

@@ -21,6 +21,7 @@ import { AnimalListComponent } from './animal-list/animal-list.component';
 import { AnimalDobSortPipe } from '../pipes/animal-dob-sort.pipe';
 import { ConvertToGenericDataTypePipe } from '../pipes/convert-to-generic-data-type.pipe';
 import { SearchableDropdownComponent } from './searchable-dropdown/searchable-dropdown.component';
+import { TagNumberDisplay } from '../pipes/tag-number-dsiplay.pipe';
 
 const COMPONENTS = [
   BreedsListComponent,
@@ -34,6 +35,7 @@ const COMPONENTS = [
   CalvingStatsModalComponent,
   AnimalListComponent,
   AnimalDobSortPipe,
+  TagNumberDisplay,
   ConvertToGenericDataTypePipe,
   SearchableDropdownComponent
 ];
