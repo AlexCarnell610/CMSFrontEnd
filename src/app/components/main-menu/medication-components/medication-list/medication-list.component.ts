@@ -46,7 +46,7 @@ export class MedicationListComponent implements OnInit {
                 item.name.toLowerCase().includes(searchTerm.toLowerCase())
               )
             : data.filter((item) => {
-              const newItem = {...item, date: item.treatmentDate.format('DD/MM/YYYY')}
+              const newItem = {...item, date: item.treatmentStartDate.format('DD/MM/YYYY')}
                 return JSON.stringify(newItem)
                   .toLowerCase()
                   .includes(searchTerm.toLowerCase());

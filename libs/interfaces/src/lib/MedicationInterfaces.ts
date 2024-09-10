@@ -13,7 +13,8 @@ export interface IMedication {
 export interface ITreatment {
   id?: string;
   administerer: string;
-  treatmentDate: moment.Moment;
+  treatmentStartDate: moment.Moment;
+  treatmentEndDate?:moment.Moment;
   treatmentGroup: string;
   medication: string;
   createdAt?: moment.Moment
@@ -45,7 +46,7 @@ export function isMedicationArray(data: any): data is IMedication[] {
 }
 
 export class MedDisplayDataType implements IMedDisplayDataType {
-  constructor(public firstRow: string, public secondRow: string, public thirdRow: string, public fourthRow: string,  public isMedication: boolean, public id: string, public treatmentMedicationName?: Observable<string>) {
+  constructor(public firstRow: string, public secondRow: string, public thirdRow: string, public fourthRow: string, public fifthRow: string,  public isMedication: boolean, public id: string, public treatmentMedicationName?: Observable<string>) {
   
   }
 
@@ -61,7 +62,7 @@ export class MedDisplayDataType implements IMedDisplayDataType {
         name: this.firstRow,
         batchNumber: this.secondRow,
         withdrawalPeriod: +this.thirdRow,
-        expiryDate: moment(this.fourthRow, 'YYYY/MM'),
+        expiryDate: moment(this.fifthRow, 'YYYY/MM'),
         id: this.id
       }
     }
@@ -69,8 +70,9 @@ export class MedDisplayDataType implements IMedDisplayDataType {
       return {
         treatmentGroup: this.firstRow,
         medication: this.secondRow,
-        treatmentDate: moment(this.thirdRow, 'DD/MM/yyyy'),
-        administerer: this.fourthRow,
+        treatmentStartDate: moment(this.thirdRow, 'DD/MM/yyyy'),
+        treatmentEndDate: moment(this.fourthRow, 'DD/MM/YYYY'),
+        administerer: this.fifthRow,
         id: this.id
       }
     }

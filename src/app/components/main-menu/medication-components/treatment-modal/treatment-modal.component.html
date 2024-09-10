@@ -33,18 +33,32 @@
         <cms-form-errors [errors]="medicationControl.errors"></cms-form-errors>
       </div>
     </div>
-    <div class="form-group" [ngClass]="{ 'was-validated': dateControl.dirty }">
-      <label for="treatmentDate"> Treatment Date</label>
+    <div class="form-group" [ngClass]="{ 'was-validated': startDateControl.dirty }">
+      <label for="treatmentStartDate"> Treatment Start Date</label>
       <input
         type="date"
         class="form-control"
-        name="treatmentDate"
-        id="treatmentDate"
-        formControlName="treatmentDate"
+        name="treatmentStartDate"
+        id="treatmentStartDate"
+        formControlName="treatmentStartDate"
         required
       />
       <div class="invalid-feedback">
-        <cms-form-errors [errors]="dateControl.errors"></cms-form-errors>
+        <cms-form-errors [errors]="startDateControl.errors"></cms-form-errors>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="treatmentEndDate"> Treatment End Date</label>
+      <input
+        type="date"
+        class="form-control"
+        name="treatmentEndDate"
+        id="treatmentEndDate"
+        formControlName="treatmentEndDate"
+        [ngClass]="getCSSForTreatmentEndDate()"
+      />
+      <div class="invalid-feedback">
+        <cms-form-errors [errors]="endDateControl.errors"></cms-form-errors>
       </div>
     </div>
     <div

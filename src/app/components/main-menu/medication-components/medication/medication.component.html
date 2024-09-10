@@ -75,8 +75,8 @@
           <tr *ngFor="let treatment of treatments | convertToGenericDataType">
             <td>{{ treatment.firstRow }}</td>
             <td>{{ treatment.treatmentMedicationName | async }}</td>
-            <td>{{ treatment.thirdRow }}</td>
-            <td>{{ treatment.fourthRow }}</td>
+            <td>{{ treatment.thirdRow && treatment.fourthRow ? treatment.thirdRow + " - " + treatment.fourthRow : treatment.thirdRow }}</td>
+            <td>{{ treatment.fifthRow }}</td>
           </tr>
         </tbody>
       </table>

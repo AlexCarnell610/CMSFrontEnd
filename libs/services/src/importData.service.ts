@@ -119,7 +119,8 @@ export class MappingService {
     return {
       id: treatment.id,
       administerer: treatment.administerer,
-      treatmentDate: this.convertDate(treatment.treatment_date),
+      treatmentStartDate: this.convertDate(treatment.treatment_start_date),
+      treatmentEndDate: treatment.treatment_end_date ? this.convertDate(treatment.treatment_end_date) : undefined,
       medication: treatment.medication_id,
       treatmentGroup: treatment.treatment_group,
       createdAt: this.convertDate(treatment.created_at)
