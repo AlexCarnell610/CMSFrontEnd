@@ -35,14 +35,14 @@
         </li>
         <li class="list-group">
           <p class="mb-0">
-            <b>{{ datum.isMedication ? "Withdrawal Period: " : "Date: " }}</b>
-            {{ datum.thirdRow }}
+            <b>{{ datum.isMedication ? "Withdrawal Period: " : "Treatment Date: " }}</b>
+            {{ datum.thirdRow && datum.fourthRow ? datum.thirdRow + " - " + datum.fourthRow : datum.thirdRow }}
           </p>
         </li>
         <li class="list-group">
           <p class="mb-0">
             <b>{{ datum.isMedication ? "Expiry Date: " : "Administerer: " }}</b>
-            {{ datum.fourthRow }}
+            {{ datum.fifthRow }}
           </p>
         </li>
       </ul>

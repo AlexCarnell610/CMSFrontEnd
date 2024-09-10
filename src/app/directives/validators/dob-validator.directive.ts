@@ -11,7 +11,7 @@ export class DobValidatorDirective implements Validator{
   validate(control: AbstractControl): ValidationErrors | null {
     
       if (moment().diff(moment(control.value), 'days') < 0) {
-        return { dob: 'DOB cant be in the future' };
+        return { dob: "DOB can't be in the future" };
       } else {
         return null;
       }

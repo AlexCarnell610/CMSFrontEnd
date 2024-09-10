@@ -1,5 +1,11 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { FORM_DATE_FORMAT, Modals } from '@cms-enums';
 import { IMedication, ITreatment } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
@@ -33,10 +39,12 @@ export class TreatmentModalComponent implements OnInit, AfterViewInit {
     treatmentGroup: FormControl<string>;
     medication: FormControl<IMedication>;
     administerer: FormControl<string>;
-    treatmentDate: FormControl<string>;
+    treatmentStartDate: FormControl<string>;
+    treatmentEndDate: FormControl<string>;
   }>({
     administerer: new FormControl(null, Validators.required),
-    treatmentDate: new FormControl(null, Validators.required),
+    treatmentStartDate: new FormControl(null, Validators.required),
+    treatmentEndDate: new FormControl(null, this.endDateValidator),
     medication: new FormControl(null, Validators.required),
     treatmentGroup: new FormControl(null, Validators.required),
   });
@@ -74,8 +82,10 @@ export class TreatmentModalComponent implements OnInit, AfterViewInit {
                   (medication) =>
                     medication.id === this.treatmentToEdit.medication
                 ),
-                treatmentDate:
-                  this.treatmentToEdit.treatmentDate.format(FORM_DATE_FORMAT),
+                treatmentStartDate:
+                  this.treatmentToEdit.treatmentStartDate.format(
+                    FORM_DATE_FORMAT
+                  ),
                 treatmentGroup: this.treatmentToEdit.treatmentGroup,
               });
             }
@@ -88,7 +98,7 @@ export class TreatmentModalComponent implements OnInit, AfterViewInit {
     this.treatmentForm.markAllAsTouched();
     this.treatmentGroupControl.markAsDirty();
     this.administererControl.markAsDirty();
-    this.dateControl.markAsDirty();
+    this.startDateControl.markAsDirty();
     this.medicationControl.markAsDirty();
     if (this.treatmentForm.valid) {
       if (!this.isEdit) {
@@ -96,7 +106,11 @@ export class TreatmentModalComponent implements OnInit, AfterViewInit {
           addTreatment({
             treatment: {
               ...this.treatmentForm.getRawValue(),
-              treatmentDate: this.dateControl.value,
+              treatmentStartDate: this.startDateControl.value,
+              treatmentEndDate:
+                this.endDateControl.value !== ''
+                  ? this.endDateControl.value
+                  : null,
               medication: this.medicationControl.value.id,
             },
           })
@@ -108,13 +122,25 @@ export class TreatmentModalComponent implements OnInit, AfterViewInit {
               id: this.treatmentToEdit.id,
               changes: {
                 ...this.treatmentForm.getRawValue(),
-                treatmentDate: this.dateControl.value,
+                treatmentStartDate: this.startDateControl.value,
+                treatmentEndDate:
+                  this.endDateControl.value !== ''
+                    ? this.endDateControl.value
+                    : null,
                 medication: this.medicationControl.value.id,
               },
             },
           })
         );
       }
+    }
+  }
+
+  getCSSForTreatmentEndDate() {
+    if (this.endDateControl.invalid && this.endDateControl.dirty) {
+      return 'is-invalid';
+    } else if (this.endDateControl.valid && this.endDateControl.dirty) {
+      return 'is-valid';
     }
   }
 
@@ -126,8 +152,12 @@ export class TreatmentModalComponent implements OnInit, AfterViewInit {
     return this.treatmentForm.controls.administerer;
   }
 
-  get dateControl(): FormControl {
-    return this.treatmentForm.controls.treatmentDate;
+  get startDateControl(): FormControl {
+    return this.treatmentForm.controls.treatmentStartDate;
+  }
+
+  get endDateControl(): FormControl {
+    return this.treatmentForm.controls.treatmentEndDate;
   }
 
   get medicationControl(): FormControl<IMedication> {
@@ -136,5 +166,15 @@ export class TreatmentModalComponent implements OnInit, AfterViewInit {
 
   get treatmentGroupControl(): FormControl {
     return this.treatmentForm.controls.treatmentGroup;
+  }
+
+  private endDateValidator(
+    endDateControl: AbstractControl
+  ): ValidationErrors | null {
+    return moment(endDateControl.value).isBefore(
+      moment(endDateControl.parent?.controls['treatmentStartDate'].value)
+    )
+      ? { treatmentEndDate: true }
+      : null;
   }
 }

@@ -27,6 +27,7 @@ export class ConvertToGenericDataTypePipe implements PipeTransform {
             value.name,
             value.batchNumber,
             '' + value.withdrawalPeriod,
+            null,
             value.expiryDate.format('YYYY/MM'),
             true,
             value.id
@@ -45,7 +46,8 @@ export class ConvertToGenericDataTypePipe implements PipeTransform {
           return new MedDisplayDataType(
             value.treatmentGroup,
             value.medication,
-            value.treatmentDate.format('DD/MM/YYYY'),
+            value.treatmentStartDate.format('DD/MM/YYYY'),
+            value.treatmentEndDate?.format('DD/MM/YYYY'),
             value.administerer,
             false,
             value.id,

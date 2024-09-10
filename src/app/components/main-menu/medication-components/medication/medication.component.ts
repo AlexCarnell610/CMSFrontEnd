@@ -44,7 +44,7 @@ export class MedicationComponent implements OnInit, OnDestroy {
     const treatmentsOrderedByTreatmentDate = this.treatments$.pipe(
       map((treatments) =>
         treatments.sort((trtA, trtB) =>
-          trtA.treatmentDate.isSameOrBefore(trtB.treatmentDate) ? 1 : -1
+          trtA.treatmentStartDate.isSameOrBefore(trtB.treatmentStartDate) ? 1 : -1
         )
       )
     );
@@ -59,7 +59,7 @@ export class MedicationComponent implements OnInit, OnDestroy {
         if (date.isAfter('1900-01-01')) {
           this.filteredTreatments$.next(
             treatments.filter((treatment) =>
-              treatment.treatmentDate.isSameOrAfter(date)
+              treatment.treatmentStartDate.isSameOrAfter(date)
             )
           );
         } else {
