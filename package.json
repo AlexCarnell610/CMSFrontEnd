@@ -31,7 +31,7 @@
     "@ngrx/schematics": "^15.4.0",
     "@ngrx/store": "^15.4.0",
     "@ngrx/store-devtools": "^15.4.0",
-    "@nrwl/angular": "^15.9.7",
+    "@nrwl/angular": "^16.10.0",
     "@popperjs/core": "^2.11.8",
     "@schematics/angular": "^15.2.11",
     "@zxing/browser": "0.1.3",
