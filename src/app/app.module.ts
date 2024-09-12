@@ -54,6 +54,7 @@ import { TreatmentEffects } from '@cms-ngrx/treatment';
     NgbDropdownModule,
     NgbDatepickerModule,
     AuthModule.forRoot({
+      
       ...environment.auth,
       httpInterceptor: {
         allowedList: ['/api/*', '/devApi/*'],

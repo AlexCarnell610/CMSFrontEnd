@@ -519,7 +519,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subs.add(
       animalModal.onOpenFinished.subscribe(() => {
         this.newSire = false;
-        this.isAddMode = animalModal.getData().isAdd;
+        this.isAddMode = (animalModal.getData() as any).isAdd;
         this.animalForm.enable();
         this.setData();
       })

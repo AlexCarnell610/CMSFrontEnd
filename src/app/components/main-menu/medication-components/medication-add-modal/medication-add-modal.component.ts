@@ -58,10 +58,10 @@ export class MedicationAddModalComponent implements OnInit, AfterViewInit {
       .add(
         modal.onOpen.subscribe(() => {
           // not working first time
-          this.isEdit = modal.getData().isEdit;
+          this.isEdit = (modal.getData() as any).isEdit;
           
           if (this.isEdit) {
-            this.medicationToEdit = modal.getData().medicationToEdit;
+            this.medicationToEdit = (modal.getData() as any).medicationToEdit;
             this.medicationForm.patchValue({
               batchNumber: this.medicationToEdit.batchNumber,
               expiryDate:

@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 $color-overlay: rgba(245, 245, 245, 0.97);
 
-@import "../node_modules/ngx-smart-modal/ngx-smart-modal";
+@import "../node_modules/ngx-smart-modal/styles/ngx-smart-modal.scss";
 @import "node_modules/bootstrap/dist/css/bootstrap.css";
 
 /* .footer {

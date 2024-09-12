@@ -72,9 +72,9 @@ export class TreatmentModalComponent implements OnInit, AfterViewInit {
         modal.onOpen
           .pipe(withLatestFrom(this.medications$))
           .subscribe(([_, medications]) => {
-            this.isEdit = modal.getData().isEdit;
+            this.isEdit = (modal.getData() as any).isEdit;
             if (this.isEdit) {
-              this.treatmentToEdit = modal.getData().treatmentToEdit;
+              this.treatmentToEdit = (modal.getData() as any).treatmentToEdit;
 
               this.treatmentForm.patchValue({
                 administerer: this.treatmentToEdit.administerer,

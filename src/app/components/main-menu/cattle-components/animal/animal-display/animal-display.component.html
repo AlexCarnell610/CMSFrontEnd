@@ -41,7 +41,7 @@
         <span
           *ngIf="showGoToChild && !basicMode"
           (click)="goToChildEmit.emit({})"
-          class="btn badge badge-pill badge-danger mr-1"
+          class="btn badge badge-pill badge-danger me-1"
           >Back</span
         >
         <span
@@ -72,12 +72,12 @@
       <textarea
         *ngIf="isEditNotes"
         formControlName="notes"
-        class="flex-fill mr-1"
+        class="flex-fill me-1"
         style="height: 81px; resize: none"
       ></textarea>
       <span
         *ngIf="selectedAnimal.notes || isEditNotes"
-        class="d-flex flex-column ml-auto justify-content-center"
+        class="d-flex flex-column ms-auto justify-content-center"
       >
         <span
           *ngIf="!saving"

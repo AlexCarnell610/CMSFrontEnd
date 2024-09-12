@@ -62,7 +62,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.cullUpdateService.cullUpdate = data.animal;
           });
         }
-      })
+      },error => {console.warn(error)}, () => console.warn("COMPLOETRE"))
     );
   }
 
