@@ -74,9 +74,9 @@
           </div>
         </div>
 
-        <div class="custom-control custom-checkbox">
-          <input formControlName="isSaleWeight" type="checkbox" class="custom-control-input" [ngClass]="getCSSForRadio()" id="saleWeight">
-          <label class="custom-control-label" for="saleWeight">Is sale weight</label>
+        <div class="form-check">
+          <input formControlName="isSaleWeight" type="checkbox" class="form-check-input" [ngClass]="getCSSForRadio()" id="saleWeight">
+          <label class="form-check-label" for="saleWeight">Is sale weight</label>
           <div class="invalid-feedback">
             <cms-form-errors
               [errors]="isSaleWeightControl.errors"

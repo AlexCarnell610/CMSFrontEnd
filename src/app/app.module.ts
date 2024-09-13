@@ -25,6 +25,7 @@ import { LoadingModalComponent } from './components/loading-modal/loading-modal.
 import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { TreatmentEffects } from '@cms-ngrx/treatment';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { TreatmentEffects } from '@cms-ngrx/treatment';
  ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     StoreModule.forRoot(reducers, {
       runtimeChecks: {
@@ -54,12 +56,13 @@ import { TreatmentEffects } from '@cms-ngrx/treatment';
     NgbDropdownModule,
     NgbDatepickerModule,
     AuthModule.forRoot({
-      
+
       ...environment.auth,
       httpInterceptor: {
         allowedList: ['/api/*', '/devApi/*'],
       },
     }),
+    
   ],
   providers: [
     {

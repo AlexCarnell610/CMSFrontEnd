@@ -74,8 +74,8 @@
           </li>
         </ul>
       </div>
-      <div class="chart-wrapper mt-2" *ngIf="chartWeights">
-        <span class="ms-2 mb-1" style="color: #7e7e7e"
+      <div class="chart-wrapper mt-2" *ngrxLet="chartWeights$ as chartWeights">
+        <span *ngIf="chartWeights.datasets.length > 0" class="ms-2 mb-1" style="color: #7e7e7e"
           ><strong>Calf Weight Gain</strong></span
         >
         <canvas

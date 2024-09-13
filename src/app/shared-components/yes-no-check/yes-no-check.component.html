@@ -1,0 +1,44 @@
+<div class="mb-2 mt-2">
+  <label for="btnCheck"><ng-content></ng-content>&nbsp; </label>
+  <div class="btn-group" role="group" id="btnCheck">
+    <input
+    class="btn-check"
+      [formControl]="yesNoFormControl"
+      value="yes"
+      type="radio"
+      name="btnCheck"
+      id="yes"
+      required
+    />
+    <label
+      class="btn btn-outline-primary btn-sm"
+      [ngClass]="getCSSForYes()" for="yes"
+      >Yes
+    </label>
+
+    <input
+    class="btn-check"
+      [formControl]="yesNoFormControl"
+      value="no"
+      type="radio"
+      name="btnCheck"
+      id="no"
+      required
+    />
+
+    <label
+      class="btn btn-outline-primary btn-sm"
+      [ngClass]="getCSSForNo()" for="no"
+      >No
+    </label>
+  </div>
+  <div
+    *ngIf="yesNoFormControl.invalid && yesNoFormControl.dirty"
+    class="cms-invalid-feedback"
+  >
+    <cms-form-errors
+      [errors]="yesNoFormControl.errors"
+      [isRadio]="true"
+    ></cms-form-errors>
+  </div>
+</div>

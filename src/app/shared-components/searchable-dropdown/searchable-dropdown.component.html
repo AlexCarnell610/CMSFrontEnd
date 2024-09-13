@@ -1,10 +1,26 @@
-<label for="typeahead-focus">{{label}}</label>
+<label for="typeahead-focus">{{ label }}</label>
 <input
   id="typeahead-focus"
   type="text"
   class="form-control"
   [formControl]="inputFormControl"
+  [typeahead]="dataSorted"
+  typeaheadOptionField="medication.name"
+  typeaheadGroupField="expired"
+  [typeaheadScrollable]="true"
+  [typeaheadOptionsInScrollableView]="5"
+  [required]="isRequired"
+  [typeaheadMinLength]="0"
+/>
+
+<!-- <input
+  id="typeahead-focus"
+  type="text"
+  class="form-control"
+  [formControl]="inputFormControl"
   [ngbTypeahead]="search"
+  [typeaheadScrollable]="true"
+       [typeaheadOptionsInScrollableView]="5"
   (focus)="focus$.next($any($event).target.value)"
   (click)="click$.next($any($event).target.value)"
   [editable]="false"
@@ -12,4 +28,4 @@
   [inputFormatter]="formatter"
   #instance="ngbTypeahead"
   [required]="isRequired"
-/>
+/> -->

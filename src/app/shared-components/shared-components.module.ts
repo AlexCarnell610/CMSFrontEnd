@@ -13,7 +13,6 @@ import {
   NgbAlertModule,
   NgbPopoverModule,
   NgbDropdownModule,
-  NgbTypeaheadModule,
 } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { CalvingStatsModalComponent } from './calving-stats-modal/calving-stats-modal.component';
@@ -22,6 +21,8 @@ import { AnimalDobSortPipe } from '../pipes/animal-dob-sort.pipe';
 import { ConvertToGenericDataTypePipe } from '../pipes/convert-to-generic-data-type.pipe';
 import { SearchableDropdownComponent } from './searchable-dropdown/searchable-dropdown.component';
 import { TagNumberDisplay } from '../pipes/tag-number-dsiplay.pipe';
+import { BcmsRegisteredComponent } from './yes-no-check/yes-no-check.component';
+import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 
 const COMPONENTS = [
   BreedsListComponent,
@@ -37,7 +38,8 @@ const COMPONENTS = [
   AnimalDobSortPipe,
   TagNumberDisplay,
   ConvertToGenericDataTypePipe,
-  SearchableDropdownComponent
+  SearchableDropdownComponent,
+  BcmsRegisteredComponent
 ];
 
 @NgModule({
@@ -51,7 +53,8 @@ const COMPONENTS = [
     NgbAlertModule,
     NgbPopoverModule,
     NgbDropdownModule,
-    NgbTypeaheadModule
+    TypeaheadModule.forRoot(),
+    
   ],
   exports: [...COMPONENTS, CommonModule, NgxSmartModalModule],
 })

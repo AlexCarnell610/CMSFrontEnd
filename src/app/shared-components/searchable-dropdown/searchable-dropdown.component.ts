@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { IMedication } from '@cms-interfaces';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
+import * as moment from 'moment';
 import { OperatorFunction, Observable, merge, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 
@@ -23,6 +24,12 @@ export class SearchableDropdownComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  get dataSorted(): {medication: IMedication, expired: string}[]{
+    return this.data.map(datum => {
+      return {medication: datum, expired: datum.expiryDate.isBefore(moment()) ? "Expired" : "In Date"}
+    })
   }
 
   search: OperatorFunction<string, readonly IMedication[]> = (text$: Observable<string>) => {

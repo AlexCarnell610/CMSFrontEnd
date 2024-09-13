@@ -44,46 +44,7 @@
             <cms-form-errors [errors]="managementTag.errors" [isManagementTag]="true"></cms-form-errors>
           </div>
         </div>
-        <div class="mb-2">
-          <label for="registered">Registered on BCMS - &nbsp; </label>
-          <div class="btn-group btn-group-toggle" id="registered">
-            <label
-              class="btn btn-outline-primary btn-sm"
-              [ngClass]="getCSSForRegisteredYes()"
-            >
-              <input
-                formControlName="registered"
-                value="yes"
-                type="radio"
-                name="registered"
-                id="yes"
-                required
-              />Yes
-            </label>
-            <label
-              class="btn btn-outline-primary btn-sm"
-              [ngClass]="getCSSForRegisteredNo()"
-            >
-              <input
-                formControlName="registered"
-                value="no"
-                type="radio"
-                name="registered"
-                id="no"
-                required
-              />No
-            </label>
-          </div>
-          <div
-            *ngIf="registered.invalid && registered.dirty"
-            class="cms-invalid-feedback"
-          >
-            <cms-form-errors
-              [errors]="registered.errors"
-              [isRadio]="true"
-            ></cms-form-errors>
-          </div>
-        </div>
+        <cms-yes-no-check [yesNoFormControl]="registered">Registered on BCMS - </cms-yes-no-check>
         <div class="form-group">
           <label for="birthDate">Enter birth date</label>
           <input
@@ -144,9 +105,9 @@
             required
             autocapitalize="characters"
           />
-          <div class="custom-control custom-checkbox mt-1">
-            <input type="checkbox" class="custom-control-input" id="damTagUnknown" formControlName="damTagUnknown">
-            <label class="custom-control-label" for="damTagUnknown">Dam tag unknown</label>
+          <div class="form-check mt-1">
+            <input type="checkbox" class="form-check-input" id="damTagUnknown" formControlName="damTagUnknown">
+            <label class="form-check-label" for="damTagUnknown">Dam tag unknown</label>
           </div>
           <div class="invalid-feedback">
             <cms-form-errors [errors]="dam.errors"></cms-form-errors>
@@ -161,7 +122,7 @@
           [breedControlName]="breedControlName"
         ></cms-sire-list>
 
-        <div class="form-check" [ngClass]="{ 'was-validated': gender.dirty }">
+        <div class="form-check mt-1" [ngClass]="{ 'was-validated': gender.dirty }">
           <input
             formControlName="gender"
             type="radio"

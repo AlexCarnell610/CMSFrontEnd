@@ -56,14 +56,14 @@
 
     <span
       *ngIf="page !== 'registration'"
-      class="btn badge badge-info badge-pill align-self-center"
+      class="btn badge bg-info rounded-pill align-self-center"
       (click)="openEditModal(animal)"
       >Edit {{ pillButtonText }}</span
     >
     <span *ngIf="pillButtonText === 'Animal'"></span>
     <span
       *ngIf="pillButtonText !== 'Animal'"
-      class="btn badge badge-success badge-pill ms-1"
+      class="btn badge bg-success rounded-pill ms-1"
       (click)="openAddModal(animal)"
       >{{ page === "registration" ? "" : "Add" }} {{ pillButtonText }}</span
     >

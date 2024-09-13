@@ -114,22 +114,6 @@ export class CalvingStatsModalComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public getCSSForIsAliveYes() {
-    if (this.isAlive.dirty && this.alive) {
-      return 'active';
-    } else if (this.isAlive.invalid && this.isAlive.dirty) {
-      return 'btn-outline-danger';
-    }
-  }
-
-  public getCSSForIsAliveNo() {
-    if (this.isAlive.invalid && this.isAlive.dirty) {
-      return 'btn-outline-danger';
-    } else if (this.isAlive.dirty && !this.alive) {
-      return 'active';
-    }
-  }
-
   public getCSSForCalvingEase() {
     if (this.calvingEase.invalid && this.calvingEase.dirty) {
       return 'is-invalid';

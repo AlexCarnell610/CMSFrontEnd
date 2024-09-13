@@ -13,20 +13,34 @@
 <div class="container">
   <div class="row mb-2">
     <div class="col-md">
-      <div class="btn-group btn-group-toggle" data-toggle="buttons">
+      <div class="btn-group" role="group">
+        <input
+          type="radio"
+          name="options"
+          id="option1"
+          class="btn-check"
+          autocomplete="off"
+        />
         <label
-          class="btn btn-secondary"
+          for="option1"
+          class="btn btn-outline-secondary"
           (click)="dateFilterDob = true; triggerDateChange()"
-          [ngClass]="dateFilterDob ? 'active' : ''"
-        >
-          <input type="radio" name="options" id="option1" /> Date Of Birth
+          >Date Of Birth
         </label>
+
+        <input
+          type="radio"
+          name="options"
+          id="option2"
+          class="btn-check"
+          autocomplete="off"
+        />
         <label
-          class="btn btn-secondary"
+          for="option2"
+          class="btn btn-outline-secondary"
           (click)="dateFilterDob = false; triggerDateChange()"
-          [ngClass]="!dateFilterDob ? 'active' : ''"
         >
-          <input type="radio" name="options" id="option2" /> Date of Weight
+          Date of Weight
         </label>
       </div>
     </div>
@@ -67,9 +81,8 @@
         </div>
       </div>
       <div class="input-group mb-2 mb-md-0">
-        <div class="input-group-prepend">
-          <span class="input-group-text">From</span>
-        </div>
+        <span class="input-group-text">From</span>
+
         <input
           #dpFromDate
           class="form-control"
@@ -79,23 +92,20 @@
           onkeydown="return false"
           (click)="toggle()"
         />
-        <div class="input-group-append">
-          <button
-            id="fromDate"
-            class="btn btn-outline-secondary"
-            (click)="toggle()"
-            type="button"
-          >
-            <i class="fa-regular fa-calendar-days"></i>
-          </button>
-        </div>
+
+        <button
+          id="fromDate"
+          class="btn btn-outline-secondary"
+          (click)="toggle()"
+          type="button"
+        >
+          <i class="fa-regular fa-calendar-days"></i>
+        </button>
       </div>
     </div>
     <div class="col-md">
       <div class="input-group">
-        <div id="toDate" class="input-group-prepend">
-          <span class="input-group-text">To</span>
-        </div>
+        <span class="input-group-text">To</span>
         <input
           [formControl]="toDateControl"
           #dpToDate
@@ -106,15 +116,13 @@
           onkeydown="return false"
           (click)="toggle()"
         />
-        <div class="input-group-append">
-          <button
-            class="btn btn-outline-secondary"
-            (click)="toggle()"
-            type="button"
-          >
-            <i class="fa-regular fa-calendar-days"></i>
-          </button>
-        </div>
+        <button
+          class="btn btn-outline-secondary"
+          (click)="toggle()"
+          type="button"
+        >
+          <i class="fa-regular fa-calendar-days"></i>
+        </button>
       </div>
     </div>
     <div class="col-md-auto mt-1 mt-md-0">
@@ -126,17 +134,17 @@
 
   <div class="row">
     <div class="col-md">
-      <!-- <a class="badge badge-success"
+      <!-- <a class="badge bg-success"
         ><i class="fa-solid fa-sort-up"></i>Lowest to Highest Avg Daily Weight
         Gain</a
       >
       <br />
-      <a class="badge badge-success"
+      <a class="badge bg-success"
         ><i class="fa-solid fa-sort-up"></i>Lowest to Highest Total Weight
         Gain</a
       >
       <br />
-      <a class="badge badge-success"
+      <a class="badge bg-success"
         ><i class="fa-solid fa-sort-up"></i>Lowest to Highest Total Weight</a
       >
       <br /> -->

@@ -137,14 +137,14 @@ describe('AnimalDisplayComponent', () => {
 
   it('Should return correct css if not editing notes', () => {
     component.isEditNotes = false;
-    expect(component.getCSSForNotesEdit()).toEqual('badge-info');
+    expect(component.getCSSForNotesEdit()).toEqual('bg-primary');
   });
 
   it('should return correct css if editing notes and no ntoes changes made', () => {
     component.isEditNotes = true;
     component.hasChangedNotes = false;
     expect(component.getCSSForNotesEdit()).toEqual(
-      'badge-success cms-disabled-pill cms-notes-edit'
+      'bg-success cms-disabled-pill cms-notes-edit'
     );
   });
 
@@ -152,7 +152,7 @@ describe('AnimalDisplayComponent', () => {
     component.isEditNotes = true;
     component.hasChangedNotes = true;
     expect(component.getCSSForNotesEdit()).toEqual(
-      'badge-success cms-notes-edit'
+      'bg-success cms-notes-edit'
     );
   });
 

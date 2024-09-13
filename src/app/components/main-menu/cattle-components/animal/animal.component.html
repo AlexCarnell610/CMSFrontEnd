@@ -16,29 +16,29 @@
   </button>
   <br />
   <div [formGroup]="sortingFormGroup">
-    <div class="custom-control-inline custom-control custom-radio">
+    <div class="form-check form-check-inline">
       <input
         type="radio"
-        class="custom-control-input"
+        class="form-check-input"
         name="sortRadio"
         [value]="YOUNG_TO_OLD"
         id="sort-young-old"
         formControlName="sortRadio"
       />
-      <label class="custom-control-label" for="sort-young-old"
+      <label class="form-check-label" for="sort-young-old"
         >Youngest to Oldest</label
       >
     </div>
-    <div class="custom-control-inline custom-control custom-radio">
+    <div class="form-check form-check-inline">
       <input
         type="radio"
-        class="custom-control-input"
+        class="form-check-input"
         name="sortRadio"
         [value]="OLD_TO_YOUNG"
         id="sort-old-young"
         formControlName="sortRadio"
       />
-      <label class="custom-control-label" for="sort-old-young"
+      <label class="form-check-label" for="sort-old-young"
         >Oldest to Youngest</label
       >
     </div>

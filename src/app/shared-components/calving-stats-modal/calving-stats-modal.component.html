@@ -2,50 +2,7 @@
   <h4 class="text-center">Calving Stat</h4>
   <div class="cms-form">
     <form [formGroup]="calvingStatForm">
-      <div class="mb-2">
-        <label
-          [ngClass]="{ 'invalid-label': isAlive.invalid && isAlive.dirty }"
-          for="isAlive"
-          ><strong>Calf Alive - </strong>&nbsp;
-        </label>
-        <div class="btn-group btn-group-toggle" id="isAlive">
-          <label
-            class="btn btn-outline-primary btn-sm"
-            [ngClass]="getCSSForIsAliveYes()"
-          >
-            <input
-              formControlName="isAlive"
-              value="alive"
-              type="radio"
-              name="isAlive"
-              id="alive"
-              required
-            />Yes
-          </label>
-          <label
-            class="btn btn-outline-primary btn-sm"
-            [ngClass]="getCSSForIsAliveNo()"
-          >
-            <input
-              formControlName="isAlive"
-              value="dead"
-              type="radio"
-              name="isAlive"
-              id="dead"
-              required
-            />No
-          </label>
-        </div>
-        <div
-          *ngIf="isAlive.invalid && isAlive.dirty"
-          class="cms-invalid-feedback"
-        >
-          <cms-form-errors
-            [errors]="isAlive.errors"
-            [isRadio]="true"
-          ></cms-form-errors>
-        </div>
-      </div>
+      <cms-yes-no-check [yesNoFormControl]="isAlive"><strong>Calf Alive - </strong></cms-yes-no-check>
       <div class="row">
         <div class="col">
           <label for="easeOfCalving"><strong>Ease of Calving</strong></label>
