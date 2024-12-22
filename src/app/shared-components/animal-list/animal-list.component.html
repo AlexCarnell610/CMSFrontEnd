@@ -7,7 +7,7 @@
 </button>
 <button
   *ngIf="multiSelect"
-  class="btn btn-primary ml-1 mb-1"
+  class="btn btn-primary ms-1 mb-1"
   (click)="selectAll()"
 >
   Select All
@@ -32,14 +32,14 @@
     [ngClass]="getCSSForButton(animal)"
     (click)="selectAnimal(animal)"
   >
-    <span *ngIf="!animal.name && !animal.managementTag" class="mr-1"
+    <span *ngIf="!animal.name && !animal.managementTag" class="me-1"
       ><strong>
         {{ animal.tagNumber | tagNumberDisplay}}
       </strong></span
     >
     <ul
       *ngIf="animal.name || animal.managementTag"
-      class="mr-1 list-group list-group-flush"
+      class="me-1 list-group list-group-flush"
     >
       <li class="list-group">
         <strong>
@@ -56,14 +56,14 @@
 
     <span
       *ngIf="page !== 'registration'"
-      class="btn badge badge-info badge-pill align-self-center"
+      class="btn badge bg-info rounded-pill align-self-center"
       (click)="openEditModal(animal)"
       >Edit {{ pillButtonText }}</span
     >
     <span *ngIf="pillButtonText === 'Animal'"></span>
     <span
       *ngIf="pillButtonText !== 'Animal'"
-      class="btn badge badge-success badge-pill ml-1"
+      class="btn badge bg-success rounded-pill ms-1"
       (click)="openAddModal(animal)"
       >{{ page === "registration" ? "" : "Add" }} {{ pillButtonText }}</span
     >

@@ -2,50 +2,7 @@
   <h4 class="text-center">Calving Stat</h4>
   <div class="cms-form">
     <form [formGroup]="calvingStatForm">
-      <div class="mb-2">
-        <label
-          [ngClass]="{ 'invalid-label': isAlive.invalid && isAlive.dirty }"
-          for="isAlive"
-          ><strong>Calf Alive - </strong>&nbsp;
-        </label>
-        <div class="btn-group btn-group-toggle" id="isAlive">
-          <label
-            class="btn btn-outline-primary btn-sm"
-            [ngClass]="getCSSForIsAliveYes()"
-          >
-            <input
-              formControlName="isAlive"
-              value="alive"
-              type="radio"
-              name="isAlive"
-              id="alive"
-              required
-            />Yes
-          </label>
-          <label
-            class="btn btn-outline-primary btn-sm"
-            [ngClass]="getCSSForIsAliveNo()"
-          >
-            <input
-              formControlName="isAlive"
-              value="dead"
-              type="radio"
-              name="isAlive"
-              id="dead"
-              required
-            />No
-          </label>
-        </div>
-        <div
-          *ngIf="isAlive.invalid && isAlive.dirty"
-          class="cms-invalid-feedback"
-        >
-          <cms-form-errors
-            [errors]="isAlive.errors"
-            [isRadio]="true"
-          ></cms-form-errors>
-        </div>
-      </div>
+      <cms-yes-no-check [yesNoFormControl]="isAlive" [name]="'isAlive'" [yesVal]="'alive'" [noVal]="'dead'"><strong>Calf Alive - </strong></cms-yes-no-check>
       <div class="row">
         <div class="col">
           <label for="easeOfCalving"><strong>Ease of Calving</strong></label>
@@ -140,7 +97,7 @@
           class="range-label"
           [ngClass]="{ disabled: gettingUp.disabled }"
           for="gettingUp"
-          >Getting up (1 slow - 5 fast</label
+          >Getting up (1 slow - 5 fast)</label
         >
         <div class="input-group">
           <input
@@ -153,7 +110,7 @@
             max="5"
             step="1"
           />
-          <div class="input-group-append ml-2">
+          <div class="input-group-append ms-2">
             <div
               class="input-group-text"
               [ngClass]="{ disabled: gettingUp.disabled }"
@@ -163,10 +120,12 @@
           </div>
         </div>
       </div>
-      <label for="firstDrink" [ngClass]="getCSSForDrinkAssistNo()"
+      <cms-yes-no-check [yesNoFormControl]="drinkAssistance" [name]="'drinkAssist'">First feed assisted - </cms-yes-no-check>
+      
+      <!-- <label for="firstDrink" [ngClass]="getCSSForDrinkAssistNo()"
         >First feed assisted -
       </label>
-      <div class="btn-group btn-group-toggle ml-2 mb-2" id="firstDrink">
+      <div class="btn-group btn-group-toggle ms-2 mb-2" id="firstDrink">
         <label
           class="btn btn-outline-primary btn-sm"
           [ngClass]="getCSSForDrinkAssistYes()"
@@ -200,7 +159,7 @@
           [errors]="isAlive.errors"
           [isRadio]="true"
         ></cms-form-errors>
-      </div>
+      </div> -->
       <div class="form-group">
         <label for="damHealth"
           ><strong>Dam health </strong>(1 worst - 5 best)</label
@@ -217,14 +176,14 @@
               max="5"
               step="1"
             />
-            <div class="input-group-append ml-2">
+            <div class="input-group-append ms-2">
               <div class="input-group-text">{{ damHealth.value }}</div>
             </div>
           </div>
         </div>
       </div>
       <div>
-        <button class="btn btn-success mr-3" (click)="save()">Save</button>
+        <button class="btn btn-success me-3" (click)="save()">Save</button>
         <button class="btn btn-danger" (click)="close()">Cancel</button>
       </div>
     </form>

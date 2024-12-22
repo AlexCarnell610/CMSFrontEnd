@@ -5,16 +5,17 @@
 <div class="container">
   <div class="row mt-3" *ngIf="$allUnregCalves | async as allUnregCalves">
     <div class="col" *ngIf="allUnregCalves.overdue.length > 0">
-      <span
+      <div
         *ngIf="!(loading | async)"
-        class="alert alert-danger btn"
+        class="alert alert-danger d-inline-block mb-4"
+        role="alert"
         (click)="registrationScreen()"
         ><strong>
           {{ allUnregCalves.overdue.length }}
           {{ allUnregCalves.overdue.length == 1 ? "calf is" : "calves are" }}
           overdue registration</strong
         >
-        Click to register</span
+        Click to register</div
       >
     </div>
     <div class="col" *ngIf="allUnregCalves.unreg.length > 0">
@@ -74,25 +75,25 @@
       <div class="btn-toolbar">
         <div class="btn-group">
           <button
-            class="btn btn-secondary mr-1 menu-buttons"
+            class="btn btn-secondary me-1 menu-buttons"
             (click)="weightScreen()"
           >
             Weights
           </button>
           <button
-            class="btn btn-secondary mr-1 menu-buttons"
+            class="btn btn-secondary me-1 menu-buttons"
             (click)="animalScreen()"
           >
             Animal Details
           </button>
           <button
-            class="btn btn-secondary mr-1 menu-buttons"
+            class="btn btn-secondary me-1 menu-buttons"
             (click)="birthScreen()"
           >
             Births
           </button>
           <button
-            class="btn btn-secondary mr-1 menu-buttons"
+            class="btn btn-secondary me-1 menu-buttons"
             (click)="performance()"
           >
             Performance
@@ -122,7 +123,7 @@
       <div class="btn-toolbar">
         <div class="btn-group">
           <button
-            class="btn btn-secondary mr-1 menu-buttons"
+            class="btn btn-secondary me-1 menu-buttons"
             (click)="medicationScreen()"
           >
             Manage medicine book
@@ -136,7 +137,7 @@
       <img class="user-menu-icon" src="assets/userIcon.svg" alt="UserIcon" />
       <div class="btn-toolbar">
         <div class="btn-group">
-          <button class="btn btn-danger mr-1 menu-buttons" (click)="logout()">
+          <button class="btn btn-danger me-1 menu-buttons" (click)="logout()">
             Log Out
           </button>
         </div>

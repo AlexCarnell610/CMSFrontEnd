@@ -10,6 +10,7 @@ import { PerformanceHomeComponent } from './performance-home.component';
 import { WeightAnalysisComponent } from './weight-analysis/weight-analysis.component';
 import { NgbCustomDateParserFormatter } from './ngb-custom-date-formatter-parser';
 import { NgChartsModule } from 'ng2-charts';
+import { LetDirective } from '@ngrx/component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { NgChartsModule } from 'ng2-charts';
     FormsModule,
     SharedComponentsModule,
     NgbPopoverModule,
+    LetDirective
   ],
   providers: [
     {provide: NgbDateParserFormatter, useClass: NgbCustomDateParserFormatter}

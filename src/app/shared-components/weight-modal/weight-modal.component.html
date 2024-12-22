@@ -8,12 +8,12 @@
       <form [formGroup]="editWeightForm" class="mb-3 mt-2">
         <div
           *ngIf="!isAddMode"
-          class="input-group mb-3 mt-3"
+          class="form-group mb-3 mt-3"
           [ngClass]="{ 'was-validated': weightSelect.dirty }"
         >
           <select
             formControlName="weightSelect"
-            class="custom-select"
+            class="form-select"
             id="weightSelect"
             required
           >
@@ -50,9 +50,9 @@
               min="10"
               max="1000"
             />
-            <div class="input-group-append">
-              <span class="input-group-text">Kg</span>
-            </div>
+            
+              <span class="input-group-text-end">Kg</span>
+          
             <div class="invalid-feedback">
               <cms-form-errors [errors]="weight.errors"></cms-form-errors>
             </div>
@@ -74,9 +74,9 @@
           </div>
         </div>
 
-        <div class="custom-control custom-checkbox">
-          <input formControlName="isSaleWeight" type="checkbox" class="custom-control-input" [ngClass]="getCSSForRadio()" id="saleWeight">
-          <label class="custom-control-label" for="saleWeight">Is sale weight</label>
+        <div class="form-check">
+          <input formControlName="isSaleWeight" type="checkbox" class="form-check-input" [ngClass]="getCSSForRadio()" id="saleWeight">
+          <label class="form-check-label" for="saleWeight">Is sale weight</label>
           <div class="invalid-feedback">
             <cms-form-errors
               [errors]="isSaleWeightControl.errors"
@@ -86,7 +86,7 @@
         </div>
 
         <button
-          class="btn btn-success mr-3"
+          class="btn btn-success me-3"
           (click)="saveChanges()"
           ngbPopover="Update Success!"
           #p="ngbPopover"
@@ -99,11 +99,11 @@
         <button type="button" class="btn btn-danger" (click)="closeModal()">
           Close
         </button>
-        <button *ngIf="!isAddMode" class="btn btn-warning float-right" [disabled]="!selectedWeight" (click)="deleteWeight()">Delete</button>
+        <button *ngIf="!isAddMode" class="btn btn-warning float-right ms-2" [disabled]="!selectedWeight" (click)="deleteWeight()">Delete</button>
 
         <button
         *ngIf="showOverride"
-          class="btn btn-danger mr-3"
+          class="btn btn-danger me-3"
           (click)="saveChanges(true)"
         >
           Override Errors!

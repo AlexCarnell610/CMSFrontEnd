@@ -74,7 +74,6 @@ export class WeightAnalysisComponent implements OnInit {
       y: {
         beginAtZero: true,
         min: 0,
-        suggestedMax: 1000,
         ticks: { stepSize: 50 },
       },
       x: {

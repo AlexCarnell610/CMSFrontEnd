@@ -54,14 +54,19 @@ export class MedicationAddModalComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.scanner.scanStop();
     const modal = this.modalService.get(this.modalIdentifier);
+    this.subs.add(
+      modal.onAnyCloseEventFinished.subscribe(() => {
+        this.medicationForm.reset();
+      })
+    )
     this.subs
       .add(
         modal.onOpen.subscribe(() => {
           // not working first time
-          this.isEdit = modal.getData().isEdit;
+          this.isEdit = (modal.getData() as any).isEdit;
           
           if (this.isEdit) {
-            this.medicationToEdit = modal.getData().medicationToEdit;
+            this.medicationToEdit = (modal.getData() as any).medicationToEdit;
             this.medicationForm.patchValue({
               batchNumber: this.medicationToEdit.batchNumber,
               expiryDate:

@@ -82,7 +82,7 @@ export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.modalService.get(Modals.Sire).onOpenFinished.subscribe(() => {
-      const modalData = this.modalService.resetModalData(Modals.Sire);
+      const modalData = this.modalService.resetModalData(Modals.Sire) as any;
 
       this.bull = modalData.bull;
       this.isAdd = modalData.isAdd;

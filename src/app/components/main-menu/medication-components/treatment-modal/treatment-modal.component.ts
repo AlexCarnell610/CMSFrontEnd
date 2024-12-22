@@ -62,19 +62,28 @@ export class TreatmentModalComponent implements OnInit, AfterViewInit {
       this.inDateMedications$,
       this.outOfDateMedications$,
     ]).pipe(map(([inDateMeds, expiredMeds]) => inDateMeds.concat(expiredMeds)));
+    this.medicationControl.valueChanges.subscribe(val => {
+      console.warn("trt modal com",val);
+      
+    })
   }
 
   ngAfterViewInit(): void {
     const modal = this.modalService.get(this.modalIdentifier);
 
+    this.subs.add(
+      modal.onAnyCloseEventFinished.subscribe(() => {
+        this.treatmentForm.reset()
+      })
+    )
     this.subs
       .add(
         modal.onOpen
           .pipe(withLatestFrom(this.medications$))
           .subscribe(([_, medications]) => {
-            this.isEdit = modal.getData().isEdit;
+            this.isEdit = (modal.getData() as any).isEdit;
             if (this.isEdit) {
-              this.treatmentToEdit = modal.getData().treatmentToEdit;
+              this.treatmentToEdit = (modal.getData() as any).treatmentToEdit;
 
               this.treatmentForm.patchValue({
                 administerer: this.treatmentToEdit.administerer,

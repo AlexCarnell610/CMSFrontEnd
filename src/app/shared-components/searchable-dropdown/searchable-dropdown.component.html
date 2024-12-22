@@ -1,4 +1,19 @@
-<label for="typeahead-focus">{{label}}</label>
+<label for="typeahead-focus">{{ label }}</label>
+<!-- <input
+  id="typeahead-focus"
+  type="text"
+  class="form-control"
+  [formControl]="inputFormControl"
+  [typeahead]="dataSorted"
+  typeaheadOptionField="medication.name"
+  typeaheadGroupField="expired"
+  [typeaheadScrollable]="true"
+  [typeaheadOptionsInScrollableView]="5"
+  [required]="isRequired"
+  [typeaheadMinLength]="0"
+  (typeaheadOnSelect)="select($event)"
+/> -->
+
 <input
   id="typeahead-focus"
   type="text"

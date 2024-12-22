@@ -11,6 +11,7 @@ import * as moment from 'moment';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'cms-main-menu',
@@ -84,8 +85,10 @@ export class MainMenuComponent implements OnInit, AfterViewInit {
   }
 
   public logout(): void {
+    // `https://${window.location.host}/CMSFrontEnd/${PageURLs.Login}`
     this.auth.logout({
-      returnTo: `https://${window.location.host}/CMSFrontEnd/${PageURLs.Login}`,
+      clientId: environment.auth.clientId,
+      logoutParams:{returnTo: environment.auth.authorizationParams.redirect_uri }
     });
   }
 

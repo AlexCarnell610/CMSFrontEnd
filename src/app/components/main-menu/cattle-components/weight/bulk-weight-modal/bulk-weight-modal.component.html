@@ -12,50 +12,29 @@
         "
         class="input-group"
       >
-        <div class="custom-file" style="min-width: 2px">
-          <input
-            (change)="checkFile($event.target.files[0])"
-            formControlName="inputFile"
-            type="file"
-            class="custom-file-input"
-            id="choose-weight-file"
-            aria-describedby="upload-button"
-            accept=".csv, .txt"
-            style="max-width: 150px"
-            #upload
-          />
-          <label
-            class="custom-file-label text-truncate d-block"
-            for="choose-weight-file"
-            >{{ labelText }}</label
-          >
-        </div>
-        <div class="input-group-append">
-          <button
-            class="btn btn-outline-secondary"
-            type="button"
-            id="upload-button"
-            (click)="upload.click()"
-          >
-            Browse
-          </button>
-        </div>
-        <div class="input-group-append">
-          <button
-            class="btn btn-success"
-            type="button"
-            id="check-button"
-            [disabled]="!selectedFile"
-            (click)="saveWeights()"
-            ngbPopover="Weights Added!"
-            #saveConfirm="ngbPopover"
-            placement="bottom"
-            popoverClass="update-success"
-            triggers="manual"
-          >
-            Save Weights
-          </button>
-        </div>
+        <input
+          (change)="checkFile($event.target.files[0])"
+          type="file"
+          class="form-control"
+          id="choose-weight-file"
+          aria-describedby="upload-button"
+          accept=".csv, .txt"
+          #upload
+        />
+        <button
+          class="btn btn-success"
+          type="button"
+          id="check-button"
+          [disabled]="!selectedFile"
+          (click)="saveWeights()"
+          ngbPopover="Weights Added!"
+          #saveConfirm="ngbPopover"
+          placement="bottom"
+          popoverClass="update-success"
+          triggers="manual"
+        >
+          Save Weights
+        </button>
       </div>
     </form>
   </div>
@@ -105,4 +84,7 @@
   </div>
 </ng-template>
 
-<cms-edit-bulk-weight-modal (weightChange)="updateWeight($event)" [weight]="editWeight"></cms-edit-bulk-weight-modal>
+<cms-edit-bulk-weight-modal
+  (weightChange)="updateWeight($event)"
+  [weight]="editWeight"
+></cms-edit-bulk-weight-modal>

@@ -217,21 +217,21 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  public getCSSForRegisteredNo() {
-    if (this.registered.invalid && this.registered.dirty) {
-      return 'btn-outline-danger';
-    } else if (this.registered.value === 'no') {
-      return 'active';
-    }
-  }
+  // public getCSSForRegisteredNo() {
+  //   if (this.registered.invalid && this.registered.dirty) {
+  //     return 'btn-outline-danger';
+  //   } else if (this.registered.value === 'no') {
+  //     return 'active';
+  //   }
+  // }
 
-  public getCSSForRegisteredYes() {
-    if (this.registered.invalid && this.registered.dirty) {
-      return 'btn-outline-danger';
-    } else if (this.registered.value === 'yes') {
-      return 'active';
-    }
-  }
+  // public getCSSForRegisteredYes() {
+  //   if (this.registered.invalid && this.registered.dirty) {
+  //     return 'btn-outline-danger';
+  //   } else if (this.registered.value === 'yes') {
+  //     return 'active';
+  //   }
+  // }
 
   get selectedBreed$(): Observable<IBreedCode> {
     return this.breed.valueChanges;
@@ -519,7 +519,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subs.add(
       animalModal.onOpenFinished.subscribe(() => {
         this.newSire = false;
-        this.isAddMode = animalModal.getData().isAdd;
+        this.isAddMode = (animalModal.getData() as any).isAdd;
         this.animalForm.enable();
         this.setData();
       })

@@ -33,7 +33,10 @@
         <cms-form-errors [errors]="medicationControl.errors"></cms-form-errors>
       </div>
     </div>
-    <div class="form-group" [ngClass]="{ 'was-validated': startDateControl.dirty }">
+    <div
+      class="form-group"
+      [ngClass]="{ 'was-validated': startDateControl.dirty }"
+    >
       <label for="treatmentStartDate"> Treatment Start Date</label>
       <input
         type="date"
@@ -62,7 +65,7 @@
       </div>
     </div>
     <div
-      class="form-group"
+      class="form-group mb-2"
       [ngClass]="{ 'was-validated': treatmentGroupControl.dirty }"
     >
       <label for="administerer"> Administerer</label>
@@ -80,7 +83,7 @@
         ></cms-form-errors>
       </div>
     </div>
-    <button class="btn btn-success mr-2" (click)="save()">Save</button>
+    <button class="btn btn-success me-2" (click)="save()">Save</button>
     <button class="btn btn-danger" (click)="close()">Close</button>
   </form>
 </ngx-smart-modal>

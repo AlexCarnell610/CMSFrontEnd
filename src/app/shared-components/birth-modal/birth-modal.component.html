@@ -11,7 +11,7 @@
           [ngClass]="{ 'was-validated': calfSelect.dirty }"
           *ngIf="!isAdd && ($calves | async) as calves"
         >
-          <select class="custom-select" formControlName="calves" required>
+          <select class="form-select" formControlName="calves" required>
             <option value="">Select calf...</option>
             <option *ngFor="let calf of calves" value="{{ calf.tagNumber }}">
               {{ calf.tagNumber }}
@@ -86,46 +86,7 @@
           [breedControlName]="breedControlName"
           (sireAdded)="newSire = $event"
         ></cms-sire-list>
-        <div class="mb-2">
-          <label for="registered">Registered on BCMS - &nbsp; </label>
-          <div class="btn-group btn-group-toggle" id="registered">
-            <label
-              class="btn btn-outline-primary btn-sm"
-              [ngClass]="getCSSForRegisteredYes()"
-            >
-              <input
-                formControlName="registered"
-                value="yes"
-                type="radio"
-                name="registered"
-                id="yes"
-                required
-              />Yes
-            </label>
-            <label
-              class="btn btn-outline-primary btn-sm"
-              [ngClass]="getCSSForRegisteredNo()"
-            >
-              <input
-                formControlName="registered"
-                value="no"
-                type="radio"
-                name="registered"
-                id="no"
-                required
-              />No
-            </label>
-          </div>
-          <div
-            *ngIf="registered.invalid && registered.dirty"
-            class="cms-invalid-feedback"
-          >
-            <cms-form-errors
-              [errors]="registered.errors"
-              [isRadio]="true"
-            ></cms-form-errors>
-          </div>
-        </div>
+        <cms-yes-no-check [yesNoFormControl]="registered" [name]="'registered'">Registered on BCMS - </cms-yes-no-check>
         <div class="form-check" [ngClass]="{ 'was-validated': gender.dirty }">
           <input
             formControlName="gender"
@@ -220,7 +181,7 @@
         </div>
         <div>
           <button
-            class="btn btn-success mr-3"
+            class="btn btn-success me-3"
             (click)="save()"
             ngbPopover="Update Success!"
             #errorPop="ngbPopover"
