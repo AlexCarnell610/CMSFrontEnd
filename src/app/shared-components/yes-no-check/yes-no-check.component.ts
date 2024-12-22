@@ -6,9 +6,14 @@ import { FormControl } from '@angular/forms';
   templateUrl: './yes-no-check.component.html',
   styleUrls: ['./yes-no-check.component.scss']
 })
-export class BcmsRegisteredComponent {
+export class YesNoCheckComponent {
 
-  @Input()yesNoFormControl: FormControl
+  @Input()yesNoFormControl: FormControl;
+  @Input()name: string;
+  @Input()yesVal = "yes";
+  @Input()noVal = 'no';
+
+  
 
   public getCSSForNo() {
     if (this.yesNoFormControl.invalid && this.yesNoFormControl.dirty) {

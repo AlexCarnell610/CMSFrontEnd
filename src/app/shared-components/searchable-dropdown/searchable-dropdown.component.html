@@ -1,5 +1,5 @@
 <label for="typeahead-focus">{{ label }}</label>
-<input
+<!-- <input
   id="typeahead-focus"
   type="text"
   class="form-control"
@@ -11,16 +11,15 @@
   [typeaheadOptionsInScrollableView]="5"
   [required]="isRequired"
   [typeaheadMinLength]="0"
-/>
+  (typeaheadOnSelect)="select($event)"
+/> -->
 
-<!-- <input
+<input
   id="typeahead-focus"
   type="text"
   class="form-control"
   [formControl]="inputFormControl"
   [ngbTypeahead]="search"
-  [typeaheadScrollable]="true"
-       [typeaheadOptionsInScrollableView]="5"
   (focus)="focus$.next($any($event).target.value)"
   (click)="click$.next($any($event).target.value)"
   [editable]="false"
@@ -28,4 +27,4 @@
   [inputFormatter]="formatter"
   #instance="ngbTypeahead"
   [required]="isRequired"
-/> -->
+/>

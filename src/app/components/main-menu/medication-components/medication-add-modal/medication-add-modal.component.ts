@@ -54,6 +54,11 @@ export class MedicationAddModalComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.scanner.scanStop();
     const modal = this.modalService.get(this.modalIdentifier);
+    this.subs.add(
+      modal.onAnyCloseEventFinished.subscribe(() => {
+        this.medicationForm.reset();
+      })
+    )
     this.subs
       .add(
         modal.onOpen.subscribe(() => {

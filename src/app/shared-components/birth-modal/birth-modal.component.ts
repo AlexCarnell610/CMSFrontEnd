@@ -465,7 +465,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
       }),
       calfSire: this.fb.control([], Validators.required),
       gender: this.fb.control([], Validators.required),
-      registered: this.fb.control([], Validators.required),
+      registered: this.fb.control(["REGED"], Validators.required),
       managementTag: this.fb.control([])
     });
   }

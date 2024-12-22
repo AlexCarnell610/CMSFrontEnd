@@ -1,34 +1,34 @@
 <div class="mb-2 mt-2">
-  <label for="btnCheck"><ng-content></ng-content>&nbsp; </label>
-  <div class="btn-group" role="group" id="btnCheck">
+  <label [for]="'btnCheck'+name"><ng-content></ng-content>&nbsp; </label>
+  <div class="btn-group" role="group" [id]="'btnCheck'+name">
     <input
     class="btn-check"
       [formControl]="yesNoFormControl"
-      value="yes"
+      [value]="yesVal"
       type="radio"
-      name="btnCheck"
-      id="yes"
+      [name]="'btnCheck'+name"
+      [id]="'yes'+name"
       required
     />
     <label
       class="btn btn-outline-primary btn-sm"
-      [ngClass]="getCSSForYes()" for="yes"
+      [ngClass]="getCSSForYes()" [for]="'yes'+name"
       >Yes
     </label>
 
     <input
     class="btn-check"
       [formControl]="yesNoFormControl"
-      value="no"
+      [value]="noVal"
       type="radio"
-      name="btnCheck"
-      id="no"
+      [name]="'btnCheck'+name"
+      [id]="'no'+name"
       required
     />
 
     <label
       class="btn btn-outline-primary btn-sm"
-      [ngClass]="getCSSForNo()" for="no"
+      [ngClass]="getCSSForNo()" [for]="'no'+name"
       >No
     </label>
   </div>

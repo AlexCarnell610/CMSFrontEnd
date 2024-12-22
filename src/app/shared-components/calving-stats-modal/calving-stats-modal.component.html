@@ -2,7 +2,7 @@
   <h4 class="text-center">Calving Stat</h4>
   <div class="cms-form">
     <form [formGroup]="calvingStatForm">
-      <cms-yes-no-check [yesNoFormControl]="isAlive"><strong>Calf Alive - </strong></cms-yes-no-check>
+      <cms-yes-no-check [yesNoFormControl]="isAlive" [name]="'isAlive'" [yesVal]="'alive'" [noVal]="'dead'"><strong>Calf Alive - </strong></cms-yes-no-check>
       <div class="row">
         <div class="col">
           <label for="easeOfCalving"><strong>Ease of Calving</strong></label>
@@ -97,7 +97,7 @@
           class="range-label"
           [ngClass]="{ disabled: gettingUp.disabled }"
           for="gettingUp"
-          >Getting up (1 slow - 5 fast</label
+          >Getting up (1 slow - 5 fast)</label
         >
         <div class="input-group">
           <input
@@ -120,7 +120,9 @@
           </div>
         </div>
       </div>
-      <label for="firstDrink" [ngClass]="getCSSForDrinkAssistNo()"
+      <cms-yes-no-check [yesNoFormControl]="drinkAssistance" [name]="'drinkAssist'">First feed assisted - </cms-yes-no-check>
+      
+      <!-- <label for="firstDrink" [ngClass]="getCSSForDrinkAssistNo()"
         >First feed assisted -
       </label>
       <div class="btn-group btn-group-toggle ms-2 mb-2" id="firstDrink">
@@ -157,7 +159,7 @@
           [errors]="isAlive.errors"
           [isRadio]="true"
         ></cms-form-errors>
-      </div>
+      </div> -->
       <div class="form-group">
         <label for="damHealth"
           ><strong>Dam health </strong>(1 worst - 5 best)</label

@@ -86,7 +86,7 @@
           [breedControlName]="breedControlName"
           (sireAdded)="newSire = $event"
         ></cms-sire-list>
-        <cms-yes-no-check [yesNoFormControl]="registered">Registered on BCMS - </cms-yes-no-check>
+        <cms-yes-no-check [yesNoFormControl]="registered" [name]="'registered'">Registered on BCMS - </cms-yes-no-check>
         <div class="form-check" [ngClass]="{ 'was-validated': gender.dirty }">
           <input
             formControlName="gender"

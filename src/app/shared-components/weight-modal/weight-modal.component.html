@@ -8,12 +8,12 @@
       <form [formGroup]="editWeightForm" class="mb-3 mt-2">
         <div
           *ngIf="!isAddMode"
-          class="input-group mb-3 mt-3"
+          class="form-group mb-3 mt-3"
           [ngClass]="{ 'was-validated': weightSelect.dirty }"
         >
           <select
             formControlName="weightSelect"
-            class="custom-select"
+            class="form-select"
             id="weightSelect"
             required
           >
@@ -50,9 +50,9 @@
               min="10"
               max="1000"
             />
-            <div class="input-group-append">
-              <span class="input-group-text">Kg</span>
-            </div>
+            
+              <span class="input-group-text-end">Kg</span>
+          
             <div class="invalid-feedback">
               <cms-form-errors [errors]="weight.errors"></cms-form-errors>
             </div>
@@ -99,7 +99,7 @@
         <button type="button" class="btn btn-danger" (click)="closeModal()">
           Close
         </button>
-        <button *ngIf="!isAddMode" class="btn btn-warning float-right" [disabled]="!selectedWeight" (click)="deleteWeight()">Delete</button>
+        <button *ngIf="!isAddMode" class="btn btn-warning float-right ms-2" [disabled]="!selectedWeight" (click)="deleteWeight()">Delete</button>
 
         <button
         *ngIf="showOverride"
