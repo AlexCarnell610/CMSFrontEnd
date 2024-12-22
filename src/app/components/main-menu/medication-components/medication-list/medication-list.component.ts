@@ -4,11 +4,15 @@ import {
   IMedication,
   ITreatment,
   MedDisplayDataType,
-  isMedication,
   isMedicationArray,
+  isTreatment,
 } from '@cms-interfaces';
+import { RootState } from '@cms-ngrx';
+import { selectMedicationWithdrawal } from '@cms-ngrx/medication';
+import { Store } from '@ngrx/store';
+import { Moment } from 'moment';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'cms-medication-list',
@@ -27,7 +31,7 @@ export class MedicationListComponent implements OnInit {
   public searchedData$: BehaviorSubject<IMedication[] | ITreatment[]> =
     new BehaviorSubject([]);
 
-  constructor() {}
+  constructor(private readonly store: Store<RootState>) {}
 
   ngOnInit(): void {
     this.data$.subscribe((data) => this.searchedData$.next(data));
@@ -46,7 +50,10 @@ export class MedicationListComponent implements OnInit {
                 item.name.toLowerCase().includes(searchTerm.toLowerCase())
               )
             : data.filter((item) => {
-              const newItem = {...item, date: item.treatmentStartDate.format('DD/MM/YYYY')}
+                const newItem = {
+                  ...item,
+                  date: item.treatmentStartDate.format('DD/MM/YYYY'),
+                };
                 return JSON.stringify(newItem)
                   .toLowerCase()
                   .includes(searchTerm.toLowerCase());

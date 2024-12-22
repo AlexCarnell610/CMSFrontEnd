@@ -1,15 +1,18 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import {
-  IMedDisplayDataType,
+  
   IMedication,
   ITreatment,
   MedDisplayDataType,
   isMedicationArray,
+  isTreatment,
   isTreatmentArray,
 } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
-import { selectMedicationName } from '@cms-ngrx/medication';
+import { selectMedicationName, selectMedicationWithdrawal } from '@cms-ngrx/medication';
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Pipe({
   name: 'convertToGenericDataType',
@@ -51,12 +54,31 @@ export class ConvertToGenericDataTypePipe implements PipeTransform {
             value.administerer,
             false,
             value.id,
-            this.store.select(selectMedicationName(value.medication))
+            this.store.select(selectMedicationName(value.medication)),
+            this.getWithDrawalEndDate(value)
           );
         });
       }
     }
 
     return null;
+  }
+
+  private getWithDrawalEndDate(treatment: ITreatment): Observable<string> {
+    
+      return this.store
+        .select(selectMedicationWithdrawal(treatment.medication))
+        .pipe(
+          map((withdrawalLength) =>
+            treatment.treatmentEndDate
+              ? treatment.treatmentEndDate
+                  .add(withdrawalLength, 'days')
+                  .format('DD/MM/YYYY')
+              : treatment.treatmentStartDate
+                  .add(withdrawalLength, 'days')
+                  .format('DD/MM/YYYY')
+          )
+        );
+    
   }
 }

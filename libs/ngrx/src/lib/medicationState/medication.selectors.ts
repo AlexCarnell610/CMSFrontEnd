@@ -9,9 +9,19 @@ export const selectMedications = createSelector(
 
 export const selectMedicationName = (medicationID) =>
   createSelector(
-    selectMedications,
-    (medications) =>
-      medications.find((medication) => medication.id === medicationID).name
+    selectMedication(medicationID),
+    (medication) => medication.name
+  );
+
+export const selectMedication = (medicationID) =>
+  createSelector(selectMedications, (medications) =>
+    medications.find((medication) => medication.id === medicationID)
+  );
+
+export const selectMedicationWithdrawal = (medicationID) =>
+  createSelector(
+    selectMedication(medicationID),
+    (medication) => medication.withdrawalPeriod
   );
 
 export const selectInDateMedications = createSelector(
@@ -25,10 +35,12 @@ export const selectInDateMedications = createSelector(
 export const selectOutOfDateMedications = createSelector(
   selectMedications,
   (medications) =>
-    medications.filter((medication) => medication.expiryDate.isBefore(moment())).map(medication => {
-      return {
-        ...medication,
-        name: medication.name+" EXPIRED"
-      }
-    })
+    medications
+      .filter((medication) => medication.expiryDate.isBefore(moment()))
+      .map((medication) => {
+        return {
+          ...medication,
+          name: medication.name + ' EXPIRED',
+        };
+      })
 );

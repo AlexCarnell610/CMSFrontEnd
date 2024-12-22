@@ -39,6 +39,12 @@
             {{ datum.thirdRow && datum.fourthRow ? datum.thirdRow + " - " + datum.fourthRow : datum.thirdRow }}
           </p>
         </li>
+        <li class="list-group" *ngIf="!datum.isMedication">
+          <p class="mb-0">
+            <b>Withdrawal period end: </b>
+            {{ datum.treatmentWithdrawalEnd | async }}
+          </p>
+        </li>
         <li class="list-group">
           <p class="mb-0">
             <b>{{ datum.isMedication ? "Expiry Date: " : "Administerer: " }}</b>

@@ -66,6 +66,7 @@
             <th scope="col">Treatment Group</th>
             <th scope="col">Medication</th>
             <th scope="col">Treatment Date</th>
+            <th scope="col">Withdrawal Period End</th>
             <th scope="col">Administerer</th>
           </tr>
         </thead>
@@ -80,6 +81,7 @@
                   : treatment.thirdRow
               }}
             </td>
+            <td>{{treatment.treatmentWithdrawalEnd | async}}</td>
             <td>{{ treatment.fifthRow }}</td>
           </tr>
         </tbody>
