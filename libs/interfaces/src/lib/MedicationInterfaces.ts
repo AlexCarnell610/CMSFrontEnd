@@ -46,7 +46,7 @@ export function isMedicationArray(data: any): data is IMedication[] {
 }
 
 export class MedDisplayDataType implements IMedDisplayDataType {
-  constructor(public firstRow: string, public secondRow: string, public thirdRow: string, public fourthRow: string, public fifthRow: string,  public isMedication: boolean, public id: string, public treatmentMedicationName?: Observable<string>) {
+  constructor(public firstRow: string, public secondRow: string, public thirdRow: string, public fourthRow: string, public fifthRow: string,  public isMedication: boolean, public id: string, public treatmentMedicationName?: Observable<string>, public treatmentWithdrawalEnd?: Observable<string>) {
   
   }
 
@@ -55,6 +55,8 @@ export class MedDisplayDataType implements IMedDisplayDataType {
   // isMedication: boolean;
   // secondRow: string;
   // thirdRow: string;
+
+
 
   toInitialType(): IMedication | ITreatment {
     if (this.isMedication) {
@@ -71,7 +73,7 @@ export class MedDisplayDataType implements IMedDisplayDataType {
         treatmentGroup: this.firstRow,
         medication: this.secondRow,
         treatmentStartDate: moment(this.thirdRow, 'DD/MM/yyyy'),
-        treatmentEndDate: moment(this.fourthRow, 'DD/MM/YYYY'),
+        treatmentEndDate: this.fourthRow ? moment(this.fourthRow, 'DD/MM/YYYY') : null,
         administerer: this.fifthRow,
         id: this.id
       }
