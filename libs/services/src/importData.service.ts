@@ -46,6 +46,7 @@ export class MappingService {
         notes: value.notes,
         breed: value.breed,
         registered: this.convertBoolean(value.registered),
+        salePrice: value.sale_price || null
       });
     }
 

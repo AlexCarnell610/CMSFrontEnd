@@ -6,7 +6,11 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import {
+  FormControl,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { PageURLs } from '@cms-enums';
 import { Animal, IAnimal, IBull, IDobRange, isAnimal } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
@@ -48,6 +52,7 @@ export class AnimalListComponent implements OnInit, OnDestroy {
   public searchBarGroup: UntypedFormGroup = new UntypedFormGroup({});
   public animals$: Observable<Animal[]>;
   public searchedAnimals$: BehaviorSubject<Animal[]> = new BehaviorSubject([]);
+  public includeSoldAnimalsFormControl = new FormControl(false);
 
   private currentAnimal: Animal;
   private $currentAnimal: BehaviorSubject<Animal> = new BehaviorSubject(null);
@@ -63,7 +68,6 @@ export class AnimalListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.trackAnimalSelect();
     this.populateAnimals();
-
     this.setUpList();
     this.trackSearch();
   }
@@ -85,6 +89,10 @@ export class AnimalListComponent implements OnInit, OnDestroy {
   public selectAll(): void {
     this.multiSelectedAnimals = [...this.searchedAnimals$.getValue()];
     this.mutiAnimalsSelected.emit(this.multiSelectedAnimals);
+  }
+
+  public isSold(animal: Animal): boolean {
+    return isAnimal(animal) && !!animal.salePrice
   }
 
   public selectAnimal(animal: Animal) {
@@ -122,11 +130,7 @@ export class AnimalListComponent implements OnInit, OnDestroy {
 
   private populateAnimals() {
     if (this.page === PageURLs.Births) {
-      this.animals$ = this.store
-        .pipe(select(getDams))
-        .pipe(
-          map((animals) => animals.filter((animal) => this.notSold(animal)))
-        );
+      this.animals$ = this.store.pipe(select(getDams));
     } else if (this.page === PageURLs.Registration) {
       this.animals$ = this.store.pipe(select(getUnregisteredCalves));
     } else if (this.page === PageURLs.Animals) {
@@ -153,6 +157,18 @@ export class AnimalListComponent implements OnInit, OnDestroy {
     } else {
       this.animals$ = this.selectAnimals$;
     }
+
+    this.animals$ = combineLatest([this.animals$, this.includeSoldAnimalsFormControl.valueChanges.pipe(startWith(this.includeSoldAnimalsValue))]).pipe(
+      map(([animals, includeSold]) =>
+        animals.filter((animal) => {
+          return (
+            (isAnimal(animal) &&
+             ( !!animal.salePrice === includeSold || animal.salePrice === null)) ||
+            !isAnimal(animal)
+          );
+        })
+      )
+    );
   }
 
   private dateRangeFilters(
@@ -165,7 +181,7 @@ export class AnimalListComponent implements OnInit, OnDestroy {
         animal.birthDate.isBetween(dateRange.from, dateRange.to, 'day', '[]')
       );
     } else if (!filterDob) {
-      return animals.filter((animal) => 
+      return animals.filter((animal) =>
         animal.weightData.some((data) =>
           data.weightDate.isBetween(dateRange.from, dateRange.to, 'day', '[]')
         )
@@ -249,6 +265,9 @@ export class AnimalListComponent implements OnInit, OnDestroy {
   }
 
   private trackSearch() {
+    // this.animals$ = combineLatest([this.animals$, this.includeSoldAnimalsFormControl.valueChanges]).pipe(map(([animals, includeSold]) => {
+    //   return animals.filter(animal => (isAnimal(animal) && (!!animal.salePrice === includeSold)))
+    // }))
     this.subscriptions.add(
       this.animals$
         .pipe(takeWhile(() => !this.searched, true))
@@ -294,6 +313,10 @@ export class AnimalListComponent implements OnInit, OnDestroy {
 
   private get searchBarValChange() {
     return this.searchBarGroup.get('searchBar').valueChanges;
+  }
+
+  private get includeSoldAnimalsValue() {
+    return this.includeSoldAnimalsFormControl.value;
   }
 
   ngOnDestroy() {

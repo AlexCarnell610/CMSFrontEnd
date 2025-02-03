@@ -85,6 +85,31 @@
           </div>
         </div>
 
+        <div class="form-group mb-2" *ngIf="isSaleWeight">
+          <label for="salePrice">Enter sale price</label>
+          <div
+            class="input-group"
+            [ngClass]="{ 'was-validated': salePrice.dirty }"
+          >
+          <span class="input-group-text">£</span>
+            <input
+              formControlName="salePrice"
+              class="form-control"
+              type="number"
+              step="0.01"
+              name="salePrice"
+              required
+              min="20"
+              max="10000"
+            />
+            
+          
+            <div class="invalid-feedback">
+              <cms-form-errors [errors]="salePrice.errors" [minMaxUnits]="''"></cms-form-errors>
+            </div>
+          </div>
+        </div>
+
         <button
           class="btn btn-success me-3"
           (click)="saveChanges()"

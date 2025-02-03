@@ -30,6 +30,10 @@ import * as moment from 'moment';
 import { BehaviorSubject, Observable, zip } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
+interface AnimalPPK {
+  tagNumber: string;
+  value: string;
+}
 @Component({
   selector: 'cms-weight-analysis',
   templateUrl: './weight-analysis.component.html',
@@ -110,6 +114,32 @@ export class WeightAnalysisComponent implements OnInit {
     maintainAspectRatio: false,
     responsive: true,
   };
+  soldPencePerKiloData$: Observable<ChartConfiguration['data']>;
+  soldPencePerKiloOptions: ChartConfiguration['options'] = {
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        callbacks: {
+          label: (label) => `${label.label}: ${label.formattedValue} PPK`,
+          title: () => '',
+        },
+      },
+      title: {
+        display: true,
+        text: 'Sold Pence Per Kilo',
+        fullSize: true,
+        font: {
+          size: 16,
+        },
+      },
+    },
+  };
+
+  sortedPPK$: Observable<AnimalPPK[]>;
+  minPPK: Observable<AnimalPPK>;
+  averagePPK: Observable<string>;
 
   private selectedAnimals$: BehaviorSubject<Animal[]> = new BehaviorSubject<
     Animal[]
@@ -173,6 +203,68 @@ export class WeightAnalysisComponent implements OnInit {
       })
     );
 
+    this.soldPencePerKiloData$ = this.selectedAnimals$.pipe(
+      map((selectedAnimals) => {
+        const soldAnimals = selectedAnimals?.filter(
+          (animal) => isAnimal(animal) && !!animal.salePrice
+        );
+
+        if (isAnimalArray(soldAnimals)) {
+          const labels = soldAnimals.map((animal) => animal.tagNumber);
+          const ppk = soldAnimals.map((animal) => this.getPPK(animal));
+
+          return {
+            datasets: [
+              {
+                data: ppk,
+              },
+            ],
+            labels,
+          };
+        }
+      })
+    );
+
+    const soldAnimalSelected$ = this.selectedAnimals$.pipe(
+      filter(
+        (animals) =>
+          animals.length > 0 &&
+          animals.some((animal) => isAnimal(animal) && !!animal.salePrice)
+      ),
+      map((animals) =>
+        animals.filter((animal) => isAnimal(animal) && !!animal.salePrice)
+      )
+    );
+
+    this.sortedPPK$ = soldAnimalSelected$.pipe(
+      map((animals: IAnimal[]) => {
+        const sortedPPK = animals.sort((a, b) => {
+          if (isAnimal(a) && isAnimal(b)) {
+            this.getPPK(b) - this.getPPK(a);
+          } else {
+            return -1;
+          }
+        });
+        return sortedPPK.map((animal) => {
+          return {
+            tagNumber: animal.tagNumber,
+            value: this.getPPK(animal).toFixed(2),
+          };
+        });
+      })
+    );
+    this.averagePPK = soldAnimalSelected$.pipe(
+      map((animals) => {
+        const ppks = animals.map((animal) =>
+          isAnimal(animal) ? this.getPPK(animal) : null
+        );
+        return (
+          ppks.reduce((prev, curr) => (!!curr ? prev + curr : prev)) /
+          ppks.length
+        ).toFixed(2);
+      })
+    );
+
     //sort based on highest total weigh, totasl weight gain avg daily weight gain
     const animals$ = this.store.select(selectAnimals).pipe(
       filter((animals) => animals.length > 0),
@@ -193,6 +285,17 @@ export class WeightAnalysisComponent implements OnInit {
       startDate: new UntypedFormControl(null, Validators.required),
       endDate: new UntypedFormControl(null, Validators.required),
     });
+  }
+
+  private getPPK(animal: IAnimal): number {
+    return (
+      animal.weightData.find((weight) => weight.isSaleWeight).weight /
+      animal.salePrice
+    );
+  }
+
+  getMax(ppks: AnimalPPK[]): AnimalPPK {
+    return ppks.length > 0 ? ppks[ppks.length - 1] : null;
   }
 
   createLabels(animals: IAnimal[]): number[] {
@@ -330,14 +433,17 @@ export class WeightAnalysisComponent implements OnInit {
 
   private toMoment(date: NgbDate): moment.Moment | null {
     return date
-      ? moment().year(date.year).month(date.month -1).date(date.day)
+      ? moment()
+          .year(date.year)
+          .month(date.month - 1)
+          .date(date.day)
       : undefined;
   }
 
   private toNgbDateStruct(date: moment.Moment): NgbDateStruct {
     return {
       day: date.date(),
-      month: date.month() +1,
+      month: date.month() + 1,
       year: date.year(),
     };
   }

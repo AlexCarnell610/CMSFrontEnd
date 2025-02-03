@@ -21,6 +21,7 @@ export interface BaseAnimal {
   birthDate: moment.Moment;
   managementTag: string;
   gender: Gender;
+  salePrice?: number
 }
 
 export interface Dam extends BaseAnimal {

@@ -45,11 +45,6 @@ export class CalvingStatsModalComponent implements OnInit, AfterViewInit {
     this.trackEaseOfCalving();
     this.trackIsAlive();
     this.trackNotesChange();
-
-this.drinkAssistance.valueChanges.subscribe(val => {
-  console.warn("Drink Assistance", val);
-  
-})
   }
 
   ngAfterViewInit() {
@@ -206,9 +201,7 @@ this.drinkAssistance.valueChanges.subscribe(val => {
 
   private trackIsAlive() {
     this.subs.add(
-      this.isAlive.valueChanges.subscribe((val) => {
-        console.warn("IS ALIVE CLICKED", val);
-        
+      this.isAlive.valueChanges.subscribe((val) => {        
         if (this.alive) {
           this.gettingUp.enable();
           this.drinkAssistance.enable();

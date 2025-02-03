@@ -106,6 +106,15 @@
         >
       </span>
     </li>
+    <li class="list-group-item" *ngIf="selectedAnimal.salePrice">
+      <strong>Sold - </strong>
+      <ul *ngIf="saleWeight$ | async as saleWeight">
+        <li>Sale date - {{saleWeight.weightDate | date : "dd MMM yyyy"}}</li>
+        <li>Sale weight - {{saleWeight.weight}}Kg</li>
+        <li>Sale amount - £{{selectedAnimal.salePrice}}</li>
+        <li>Pence Per Kilo - {{(selectedAnimal.salePrice / saleWeight.weight) | number : '1.2-2'}}ppk</li>
+      </ul>
+    </li>
     <li class="list-group-item" *ngIf="$sire | async as sire">
       <strong>Sire - </strong
       >{{ sire.name !== "null" ? sire.name : "No sire assigned" }}

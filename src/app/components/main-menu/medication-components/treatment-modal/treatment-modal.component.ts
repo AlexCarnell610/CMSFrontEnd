@@ -62,10 +62,6 @@ export class TreatmentModalComponent implements OnInit, AfterViewInit {
       this.inDateMedications$,
       this.outOfDateMedications$,
     ]).pipe(map(([inDateMeds, expiredMeds]) => inDateMeds.concat(expiredMeds)));
-    this.medicationControl.valueChanges.subscribe(val => {
-      console.warn("trt modal com",val);
-      
-    })
   }
 
   ngAfterViewInit(): void {

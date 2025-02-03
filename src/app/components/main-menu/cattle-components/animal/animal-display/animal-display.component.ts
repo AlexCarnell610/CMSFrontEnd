@@ -7,7 +7,7 @@ import {
   Output,
 } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { IAnimal, IBull, UNKNOWN_DAM_TAG } from '@cms-interfaces';
+import { AnimalWeight, IAnimal, IBull, UNKNOWN_DAM_TAG } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { getAnimalByTag } from '@cms-ngrx/animal';
 import { selectBullByTag } from '@cms-ngrx/bull';
@@ -37,9 +37,11 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
   public hasChangedNotes = false;
   public notesGroup: UntypedFormGroup = new UntypedFormGroup({});
   public saving = false;
+  public saleWeight$: Observable<AnimalWeight>
   private subscriptions: Subscription = new Subscription();
   private animalTagNumber: string = null;
   private notes: string = null;
+
 
   constructor(
     private readonly store: Store<RootState>,
@@ -54,6 +56,8 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
     this.trackSire();
     this.trackAnimalChanges();
     this.trackNotesChanges();
+
+    this.saleWeight$ = this.$selectedAnimal.pipe(map(animal => animal.weightData.find(weight => weight.isSaleWeight)))
   }
 
   public goToDam(animal: IAnimal) {
@@ -161,6 +165,8 @@ export class AnimalDisplayComponent implements OnInit, OnDestroy {
       })
     );
   }
+
+
 
   private notesControl() {
     return this.notesGroup.get('notes');
