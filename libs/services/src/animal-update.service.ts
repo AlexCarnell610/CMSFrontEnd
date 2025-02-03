@@ -25,7 +25,7 @@ export class AnimalUpdateService {
     weightUpdate: any,
     animal: IAnimal
   ): Promise<boolean> {
-    return new Promise((resolve) => {
+    return new Promise((resolve) => {      
       this.httpService.updateWeight(weightId, weightUpdate).subscribe((res) => {
         this.store.dispatch(
           new UpdateAnimalWeight({
@@ -67,7 +67,7 @@ export class AnimalUpdateService {
     });
   }
 
-  public updateAnimal(tagNumber: string, animal): Promise<boolean> {
+  public updateAnimal(tagNumber: string, animal): Promise<boolean> {    
     return new Promise((resolve) => {
       this.httpService.updateAnimal(tagNumber, animal).subscribe((res) => {
         this.store.dispatch(

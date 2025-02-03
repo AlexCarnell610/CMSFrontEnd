@@ -12,6 +12,12 @@
 >
   Select All
 </button>
+<div class="form-check">
+  <input [formControl]="includeSoldAnimalsFormControl" class="form-check-input" type="checkbox" value="" id="includeSoldAnimals">
+  <label class="form-check-label" for="includeSoldAnimals">
+    Display Sold Animals
+  </label>
+</div>
 <ul
   class="list-group cms-list"
   id="animalList"
@@ -52,6 +58,9 @@
       <li class="list-group" *ngIf="animal.managementTag">
         {{ animal.managementTag }}
       </li>
+      <li class="list-group" *ngIf="isSold(animal)" >
+        <img class="sold-tag" src="assets/soldTag.svg" alt="SoldTag" />
+      </li>
     </ul>
 
     <span
@@ -68,6 +77,7 @@
       >{{ page === "registration" ? "" : "Add" }} {{ pillButtonText }}</span
     >
     <span *ngIf="page === 'registration'"></span>
+    
   </button>
 </ul>
 <cms-warning-display></cms-warning-display>

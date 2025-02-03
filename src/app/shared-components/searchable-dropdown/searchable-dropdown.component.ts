@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { IMedication } from '@cms-interfaces';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
@@ -11,7 +11,7 @@ import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators'
   templateUrl: './searchable-dropdown.component.html',
   styleUrls: ['./searchable-dropdown.component.scss']
 })
-export class SearchableDropdownComponent implements OnInit {
+export class SearchableDropdownComponent {
 
   @Input() isRequired = true
   @Input() inputFormControl: FormControl
@@ -24,10 +24,7 @@ export class SearchableDropdownComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
-    this.inputFormControl.valueChanges.subscribe(val => {console.warn(val);
-    })
-  }
+  
 
   get dataSorted(): {medication: IMedication, expired: string}[]{
     return this.data.map(datum => {
@@ -37,7 +34,6 @@ export class SearchableDropdownComponent implements OnInit {
 
   select($event){
     this.inputFormControl.setValue($event.item.medication)
-    console.warn($event)
   }
 
   search: OperatorFunction<string, readonly IMedication[]> = (text$: Observable<string>) => {

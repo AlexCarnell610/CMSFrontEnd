@@ -12,4 +12,5 @@ export class FormErrorsComponent {
   @Input() isRadio: boolean = false;
   @Input() isManagementTag=false
   @Input() bulkWeightEdit=false
+  @Input() minMaxUnits = "Kg"
 }

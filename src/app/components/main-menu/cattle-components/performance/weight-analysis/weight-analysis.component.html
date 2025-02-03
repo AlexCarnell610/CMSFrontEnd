@@ -157,7 +157,7 @@
       ></cms-animal-list>
     </div>
     <div class="col-md">
-      <div class="h-50">
+      <div class="row">
         <canvas
           id="avgDailyWeightGain"
           baseChart
@@ -168,7 +168,7 @@
         >
         </canvas>
       </div>
-      <div class="h-50">
+      <div class="row">
         <canvas
           id="actualDailyWeightGain"
           baseChart
@@ -178,6 +178,33 @@
           [type]="lineChartType"
         >
         </canvas>
+      </div>
+      <div class="row" *ngIf="sortedPPK$ | async as sortedPPK">
+        <div class="card">
+          <div class="card-body">
+            <strong>MaxPPK:</strong> {{ getMax(sortedPPK)?.tagNumber }} -
+            {{ getMax(sortedPPK)?.value }} £/k
+          </div>
+          <div class="card-body">
+            <strong>MinPPK: </strong>{{ sortedPPK[0].tagNumber }} -
+            {{ sortedPPK[0].value }} £/k
+          </div>
+          <div class="card-body">
+              <strong>AveragePPK:</strong> {{ averagePPK | async }}
+            </div>
+        </div>
+        
+        
+        
+        
+        <canvas
+          id="soldPencePerKilo"
+          baseChart
+          class="chart"
+          [data]="soldPencePerKiloData$ | async"
+          [type]="barChartType"
+          [options]="soldPencePerKiloOptions"
+        ></canvas>
       </div>
     </div>
   </div>
