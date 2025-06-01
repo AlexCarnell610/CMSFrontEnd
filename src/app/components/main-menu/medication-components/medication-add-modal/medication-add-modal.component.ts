@@ -1,22 +1,18 @@
 import { formatDate } from '@angular/common';
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Input,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FORM_DATE_FORMAT, Modals } from '@cms-enums';
 import { IMedication } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { addMedication, updateMedication } from '@cms-ngrx/medication';
+import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
+import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { BarcodeFormat } from '@zxing/library';
 import { ZXingScannerComponent } from '@zxing/ngx-scanner';
 import { NgxSmartModalService } from 'ngx-smart-modal';
-import { Subscription } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
+import { MedicationActionTypes } from '@cms-ngrx/medication';
 
 @Component({
   selector: 'cms-medication-add-modal',
@@ -27,10 +23,12 @@ export class MedicationAddModalComponent implements OnInit, AfterViewInit {
   modalIdentifier = Modals.MedicationAddModal;
   isEdit = false;
   medicationToEdit: IMedication = null;
+  @ViewChild('saveConfirm') saveConfirm: NgbPopover;
   @ViewChild('scanner', { static: false }) scanner: ZXingScannerComponent;
   mediaStreamLoaded = false;
   mediaStream: MediaStream;
   allowedFormats = [BarcodeFormat.DATA_MATRIX];
+  showScanner = true;
   medicationForm = new FormGroup<{
     medicationName: FormControl<string>;
     batchNumber: FormControl<string>;
@@ -46,7 +44,8 @@ export class MedicationAddModalComponent implements OnInit, AfterViewInit {
   private readonly subs = new Subscription();
   constructor(
     private readonly modalService: NgxSmartModalService,
-    private readonly store: Store<RootState>
+    private readonly store: Store<RootState>,
+    private readonly actions: Actions
   ) {}
 
   ngOnInit(): void {}
@@ -58,13 +57,13 @@ export class MedicationAddModalComponent implements OnInit, AfterViewInit {
       modal.onAnyCloseEventFinished.subscribe(() => {
         this.medicationForm.reset();
       })
-    )
+    );
     this.subs
       .add(
         modal.onOpen.subscribe(() => {
           // not working first time
           this.isEdit = (modal.getData() as any).isEdit;
-          
+
           if (this.isEdit) {
             this.medicationToEdit = (modal.getData() as any).medicationToEdit;
             this.medicationForm.patchValue({
@@ -75,20 +74,7 @@ export class MedicationAddModalComponent implements OnInit, AfterViewInit {
               withdrawalPeriod: this.medicationToEdit.withdrawalPeriod,
             });
           }
-
-          this.scanner.restart();
-          this.scanner.enable = true;
-
-          this.scanner.askForPermission().then((permission) => {
-            if (permission) {
-              this.scanner.updateVideoInputDevices().then((devices) => {
-                this.scanner.device =
-                  devices.find((device) =>
-                    device.label.includes('facing back')
-                  ) || devices[0];
-              });
-            }
-          });
+          this.restartScanner();
         })
       )
       .add(
@@ -99,6 +85,21 @@ export class MedicationAddModalComponent implements OnInit, AfterViewInit {
         })
       )
       .add(modal.onOpenFinished.subscribe(() => {}));
+  }
+
+  restartScanner(): void {
+    this.scanner.restart();
+    this.scanner.enable = true;
+
+    this.scanner.askForPermission().then((permission) => {
+      if (permission) {
+        this.scanner.updateVideoInputDevices().then((devices) => {
+          this.scanner.device =
+            devices.find((device) => device.label.includes('facing back')) ||
+            devices[0];
+        });
+      }
+    });
   }
 
   openCamera(): void {
@@ -132,6 +133,13 @@ export class MedicationAddModalComponent implements OnInit, AfterViewInit {
       const withdrawalPeriod = this.withdrawalPeriodControl.value;
 
       if (!this.isEdit) {
+        this.subs.add(
+          this.actions
+            .pipe(ofType(MedicationActionTypes.LoadMedicationSuccess))
+            .subscribe(() => {
+              this.handlePopover();
+            })
+        );
         this.store.dispatch(
           addMedication({
             medication: {
@@ -143,6 +151,13 @@ export class MedicationAddModalComponent implements OnInit, AfterViewInit {
           })
         );
       } else {
+        this.subs.add(
+          this.actions
+            .pipe(ofType(MedicationActionTypes.UpdateMedicationSuccess))
+            .subscribe(() => {
+              this.handlePopover();
+            })
+        );
         this.store.dispatch(
           updateMedication({
             medication: {
@@ -152,6 +167,28 @@ export class MedicationAddModalComponent implements OnInit, AfterViewInit {
           })
         );
       }
+    }
+  }
+
+  private handlePopover() {
+    this.saveConfirm.open();
+    this.subs.add(
+      timer(1500).subscribe(() => {
+        this.saveConfirm.close();
+        this.clear()
+      })
+    );
+  }
+
+  toggleCamera(): void {
+    if (this.showScanner) {
+      this.scanner.scanStop();
+      this.showScanner = false;
+    } else {
+      this.showScanner = true;
+      setTimeout(() => {
+        this.restartScanner();
+      }, 300);
     }
   }
 

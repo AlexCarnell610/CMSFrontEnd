@@ -1,8 +1,8 @@
 import { IMedication } from '@cms-interfaces';
+import { sortByCreatedDate } from '@cms-ngrx';
 import { EntityAdapter, EntityState, createEntityAdapter } from '@ngrx/entity';
-import { Action, createFeatureSelector, createReducer, on } from '@ngrx/store';
+import { createFeatureSelector, createReducer, on } from '@ngrx/store';
 import {
-  addMedication,
   initialLoadMedicationsSuccess,
   loadMedicationSuccess,
   updateMedicationSuccess,
@@ -15,6 +15,7 @@ export interface MedicationState extends EntityState<IMedication> {}
 export const adapter: EntityAdapter<IMedication> =
   createEntityAdapter<IMedication>({
     selectId: (medication) => medication.id,
+    sortComparer: sortByCreatedDate
   });
 
 export const initialMedicationState: MedicationState = adapter.getInitialState(

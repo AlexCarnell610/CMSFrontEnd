@@ -8,6 +8,7 @@ export interface IMedication {
   withdrawalPeriod: number;
   expiryDate: moment.Moment;
   batchNumber: string;
+  createdAt?:moment.Moment
 }
 
 export interface ITreatment {
@@ -46,7 +47,7 @@ export function isMedicationArray(data: any): data is IMedication[] {
 }
 
 export class MedDisplayDataType implements IMedDisplayDataType {
-  constructor(public firstRow: string, public secondRow: string, public thirdRow: string, public fourthRow: string, public fifthRow: string,  public isMedication: boolean, public id: string, public treatmentMedicationName?: Observable<string>, public treatmentWithdrawalEnd?: Observable<string>) {
+  constructor(public firstRow: string, public secondRow: string, public thirdRow: string, public fourthRow: string, public fifthRow: string,  public isMedication: boolean, public id: string, public treatmentMedicationName?: Observable<string>, public treatmentWithdrawalEnd?: Observable<string>, public treatmentMedicationBatchNum?: Observable<string>) {
   
   }
 

@@ -13,11 +13,17 @@ import {
   selectInDateMedications,
   selectOutOfDateMedications,
 } from '@cms-ngrx/medication';
-import { addTreatment, updateTreatment } from '@cms-ngrx/treatment';
+import {
+  addTreatment,
+  TreatmentActionTypes,
+  updateTreatment,
+} from '@cms-ngrx/treatment';
+import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
+import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import * as moment from 'moment';
 import { NgxSmartModalService } from 'ngx-smart-modal';
-import { Observable, Subscription, combineLatest, merge } from 'rxjs';
+import { Observable, Subscription, combineLatest, merge, timer } from 'rxjs';
 import { map, withLatestFrom } from 'rxjs/operators';
 
 @Component({
@@ -26,6 +32,7 @@ import { map, withLatestFrom } from 'rxjs/operators';
   styleUrls: ['./treatment-modal.component.scss'],
 })
 export class TreatmentModalComponent implements OnInit, AfterViewInit {
+  @ViewChild('saveConfirm') saveConfirm: NgbPopover;
   inDateMedications$: Observable<IMedication[]>;
   outOfDateMedications$: Observable<IMedication[]>;
 
@@ -51,7 +58,8 @@ export class TreatmentModalComponent implements OnInit, AfterViewInit {
 
   constructor(
     private readonly modalService: NgxSmartModalService,
-    private readonly store: Store<RootState>
+    private readonly store: Store<RootState>,
+    private readonly actions: Actions
   ) {}
 
   ngOnInit(): void {
@@ -69,9 +77,9 @@ export class TreatmentModalComponent implements OnInit, AfterViewInit {
 
     this.subs.add(
       modal.onAnyCloseEventFinished.subscribe(() => {
-        this.treatmentForm.reset()
+        this.treatmentForm.reset();
       })
-    )
+    );
     this.subs
       .add(
         modal.onOpen
@@ -107,6 +115,11 @@ export class TreatmentModalComponent implements OnInit, AfterViewInit {
     this.medicationControl.markAsDirty();
     if (this.treatmentForm.valid) {
       if (!this.isEdit) {
+        this.subs.add(
+          this.actions
+            .pipe(ofType(TreatmentActionTypes.LoadTreatmentSuccess))
+            .subscribe(() => this.handlePopover())
+        );
         this.store.dispatch(
           addTreatment({
             treatment: {
@@ -121,6 +134,11 @@ export class TreatmentModalComponent implements OnInit, AfterViewInit {
           })
         );
       } else {
+        this.subs.add(
+          this.actions
+            .pipe(ofType(TreatmentActionTypes.UpdateTreatmentSuccess))
+            .subscribe(() => this.handlePopover())
+        );
         this.store.dispatch(
           updateTreatment({
             treatment: {
@@ -139,6 +157,15 @@ export class TreatmentModalComponent implements OnInit, AfterViewInit {
         );
       }
     }
+  }
+
+  private handlePopover() {
+    this.saveConfirm.open();
+    this.subs.add(
+      timer(1500).subscribe(() => {
+        this.saveConfirm.close();
+      })
+    );
   }
 
   getCSSForTreatmentEndDate() {
