@@ -108,7 +108,8 @@ export class MappingService {
       expiryDate: this.convertDate(medication.expiry_date),
       id: medication.id,
       name: medication.name,
-      withdrawalPeriod: medication.withdrawal_period
+      withdrawalPeriod: medication.withdrawal_period,
+      createdAt: this.convertDate(medication.created_at)
     }
   }
 

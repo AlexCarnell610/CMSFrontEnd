@@ -13,6 +13,12 @@ export const selectMedicationName = (medicationID) =>
     (medication) => medication.name
   );
 
+  export const selectMedicationBatchNum = (medicationID) =>
+    createSelector(
+      selectMedication(medicationID),
+      (medication) => medication.batchNumber
+    );
+
 export const selectMedication = (medicationID) =>
   createSelector(selectMedications, (medications) =>
     medications.find((medication) => medication.id === medicationID)
@@ -40,7 +46,7 @@ export const selectOutOfDateMedications = createSelector(
       .map((medication) => {
         return {
           ...medication,
-          name: medication.name + ' EXPIRED',
+          name: medication.name,
         };
       })
 );

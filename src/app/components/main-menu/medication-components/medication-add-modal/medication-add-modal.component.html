@@ -74,19 +74,41 @@
       </div>
     </div>
     <div class="mt-2">
-
-      <button class="btn btn-success me-2" (click)="save()">Save</button>
+      <button
+        class="btn btn-success me-2"
+        type="button"
+        id="save-button"
+        ngbPopover="Medication Saved!"
+        #saveConfirm="ngbPopover"
+        placement="bottom"
+        popoverClass="update-success"
+        triggers="manual"
+        (click)="save()"
+      >
+        Save
+      </button>
       <button class="btn btn-secondary me-2" (click)="clear()">Clear</button>
-      <button class="btn btn-danger" (click)="close()">Close</button>
+      <button class="btn btn-danger me-2" (click)="close()">Close</button>
+      <button class="btn btn-info" (click)="toggleCamera()">
+        Toggle Camera
+      </button>
     </div>
   </form>
-  <zxing-scanner
-    #scanner
-    [tryHarder]="true"
-    (scanSuccess)="codeFound($event)"
-    (scanComplete)="scanned($event)"
-    [formats]="allowedFormats"
-    [autostart]="false"
-
-  ></zxing-scanner>
+  <!-- <div id="scanner-div"> -->
+  <div class="" style="height: 20vh; position: relative">
+    <svg width="100%" height="100%" viewBox="0 0 10 10">
+      <line class="point" x1="0" x2="10" y1="5" y2="5" />
+      <line class="point" x1="5" x2="5" y1="1" y2="9" />
+    </svg>
+    <zxing-scanner
+      *ngIf="showScanner"
+      #scanner
+      [tryHarder]="true"
+      (scanSuccess)="codeFound($event)"
+      (scanComplete)="scanned($event)"
+      [formats]="allowedFormats"
+      [autostart]="false"
+    ></zxing-scanner>
+    <!-- </div> -->
+  </div>
 </ngx-smart-modal>

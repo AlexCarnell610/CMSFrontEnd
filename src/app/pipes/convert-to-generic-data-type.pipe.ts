@@ -9,7 +9,7 @@ import {
   isTreatmentArray,
 } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
-import { selectMedicationName, selectMedicationWithdrawal } from '@cms-ngrx/medication';
+import { selectMedication, selectMedicationBatchNum, selectMedicationName, selectMedicationWithdrawal } from '@cms-ngrx/medication';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -55,7 +55,8 @@ export class ConvertToGenericDataTypePipe implements PipeTransform {
             false,
             value.id,
             this.store.select(selectMedicationName(value.medication)),
-            this.getWithDrawalEndDate(value)
+            this.getWithDrawalEndDate(value),
+            this.store.select(selectMedicationBatchNum(value.medication))
           );
         });
       }

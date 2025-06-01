@@ -65,6 +65,7 @@
           <tr>
             <th scope="col">Treatment Group</th>
             <th scope="col">Medication</th>
+            <th scope="col">Batch Number</th>
             <th scope="col">Treatment Date</th>
             <th scope="col">Withdrawal Period End</th>
             <th scope="col">Administerer</th>
@@ -74,6 +75,7 @@
           <tr *ngFor="let treatment of treatments | convertToGenericDataType">
             <td>{{ treatment.firstRow }}</td>
             <td>{{ treatment.treatmentMedicationName | async }}</td>
+            <td>{{treatment.treatmentMedicationBatchNum | async}}</td>
             <td>
               {{
                 treatment.thirdRow && treatment.fourthRow

@@ -14,6 +14,14 @@
   (typeaheadOnSelect)="select($event)"
 /> -->
 
+<ng-template #resultTemplate let-r="result" let-t="term">
+  <ngb-highlight [result]="r.name + ' ' + r.batchNumber" [term]="t"></ngb-highlight>
+  <br>
+  <span style="color: #ffbf00; font-weight: 500;">
+    {{isExpired(r) ? "Expired" : ''}}
+  </span>
+</ng-template>
+
 <input
   id="typeahead-focus"
   type="text"
@@ -23,6 +31,7 @@
   (focus)="focus$.next($any($event).target.value)"
   (click)="click$.next($any($event).target.value)"
   [editable]="false"
+  [resultTemplate]="resultTemplate"
   [resultFormatter]="formatter"
   [inputFormatter]="formatter"
   #instance="ngbTypeahead"

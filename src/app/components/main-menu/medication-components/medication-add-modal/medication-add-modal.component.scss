@@ -8,3 +8,27 @@
     width: 100%;
     display: block;
 }
+
+#scanner-div {
+    
+    background-image: linear-gradient(#ff0000, #ff0000);
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+:host zxing-scanner::ng-deep video {
+    max-height: 20vh;
+    object-fit: contain;
+   
+  }
+
+  svg {
+    position: absolute;
+    background-color: transparent;
+  }
+  
+  .point {
+    stroke: red;
+    stroke-width: 0.1;
+  }

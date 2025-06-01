@@ -1,16 +1,12 @@
 import { ITreatment } from '@cms-interfaces';
+import { sortByCreatedDate } from '@cms-ngrx';
 import { EntityAdapter, EntityState, createEntityAdapter } from '@ngrx/entity';
-import { Action, createFeatureSelector, createReducer, on } from '@ngrx/store';
+import { createFeatureSelector, createReducer, on } from '@ngrx/store';
 import {
-  addTreatment,
   initialLoadTreatmentsSuccess,
   loadTreatmentSuccess,
   updateTreatmentSuccess,
 } from './treatment.actions';
-
-function sortByCreatedDate(a: ITreatment, b: ITreatment): number {
-  return a.createdAt.isAfter(b.createdAt) ? -1 : b.createdAt.isAfter(a.createdAt) ? 1 : 0
-}
 
 export const treatmentFeatureKey = 'treatment';
 
@@ -19,7 +15,7 @@ export interface TreatmentState extends EntityState<ITreatment> {}
 export const adapter: EntityAdapter<ITreatment> =
   createEntityAdapter<ITreatment>({
     selectId: (treatment) => treatment.id,
-    sortComparer:sortByCreatedDate
+    sortComparer: sortByCreatedDate,
   });
 
 export const initialTreatmentState: TreatmentState = adapter.getInitialState(
