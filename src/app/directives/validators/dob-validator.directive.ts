@@ -1,6 +1,6 @@
 import { Directive } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, ValidationErrors, Validator } from '@angular/forms';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Directive({
   selector: '[cmsDobValidator]',

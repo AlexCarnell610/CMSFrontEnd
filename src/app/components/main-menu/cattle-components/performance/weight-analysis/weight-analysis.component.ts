@@ -26,7 +26,7 @@ import {
 } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
-import * as moment from 'moment';
+import moment from 'moment';
 import { BehaviorSubject, Observable, zip } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 

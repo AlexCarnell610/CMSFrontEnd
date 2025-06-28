@@ -21,7 +21,7 @@ import { NgbAlertConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { PusherChannels } from 'libs/enums/src/lib/pusher-channels';
 import { PusherService } from 'libs/services/src/pusher.service';
-import * as Moment from 'moment';
+import moment from 'moment';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { combineLatest, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -48,7 +48,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.ngbAlertConfig.dismissible = false;
   }
   ngOnInit() {
-    Moment.locale('en-gb');
+    moment.locale('en-gb');
     this.subs.add(
       this.auth.isAuthenticated$.subscribe((authed) => {
         if (authed) {

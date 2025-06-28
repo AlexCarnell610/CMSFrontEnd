@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -27,54 +27,46 @@ import { LogoutComponent } from './components/logout/logout.component';
 import { TreatmentEffects } from '@cms-ngrx/treatment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    LoginComponent,
-    LogoutComponent,
-    FooterComponent,
-    LoadingModalComponent,
- ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    StoreModule.forRoot(reducers, {
-      runtimeChecks: {
-        strictStateImmutability: true,
-        strictActionImmutability: true,
-      },
-    }),
-    EffectsModule.forRoot([AnimalEffects, BullEffects, MedicationEffects, TreatmentEffects]),
-    environment.production ? [] : StoreDevtoolsModule.instrument({connectInZone: true}),
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    CommonModule,
-    NgxSmartModalModule.forRoot(),
-    NgbTooltipModule,
-    NgbDropdownModule,
-    NgbDatepickerModule,
-    AuthModule.forRoot({
-
-      ...environment.auth,
-      httpInterceptor: {
-        allowedList: ['/api/*', '/devApi/*'],
-      },
-    }),
-    
-  ],
-  providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthHttpInterceptor,
-      multi: true,
-    },
-    {
-      provide: 'locationObj',
-      useValue: location,
-    },
-  ],
-  bootstrap: [AppComponent],
-})
+@NgModule({ declarations: [
+        AppComponent,
+        LoginComponent,
+        LogoutComponent,
+        FooterComponent,
+        LoadingModalComponent,
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        StoreModule.forRoot(reducers, {
+            runtimeChecks: {
+                strictStateImmutability: true,
+                strictActionImmutability: true,
+            },
+        }),
+        EffectsModule.forRoot([AnimalEffects, BullEffects, MedicationEffects, TreatmentEffects]),
+        environment.production ? [] : StoreDevtoolsModule.instrument({ connectInZone: true }),
+        FormsModule,
+        ReactiveFormsModule,
+        CommonModule,
+        NgxSmartModalModule.forRoot(),
+        NgbTooltipModule,
+        NgbDropdownModule,
+        NgbDatepickerModule,
+        AuthModule.forRoot({
+            ...environment.auth,
+            httpInterceptor: {
+                allowedList: ['/api/*', '/devApi/*'],
+            },
+        })], providers: [
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthHttpInterceptor,
+            multi: true,
+        },
+        {
+            provide: 'locationObj',
+            useValue: location,
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 export class AppModule {}

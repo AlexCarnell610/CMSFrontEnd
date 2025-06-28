@@ -4,7 +4,7 @@ import { AssistanceReason, CalvingAssistance, Modals } from '@cms-enums';
 import { IAnimal, bull, CalvingStat } from '@cms-interfaces';
 import { mockAnimal, mockCalvingStat } from '@cms-testing-data';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
-import * as moment from 'moment';
+import moment from 'moment';
 import { of } from 'rxjs';
 import { BirthModalComponent } from './birth-modal.component';
 

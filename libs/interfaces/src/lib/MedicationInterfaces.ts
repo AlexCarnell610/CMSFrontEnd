@@ -1,5 +1,5 @@
 import { FORM_DATE_FORMAT } from '@cms-enums';
-import * as moment from 'moment';
+import moment from 'moment';
 import { Observable } from 'rxjs';
 
 export interface IMedication {

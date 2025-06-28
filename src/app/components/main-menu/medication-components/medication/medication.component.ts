@@ -8,7 +8,7 @@ import { selectMedications } from '@cms-ngrx/medication';
 import { selectTreatments } from '@cms-ngrx/treatment';
 import { LoadingPaneService } from '@cms-services';
 import { Store } from '@ngrx/store';
-import * as moment from 'moment';
+import moment from 'moment';
 import { NgxSmartModalComponent, NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';

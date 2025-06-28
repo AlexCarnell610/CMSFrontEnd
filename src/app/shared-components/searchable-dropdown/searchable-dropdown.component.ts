@@ -2,7 +2,7 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { IMedication } from '@cms-interfaces';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
-import * as moment from 'moment';
+import moment from 'moment';
 import { OperatorFunction, Observable, merge, Subject } from 'rxjs';
 import {
   debounceTime,

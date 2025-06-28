@@ -1,7 +1,7 @@
 import { Modals, PageURLs } from '@cms-enums';
 import { IAnimal } from '@cms-interfaces';
 import { convertedAnimal } from '@cms-testing-data';
-import * as moment from 'moment';
+import moment from 'moment';
 import { of } from 'rxjs';
 import { MainMenuComponent } from './main-menu.component';
 

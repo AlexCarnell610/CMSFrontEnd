@@ -1,6 +1,6 @@
 import { AssistanceReason, CalvingAssistance, Gender } from '@cms-enums';
 import { IAnimal, CalvingStat } from '@cms-interfaces';
-import * as moment from 'moment';
+import moment from 'moment';
 
 export const mockCalvingStat: CalvingStat = {
   alive: true,

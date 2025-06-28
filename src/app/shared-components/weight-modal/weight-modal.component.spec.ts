@@ -3,7 +3,7 @@ import { Modals } from '@cms-enums';
 import { AnimalWeight } from '@cms-interfaces';
 import { convertedAnimal } from '@cms-testing-data';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
-import * as moment from 'moment';
+import moment from 'moment';
 import { of, Subject } from 'rxjs';
 import { EditWeightModalComponent } from './weight-modal.component';
 

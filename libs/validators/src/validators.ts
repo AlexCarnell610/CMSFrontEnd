@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { IAnimal, AnimalWeight, Animal } from '@cms-interfaces';
 import { AnimalBreedService } from '@cms-services';
-import * as moment from 'moment';
+import moment from 'moment';
 
 export function breedValidator(breedService: AnimalBreedService): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {

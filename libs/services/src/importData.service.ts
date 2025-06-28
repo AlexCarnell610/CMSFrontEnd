@@ -11,7 +11,7 @@ import {
   IMedication,
   ITreatment,
 } from '@cms-interfaces';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Injectable({
   providedIn: 'root',

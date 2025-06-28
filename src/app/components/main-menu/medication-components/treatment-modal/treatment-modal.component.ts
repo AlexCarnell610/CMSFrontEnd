@@ -21,7 +21,7 @@ import {
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import * as moment from 'moment';
+import moment from 'moment';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { Observable, Subscription, combineLatest, merge, timer } from 'rxjs';
 import { map, withLatestFrom } from 'rxjs/operators';
