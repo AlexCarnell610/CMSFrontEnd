@@ -76,21 +76,21 @@
 				},
 				"serve": {
 					"builder": "@angular-devkit/build-angular:dev-server",
-					"options": {
-						"browserTarget": "CMSFrontEnd:build",
-						"proxyConfig": "src/proxy.conf.json"
+          "options": {
+            "proxyConfig": "src/proxy.conf.json",
+            "buildTarget": "CMSFrontEnd:build"
 					},
 					"configurations": {
-						"production": {
-							"browserTarget": "CMSFrontEnd:build:production",
-							"proxyConfig": "src/prod.proxy.conf.json"
+            "production": {
+              "proxyConfig": "src/prod.proxy.conf.json",
+              "buildTarget": "CMSFrontEnd:build:production"
 						}
 					}
 				},
 				"extract-i18n": {
 					"builder": "@angular-devkit/build-angular:extract-i18n",
-					"options": {
-						"browserTarget": "CMSFrontEnd:build"
+          "options": {
+            "buildTarget": "CMSFrontEnd:build"
 					}
 				},
 				"test": {
