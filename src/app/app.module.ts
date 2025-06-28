@@ -46,7 +46,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
       },
     }),
     EffectsModule.forRoot([AnimalEffects, BullEffects, MedicationEffects, TreatmentEffects]),
-    environment.production ? [] : StoreDevtoolsModule.instrument(),
+    environment.production ? [] : StoreDevtoolsModule.instrument({connectInZone: true}),
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,

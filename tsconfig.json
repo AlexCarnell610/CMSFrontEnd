@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "useDefineForClassFields": false,
     "resolveJsonModule": true,
     "baseUrl": ".",
     "outDir": "./dist/out-tsc",
@@ -32,6 +33,6 @@
   "exclude": ["./dist/**"],
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
+    "strictInjectionParameters": true,
   }
 }
