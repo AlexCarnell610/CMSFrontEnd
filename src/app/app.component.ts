@@ -1,17 +1,10 @@
-import {
-  AfterViewInit,
-  Component,
-  HostListener,
-  Inject,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, Inject, HostListener, inject } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { Modals, PageURLs } from '@cms-enums';
 import { RootState } from '@cms-ngrx';
 import { RetrieveAnimalData } from '@cms-ngrx/animal';
 import { RetreieveBullData } from '@cms-ngrx/bull';
-import { initialLoadMedications, selectAll } from '@cms-ngrx/medication';
+import { initialLoadMedications } from '@cms-ngrx/medication';
 import {
   CullUpdateService,
   LoadingPaneService,
@@ -38,15 +31,17 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     @Inject('locationObj') private location: Location,
     public readonly auth: AuthService,
     private readonly loadingService: LoadingPaneService,
-    private readonly store: Store<RootState>,
     private readonly ngbAlertConfig: NgbAlertConfig,
     private readonly screenSizeService: ScreenSizeService,
     private readonly pusherService: PusherService,
     private readonly cullUpdateService: CullUpdateService,
-    private readonly modalService: NgxSmartModalService
   ) {
     this.ngbAlertConfig.dismissible = false;
   }
+
+
+  readonly modalService = inject(NgxSmartModalService)
+  readonly store = inject(Store<RootState>)
   ngOnInit() {
     moment.locale('en-gb');
     this.subs.add(
@@ -57,9 +52,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
           this.store.dispatch(new RetrieveAnimalData());
           this.store.dispatch(new RetreieveBullData());
           this.store.dispatch(initialLoadMedications());
-          this.store.subscribe(store => console.warn(store))
-          this.store.select(selectAll).subscribe(all => console.warn(all)
-          )
           this.cullUpdateService.populateCullUpdate()
           this.pusherService.channel.bind(PusherChannels.CullUpdate, (data) => {
             this.cullUpdateService.cullUpdate = data.animal;
