@@ -1,5 +1,5 @@
 import { AbstractControl } from '@angular/forms';
-import * as moment from 'moment';
+import moment from 'moment';
 import { DobValidatorDirective } from './dob-validator.directive';
 
 describe('DobValidatorDirective', () => {

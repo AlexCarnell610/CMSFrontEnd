@@ -11,7 +11,7 @@ import {
 } from '@cms-services';
 import { select, Store } from '@ngrx/store';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
-import * as moment from 'moment';
+import moment from 'moment';
 import { Moment } from 'moment';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';

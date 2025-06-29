@@ -7,7 +7,7 @@ import { RootState } from '@cms-ngrx';
 import { getMaleOver36Months, getUnregisteredCalves } from '@cms-ngrx/animal';
 import { LoadingPaneService } from '@cms-services';
 import { select, Store } from '@ngrx/store';
-import * as moment from 'moment';
+import moment from 'moment';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';

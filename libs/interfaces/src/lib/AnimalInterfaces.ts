@@ -1,5 +1,5 @@
 import { AssistanceReason, CalvingAssistance, Gender } from '@cms-enums';
-import * as moment from 'moment';
+import moment from 'moment';
 
 export type Animal = IAnimal | IBull;
 export interface IBull {

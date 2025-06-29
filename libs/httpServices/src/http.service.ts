@@ -10,7 +10,7 @@ import {
   IMedication,
   ITreatment,
 } from '@cms-interfaces';
-import * as moment from 'moment';
+import moment from 'moment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../src/environments/environment';

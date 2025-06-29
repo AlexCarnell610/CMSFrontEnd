@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Animal, IAnimal } from '@cms-interfaces';
 import { HttpService } from '@cms-services/http';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Update } from '@ngrx/entity';
-import * as moment from 'moment';
+import moment from 'moment';
 import { of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { LoadingPaneService } from '../../../../services/src/loading-pane.service';
@@ -25,7 +25,7 @@ export class AnimalEffects {
     private readonly httpService: HttpService,
     private loadingPaneService: LoadingPaneService
   ) {
-    actions$.pipe(tap((action) => console.error(action)));
+    // actions$.pipe(tap((action) => console.error(action)));
   }
 
   $retrieveAnimalData = createEffect(() =>

@@ -4,10 +4,10 @@
     "outDir": "./out-tsc/app",
     "types": [],
     "lib": [
-      "es2020",
+      "es2022",
       "DOM"
     ],
-    "target": "es2020"
+    "target": "es2022"
   },
   "files": [
     "src/main.ts",

@@ -1,11 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  HostListener,
-  Inject,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, Inject, HostListener, inject } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { Modals, PageURLs } from '@cms-enums';
 import { RootState } from '@cms-ngrx';
@@ -21,7 +14,7 @@ import { NgbAlertConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { PusherChannels } from 'libs/enums/src/lib/pusher-channels';
 import { PusherService } from 'libs/services/src/pusher.service';
-import * as Moment from 'moment';
+import moment from 'moment';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { combineLatest, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -38,17 +31,19 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     @Inject('locationObj') private location: Location,
     public readonly auth: AuthService,
     private readonly loadingService: LoadingPaneService,
-    private readonly store: Store<RootState>,
     private readonly ngbAlertConfig: NgbAlertConfig,
     private readonly screenSizeService: ScreenSizeService,
     private readonly pusherService: PusherService,
     private readonly cullUpdateService: CullUpdateService,
-    private readonly modalService: NgxSmartModalService
   ) {
     this.ngbAlertConfig.dismissible = false;
   }
+
+
+  readonly modalService = inject(NgxSmartModalService)
+  readonly store = inject(Store<RootState>)
   ngOnInit() {
-    Moment.locale('en-gb');
+    moment.locale('en-gb');
     this.subs.add(
       this.auth.isAuthenticated$.subscribe((authed) => {
         if (authed) {

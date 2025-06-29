@@ -5,7 +5,7 @@ import { IAnimal, bull } from '@cms-interfaces';
 import { AnimalBreedService } from '@cms-services';
 import { convertedAnimal, mockAnimal } from '@cms-testing-data';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
-import * as moment from 'moment';
+import moment from 'moment';
 import { of, Subject } from 'rxjs';
 import { AnimalModalComponent } from './animal-modal.component';
 

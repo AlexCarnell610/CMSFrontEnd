@@ -28,7 +28,7 @@ import {
 import { breedValidator, dateValidator } from '@cms-validators';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { select, Store } from '@ngrx/store';
-import * as moment from 'moment';
+import moment from 'moment';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import {
   BehaviorSubject,

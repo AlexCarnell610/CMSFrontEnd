@@ -4,11 +4,11 @@ import { Router } from '@angular/router';
 import { Modals, PageURLs } from '@cms-enums';
 import { IMedication, ITreatment, MedDisplayDataType } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
-import { selectMedications } from '@cms-ngrx/medication';
+import { selectMedications2 } from '@cms-ngrx/medication';
 import { selectTreatments } from '@cms-ngrx/treatment';
 import { LoadingPaneService } from '@cms-services';
 import { Store } from '@ngrx/store';
-import * as moment from 'moment';
+import moment from 'moment';
 import { NgxSmartModalComponent, NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -34,7 +34,7 @@ export class MedicationComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.medications$ = this.store.select(selectMedications);
+    this.medications$ = this.store.select(selectMedications2());
     this.treatments$ = this.store.select(selectTreatments);
 
     this.listenToTreatmentTableFilter();

@@ -15,12 +15,16 @@
 			"prefix": "cms",
 			"architect": {
 				"build": {
-					"builder": "@angular-devkit/build-angular:browser",
+					"builder": "@angular-devkit/build-angular:application",
 					"options": {
-						"outputPath": "dist/CMSFrontEnd",
-						"index": "src/index.html",
-						"main": "src/main.ts",
-						"polyfills": "src/polyfills.ts",
+						"outputPath": {
+							"browser": "",
+              "base": "dist/CMSFrontEnd"
+            },
+            "index": "src/index.html",
+						"polyfills": [
+              "src/polyfills.ts"
+            ],
 						"tsConfig": "tsconfig.app.json",
 						"assets": [
 							"src/favicon.ico",
@@ -35,13 +39,17 @@
 							"overlayscrollbars-ngx.esm.js",
 							"pusher.js",
 							"moment"
-						],
-						"vendorChunk": true,
-						"extractLicenses": false,
-						"buildOptimizer": false,
+            ],
+            "extractLicenses": false,
 						"sourceMap": true,
 						"optimization": false,
-						"namedChunks": true
+            "namedChunks": true,
+            "browser": "src/main.ts",
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "."
+              ]
+            }
 					},
 					"configurations": {
 						"production": {
@@ -55,9 +63,7 @@
 							"outputHashing": "all",
 							"sourceMap": false,
 							"namedChunks": false,
-							"extractLicenses": true,
-							"vendorChunk": false,
-							"buildOptimizer": true,
+              "extractLicenses": true,
 							"budgets": [
 								{
 									"type": "initial",
@@ -76,21 +82,21 @@
 				},
 				"serve": {
 					"builder": "@angular-devkit/build-angular:dev-server",
-					"options": {
-						"browserTarget": "CMSFrontEnd:build",
-						"proxyConfig": "src/proxy.conf.json"
+          "options": {
+            "proxyConfig": "src/proxy.conf.json",
+            "buildTarget": "CMSFrontEnd:build"
 					},
 					"configurations": {
-						"production": {
-							"browserTarget": "CMSFrontEnd:build:production",
-							"proxyConfig": "src/prod.proxy.conf.json"
+            "production": {
+              "proxyConfig": "src/prod.proxy.conf.json",
+              "buildTarget": "CMSFrontEnd:build:production"
 						}
 					}
 				},
 				"extract-i18n": {
 					"builder": "@angular-devkit/build-angular:extract-i18n",
-					"options": {
-						"browserTarget": "CMSFrontEnd:build"
+          "options": {
+            "buildTarget": "CMSFrontEnd:build"
 					}
 				},
 				"test": {
