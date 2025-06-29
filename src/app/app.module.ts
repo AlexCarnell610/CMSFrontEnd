@@ -7,7 +7,6 @@ import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
 import { reducers } from '@cms-ngrx';
 import { AnimalEffects } from '@cms-ngrx/animal';
 import { BullEffects } from '@cms-ngrx/bull';
-import { MedicationEffects } from '@cms-ngrx/medication';
 import {
   NgbDatepickerModule,
   NgbDropdownModule,
@@ -24,7 +23,8 @@ import { FooterComponent } from './components/footer/footer.component';
 import { LoadingModalComponent } from './components/loading-modal/loading-modal.component';
 import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
-import { TreatmentEffects } from '@cms-ngrx/treatment';
+import { TreatmentEffects, treatmentReducer } from '@cms-ngrx/treatment';
+import { MedicationEffects, medicationReducer } from '@cms-ngrx/medication';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({ declarations: [
@@ -37,10 +37,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     bootstrap: [AppComponent], imports: [BrowserModule,
         BrowserAnimationsModule,
         AppRoutingModule,
-        StoreModule.forRoot(reducers, {
+        StoreModule.forRoot({...reducers, treatment: treatmentReducer, medication: medicationReducer, }, {
             runtimeChecks: {
-                strictStateImmutability: true,
-                strictActionImmutability: true,
+              strictStateImmutability: true,
+              strictActionImmutability: true,
+              strictStateSerializability: false,
+              strictActionSerializability: true,
+              strictActionWithinNgZone: true,
+              strictActionTypeUniqueness: true,
             },
         }),
         EffectsModule.forRoot([AnimalEffects, BullEffects, MedicationEffects, TreatmentEffects]),

@@ -1,16 +1,17 @@
 import { createSelector } from '@ngrx/store';
-import { selectAll } from './medication.reducer';
+import { getMedicationState, medicationAdapter, selectAll, selectAllMedications, selectIds } from './medication.reducer';
 import moment from 'moment';
 
-export const selectMedications = createSelector(
-  selectAll,
-  (medications) => medications
-);
 
 export const selectMedicationName = (medicationID) =>
   createSelector(
     selectMedication(medicationID),
     (medication) => medication.name
+  );
+
+  export const selectMedications2 = () => createSelector(
+    selectAll,
+    (medications) => medications
   );
 
   export const selectMedicationBatchNum = (medicationID) =>
@@ -20,7 +21,7 @@ export const selectMedicationName = (medicationID) =>
     );
 
 export const selectMedication = (medicationID) =>
-  createSelector(selectMedications, (medications) =>
+  createSelector(selectMedications2(), (medications) =>
     medications.find((medication) => medication.id === medicationID)
   );
 
@@ -31,17 +32,17 @@ export const selectMedicationWithdrawal = (medicationID) =>
   );
 
 export const selectInDateMedications = createSelector(
-  selectMedications,
-  (medications) =>
-    medications.filter((medication) =>
+  
+  () =>
+    [].filter((medication) =>
       medication.expiryDate.isSameOrAfter(moment())
     )
 );
 
 export const selectOutOfDateMedications = createSelector(
-  selectMedications,
-  (medications) =>
-    medications
+  medicationAdapter.getSelectors(getMedicationState).selectAll,
+  () =>
+  []
       .filter((medication) => medication.expiryDate.isBefore(moment()))
       .map((medication) => {
         return {

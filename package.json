@@ -26,12 +26,12 @@
     "@auth0/auth0-angular": "2.0.0",
     "@fortawesome/fontawesome-free": "^6.5.2",
     "@ng-bootstrap/ng-bootstrap": "^17.0.0",
-    "@ngrx/component": "^17.2.0",
-    "@ngrx/effects": "^17.2.0",
-    "@ngrx/entity": "^17.2.0",
-    "@ngrx/schematics": "^17.2.0",
-    "@ngrx/store": "^17.2.0",
-    "@ngrx/store-devtools": "^17.2.0",
+    "@ngrx/component": "^18.1.1",
+    "@ngrx/effects": "^18.1.1",
+    "@ngrx/entity": "^18.1.1",
+    "@ngrx/schematics": "^18.1.1",
+    "@ngrx/store": "^18.1.1",
+    "@ngrx/store-devtools": "^18.1.1",
     "@nrwl/angular": "^16.10.0",
     "@popperjs/core": "^2.11.6",
     "@schematics/angular": "^15.2.11",
@@ -48,7 +48,8 @@
     "ngx-smart-modal": "^14.0.3",
     "pusher-js": "^7.6.0",
     "rxjs": "^6.6.3",
-    "zone.js": "^0.14.10"
+    "zone.js": "^0.14.10",
+    "@ngrx/operators": "^18.0.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^18.2.20",

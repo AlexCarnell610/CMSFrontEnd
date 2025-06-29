@@ -12,11 +12,13 @@ import {
 import { map, switchMap } from 'rxjs/operators';
 import { LoadingPaneService } from '@cms-services';
 import { HttpService } from '@cms-services/http';
+import { inject } from '@angular/core';
 
 @Injectable()
 export class MedicationEffects {
+  readonly actions$ = inject(Actions)
   constructor(
-    private actions$: Actions,
+    // private actions$: Actions,
     private readonly loadingService: LoadingPaneService,
     private readonly httpService: HttpService
   ) {}

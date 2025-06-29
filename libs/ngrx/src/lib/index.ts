@@ -10,7 +10,7 @@ export interface RootState {
   animal: AnimalState;
   bull: BullState;
   medication: MedicationState;
-  treatment: TreatmentState
+  treatment: TreatmentState;
 }
 
 export const reducers: ActionReducerMap<RootState, any> = {
@@ -24,6 +24,4 @@ export const metaReducers: MetaReducer<RootState>[] = !environment.production
   ? []
   : [];
 
-  export function sortByCreatedDate(a: ITreatment|IMedication, b: ITreatment|IMedication): number {
-    return a.createdAt.isAfter(b.createdAt) ? -1 : b.createdAt.isAfter(a.createdAt) ? 1 : 0
-  }
+  
