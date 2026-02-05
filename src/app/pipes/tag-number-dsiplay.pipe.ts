@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'tagNumberDisplay',
+    name: 'tagNumberDisplay',
+    standalone: false
 })
 export class TagNumberDisplay implements PipeTransform {
   transform(

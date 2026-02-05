@@ -3,8 +3,9 @@ import { AbstractControl, NG_VALIDATORS, ValidationErrors, Validator } from '@an
 import moment from 'moment';
 
 @Directive({
-  selector: '[cmsDobValidator]',
-  providers: [{provide: NG_VALIDATORS, useExisting: DobValidatorDirective, multi: true}]
+    selector: '[cmsDobValidator]',
+    providers: [{ provide: NG_VALIDATORS, useExisting: DobValidatorDirective, multi: true }],
+    standalone: false
 })
 export class DobValidatorDirective implements Validator{
 

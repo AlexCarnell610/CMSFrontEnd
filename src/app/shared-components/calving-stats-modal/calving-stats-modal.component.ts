@@ -24,9 +24,10 @@ enum FormControls {
 }
 
 @Component({
-  selector: 'cms-calving-stats-modal',
-  templateUrl: './calving-stats-modal.component.html',
-  styleUrls: ['./calving-stats-modal.component.scss'],
+    selector: 'cms-calving-stats-modal',
+    templateUrl: './calving-stats-modal.component.html',
+    styleUrls: ['./calving-stats-modal.component.scss'],
+    standalone: false
 })
 export class CalvingStatsModalComponent implements OnInit, AfterViewInit {
   @Output() statSaved: EventEmitter<CalvingStat | false> = new EventEmitter();

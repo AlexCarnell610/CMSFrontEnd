@@ -17,9 +17,10 @@ import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 @Component({
-  selector: 'cms-cull-update',
-  templateUrl: './cull-update.component.html',
-  styleUrls: ['./cull-update.component.scss'],
+    selector: 'cms-cull-update',
+    templateUrl: './cull-update.component.html',
+    styleUrls: ['./cull-update.component.scss'],
+    standalone: false
 })
 export class CullUpdateComponent implements OnInit, OnDestroy {
   public cullUpdate: ICullUpdate[] = null;

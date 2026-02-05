@@ -11,9 +11,10 @@ import { map, take } from 'rxjs/operators';
 const YOUNG_TO_OLD = 'youngToOld';
 const OLD_TO_YOUNG = 'oldToYoung';
 @Component({
-  selector: 'cms-animal',
-  templateUrl: './animal.component.html',
-  styleUrls: ['./animal.component.scss'],
+    selector: 'cms-animal',
+    templateUrl: './animal.component.html',
+    styleUrls: ['./animal.component.scss'],
+    standalone: false
 })
 export class AnimalComponent implements OnInit {
   public pageName = PageURLs.Animals;

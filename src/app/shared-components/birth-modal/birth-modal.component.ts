@@ -51,9 +51,10 @@ export enum BirthFormControls {
 }
 
 @Component({
-  selector: 'cms-birth-modal',
-  templateUrl: './birth-modal.component.html',
-  styleUrls: ['./birth-modal.component.scss'],
+    selector: 'cms-birth-modal',
+    templateUrl: './birth-modal.component.html',
+    styleUrls: ['./birth-modal.component.scss'],
+    standalone: false
 })
 export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() animal: IAnimal;

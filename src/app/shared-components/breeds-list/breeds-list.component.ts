@@ -4,9 +4,10 @@ import { IBreedCode } from '@cms-interfaces';
 import { AnimalBreedService } from '@cms-services';
 
 @Component({
-  selector: 'cms-breeds-list',
-  templateUrl: './breeds-list.component.html',
-  styleUrls: ['./breeds-list.component.scss']
+    selector: 'cms-breeds-list',
+    templateUrl: './breeds-list.component.html',
+    styleUrls: ['./breeds-list.component.scss'],
+    standalone: false
 })
 export class BreedsListComponent implements OnInit {
 

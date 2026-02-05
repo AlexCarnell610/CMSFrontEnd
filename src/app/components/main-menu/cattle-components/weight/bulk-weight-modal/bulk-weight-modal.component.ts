@@ -34,9 +34,10 @@ interface WeightDataIndexes {
   time: number;
 }
 @Component({
-  selector: 'cms-bulk-weight-modal',
-  templateUrl: './bulk-weight-modal.component.html',
-  styleUrls: ['./bulk-weight-modal.component.scss'],
+    selector: 'cms-bulk-weight-modal',
+    templateUrl: './bulk-weight-modal.component.html',
+    styleUrls: ['./bulk-weight-modal.component.scss'],
+    standalone: false
 })
 export class BulkWeightModalComponent implements OnInit, AfterViewInit {
   @ViewChild('saveConfirm') saveConfirm: NgbPopover;

@@ -8,9 +8,10 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 @Component({
-  selector: 'cms-weight',
-  templateUrl: './weight.component.html',
-  styleUrls: ['./weight.component.scss'],
+    selector: 'cms-weight',
+    templateUrl: './weight.component.html',
+    styleUrls: ['./weight.component.scss'],
+    standalone: false
 })
 export class WeightComponent implements OnInit, OnDestroy {
   public chartWeights: ChartConfiguration['data'];

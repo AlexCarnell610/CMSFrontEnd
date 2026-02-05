@@ -33,9 +33,10 @@ import {
 import { map, mergeMap, startWith, takeWhile } from 'rxjs/operators';
 
 @Component({
-  selector: 'cms-animal-list',
-  templateUrl: './animal-list.component.html',
-  styleUrls: ['./animal-list.component.scss'],
+    selector: 'cms-animal-list',
+    templateUrl: './animal-list.component.html',
+    styleUrls: ['./animal-list.component.scss'],
+    standalone: false
 })
 export class AnimalListComponent implements OnInit, OnDestroy {
   @Output() add: EventEmitter<IAnimal> = new EventEmitter();

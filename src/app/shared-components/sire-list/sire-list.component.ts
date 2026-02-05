@@ -11,9 +11,10 @@ import { Modals } from '@cms-enums';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 
 @Component({
-  selector: 'cms-sire-list',
-  templateUrl: './sire-list.component.html',
-  styleUrls: ['./sire-list.component.scss'],
+    selector: 'cms-sire-list',
+    templateUrl: './sire-list.component.html',
+    styleUrls: ['./sire-list.component.scss'],
+    standalone: false
 })
 export class SireListComponent implements OnInit, OnDestroy {
   @Input() parentForm: UntypedFormGroup;

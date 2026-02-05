@@ -43,9 +43,10 @@ enum FormControls {
   DamTagUnknown = 'damTagUnknown',
 }
 @Component({
-  selector: 'cms-animal-modal',
-  templateUrl: './animal-modal.component.html',
-  styleUrls: ['./animal-modal.component.scss'],
+    selector: 'cms-animal-modal',
+    templateUrl: './animal-modal.component.html',
+    styleUrls: ['./animal-modal.component.scss'],
+    standalone: false
 })
 export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() animal: IAnimal = null;

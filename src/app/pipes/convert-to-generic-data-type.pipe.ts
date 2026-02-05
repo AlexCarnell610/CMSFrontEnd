@@ -15,7 +15,8 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Pipe({
-  name: 'convertToGenericDataType',
+    name: 'convertToGenericDataType',
+    standalone: false
 })
 export class ConvertToGenericDataTypePipe implements PipeTransform {
   constructor(private readonly store: Store<RootState>){}

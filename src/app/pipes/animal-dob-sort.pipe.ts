@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { IAnimal, isAnimal } from '@cms-interfaces';
 
 @Pipe({
-  name: 'animalDobSort',
+    name: 'animalDobSort',
+    standalone: false
 })
 export class AnimalDobSortPipe implements PipeTransform {
   transform(

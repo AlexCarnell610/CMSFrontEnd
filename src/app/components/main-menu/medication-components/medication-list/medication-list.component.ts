@@ -15,9 +15,10 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Component({
-  selector: 'cms-medication-list',
-  templateUrl: './medication-list.component.html',
-  styleUrls: ['./medication-list.component.scss'],
+    selector: 'cms-medication-list',
+    templateUrl: './medication-list.component.html',
+    styleUrls: ['./medication-list.component.scss'],
+    standalone: false
 })
 export class MedicationListComponent implements OnInit {
   @Output() editEmit: EventEmitter<MedDisplayDataType> = new EventEmitter();

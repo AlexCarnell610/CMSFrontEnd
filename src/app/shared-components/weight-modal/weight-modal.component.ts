@@ -38,9 +38,10 @@ enum FormControls {
 }
 
 @Component({
-  selector: 'cms-weight-modal',
-  templateUrl: './weight-modal.component.html',
-  styleUrls: ['./weight-modal.component.scss'],
+    selector: 'cms-weight-modal',
+    templateUrl: './weight-modal.component.html',
+    styleUrls: ['./weight-modal.component.scss'],
+    standalone: false
 })
 export class EditWeightModalComponent
   implements OnInit, AfterViewInit, OnDestroy

@@ -10,9 +10,10 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
-  selector: 'cms-birth',
-  templateUrl: './birth.component.html',
-  styleUrls: ['./birth.component.scss'],
+    selector: 'cms-birth',
+    templateUrl: './birth.component.html',
+    styleUrls: ['./birth.component.scss'],
+    standalone: false
 })
 export class BirthComponent {
   public pageName = PageURLs.Births;

@@ -5,9 +5,10 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'cms-warning-display',
-  templateUrl: './warning-display.component.html',
-  styleUrls: ['./warning-display.component.scss'],
+    selector: 'cms-warning-display',
+    templateUrl: './warning-display.component.html',
+    styleUrls: ['./warning-display.component.scss'],
+    standalone: false
 })
 export class WarningDisplayComponent implements AfterViewInit, OnDestroy {
   public toast: IToast = null;

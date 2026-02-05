@@ -12,9 +12,10 @@ import {
 } from 'rxjs/operators';
 
 @Component({
-  selector: 'cms-searchable-dropdown',
-  templateUrl: './searchable-dropdown.component.html',
-  styleUrls: ['./searchable-dropdown.component.scss'],
+    selector: 'cms-searchable-dropdown',
+    templateUrl: './searchable-dropdown.component.html',
+    styleUrls: ['./searchable-dropdown.component.scss'],
+    standalone: false
 })
 export class SearchableDropdownComponent {
   @Input() isRequired = true;

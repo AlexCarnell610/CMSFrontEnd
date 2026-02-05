@@ -13,9 +13,10 @@ import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 
 @Component({
-  selector: 'cms-registration',
-  templateUrl: './registration.component.html',
-  styleUrls: ['./registration.component.scss'],
+    selector: 'cms-registration',
+    templateUrl: './registration.component.html',
+    styleUrls: ['./registration.component.scss'],
+    standalone: false
 })
 export class RegistrationComponent {
   public pageName = PageURLs.Registration;

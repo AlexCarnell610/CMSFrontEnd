@@ -21,9 +21,10 @@ import { BehaviorSubject, EMPTY, Observable, of, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 @Component({
-  selector: 'cms-animal-display',
-  templateUrl: './animal-display.component.html',
-  styleUrls: ['./animal-display.component.scss'],
+    selector: 'cms-animal-display',
+    templateUrl: './animal-display.component.html',
+    styleUrls: ['./animal-display.component.scss'],
+    standalone: false
 })
 export class AnimalDisplayComponent implements OnInit, OnDestroy {
   @Input() basicMode = false

@@ -2,9 +2,10 @@ import { Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 @Component({
-  selector: 'cms-yes-no-check',
-  templateUrl: './yes-no-check.component.html',
-  styleUrls: ['./yes-no-check.component.scss']
+    selector: 'cms-yes-no-check',
+    templateUrl: './yes-no-check.component.html',
+    styleUrls: ['./yes-no-check.component.scss'],
+    standalone: false
 })
 export class YesNoCheckComponent {
 

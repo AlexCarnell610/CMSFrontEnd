@@ -16,9 +16,10 @@ import { formatDate } from '@angular/common';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'cms-edit-bulk-weight-modal',
-  templateUrl: './edit-bulk-weight-modal.component.html',
-  styleUrls: ['./edit-bulk-weight-modal.component.scss'],
+    selector: 'cms-edit-bulk-weight-modal',
+    templateUrl: './edit-bulk-weight-modal.component.html',
+    styleUrls: ['./edit-bulk-weight-modal.component.scss'],
+    standalone: false
 })
 export class EditBulkWeightModalComponent
   implements OnInit, AfterViewInit, OnDestroy

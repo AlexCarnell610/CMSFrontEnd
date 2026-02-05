@@ -27,9 +27,10 @@ import { Observable, Subscription, combineLatest, merge, timer } from 'rxjs';
 import { map, withLatestFrom } from 'rxjs/operators';
 
 @Component({
-  selector: 'cms-treatment-modal',
-  templateUrl: './treatment-modal.component.html',
-  styleUrls: ['./treatment-modal.component.scss'],
+    selector: 'cms-treatment-modal',
+    templateUrl: './treatment-modal.component.html',
+    styleUrls: ['./treatment-modal.component.scss'],
+    standalone: false
 })
 export class TreatmentModalComponent implements OnInit, AfterViewInit {
   @ViewChild('saveConfirm') saveConfirm: NgbPopover;

@@ -15,9 +15,10 @@ import { Subscription, timer } from 'rxjs';
 import { MedicationActionTypes } from '@cms-ngrx/medication';
 
 @Component({
-  selector: 'cms-medication-add-modal',
-  templateUrl: './medication-add-modal.component.html',
-  styleUrls: ['./medication-add-modal.component.scss'],
+    selector: 'cms-medication-add-modal',
+    templateUrl: './medication-add-modal.component.html',
+    styleUrls: ['./medication-add-modal.component.scss'],
+    standalone: false
 })
 export class MedicationAddModalComponent implements OnInit, AfterViewInit {
   modalIdentifier = Modals.MedicationAddModal;

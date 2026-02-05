@@ -5,9 +5,10 @@ import { PageURLs } from '@cms-enums';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'cms-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+    selector: 'cms-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss'],
+    standalone: false
 })
 export class LoginComponent implements OnInit, OnDestroy {
   private subs = new Subscription();

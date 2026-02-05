@@ -14,9 +14,10 @@ import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
 @Component({
-  selector: 'cms-medication',
-  templateUrl: './medication.component.html',
-  styleUrls: ['./medication.component.scss'],
+    selector: 'cms-medication',
+    templateUrl: './medication.component.html',
+    styleUrls: ['./medication.component.scss'],
+    standalone: false
 })
 export class MedicationComponent implements OnInit, OnDestroy {
   medications$: Observable<IMedication[]>;

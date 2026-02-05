@@ -35,9 +35,10 @@ interface AnimalPPK {
   value: string;
 }
 @Component({
-  selector: 'cms-weight-analysis',
-  templateUrl: './weight-analysis.component.html',
-  styleUrls: ['./weight-analysis.component.scss'],
+    selector: 'cms-weight-analysis',
+    templateUrl: './weight-analysis.component.html',
+    styleUrls: ['./weight-analysis.component.scss'],
+    standalone: false
 })
 export class WeightAnalysisComponent implements OnInit {
   @ViewChild('datepicker') datePicker: NgbInputDatepicker;

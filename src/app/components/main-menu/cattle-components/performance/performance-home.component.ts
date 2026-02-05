@@ -3,9 +3,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { PageURLs } from '@cms-enums';
 
 @Component({
-  selector: 'cms-performance-home',
-  templateUrl: './performance-home.component.html',
-  styleUrls: ['./performance-home.component.scss']
+    selector: 'cms-performance-home',
+    templateUrl: './performance-home.component.html',
+    styleUrls: ['./performance-home.component.scss'],
+    standalone: false
 })
 export class PerformanceHomeComponent implements OnInit {
 

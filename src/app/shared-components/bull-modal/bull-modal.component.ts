@@ -30,9 +30,10 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
 import { Subscription, timer } from 'rxjs';
 
 @Component({
-  selector: 'cms-bull-modal',
-  templateUrl: './bull-modal.component.html',
-  styleUrls: ['./bull-modal.component.scss'],
+    selector: 'cms-bull-modal',
+    templateUrl: './bull-modal.component.html',
+    styleUrls: ['./bull-modal.component.scss'],
+    standalone: false
 })
 export class BullModalComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() form: UntypedFormGroup;
