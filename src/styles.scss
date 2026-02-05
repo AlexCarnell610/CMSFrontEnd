@@ -3,8 +3,8 @@ $color-overlay: rgba(245, 245, 245, 0.97);
 $info: rgb(19, 172, 202);
 // $info: orange;
 
-@import "../node_modules/ngx-smart-modal/styles/ngx-smart-modal.scss";
-@import "node_modules/bootstrap/scss/bootstrap.scss";
+@use "../node_modules/ngx-smart-modal/styles/ngx-smart-modal.scss";
+@use "node_modules/bootstrap/scss/bootstrap.scss";
 
 /* .footer {
   position: fixed;
