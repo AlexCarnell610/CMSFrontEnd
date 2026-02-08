@@ -23,63 +23,67 @@
       ></cms-animal-list>
     </div>
     <div class="col-lg-5 cms-birth-animal-list">
-      <div
-        class="card cms-list"
-        *ngIf="$selectedAnimal | async as selectedAnimal"
-        [ngClass]="getCSS()"
-      >
-        <div class="card-header d-flex justify-content-between">
-          <strong>Tag number - {{ selectedAnimal.tagNumber }}</strong>
-          <span
-            class="btn badge bg-info rounded-pill align-self-center"
-            (click)="editBirth()"
-            >Edit Births</span
+      @if ($selectedAnimal | async; as selectedAnimal) {
+        <div
+          class="card cms-list"
+          [ngClass]="getCSS()"
           >
-        </div>
-        <div *ngIf="$calves | async as calves">
-          <ul
-            class="list-group list-group-flush"
-            *ngIf="calves.length > 0; else no_calves"
-          >
-            <li class="list-group-item">
-              <strong>{{ calves.length > 1 ? "Calves" : "Calf" }}</strong>
-            </li>
-            <button
-              class="list-group-item list-group-item-action"
-              *ngFor="let calf of calves"
-              (click)="animalSelected(calf)"
-            >
-              <strong>{{ calf.tagNumber }} -</strong>
-              <ul style="list-style-type: none">
-                <li>
-                  &nbsp; <strong>Management Tag - </strong>
-                  {{ calf.managementTag }}
-                </li>
-                <li>
-                  &nbsp; <strong>Gender - </strong>
-                  {{ calf.gender ? calf.gender : "M" }}
-                </li>
-                <li>
-                  &nbsp; <strong>Date of Birth - </strong>
-                  {{ calf.birthDate | date : "dd MMM yyyy" }}
-                </li>
-              </ul>
-            </button>
-          </ul>
-        </div>
+          <div class="card-header d-flex justify-content-between">
+            <strong>Tag number - {{ selectedAnimal.tagNumber }}</strong>
+            <span
+              class="btn badge bg-info rounded-pill align-self-center"
+              (click)="editBirth()"
+              >Edit Births</span
+              >
+            </div>
+            @if ($calves | async; as calves) {
+              <div>
+                @if (calves.length > 0) {
+                  <ul
+                    class="list-group list-group-flush"
+                    >
+                    <li class="list-group-item">
+                      <strong>{{ calves.length > 1 ? "Calves" : "Calf" }}</strong>
+                    </li>
+                    @for (calf of calves; track calf) {
+                      <button
+                        class="list-group-item list-group-item-action"
+                        (click)="animalSelected(calf)"
+                        >
+                        <strong>{{ calf.tagNumber }} -</strong>
+                        <ul style="list-style-type: none">
+                          <li>
+                            &nbsp; <strong>Management Tag - </strong>
+                            {{ calf.managementTag }}
+                          </li>
+                          <li>
+                            &nbsp; <strong>Gender - </strong>
+                            {{ calf.gender ? calf.gender : "M" }}
+                          </li>
+                          <li>
+                            &nbsp; <strong>Date of Birth - </strong>
+                            {{ calf.birthDate | date : "dd MMM yyyy" }}
+                          </li>
+                        </ul>
+                      </button>
+                    }
+                  </ul>
+                } @else {
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Animal has no calves</li>
+                  </ul>
+                }
+              </div>
+            }
+          </div>
+        }
       </div>
     </div>
   </div>
-</div>
 
-<ng-template #no_calves>
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item">Animal has no calves</li>
-  </ul>
-</ng-template>
 
-<cms-birth-modal
-  [animal]="$selectedAnimal | async"
-  [isAdd]="isAdd"
-></cms-birth-modal>
-<cms-warning-display></cms-warning-display>
+  <cms-birth-modal
+    [animal]="$selectedAnimal | async"
+    [isAdd]="isAdd"
+  ></cms-birth-modal>
+  <cms-warning-display></cms-warning-display>

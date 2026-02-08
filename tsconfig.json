@@ -10,24 +10,53 @@
     "declaration": false,
     "experimentalDecorators": true,
     "module": "es2022",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "es2022",
-    "lib": ["es2022", "dom"],
+    "lib": [
+      "es2022",
+      "dom"
+    ],
     "paths": {
-      "rxjs": ["node_modules/rxjs"],
-      "rxjs/*": ["node_modules/rxjs/*"],
-      "@cms-enums": ["libs/enums/src"],
-      "@cms-interfaces": ["libs/interfaces/src"],
-      "@cms-ngrx/animal": ["libs/ngrx/src/lib/animalState"],
-      "@cms-ngrx/bull": ["libs/ngrx/src/lib/bullState"],
-      "@cms-ngrx/medication": ["libs/ngrx/src/lib/medicationState"],
-      "@cms-ngrx/treatment": ["libs/ngrx/src/lib/treatmentState"],
-      "@cms-ngrx": ["libs/ngrx/src/lib"],
-      "@cms-services/http": ["libs/httpServices"],
-      "@cms-services": ["libs/services"],
-      "@cms-validators": ["libs/validators"],
-      "@cms-testing-data": ["libs/testingData"]
+      "rxjs": [
+        "node_modules/rxjs"
+      ],
+      "rxjs/*": [
+        "node_modules/rxjs/*"
+      ],
+      "@cms-enums": [
+        "libs/enums/src"
+      ],
+      "@cms-interfaces": [
+        "libs/interfaces/src"
+      ],
+      "@cms-ngrx/animal": [
+        "libs/ngrx/src/lib/animalState"
+      ],
+      "@cms-ngrx/bull": [
+        "libs/ngrx/src/lib/bullState"
+      ],
+      "@cms-ngrx/medication": [
+        "libs/ngrx/src/lib/medicationState"
+      ],
+      "@cms-ngrx/treatment": [
+        "libs/ngrx/src/lib/treatmentState"
+      ],
+      "@cms-ngrx": [
+        "libs/ngrx/src/lib"
+      ],
+      "@cms-services/http": [
+        "libs/httpServices"
+      ],
+      "@cms-services": [
+        "libs/services"
+      ],
+      "@cms-validators": [
+        "libs/validators"
+      ],
+      "@cms-testing-data": [
+        "libs/testingData"
+      ]
     }
   },
   "exclude": ["./dist/**"],

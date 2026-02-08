@@ -1,8 +1,10 @@
-<div *ngIf="!(auth.isLoading$ | async)" class="d-flex flex-column min-vh-100">
-  <div class="flex-fill">
-    <router-outlet class="router-outlet"></router-outlet>
+@if (!(auth.isLoading$ | async)) {
+  <div class="d-flex flex-column min-vh-100">
+    <div class="flex-fill">
+      <router-outlet class="router-outlet"></router-outlet>
+    </div>
+    <cms-footer class="mb-0 align-self-start"></cms-footer>
   </div>
-  <cms-footer class="mb-0 align-self-start"></cms-footer>
-</div>
+}
 
 <cms-loading-modal id="loadingModal2"></cms-loading-modal>

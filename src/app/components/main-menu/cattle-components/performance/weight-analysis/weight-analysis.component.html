@@ -20,192 +20,190 @@
           id="option1"
           class="btn-check"
           autocomplete="off"
-        />
-        <label
-          for="option1"
-          class="btn btn-outline-secondary"
-          (click)="dateFilterDob = true; triggerDateChange()"
-          >Date Of Birth
-        </label>
-
-        <input
-          type="radio"
-          name="options"
-          id="option2"
-          class="btn-check"
-          autocomplete="off"
-        />
-        <label
-          for="option2"
-          class="btn btn-outline-secondary"
-          (click)="dateFilterDob = false; triggerDateChange()"
-        >
-          Date of Weight
-        </label>
-      </div>
-    </div>
-  </div>
-  <div class="row mb-2">
-    <div class="col-md">
-      <div class="dp-hidden position-absolute">
-        <div class="input-group">
-          <input
-            name="datepicker"
-            class="form-control"
-            ngbDatepicker
-            #datepicker="ngbDatepicker"
-            [autoClose]="'outside'"
-            [minDate]="minDate$ | async"
-            [maxDate]="maxDate"
-            (dateSelect)="onDateSelection($event)"
-            [displayMonths]="2"
-            [dayTemplate]="dayTemplate"
-            outsideDays="hidden"
-            [startDate]="fromDateValue!"
-            tabindex="-1"
-            [placement]="'bottom'"
-            id="fromInput"
           />
-          <ng-template #dayTemplate let-date let-focused="focused">
-            <span
-              class="custom-day"
-              [class.focused]="focused"
-              [class.range]="isRange(date)"
-              [class.faded]="isHovered(date) || isInside(date)"
-              (mouseenter)="hoveredDate = date"
-              (mouseleave)="hoveredDate = null"
-            >
-              {{ date.day }}
-            </span>
-          </ng-template>
+          <label
+            for="option1"
+            class="btn btn-outline-secondary"
+            (click)="dateFilterDob = true; triggerDateChange()"
+            >Date Of Birth
+          </label>
+
+          <input
+            type="radio"
+            name="options"
+            id="option2"
+            class="btn-check"
+            autocomplete="off"
+            />
+            <label
+              for="option2"
+              class="btn btn-outline-secondary"
+              (click)="dateFilterDob = false; triggerDateChange()"
+              >
+              Date of Weight
+            </label>
+          </div>
         </div>
       </div>
-      <div class="input-group mb-2 mb-md-0">
-        <span class="input-group-text">From</span>
-
-        <input
-          #dpFromDate
-          class="form-control"
-          placeholder="dd/mm/yyyy"
-          name="dpFromDate"
-          [value]="formatter.format(fromDateValue)"
-          onkeydown="return false"
-          (click)="toggle()"
-        />
-
-        <button
-          id="fromDate"
-          class="btn btn-outline-secondary"
-          (click)="toggle()"
-          type="button"
-        >
-          <i class="fa-regular fa-calendar-days"></i>
-        </button>
-      </div>
-    </div>
-    <div class="col-md">
-      <div class="input-group">
-        <span class="input-group-text">To</span>
-        <input
-          [formControl]="toDateControl"
-          #dpToDate
-          class="form-control"
-          placeholder="dd/mm/yyyy"
-          name="dpToDate"
-          [value]="formatter.format(toDateValue)"
-          onkeydown="return false"
-          (click)="toggle()"
-        />
-        <button
-          class="btn btn-outline-secondary"
-          (click)="toggle()"
-          type="button"
-        >
-          <i class="fa-regular fa-calendar-days"></i>
-        </button>
-      </div>
-    </div>
-    <div class="col-md-auto mt-1 mt-md-0">
-      <button class="btn-danger btn" (click)="clearDateFilter()">Clear</button>
-    </div>
-  </div>
-  <!-- DONT DELETE!! -->
-  <div class="row" style="max-width: 100%" id="datePicker"></div>
-
-  <div class="row">
-    <div class="col-md">
-      <!-- <a class="badge bg-success"
-        ><i class="fa-solid fa-sort-up"></i>Lowest to Highest Avg Daily Weight
-        Gain</a
-      >
-      <br />
-      <a class="badge bg-success"
-        ><i class="fa-solid fa-sort-up"></i>Lowest to Highest Total Weight
-        Gain</a
-      >
-      <br />
-      <a class="badge bg-success"
-        ><i class="fa-solid fa-sort-up"></i>Lowest to Highest Total Weight</a
-      >
-      <br /> -->
-      <cms-animal-list
-        [page]="page"
-        [multiSelect]="true"
-        [dateRange$]="dateRange"
-        [filterByDOB]="dateFilterDob"
-        (mutiAnimalsSelected)="multiAnimalsSelected($event)"
-      ></cms-animal-list>
-    </div>
-    <div class="col-md">
-      <div class="row">
-        <canvas
-          id="avgDailyWeightGain"
-          baseChart
-          class="chart"
-          [data]="avgDailyWeightChartData | async"
-          [options]="avgDailyWeightGainChartOptions"
-          [type]="barChartType"
-        >
-        </canvas>
-      </div>
-      <div class="row">
-        <canvas
-          id="actualDailyWeightGain"
-          baseChart
-          class="chart"
-          [data]="actualDailyWeightChartData$ | async"
-          [options]="actualDailyWeightOptions"
-          [type]="lineChartType"
-        >
-        </canvas>
-      </div>
-      <div class="row" *ngIf="sortedPPK$ | async as sortedPPK">
-        <div class="card">
-          <div class="card-body">
-            <strong>MaxPPK:</strong> {{ getMax(sortedPPK)?.tagNumber }} -
-            {{ getMax(sortedPPK)?.value }} £/k
-          </div>
-          <div class="card-body">
-            <strong>MinPPK: </strong>{{ sortedPPK[0].tagNumber }} -
-            {{ sortedPPK[0].value }} £/k
-          </div>
-          <div class="card-body">
-              <strong>AveragePPK:</strong> {{ averagePPK | async }}
+      <div class="row mb-2">
+        <div class="col-md">
+          <div class="dp-hidden position-absolute">
+            <div class="input-group">
+              <input
+                name="datepicker"
+                class="form-control"
+                ngbDatepicker
+                #datepicker="ngbDatepicker"
+                [autoClose]="'outside'"
+                [minDate]="minDate$ | async"
+                [maxDate]="maxDate"
+                (dateSelect)="onDateSelection($event)"
+                [displayMonths]="2"
+                [dayTemplate]="dayTemplate"
+                outsideDays="hidden"
+                [startDate]="fromDateValue!"
+                tabindex="-1"
+                [placement]="'bottom'"
+                id="fromInput"
+                />
+                <ng-template #dayTemplate let-date let-focused="focused">
+                  <span
+                    class="custom-day"
+                    [class.focused]="focused"
+                    [class.range]="isRange(date)"
+                    [class.faded]="isHovered(date) || isInside(date)"
+                    (mouseenter)="hoveredDate = date"
+                    (mouseleave)="hoveredDate = null"
+                    >
+                    {{ date.day }}
+                  </span>
+                </ng-template>
+              </div>
             </div>
-        </div>
-        
-        
-        
-        
-        <canvas
-          id="soldPencePerKilo"
-          baseChart
-          class="chart"
-          [data]="soldPencePerKiloData$ | async"
-          [type]="barChartType"
-          [options]="soldPencePerKiloOptions"
-        ></canvas>
-      </div>
-    </div>
-  </div>
-</div>
+            <div class="input-group mb-2 mb-md-0">
+              <span class="input-group-text">From</span>
+
+              <input
+                #dpFromDate
+                class="form-control"
+                placeholder="dd/mm/yyyy"
+                name="dpFromDate"
+                [value]="formatter.format(fromDateValue)"
+                onkeydown="return false"
+                (click)="toggle()"
+                />
+
+                <button
+                  id="fromDate"
+                  class="btn btn-outline-secondary"
+                  (click)="toggle()"
+                  type="button"
+                  >
+                  <i class="fa-regular fa-calendar-days"></i>
+                </button>
+              </div>
+            </div>
+            <div class="col-md">
+              <div class="input-group">
+                <span class="input-group-text">To</span>
+                <input
+                  [formControl]="toDateControl"
+                  #dpToDate
+                  class="form-control"
+                  placeholder="dd/mm/yyyy"
+                  name="dpToDate"
+                  [value]="formatter.format(toDateValue)"
+                  onkeydown="return false"
+                  (click)="toggle()"
+                  />
+                  <button
+                    class="btn btn-outline-secondary"
+                    (click)="toggle()"
+                    type="button"
+                    >
+                    <i class="fa-regular fa-calendar-days"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="col-md-auto mt-1 mt-md-0">
+                <button class="btn-danger btn" (click)="clearDateFilter()">Clear</button>
+              </div>
+            </div>
+            <!-- DONT DELETE!! -->
+            <div class="row" style="max-width: 100%" id="datePicker"></div>
+
+            <div class="row">
+              <div class="col-md">
+                <!-- <a class="badge bg-success"
+                ><i class="fa-solid fa-sort-up"></i>Lowest to Highest Avg Daily Weight
+                Gain</a
+                >
+                <br />
+                <a class="badge bg-success"
+                  ><i class="fa-solid fa-sort-up"></i>Lowest to Highest Total Weight
+                  Gain</a
+                  >
+                  <br />
+                  <a class="badge bg-success"
+                    ><i class="fa-solid fa-sort-up"></i>Lowest to Highest Total Weight</a
+                    >
+                    <br /> -->
+                    <cms-animal-list
+                      [page]="page"
+                      [multiSelect]="true"
+                      [dateRange$]="dateRange"
+                      [filterByDOB]="dateFilterDob"
+                      (mutiAnimalsSelected)="multiAnimalsSelected($event)"
+                    ></cms-animal-list>
+                  </div>
+                  <div class="col-md">
+                    <div class="row">
+                      <canvas
+                        id="avgDailyWeightGain"
+                        baseChart
+                        class="chart"
+                        [data]="avgDailyWeightChartData | async"
+                        [options]="avgDailyWeightGainChartOptions"
+                        [type]="barChartType"
+                        >
+                      </canvas>
+                    </div>
+                    <div class="row">
+                      <canvas
+                        id="actualDailyWeightGain"
+                        baseChart
+                        class="chart"
+                        [data]="actualDailyWeightChartData$ | async"
+                        [options]="actualDailyWeightOptions"
+                        [type]="lineChartType"
+                        >
+                      </canvas>
+                    </div>
+                    @if (sortedPPK$ | async; as sortedPPK) {
+                      <div class="row">
+                        <div class="card">
+                          <div class="card-body">
+                            <strong>MaxPPK:</strong> {{ getMax(sortedPPK)?.tagNumber }} -
+                            {{ getMax(sortedPPK)?.value }} £/k
+                          </div>
+                          <div class="card-body">
+                            <strong>MinPPK: </strong>{{ sortedPPK[0].tagNumber }} -
+                            {{ sortedPPK[0].value }} £/k
+                          </div>
+                          <div class="card-body">
+                            <strong>AveragePPK:</strong> {{ averagePPK | async }}
+                          </div>
+                        </div>
+                        <canvas
+                          id="soldPencePerKilo"
+                          baseChart
+                          class="chart"
+                          [data]="soldPencePerKiloData$ | async"
+                          [type]="barChartType"
+                          [options]="soldPencePerKiloOptions"
+                        ></canvas>
+                      </div>
+                    }
+                  </div>
+                </div>
+              </div>

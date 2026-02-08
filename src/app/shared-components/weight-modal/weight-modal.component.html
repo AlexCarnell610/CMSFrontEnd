@@ -1,139 +1,138 @@
 <ngx-smart-modal #weightModal identifier="weightModal" [closable]="false" [dismissable]="!isDirty" [escapable]="!isDirty">
-  <div *ngIf="animal">
-    <h4 class="text-center">
-      {{ isAddMode ? "Add" : "Edit" }} Weight for
-      <strong>{{ animal.tagNumber }}</strong>
-    </h4>
-    <div class="cms-form">
-      <form [formGroup]="editWeightForm" class="mb-3 mt-2">
-        <div
-          *ngIf="!isAddMode"
-          class="form-group mb-3 mt-3"
-          [ngClass]="{ 'was-validated': weightSelect.dirty }"
-        >
-          <select
-            formControlName="weightSelect"
-            class="form-select"
-            id="weightSelect"
-            required
-          >
-            <option value="">Select weight to edit</option>
-            <option
-              *ngFor="let weight of animal.weightData"
-              value="{{ weight.id }}"
-            >
-              {{ weight.weightDate | date: "dd/MM/yyyy" }} -
-              {{ weight.weight }} Kg
-            </option>
-          </select>
-          <div class="invalid-feedback">
-            <cms-form-errors
-              [errors]="weightSelect.errors"
-              [isRadio]="true"
-            ></cms-form-errors>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="newWeight">Enter new weight</label>
-          <div
-            class="input-group"
-            [ngClass]="{ 'was-validated': weight.dirty }"
-          >
-            <input
-              formControlName="weight"
-              class="form-control"
-              type="number"
-              step="1"
-              name="weight"
-              required
-              min="10"
-              max="1000"
-            />
-            
-              <span class="input-group-text-end">Kg</span>
-          
-            <div class="invalid-feedback">
-              <cms-form-errors [errors]="weight.errors"></cms-form-errors>
+  @if (animal) {
+    <div>
+      <h4 class="text-center">
+        {{ isAddMode ? "Add" : "Edit" }} Weight for
+        <strong>{{ animal.tagNumber }}</strong>
+      </h4>
+      <div class="cms-form">
+        <form [formGroup]="editWeightForm" class="mb-3 mt-2">
+          @if (!isAddMode) {
+            <div
+              class="form-group mb-3 mt-3"
+              [ngClass]="{ 'was-validated': weightSelect.dirty }"
+              >
+              <select
+                formControlName="weightSelect"
+                class="form-select"
+                id="weightSelect"
+                required
+                >
+                <option value="">Select weight to edit</option>
+                @for (weight of animal.weightData; track weight) {
+                  <option
+                    value="{{ weight.id }}"
+                    >
+                    {{ weight.weightDate | date: "dd/MM/yyyy" }} -
+                    {{ weight.weight }} Kg
+                  </option>
+                }
+              </select>
+              <div class="invalid-feedback">
+                <cms-form-errors
+                  [errors]="weightSelect.errors"
+                  [isRadio]="true"
+                ></cms-form-errors>
+              </div>
+            </div>
+          }
+          <div class="form-group">
+            <label for="newWeight">Enter new weight</label>
+            <div
+              class="input-group"
+              [ngClass]="{ 'was-validated': weight.dirty }"
+              >
+              <input
+                formControlName="weight"
+                class="form-control"
+                type="number"
+                step="1"
+                name="weight"
+                required
+                min="10"
+                max="1000"
+                />
+                <span class="input-group-text-end">Kg</span>
+                <div class="invalid-feedback">
+                  <cms-form-errors [errors]="weight.errors"></cms-form-errors>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="newDate">Enter new date</label>
+              <input
+                formControlName="date"
+                class="form-control"
+                type="date"
+                name="date"
+                id="newDate"
+                [ngClass]="getCSSClassForDate()"
+                />
+                <div class="invalid-feedback">
+                  <cms-form-errors [errors]="date.errors"></cms-form-errors>
+                </div>
+              </div>
+              <div class="form-check">
+                <input formControlName="isSaleWeight" type="checkbox" class="form-check-input" [ngClass]="getCSSForRadio()" id="saleWeight">
+                <label class="form-check-label" for="saleWeight">Is sale weight</label>
+                <div class="invalid-feedback">
+                  <cms-form-errors
+                    [errors]="isSaleWeightControl.errors"
+                    [isRadio]="true"
+                  ></cms-form-errors>
+                </div>
+              </div>
+              @if (isSaleWeight) {
+                <div class="form-group mb-2">
+                  <label for="salePrice">Enter sale price</label>
+                  <div
+                    class="input-group"
+                    [ngClass]="{ 'was-validated': salePrice.dirty }"
+                    >
+                    <span class="input-group-text">£</span>
+                    <input
+                      formControlName="salePrice"
+                      class="form-control"
+                      type="number"
+                      step="0.01"
+                      name="salePrice"
+                      required
+                      min="20"
+                      max="10000"
+                      />
+                      <div class="invalid-feedback">
+                        <cms-form-errors [errors]="salePrice.errors" [minMaxUnits]="''"></cms-form-errors>
+                      </div>
+                    </div>
+                  </div>
+                }
+                <button
+                  class="btn btn-success me-3"
+                  (click)="saveChanges()"
+                  ngbPopover="Update Success!"
+                  #p="ngbPopover"
+                  placement="bottom"
+                  popoverClass="update-success"
+                  triggers="manual"
+                  >
+                  Save Changes
+                </button>
+                <button type="button" class="btn btn-danger" (click)="closeModal()">
+                  Close
+                </button>
+                @if (!isAddMode) {
+                  <button class="btn btn-warning float-right ms-2" [disabled]="!selectedWeight" (click)="deleteWeight()">Delete</button>
+                }
+                @if (showOverride) {
+                  <button
+                    class="btn btn-danger me-3"
+                    (click)="saveChanges(true)"
+                    >
+                    Override Errors!
+                  </button>
+                }
+              </form>
             </div>
           </div>
-        </div>
-
-        <div class="form-group">
-          <label for="newDate">Enter new date</label>
-          <input
-            formControlName="date"
-            class="form-control"
-            type="date"
-            name="date"
-            id="newDate"
-            [ngClass]="getCSSClassForDate()"
-          />
-          <div class="invalid-feedback">
-            <cms-form-errors [errors]="date.errors"></cms-form-errors>
-          </div>
-        </div>
-
-        <div class="form-check">
-          <input formControlName="isSaleWeight" type="checkbox" class="form-check-input" [ngClass]="getCSSForRadio()" id="saleWeight">
-          <label class="form-check-label" for="saleWeight">Is sale weight</label>
-          <div class="invalid-feedback">
-            <cms-form-errors
-              [errors]="isSaleWeightControl.errors"
-              [isRadio]="true"
-            ></cms-form-errors>
-          </div>
-        </div>
-
-        <div class="form-group mb-2" *ngIf="isSaleWeight">
-          <label for="salePrice">Enter sale price</label>
-          <div
-            class="input-group"
-            [ngClass]="{ 'was-validated': salePrice.dirty }"
-          >
-          <span class="input-group-text">£</span>
-            <input
-              formControlName="salePrice"
-              class="form-control"
-              type="number"
-              step="0.01"
-              name="salePrice"
-              required
-              min="20"
-              max="10000"
-            />
-            
-          
-            <div class="invalid-feedback">
-              <cms-form-errors [errors]="salePrice.errors" [minMaxUnits]="''"></cms-form-errors>
-            </div>
-          </div>
-        </div>
-
-        <button
-          class="btn btn-success me-3"
-          (click)="saveChanges()"
-          ngbPopover="Update Success!"
-          #p="ngbPopover"
-          placement="bottom"
-          popoverClass="update-success"
-          triggers="manual"
-        >
-          Save Changes
-        </button>
-        <button type="button" class="btn btn-danger" (click)="closeModal()">
-          Close
-        </button>
-        <button *ngIf="!isAddMode" class="btn btn-warning float-right ms-2" [disabled]="!selectedWeight" (click)="deleteWeight()">Delete</button>
-
-        <button
-        *ngIf="showOverride"
-          class="btn btn-danger me-3"
-          (click)="saveChanges(true)"
-        >
-          Override Errors!
-        </button>        
-      </form>
-    </div>
-  </div>
-</ngx-smart-modal>
+        }
+      </ngx-smart-modal>

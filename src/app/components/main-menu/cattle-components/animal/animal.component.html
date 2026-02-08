@@ -24,56 +24,60 @@
         [value]="YOUNG_TO_OLD"
         id="sort-young-old"
         formControlName="sortRadio"
-      />
-      <label class="form-check-label" for="sort-young-old"
-        >Youngest to Oldest</label
-      >
-    </div>
-    <div class="form-check form-check-inline">
-      <input
-        type="radio"
-        class="form-check-input"
-        name="sortRadio"
-        [value]="OLD_TO_YOUNG"
-        id="sort-old-young"
-        formControlName="sortRadio"
-      />
-      <label class="form-check-label" for="sort-old-young"
-        >Oldest to Youngest</label
-      >
-    </div>
-  </div>
-  <div class="row">
-    <div class="col">
-      <cms-animal-list
-        [sortYoungToOld]="youngToOld | async"
-        [sortOldToYoung]="oldToYoung | async"
-        [page]="pageName"
-        (edit)="editAnimal()"
-        (animalSelected)="animalSelected($event)"
-      ></cms-animal-list>
-    </div>
-    <div *ngIf="!screenService.isSmallScreen" class="col">
-      <ng-container *ngTemplateOutlet="animalDisplay"></ng-container>
-    </div>
-  </div>
-  <div class="row mt-3">
-    <div class="col" *ngIf="screenService.isSmallScreen">
-      <ng-container *ngTemplateOutlet="animalDisplay"></ng-container>
-    </div>
-  </div>
-</div>
+        />
+        <label class="form-check-label" for="sort-young-old"
+          >Youngest to Oldest</label
+          >
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            type="radio"
+            class="form-check-input"
+            name="sortRadio"
+            [value]="OLD_TO_YOUNG"
+            id="sort-old-young"
+            formControlName="sortRadio"
+            />
+            <label class="form-check-label" for="sort-old-young"
+              >Oldest to Youngest</label
+              >
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <cms-animal-list
+                [sortYoungToOld]="youngToOld | async"
+                [sortOldToYoung]="oldToYoung | async"
+                [page]="pageName"
+                (edit)="editAnimal()"
+                (animalSelected)="animalSelected($event)"
+              ></cms-animal-list>
+            </div>
+            @if (!screenService.isSmallScreen) {
+              <div class="col">
+                <ng-container *ngTemplateOutlet="animalDisplay"></ng-container>
+              </div>
+            }
+          </div>
+          <div class="row mt-3">
+            @if (screenService.isSmallScreen) {
+              <div class="col">
+                <ng-container *ngTemplateOutlet="animalDisplay"></ng-container>
+              </div>
+            }
+          </div>
+        </div>
 
-<ng-template #animalDisplay>
-  <cms-animal-display
-    [$selectedAnimal]="$selectedAnimal"
-    [showGoToChild]="showGoToChild"
-    (editAnimal)="editAnimal()"
-    (goToDamOutput)="goToDam($event)"
-    (goToChildEmit)="goToPreviousAnimal()"
-  ></cms-animal-display>
-</ng-template>
+        <ng-template #animalDisplay>
+          <cms-animal-display
+            [$selectedAnimal]="$selectedAnimal"
+            [showGoToChild]="showGoToChild"
+            (editAnimal)="editAnimal()"
+            (goToDamOutput)="goToDam($event)"
+            (goToChildEmit)="goToPreviousAnimal()"
+          ></cms-animal-display>
+        </ng-template>
 
-<!-- <cms-bull-modal [bull]="selectedAnimal"></cms-bull-modal> -->
-<cms-animal-modal [animal]="$selectedAnimal | async"></cms-animal-modal>
-<cms-warning-display></cms-warning-display>
+        <!-- <cms-bull-modal [bull]="selectedAnimal"></cms-bull-modal> -->
+        <cms-animal-modal [animal]="$selectedAnimal | async"></cms-animal-modal>
+        <cms-warning-display></cms-warning-display>

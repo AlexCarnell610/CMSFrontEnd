@@ -1,64 +1,71 @@
-<ul
-  class="list-group cms-list"
-  *ngIf="searchedData$ | async as data"
-  [formGroup]="searchBarGroup"
->
-  <input
-    type="text"
-    placeholder="Search..."
-    class="list-group-item animal-button cms-sticky"
-    formControlName="searchBar"
-  />
-
-  <button
-    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center animal-button"
-    *ngFor="let datum of data | convertToGenericDataType"
-  >
-    <div class="col-9">
-      <ul class="me-1 list-group list-group-flush">
-        <li class="list-group">
-          <strong style="font-size: larger">
-            {{ datum.firstRow }}
-          </strong>
-        </li>
-        <li *ngIf="datum.isMedication" class="list-group">
-          <p class="mb-0">
-            <b>Batch Number: </b>
-            {{ datum.secondRow }}
-          </p>
-        </li>
-        <li *ngIf="!datum.isMedication" class="list-group">
-          <p class="mb-0">
-            <b>Medication: </b>
-            {{ datum.treatmentMedicationName | async }}
-          </p>
-        </li>
-        <li class="list-group">
-          <p class="mb-0">
-            <b>{{ datum.isMedication ? "Withdrawal Period: " : "Treatment Date: " }}</b>
-            {{ datum.thirdRow && datum.fourthRow ? datum.thirdRow + " - " + datum.fourthRow : datum.thirdRow }}
-          </p>
-        </li>
-        <li class="list-group" *ngIf="!datum.isMedication">
-          <p class="mb-0">
-            <b>Withdrawal period end: </b>
-            {{ datum.treatmentWithdrawalEnd | async }}
-          </p>
-        </li>
-        <li class="list-group">
-          <p class="mb-0">
-            <b>{{ datum.isMedication ? "Expiry Date: " : "Administerer: " }}</b>
-            {{ datum.fifthRow }}
-          </p>
-        </li>
+@if (searchedData$ | async; as data) {
+  <ul
+    class="list-group cms-list"
+    [formGroup]="searchBarGroup"
+    >
+    <input
+      type="text"
+      placeholder="Search..."
+      class="list-group-item animal-button cms-sticky"
+      formControlName="searchBar"
+      />
+      @for (datum of data | convertToGenericDataType; track datum) {
+        <button
+          class="list-group-item list-group-item-action d-flex justify-content-between align-items-center animal-button"
+          >
+          <div class="col-9">
+            <ul class="me-1 list-group list-group-flush">
+              <li class="list-group">
+                <strong style="font-size: larger">
+                  {{ datum.firstRow }}
+                </strong>
+              </li>
+              @if (datum.isMedication) {
+                <li class="list-group">
+                  <p class="mb-0">
+                    <b>Batch Number: </b>
+                    {{ datum.secondRow }}
+                  </p>
+                </li>
+              }
+              @if (!datum.isMedication) {
+                <li class="list-group">
+                  <p class="mb-0">
+                    <b>Medication: </b>
+                    {{ datum.treatmentMedicationName | async }}
+                  </p>
+                </li>
+              }
+              <li class="list-group">
+                <p class="mb-0">
+                  <b>{{ datum.isMedication ? "Withdrawal Period: " : "Treatment Date: " }}</b>
+                  {{ datum.thirdRow && datum.fourthRow ? datum.thirdRow + " - " + datum.fourthRow : datum.thirdRow }}
+                </p>
+              </li>
+              @if (!datum.isMedication) {
+                <li class="list-group">
+                  <p class="mb-0">
+                    <b>Withdrawal period end: </b>
+                    {{ datum.treatmentWithdrawalEnd | async }}
+                  </p>
+                </li>
+              }
+              <li class="list-group">
+                <p class="mb-0">
+                  <b>{{ datum.isMedication ? "Expiry Date: " : "Administerer: " }}</b>
+                  {{ datum.fifthRow }}
+                </p>
+              </li>
+            </ul>
+          </div>
+          <div class="col">
+            <span
+              class="btn badge bg-info rounded-pill align-self-center"
+              (click)="edit(datum)"
+              >Edit</span
+              >
+            </div>
+          </button>
+        }
       </ul>
-    </div>
-    <div class="col">
-      <span
-        class="btn badge bg-info rounded-pill align-self-center"
-        (click)="edit(datum)"
-        >Edit</span
-      >
-    </div>
-  </button>
-</ul>
+    }

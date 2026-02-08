@@ -6,31 +6,35 @@
   [escapable]="toast?.allowEscaping"
   [dismissable]="toast?.allowEscaping"
   [customClass]="'nsm-centered'"
->
-  <div *ngIf="toast">
-    <strong>{{ toast.header }}</strong>
-    <div>{{ toast.body }}</div>
-    <div class="mt-2">
-      <button
-        class="btn me-2"
-        [ngClass]="getCSSForButton()"
-        (click)="continueClick()"
-      >
-        {{ toast.buttonText }}</button
-      ><button
-        *ngIf="toast.showCloseButton"
-        class="btn btn-dark"
-        (click)="cancelClick()"
-      >
-        {{ toast.isError ? "Close" : "Cancel" }}
-      </button>
-      <button
-        *ngIf="toast.isYesNo"
-        class="btn btn-dark"
-        (click)="cancelClick()"
-      >
-        No
-      </button>
+  >
+  @if (toast) {
+    <div>
+      <strong>{{ toast.header }}</strong>
+      <div>{{ toast.body }}</div>
+      <div class="mt-2">
+        <button
+          class="btn me-2"
+          [ngClass]="getCSSForButton()"
+          (click)="continueClick()"
+          >
+          {{ toast.buttonText }}</button
+          >@if (toast.showCloseButton) {
+          <button
+            class="btn btn-dark"
+            (click)="cancelClick()"
+            >
+            {{ toast.isError ? "Close" : "Cancel" }}
+          </button>
+        }
+        @if (toast.isYesNo) {
+          <button
+            class="btn btn-dark"
+            (click)="cancelClick()"
+            >
+            No
+          </button>
+        }
+      </div>
     </div>
-  </div>
+  }
 </ngx-smart-modal>

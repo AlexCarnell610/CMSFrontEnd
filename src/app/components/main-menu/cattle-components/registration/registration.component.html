@@ -18,14 +18,18 @@
         (animalSelected)="animalSelected($event)"
       ></cms-animal-list>
     </div>
-    <div *ngIf="!screenService.isSmallScreen" class="col">
-      <ng-container *ngTemplateOutlet="animalDisplay"></ng-container>
-    </div>
+    @if (!screenService.isSmallScreen) {
+      <div class="col">
+        <ng-container *ngTemplateOutlet="animalDisplay"></ng-container>
+      </div>
+    }
   </div>
   <div class="row mt-3">
-    <div class="col" *ngIf="screenService.isSmallScreen">
-      <ng-container *ngTemplateOutlet="animalDisplay"></ng-container>
-    </div>
+    @if (screenService.isSmallScreen) {
+      <div class="col">
+        <ng-container *ngTemplateOutlet="animalDisplay"></ng-container>
+      </div>
+    }
   </div>
 </div>
 

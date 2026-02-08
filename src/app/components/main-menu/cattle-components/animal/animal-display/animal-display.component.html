@@ -1,127 +1,160 @@
-<div
-  class="card"
-  *ngIf="$selectedAnimal | async as selectedAnimal"
-  [ngClass]="getCSS()"
->
-  <div class="card-header d-flex justify-content-between">
-    <strong>Tag number - {{ selectedAnimal.tagNumber | tagNumberDisplay}}</strong>
-    <span
-      class="btn badge bg-info rounded-pill align-self-center"
-      (click)="openEditModal()"
-      >Edit Animal</span
+@if ($selectedAnimal | async; as selectedAnimal) {
+  <div
+    class="card"
+    [ngClass]="getCSS()"
     >
-  </div>
-  <ul class="list-group list-group-flush">
-    <li *ngIf="selectedAnimal.managementTag && selectedAnimal.managementTag !== 'null'" class="list-group-item">
-      <strong>Management Tag - </strong> {{ selectedAnimal.managementTag }}
-    </li>
-    <li *ngIf="selectedAnimal.name" class="list-group-item">
-      <strong>Name - </strong> {{ selectedAnimal.name }}
-    </li>
-    <li class="list-group-item">
-      <strong>Gender - </strong> {{ selectedAnimal.gender ? selectedAnimal.gender : "M" }}
-    </li>
-    <li *ngIf="selectedAnimal.birthDate" class="list-group-item">
-      <strong>Date of Birth - </strong
-      >{{ selectedAnimal.birthDate | date: "dd MMM yyyy" }}
-    </li>
-    <li *ngIf="selectedAnimal.registered" class="list-group-item">
-      <strong>Registered - </strong
-      >{{ selectedAnimal.registered ? "Yes" : "No" }}
-    </li>
-    <li class="list-group-item">
-      <strong>Breed - </strong>{{ getBreedName(selectedAnimal) | titlecase }}
-    </li>
-    <li *ngIf="selectedAnimal.dam" class="list-group-item d-flex">
-      <strong>Dam -&nbsp;</strong
-      ><span class="flex-grow-1">{{
-        damTagNotProvided() ? "Not provided" : selectedAnimal.dam.tagNumber
-      }}</span>
-      <div>
-        <span
-          *ngIf="showGoToChild && !basicMode"
-          (click)="goToChildEmit.emit({})"
-          class="btn badge rounded-pill bg-danger me-1"
-          >Back</span
-        >
-        <span
-          *ngIf="!damTagNotProvided() && !basicMode"
-          (click)="goToDam(selectedAnimal)"
-          class="btn badge rounded-pill bg-info"
-          >Go to Dam</span
-        >
-      </div>
-    </li>
-    <li *ngIf="selectedAnimal.dam"
-      class="list-group-item d-flex justify-content-between"
-      [formGroup]="notesGroup"
-    >
-      <div class="flex-shrink-0">
-        <strong>Notes -&nbsp;</strong>
-        <button
-          *ngIf="!selectedAnimal.notes && !isEditNotes"
-          class="btn btn-success btn-sm"
-          (click)="editNotes()"
-        >
-          Add Notes
-        </button>
-      </div>
-      <div *ngIf="!isEditNotes">
-        {{ selectedAnimal.notes }}
-      </div>
-      <textarea
-        *ngIf="isEditNotes"
-        formControlName="notes"
-        class="flex-fill me-1"
-        style="height: 81px; resize: none"
-      ></textarea>
+    <div class="card-header d-flex justify-content-between">
+      <strong>Tag number - {{ selectedAnimal.tagNumber | tagNumberDisplay}}</strong>
       <span
-        *ngIf="selectedAnimal.notes || isEditNotes"
-        class="d-flex flex-column ms-auto justify-content-center"
-      >
-        <span
-          *ngIf="!saving"
-          class="badge rounded-pill"
-          [ngClass]="getCSSForNotesEdit()"
-          (click)="editNotes()"
-          >{{ !isEditNotes ? "Edit Notes" : "Save Changes" }}</span
+        class="btn badge bg-info rounded-pill align-self-center"
+        (click)="openEditModal()"
+        >Edit Animal</span
         >
-        <span
-          *ngIf="saving"
-          class="badge rounded-pill bg-success"
-          type="button"
-        >
-          <span
-            class="spinner-border cms-disabled-pill spinner-border-sm"
-            role="status"
-            aria-hidden="true"
-          ></span>
-          Saving...
-        </span>
-        <span
-          *ngIf="isEditNotes"
-          class="btn badge rounded-pill bg-danger mt-1 cms-notes-edit"
-          (click)="cancelEdit()"
-          >Cancel Edit</span
-        >
-      </span>
-    </li>
-    <li class="list-group-item" *ngIf="selectedAnimal.salePrice">
-      <strong>Sold - </strong>
-      <ul *ngIf="saleWeight$ | async as saleWeight">
-        <li>Sale date - {{saleWeight.weightDate | date : "dd MMM yyyy"}}</li>
-        <li>Sale weight - {{saleWeight.weight}}Kg</li>
-        <li>Sale amount - £{{selectedAnimal.salePrice}}</li>
-        <li>Pence Per Kilo - {{(selectedAnimal.salePrice / saleWeight.weight) | number : '1.2-2'}}ppk</li>
-      </ul>
-    </li>
-    <li class="list-group-item" *ngIf="$sire | async as sire">
-      <strong>Sire - </strong
-      >{{ sire.name !== "null" ? sire.name : "No sire assigned" }}
-      <ul *ngIf="sire.name !== 'null'" style="list-style-type: none">
-        <li *ngIf="sire.tagNumber !== 'NA'">&nbsp;{{ sire.tagNumber }}</li>
-        <li>&nbsp;{{ getBreedName(sire) | titlecase }}</li>
-      </ul>
-    </li>
-  </ul>
-</div>
+      </div>
+      <ul class="list-group list-group-flush">
+        @if (selectedAnimal.managementTag && selectedAnimal.managementTag !== 'null') {
+          <li class="list-group-item">
+            <strong>Management Tag - </strong> {{ selectedAnimal.managementTag }}
+          </li>
+        }
+        @if (selectedAnimal.name) {
+          <li class="list-group-item">
+            <strong>Name - </strong> {{ selectedAnimal.name }}
+          </li>
+        }
+        <li class="list-group-item">
+          <strong>Gender - </strong> {{ selectedAnimal.gender ? selectedAnimal.gender : "M" }}
+        </li>
+        @if (selectedAnimal.birthDate) {
+          <li class="list-group-item">
+            <strong>Date of Birth - </strong
+              >{{ selectedAnimal.birthDate | date: "dd MMM yyyy" }}
+            </li>
+          }
+          @if (selectedAnimal.registered) {
+            <li class="list-group-item">
+              <strong>Registered - </strong
+                >{{ selectedAnimal.registered ? "Yes" : "No" }}
+              </li>
+            }
+            <li class="list-group-item">
+              <strong>Breed - </strong>{{ getBreedName(selectedAnimal) | titlecase }}
+            </li>
+            @if (selectedAnimal.dam) {
+              <li class="list-group-item d-flex">
+                <strong>Dam -&nbsp;</strong
+                  ><span class="flex-grow-1">{{
+                  damTagNotProvided() ? "Not provided" : selectedAnimal.dam.tagNumber
+                }}</span>
+                <div>
+                  @if (showGoToChild && !basicMode) {
+                    <span
+                      (click)="goToChildEmit.emit({})"
+                      class="btn badge rounded-pill bg-danger me-1"
+                      >Back</span
+                      >
+                    }
+                    @if (!damTagNotProvided() && !basicMode) {
+                      <span
+                        (click)="goToDam(selectedAnimal)"
+                        class="btn badge rounded-pill bg-info"
+                        >Go to Dam</span
+                        >
+                      }
+                    </div>
+                  </li>
+                }
+                @if (selectedAnimal.dam) {
+                  <li
+                    class="list-group-item d-flex justify-content-between"
+                    [formGroup]="notesGroup"
+                    >
+                    <div class="flex-shrink-0">
+                      <strong>Notes -&nbsp;</strong>
+                      @if (!selectedAnimal.notes && !isEditNotes) {
+                        <button
+                          class="btn btn-success btn-sm"
+                          (click)="editNotes()"
+                          >
+                          Add Notes
+                        </button>
+                      }
+                    </div>
+                    @if (!isEditNotes) {
+                      <div>
+                        {{ selectedAnimal.notes }}
+                      </div>
+                    }
+                    @if (isEditNotes) {
+                      <textarea
+                        formControlName="notes"
+                        class="flex-fill me-1"
+                        style="height: 81px; resize: none"
+                      ></textarea>
+                    }
+                    @if (selectedAnimal.notes || isEditNotes) {
+                      <span
+                        class="d-flex flex-column ms-auto justify-content-center"
+                        >
+                        @if (!saving) {
+                          <span
+                            class="badge rounded-pill"
+                            [ngClass]="getCSSForNotesEdit()"
+                            (click)="editNotes()"
+                            >{{ !isEditNotes ? "Edit Notes" : "Save Changes" }}</span
+                            >
+                          }
+                          @if (saving) {
+                            <span
+                              class="badge rounded-pill bg-success"
+                              type="button"
+                              >
+                              <span
+                                class="spinner-border cms-disabled-pill spinner-border-sm"
+                                role="status"
+                                aria-hidden="true"
+                              ></span>
+                              Saving...
+                            </span>
+                          }
+                          @if (isEditNotes) {
+                            <span
+                              class="btn badge rounded-pill bg-danger mt-1 cms-notes-edit"
+                              (click)="cancelEdit()"
+                              >Cancel Edit</span
+                              >
+                            }
+                          </span>
+                        }
+                      </li>
+                    }
+                    @if (selectedAnimal.salePrice) {
+                      <li class="list-group-item">
+                        <strong>Sold - </strong>
+                        @if (saleWeight$ | async; as saleWeight) {
+                          <ul>
+                            <li>Sale date - {{saleWeight.weightDate | date : "dd MMM yyyy"}}</li>
+                            <li>Sale weight - {{saleWeight.weight}}Kg</li>
+                            <li>Sale amount - £{{selectedAnimal.salePrice}}</li>
+                            <li>Pence Per Kilo - {{(selectedAnimal.salePrice / saleWeight.weight) | number : '1.2-2'}}ppk</li>
+                          </ul>
+                        }
+                      </li>
+                    }
+                    @if ($sire | async; as sire) {
+                      <li class="list-group-item">
+                        <strong>Sire - </strong
+                          >{{ sire.name !== "null" ? sire.name : "No sire assigned" }}
+                          @if (sire.name !== 'null') {
+                            <ul style="list-style-type: none">
+                              @if (sire.tagNumber !== 'NA') {
+                                <li>&nbsp;{{ sire.tagNumber }}</li>
+                              }
+                              <li>&nbsp;{{ getBreedName(sire) | titlecase }}</li>
+                            </ul>
+                          }
+                        </li>
+                      }
+                    </ul>
+                  </div>
+                }

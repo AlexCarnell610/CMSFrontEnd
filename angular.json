@@ -15,7 +15,7 @@
 			"prefix": "cms",
 			"architect": {
 				"build": {
-					"builder": "@angular-devkit/build-angular:application",
+					"builder": "@angular/build:application",
 					"options": {
 						"outputPath": {
 							"browser": "",
@@ -81,7 +81,7 @@
 					"defaultConfiguration": ""
 				},
 				"serve": {
-					"builder": "@angular-devkit/build-angular:dev-server",
+					"builder": "@angular/build:dev-server",
           "options": {
             "proxyConfig": "src/proxy.conf.json",
             "buildTarget": "CMSFrontEnd:build"
@@ -94,13 +94,13 @@
 					}
 				},
 				"extract-i18n": {
-					"builder": "@angular-devkit/build-angular:extract-i18n",
+					"builder": "@angular/build:extract-i18n",
           "options": {
             "buildTarget": "CMSFrontEnd:build"
 					}
 				},
 				"test": {
-					"builder": "@angular-devkit/build-angular:karma",
+					"builder": "@angular/build:karma",
 					"options": {
 						"main": "src/test.ts",
 						"codeCoverage": true,
@@ -132,7 +132,7 @@
 			"prefix": "lib",
 			"architect": {
 				"build": {
-					"builder": "@angular-devkit/build-angular:ng-packagr",
+					"builder": "@angular/build:ng-packagr",
 					"options": {
 						"tsConfig": "libs/enums/tsconfig.lib.json",
 						"project": "libs/enums/ng-package.json"
@@ -144,7 +144,7 @@
 					}
 				},
 				"test": {
-					"builder": "@angular-devkit/build-angular:karma",
+					"builder": "@angular/build:karma",
 					"options": {
 						"main": "libs/enums/src/test.ts",
 						"tsConfig": "libs/enums/tsconfig.spec.json",
@@ -160,7 +160,7 @@
 			"prefix": "lib",
 			"architect": {
 				"build": {
-					"builder": "@angular-devkit/build-angular:ng-packagr",
+					"builder": "@angular/build:ng-packagr",
 					"options": {
 						"tsConfig": "libs/interfaces/tsconfig.lib.json",
 						"project": "libs/interfaces/ng-package.json"
@@ -172,7 +172,7 @@
 					}
 				},
 				"test": {
-					"builder": "@angular-devkit/build-angular:karma",
+					"builder": "@angular/build:karma",
 					"options": {
 						"main": "libs/interfaces/src/test.ts",
 						"tsConfig": "libs/interfaces/tsconfig.spec.json",
@@ -188,7 +188,7 @@
 			"prefix": "lib",
 			"architect": {
 				"build": {
-					"builder": "@angular-devkit/build-angular:ng-packagr",
+					"builder": "@angular/build:ng-packagr",
 					"options": {
 						"tsConfig": "libs/ngrx/tsconfig.lib.json",
 						"project": "libs/ngrx/ng-package.json"
@@ -200,7 +200,7 @@
 					}
 				},
 				"test": {
-					"builder": "@angular-devkit/build-angular:karma",
+					"builder": "@angular/build:karma",
 					"options": {
 						"main": "libs/ngrx/src/test.ts",
 						"tsConfig": "libs/ngrx/tsconfig.spec.json",
@@ -216,7 +216,7 @@
 			"prefix": "lib",
 			"architect": {
 				"build": {
-					"builder": "@angular-devkit/build-angular:ng-packagr",
+					"builder": "@angular/build:ng-packagr",
 					"options": {
 						"tsConfig": "libs/services/tsconfig.lib.json",
 						"project": "libs/services/ng-package.json"
@@ -228,7 +228,7 @@
 					}
 				},
 				"test": {
-					"builder": "@angular-devkit/build-angular:karma",
+					"builder": "@angular/build:karma",
 					"options": {
 						"main": "libs/services/src/test.ts",
 						"tsConfig": "libs/services/tsconfig.spec.json",
@@ -245,7 +245,7 @@
 			"prefix": "lib",
 			"architect": {
 				"build": {
-					"builder": "@angular-devkit/build-angular:ng-packagr",
+					"builder": "@angular/build:ng-packagr",
 					"options": {
 						"tsConfig": "libs/validators/tsconfig.lib.json",
 						"project": "libs/validators/ng-package.json"
@@ -257,7 +257,7 @@
 					}
 				},
 				"test": {
-					"builder": "@angular-devkit/build-angular:karma",
+					"builder": "@angular/build:karma",
 					"options": {
 						"main": "libs/validators/src/test.ts",
 						"tsConfig": "libs/validators/tsconfig.spec.json",
@@ -271,5 +271,31 @@
     "schematicCollections": [
       "@ngrx/schematics"
     ]
-	}
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "type": "component"
+    },
+    "@schematics/angular:directive": {
+      "type": "directive"
+    },
+    "@schematics/angular:service": {
+      "type": "service"
+    },
+    "@schematics/angular:guard": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:interceptor": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:module": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:pipe": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:resolver": {
+      "typeSeparator": "."
+    }
+  }
 }

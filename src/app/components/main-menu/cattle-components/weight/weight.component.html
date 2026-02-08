@@ -26,14 +26,36 @@
         (animalSelected)="animalSelected($event)"
       ></cms-animal-list>
     </div>
-    <div *ngIf="!screenSize.isSmallScreen" class="col">
-      <div class="mb-4">
-        <div class="chart-wrapper cms-sticky" *ngIf="chartWeights">
-          <ng-container [ngTemplateOutlet]="avgDailyWeightGain"></ng-container>
-          <ng-container [ngTemplateOutlet]="weightCanvas"></ng-container>
+    @if (!screenSize.isSmallScreen) {
+      <div class="col">
+        <div class="mb-4">
+          @if (chartWeights) {
+            <div class="chart-wrapper cms-sticky">
+              <ng-container [ngTemplateOutlet]="avgDailyWeightGain"></ng-container>
+              <ng-container [ngTemplateOutlet]="weightCanvas"></ng-container>
+            </div>
+          }
+        </div>
+        <div class="">
+          <cms-animal-display
+            [$selectedAnimal]="$selectedAnimal"
+            [basicMode]="true"
+            [showGoToChild]="false"
+            (editAnimal)="openEditAnimalModal()"
+          ></cms-animal-display>
         </div>
       </div>
-      <div class="">
+    }
+  </div>
+  <div class="row mt-3">
+    @if (screenSize.isSmallScreen) {
+      <div class="col">
+        @if (chartWeights) {
+          <div class="chart-wrapper small-screen-graph mb-4">
+            <ng-container [ngTemplateOutlet]="avgDailyWeightGain"></ng-container>
+            <ng-container [ngTemplateOutlet]="weightCanvas"></ng-container>
+          </div>
+        }
         <cms-animal-display
           [$selectedAnimal]="$selectedAnimal"
           [basicMode]="true"
@@ -41,21 +63,7 @@
           (editAnimal)="openEditAnimalModal()"
         ></cms-animal-display>
       </div>
-    </div>
-  </div>
-  <div class="row mt-3">
-    <div *ngIf="screenSize.isSmallScreen" class="col">
-      <div class="chart-wrapper small-screen-graph mb-4" *ngIf="chartWeights">
-        <ng-container [ngTemplateOutlet]="avgDailyWeightGain"></ng-container>
-        <ng-container [ngTemplateOutlet]="weightCanvas"></ng-container>
-      </div>
-      <cms-animal-display
-        [$selectedAnimal]="$selectedAnimal"
-        [basicMode]="true"
-        [showGoToChild]="false"
-        (editAnimal)="openEditAnimalModal()"
-      ></cms-animal-display>
-    </div>
+    }
   </div>
 </div>
 
@@ -66,7 +74,7 @@
     [data]="chartWeights"
     [options]="chartOptions"
     [type]="chartType"
-  >
+    >
   </canvas>
 </ng-template>
 

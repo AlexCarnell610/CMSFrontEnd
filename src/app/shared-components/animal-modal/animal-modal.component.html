@@ -1,181 +1,184 @@
 <ngx-smart-modal justify-content-center #animalModal identifier="animalModal" [closable]="false" [dismissable]="!isDirty" [escapable]="!isDirty">
-  <div *ngIf="animal || isAddMode">
-    <h2 class="text-center">
-      {{ isAddMode ? "Add Animal" : "Edit " }}
-      <strong>{{ isAddMode ? "" : animal?.tagNumber }}</strong>
-    </h2>
-    <div class="cms-form">
-      <form [formGroup]="animalForm">
-        <div
-          *ngIf="isAddMode"
-          class="form-group"
-          [ngClass]="{ 'was-validated': tagNumber.dirty }"
-        >
-          <label for="newTagNumber">Enter tag number</label>
-          <input
-            formControlName="newTagNumber"
-            class="form-control"
-            type="text"
-            name="tag"
-            id="newTagNumber"
-            pattern="^UK\d{12}$"
-            autocapitalize="characters"
-          />
-          <div class="invalid-feedback">
-            <cms-form-errors [errors]="tagNumber.errors"></cms-form-errors>
-          </div>
-        </div>
-        <div
-          class="form-group"
-          [ngClass]="{ 'was-validated': managementTag.dirty }"
-        >
-          <label for="managementTag">Management Tag</label>
-          <input
-            name="managementTag"
-            type="text"
-            class="form-control"
-            id="managementTag"
-            formControlName="managementTag"
-            required
-            pattern="^[a-zA-Z]{1,10}\d*$"
-            autocapitalize="characters"
-          />
-          <div class="invalid-feedback">
-            <cms-form-errors [errors]="managementTag.errors" [isManagementTag]="true"></cms-form-errors>
-          </div>
-        </div>
-        <cms-yes-no-check [yesNoFormControl]="registered" [name]="'registered'">Registered on BCMS - </cms-yes-no-check>
-        <div class="form-group">
-          <label for="birthDate">Enter birth date</label>
-          <input
-            formControlName="dob"
-            type="date"
-            class="form-control"
-            [ngClass]="getCSSClassForDOB()"
-            name="dateOfBirth"
-            id="dateOfBirth"
-          />
-          <div class="invalid-feedback">
-            <cms-form-errors [errors]="dob.errors"></cms-form-errors>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="name">Enter name (optional)</label>
-          <input
-            formControlName="name"
-            type="text"
-            class="form-control"
-            [ngClass]="getCSSClassForName()"
-            name="name"
-            id="name"
-          />
-          <div class="invalid-feedback">
-            <cms-form-errors [errors]="dob.errors"></cms-form-errors>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="breed">Enter Breed</label>
-          <input
-            [ngClass]="getCSSClassForBreed()"
-            formControlName="breed"
-            type="text"
-            id="breed"
-            list="breeds"
-            class="form-control"
-            onclick="this.select();"
-          />
-          <datalist id="breeds">
-            <option *ngFor="let breed of breedsList" value="{{ breed.code }}">
-              {{ breed.breed }}
-            </option>
-          </datalist>
-          <div class="invalid-feedback">
-            <cms-form-errors [errors]="breed.errors"></cms-form-errors>
-          </div>
-        </div>
-        <div class="form-group" [ngClass]="{ 'was-validated': dam.dirty }">
-          <label for="dams">Enter Dam Tag</label>
-          <input
-            class="form-control"
-            type="text"
-            name="dam"
-            id="dam"
-            formControlName="dam"
-            pattern="^UK\d{12}$"
-            required
-            autocapitalize="characters"
-          />
-          <div class="form-check mt-1">
-            <input type="checkbox" class="form-check-input" id="damTagUnknown" formControlName="damTagUnknown">
-            <label class="form-check-label" for="damTagUnknown">Dam tag unknown</label>
-          </div>
-          <div class="invalid-feedback">
-            <cms-form-errors [errors]="dam.errors"></cms-form-errors>
-          </div>
-        </div>
+  @if (animal || isAddMode) {
+    <div>
+      <h2 class="text-center">
+        {{ isAddMode ? "Add Animal" : "Edit " }}
+        <strong>{{ isAddMode ? "" : animal?.tagNumber }}</strong>
+      </h2>
+      <div class="cms-form">
+        <form [formGroup]="animalForm">
+          @if (isAddMode) {
+            <div
+              class="form-group"
+              [ngClass]="{ 'was-validated': tagNumber.dirty }"
+              >
+              <label for="newTagNumber">Enter tag number</label>
+              <input
+                formControlName="newTagNumber"
+                class="form-control"
+                type="text"
+                name="tag"
+                id="newTagNumber"
+                pattern="^UK\d{12}$"
+                autocapitalize="characters"
+                />
+                <div class="invalid-feedback">
+                  <cms-form-errors [errors]="tagNumber.errors"></cms-form-errors>
+                </div>
+              </div>
+            }
+            <div
+              class="form-group"
+              [ngClass]="{ 'was-validated': managementTag.dirty }"
+              >
+              <label for="managementTag">Management Tag</label>
+              <input
+                name="managementTag"
+                type="text"
+                class="form-control"
+                id="managementTag"
+                formControlName="managementTag"
+                required
+                pattern="^[a-zA-Z]{1,10}\d*$"
+                autocapitalize="characters"
+                />
+                <div class="invalid-feedback">
+                  <cms-form-errors [errors]="managementTag.errors" [isManagementTag]="true"></cms-form-errors>
+                </div>
+              </div>
+              <cms-yes-no-check [yesNoFormControl]="registered" [name]="'registered'">Registered on BCMS - </cms-yes-no-check>
+              <div class="form-group">
+                <label for="birthDate">Enter birth date</label>
+                <input
+                  formControlName="dob"
+                  type="date"
+                  class="form-control"
+                  [ngClass]="getCSSClassForDOB()"
+                  name="dateOfBirth"
+                  id="dateOfBirth"
+                  />
+                  <div class="invalid-feedback">
+                    <cms-form-errors [errors]="dob.errors"></cms-form-errors>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="name">Enter name (optional)</label>
+                  <input
+                    formControlName="name"
+                    type="text"
+                    class="form-control"
+                    [ngClass]="getCSSClassForName()"
+                    name="name"
+                    id="name"
+                    />
+                    <div class="invalid-feedback">
+                      <cms-form-errors [errors]="dob.errors"></cms-form-errors>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="breed">Enter Breed</label>
+                    <input
+                      [ngClass]="getCSSClassForBreed()"
+                      formControlName="breed"
+                      type="text"
+                      id="breed"
+                      list="breeds"
+                      class="form-control"
+                      onclick="this.select();"
+                      />
+                      <datalist id="breeds">
+                        @for (breed of breedsList; track breed) {
+                          <option value="{{ breed.code }}">
+                            {{ breed.breed }}
+                          </option>
+                        }
+                      </datalist>
+                      <div class="invalid-feedback">
+                        <cms-form-errors [errors]="breed.errors"></cms-form-errors>
+                      </div>
+                    </div>
+                    <div class="form-group" [ngClass]="{ 'was-validated': dam.dirty }">
+                      <label for="dams">Enter Dam Tag</label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="dam"
+                        id="dam"
+                        formControlName="dam"
+                        pattern="^UK\d{12}$"
+                        required
+                        autocapitalize="characters"
+                        />
+                        <div class="form-check mt-1">
+                          <input type="checkbox" class="form-check-input" id="damTagUnknown" formControlName="damTagUnknown">
+                          <label class="form-check-label" for="damTagUnknown">Dam tag unknown</label>
+                        </div>
+                        <div class="invalid-feedback">
+                          <cms-form-errors [errors]="dam.errors"></cms-form-errors>
+                        </div>
+                      </div>
+                      <cms-sire-list
+                        [isAdd]="isAddMode"
+                        [parentForm]="animalForm"
+                        [selectedBreed$]="selectedBreed$"
+                        [controlName]="sireControlName"
+                        [breedControlName]="breedControlName"
+                      ></cms-sire-list>
+                      <div class="form-check mt-1" [ngClass]="{ 'was-validated': gender.dirty }">
+                        <input
+                          formControlName="gender"
+                          type="radio"
+                          class="form-check-input"
+                          value="M"
+                          name="gender"
+                          id="isMaleRadio"
+                          required
+                          />
+                          <label class="form-check-label" for="isMaleRadio">Male</label>
+                        </div>
+                        <div
+                          class="form-check mb-3"
+                          [ngClass]="{ 'was-validated': gender.dirty }"
+                          >
+                          <input
+                            formControlName="gender"
+                            type="radio"
+                            class="form-check-input"
+                            value="F"
+                            name="gender"
+                            id="isFemaleRadio"
+                            required
+                            />
+                            <label class="form-check-label" for="isFemaleRadio">Female</label>
+                            <div class="invalid-feedback">
+                              <cms-form-errors
+                                [errors]="gender.errors"
+                                [isRadio]="true"
+                              ></cms-form-errors>
+                            </div>
+                          </div>
+                          <button
+                            class="btn btn-success"
+                            (click)="save()"
+                            ngbPopover
+                            #p="ngbPopover"
+                            placement="bottom"
+                            triggers="manual"
+                            >
+                            Save {{ isAddMode ? "Animal" : "Changes" }}
+                          </button>
+                          <button class="btn btn-danger ms-3" (click)="closeModal()">
+                            Close
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  }
+                </ngx-smart-modal>
 
-        <cms-sire-list
-          [isAdd]="isAddMode"
-          [parentForm]="animalForm"
-          [selectedBreed$]="selectedBreed$"
-          [controlName]="sireControlName"
-          [breedControlName]="breedControlName"
-        ></cms-sire-list>
-
-        <div class="form-check mt-1" [ngClass]="{ 'was-validated': gender.dirty }">
-          <input
-            formControlName="gender"
-            type="radio"
-            class="form-check-input"
-            value="M"
-            name="gender"
-            id="isMaleRadio"
-            required
-          />
-          <label class="form-check-label" for="isMaleRadio">Male</label>
-        </div>
-        <div
-          class="form-check mb-3"
-          [ngClass]="{ 'was-validated': gender.dirty }"
-        >
-          <input
-            formControlName="gender"
-            type="radio"
-            class="form-check-input"
-            value="F"
-            name="gender"
-            id="isFemaleRadio"
-            required
-          />
-          <label class="form-check-label" for="isFemaleRadio">Female</label>
-          <div class="invalid-feedback">
-            <cms-form-errors
-              [errors]="gender.errors"
-              [isRadio]="true"
-            ></cms-form-errors>
-          </div>
-        </div>
-        <button
-          class="btn btn-success"
-          (click)="save()"
-          ngbPopover
-          #p="ngbPopover"
-          placement="bottom"
-          triggers="manual"
-        >
-          Save {{ isAddMode ? "Animal" : "Changes" }}
-        </button>
-        <button class="btn btn-danger ms-3" (click)="closeModal()">
-          Close
-        </button>
-      </form>
-    </div>
-  </div>
-</ngx-smart-modal>
-
-<cms-bull-modal
-  (sireAdded)="newSire = $event"
-  [form]="animalForm"
-  [breedControlName]="breedControlName"
-  [sireControlName]="sireControlName"
-></cms-bull-modal>
+                <cms-bull-modal
+                  (sireAdded)="newSire = $event"
+                  [form]="animalForm"
+                  [breedControlName]="breedControlName"
+                  [sireControlName]="sireControlName"
+                ></cms-bull-modal>

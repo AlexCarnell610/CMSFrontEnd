@@ -15,93 +15,191 @@
       <div
         class="list-group mb-2"
         [ngClass]="{ 'cms-list': isSmallScreen }"
-      >
-        <button
-          *ngFor="let update of cullUpdate"
-          class="list-group-item list-group-item-action button-text"
-          (click)="animalSelected(update)"
         >
-          {{ update.tagNumber }}
-        </button>
+        @for (update of cullUpdate; track update) {
+          <button
+            class="list-group-item list-group-item-action button-text"
+            (click)="animalSelected(update)"
+            >
+            {{ update.tagNumber }}
+          </button>
+        }
       </div>
     </div>
-    <ng-container *ngIf="!isSmallScreen; then infoDisplay"></ng-container>
-  </div>
-  <ng-container *ngIf="isSmallScreen; then infoDisplay"></ng-container>
-</div>
-
-<ng-template #infoDisplay>
-  <div [ngClass]="{ col: !isSmallScreen }">
-    <div class="cms-sticky">
-      <div
-        *ngIf="selectedCullUpdate && $selectedAnimal | async as animal"
-        class="card"
-      >
-        <div class="card-header">
-          <strong>{{ selectedCullUpdate.tagNumber }}</strong>
+    @if (!isSmallScreen) {
+      <div [ngClass]="{ col: !isSmallScreen }">
+        <div class="cms-sticky">
+          @if (selectedCullUpdate && $selectedAnimal | async; as animal) {
+            <div
+              class="card"
+              >
+              <div class="card-header">
+                <strong>{{ selectedCullUpdate.tagNumber }}</strong>
+              </div>
+              <ul class="list-group list-group-flush">
+                @if (selectedCullUpdate.score) {
+                  <li class="list-group-item">
+                    <strong>Animal score - </strong
+                      >{{ selectedCullUpdate.score | number : "1.0-0" }}
+                    </li>
+                  }
+                  @if (selectedCullUpdate.totalCalves == 0) {
+                    <li
+                      class="list-group-item"
+                      >
+                      <strong>Animal has no calves</strong>
+                    </li>
+                  }
+                  <li class="list-group-item">
+                    <strong>Age - </strong> {{ selectedCullUpdate.age }}
+                  </li>
+                  @if (selectedCullUpdate.calfDailyWeightGain) {
+                    <li
+                      class="list-group-item"
+                      >
+                      <strong>Calf average daily weight gain - </strong>
+                      {{ selectedCullUpdate.calfDailyWeightGain | number : "1.0-3" }} Kg
+                    </li>
+                  }
+                  @if (selectedCullUpdate.totalCalves > 0) {
+                    <li
+                      class="list-group-item"
+                      >
+                      <strong>Calf tag numbers - </strong>
+                      <ul style="list-style-type: none">
+                        @for (calf of $calves | async; track calf) {
+                          <li>
+                            {{ calf.tagNumber }}
+                          </li>
+                        }
+                      </ul>
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
+            <div class="chart-wrapper mt-2" *ngrxLet="chartWeights$ as chartWeights">
+              @if (chartWeights.datasets.length > 0) {
+                <span class="ms-2 mb-1" style="color: #7e7e7e"
+                  ><strong>Calf Weight Gain</strong></span
+                  >
+                }
+                <canvas
+                  baseChart
+                  [data]="chartWeights"
+                  [options]="weightChartOptions"
+                  [legend]="false"
+                  [type]="'line'"
+                  [plugins]="[]"
+                  >
+                </canvas>
+              </div>
+              @if (aliveVSDeadData) {
+                <div class="chart-wrapper mt-2">
+                  <span class="ms-2 mb-1" style="color: #7e7e7e"
+                    ><strong>Alive vs Dead Calves</strong></span
+                    >
+                    <canvas
+                      baseChart
+                      class="chart"
+                      [data]="aliveVSDeadData"
+                      [options]="aliveDeadChartOptions"
+                      [legend]="true"
+                      [type]="'pie'"
+                      >
+                    </canvas>
+                  </div>
+                }
+              </div>
+            </div>
+          }
         </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item" *ngIf="selectedCullUpdate.score">
-            <strong>Animal score - </strong
-            >{{ selectedCullUpdate.score | number : "1.0-0" }}
-          </li>
-          <li
-            class="list-group-item"
-            *ngIf="selectedCullUpdate.totalCalves == 0"
-          >
-            <strong>Animal has no calves</strong>
-          </li>
-          <li class="list-group-item">
-            <strong>Age - </strong> {{ selectedCullUpdate.age }}
-          </li>
-          <li
-            *ngIf="selectedCullUpdate.calfDailyWeightGain"
-            class="list-group-item"
-          >
-            <strong>Calf average daily weight gain - </strong>
-            {{ selectedCullUpdate.calfDailyWeightGain | number : "1.0-3" }} Kg
-          </li>
-          <li
-            *ngIf="selectedCullUpdate.totalCalves > 0"
-            class="list-group-item"
-          >
-            <strong>Calf tag numbers - </strong>
-            <ul style="list-style-type: none">
-              <li *ngFor="let calf of $calves | async">
-                {{ calf.tagNumber }}
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-      <div class="chart-wrapper mt-2" *ngrxLet="chartWeights$ as chartWeights">
-        <span *ngIf="chartWeights.datasets.length > 0" class="ms-2 mb-1" style="color: #7e7e7e"
-          ><strong>Calf Weight Gain</strong></span
-        >
-        <canvas
-          baseChart
-          [data]="chartWeights"
-          [options]="weightChartOptions"
-          [legend]="false"
-          [type]="'line'"
-          [plugins]="[]"
-        >
-        </canvas>
-      </div>
-      <div class="chart-wrapper mt-2" *ngIf="aliveVSDeadData">
-        <span class="ms-2 mb-1" style="color: #7e7e7e"
-          ><strong>Alive vs Dead Calves</strong></span
-        >
-        <canvas
-          baseChart
-          class="chart"
-          [data]="aliveVSDeadData"
-          [options]="aliveDeadChartOptions"
-          [legend]="true"
-          [type]="'pie'"
-        >
-        </canvas>
-      </div>
-    </div>
-  </div>
-</ng-template>
+        @if (isSmallScreen) {
+          <div [ngClass]="{ col: !isSmallScreen }">
+            <div class="cms-sticky">
+              @if (selectedCullUpdate && $selectedAnimal | async; as animal) {
+                <div
+                  class="card"
+                  >
+                  <div class="card-header">
+                    <strong>{{ selectedCullUpdate.tagNumber }}</strong>
+                  </div>
+                  <ul class="list-group list-group-flush">
+                    @if (selectedCullUpdate.score) {
+                      <li class="list-group-item">
+                        <strong>Animal score - </strong
+                          >{{ selectedCullUpdate.score | number : "1.0-0" }}
+                        </li>
+                      }
+                      @if (selectedCullUpdate.totalCalves == 0) {
+                        <li
+                          class="list-group-item"
+                          >
+                          <strong>Animal has no calves</strong>
+                        </li>
+                      }
+                      <li class="list-group-item">
+                        <strong>Age - </strong> {{ selectedCullUpdate.age }}
+                      </li>
+                      @if (selectedCullUpdate.calfDailyWeightGain) {
+                        <li
+                          class="list-group-item"
+                          >
+                          <strong>Calf average daily weight gain - </strong>
+                          {{ selectedCullUpdate.calfDailyWeightGain | number : "1.0-3" }} Kg
+                        </li>
+                      }
+                      @if (selectedCullUpdate.totalCalves > 0) {
+                        <li
+                          class="list-group-item"
+                          >
+                          <strong>Calf tag numbers - </strong>
+                          <ul style="list-style-type: none">
+                            @for (calf of $calves | async; track calf) {
+                              <li>
+                                {{ calf.tagNumber }}
+                              </li>
+                            }
+                          </ul>
+                        </li>
+                      }
+                    </ul>
+                  </div>
+                }
+                <div class="chart-wrapper mt-2" *ngrxLet="chartWeights$ as chartWeights">
+                  @if (chartWeights.datasets.length > 0) {
+                    <span class="ms-2 mb-1" style="color: #7e7e7e"
+                      ><strong>Calf Weight Gain</strong></span
+                      >
+                    }
+                    <canvas
+                      baseChart
+                      [data]="chartWeights"
+                      [options]="weightChartOptions"
+                      [legend]="false"
+                      [type]="'line'"
+                      [plugins]="[]"
+                      >
+                    </canvas>
+                  </div>
+                  @if (aliveVSDeadData) {
+                    <div class="chart-wrapper mt-2">
+                      <span class="ms-2 mb-1" style="color: #7e7e7e"
+                        ><strong>Alive vs Dead Calves</strong></span
+                        >
+                        <canvas
+                          baseChart
+                          class="chart"
+                          [data]="aliveVSDeadData"
+                          [options]="aliveDeadChartOptions"
+                          [legend]="true"
+                          [type]="'pie'"
+                          >
+                        </canvas>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+
