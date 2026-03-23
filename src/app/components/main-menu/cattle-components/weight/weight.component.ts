@@ -99,7 +99,7 @@ export class WeightComponent implements OnInit, OnDestroy {
             },
           ],
           labels: animal.weightData.map((weight) =>
-            weight.weightDate.format('L')
+            weight.weightDate.toLocaleString()
           ),
         };
       } else if (animal == undefined) {

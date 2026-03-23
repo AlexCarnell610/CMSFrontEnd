@@ -28,7 +28,7 @@
         @if (selectedAnimal.birthDate) {
           <li class="list-group-item">
             <strong>Date of Birth - </strong
-              >{{ selectedAnimal.birthDate | date: "dd MMM yyyy" }}
+              >{{ selectedAnimal.birthDate.toJSDate() | date: "dd MMM yyyy" }}
             </li>
           }
           @if (selectedAnimal.registered) {
@@ -133,7 +133,7 @@
                         <strong>Sold - </strong>
                         @if (saleWeight$ | async; as saleWeight) {
                           <ul>
-                            <li>Sale date - {{saleWeight.weightDate | date : "dd MMM yyyy"}}</li>
+                            <li>Sale date - {{saleWeight.weightDate.toJSDate()| date : "dd MMM yyyy"}}</li>
                             <li>Sale weight - {{saleWeight.weight}}Kg</li>
                             <li>Sale amount - £{{selectedAnimal.salePrice}}</li>
                             <li>Pence Per Kilo - {{(selectedAnimal.salePrice / saleWeight.weight) | number : '1.2-2'}}ppk</li>

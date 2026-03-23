@@ -1,5 +1,5 @@
 import { AssistanceReason, CalvingAssistance, Gender } from '@cms-enums';
-import moment from 'moment';
+import {DateTime, DurationUnit} from 'luxon'
 
 export type Animal = IAnimal | IBull;
 export interface IBull {
@@ -18,10 +18,10 @@ export const UNKNOWN_DAM_TAG: string = "UK000000000000"
 
 export interface BaseAnimal {
   tagNumber: string;
-  birthDate: moment.Moment;
+  birthDate: DateTime;
   managementTag: string;
   gender: Gender;
-  salePrice?: number
+  salePrice?: number;
 }
 
 export interface Dam extends BaseAnimal {
@@ -55,10 +55,10 @@ export interface IAnimal extends BaseAnimal {
 }
 
 export interface AI {
-  aiDate: moment.Moment;
+  aiDate: DateTime;
   bull: { tagNumber: string };
   sweeperBull: boolean;
-  heatDate: moment.Moment;
+  heatDate: DateTime;
   year: number;
   id: number;
 }
@@ -80,7 +80,7 @@ export interface CalvingHistory {
 
 export interface AnimalWeight {
   id?: number;
-  weightDate: moment.Moment;
+  weightDate: DateTime;
   weight: number;
   isSaleWeight: boolean;
   tag?: string;
@@ -108,8 +108,8 @@ export interface IBulkWeight {
 }
 
 export interface IDobRange {
-  from: moment.Moment;
-  to: moment.Moment;
+  from: DateTime;
+  to: DateTime;
 }
 
 export function isAnimalArray(valArray: any[]): valArray is IAnimal[] {
@@ -129,8 +129,8 @@ export function isBull(animal: IAnimal | IBull): animal is IBull {
 }
 
 export function age(
-  birthDate: moment.Moment,
-  period: moment.unitOfTime.Diff = 'year'
+  birthDate: DateTime,
+  period: DurationUnit = 'year'
 ): number {
-  return moment().diff(birthDate, period, true);
+  return DateTime.now().diff(birthDate, period).as(period);
 }

@@ -10,9 +10,8 @@ import {
   ScreenSizeService,
 } from '@cms-services';
 import { select, Store } from '@ngrx/store';
-import { ChartConfiguration, ChartOptions } from 'chart.js';
-import moment from 'moment';
-import { Moment } from 'moment';
+import { ChartConfiguration } from 'chart.js';
+import { DateTime } from 'luxon';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
@@ -162,7 +161,7 @@ export class CullUpdateComponent implements OnInit, OnDestroy {
     //     labels: this.createLabels(calves),
     //   };
 
-    //           // let dates: Moment[] = [];
+    //           // let dates: any[] = [];
     //           // calves.forEach((calf) => {
     //           //   let chartPoint: any[] = [];
     //           //   return {
@@ -242,7 +241,7 @@ export class CullUpdateComponent implements OnInit, OnDestroy {
           ticks: {
             autoSkip: false,
             callback: function (_, index) {
-              return moment(this.getLabelForValue(index)).format('L');
+              return DateTime.fromMillis(+this.getLabelForValue(index)).toLocaleString();
             },
           },
         },

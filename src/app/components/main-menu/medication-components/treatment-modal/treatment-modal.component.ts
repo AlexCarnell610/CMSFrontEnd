@@ -21,16 +21,16 @@ import {
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import { NgxSmartModalService } from 'ngx-smart-modal';
-import { Observable, Subscription, combineLatest, merge, timer } from 'rxjs';
+import { Observable, Subscription, combineLatest, timer } from 'rxjs';
 import { map, withLatestFrom } from 'rxjs/operators';
 
 @Component({
-    selector: 'cms-treatment-modal',
-    templateUrl: './treatment-modal.component.html',
-    styleUrls: ['./treatment-modal.component.scss'],
-    standalone: false
+  selector: 'cms-treatment-modal',
+  templateUrl: './treatment-modal.component.html',
+  styleUrls: ['./treatment-modal.component.scss'],
+  standalone: false,
 })
 export class TreatmentModalComponent implements OnInit, AfterViewInit {
   @ViewChild('saveConfirm') saveConfirm: NgbPopover;
@@ -97,7 +97,7 @@ export class TreatmentModalComponent implements OnInit, AfterViewInit {
                     medication.id === this.treatmentToEdit.medication
                 ),
                 treatmentStartDate:
-                  this.treatmentToEdit.treatmentStartDate.format(
+                  this.treatmentToEdit.treatmentStartDate.toFormat(
                     FORM_DATE_FORMAT
                   ),
                 treatmentGroup: this.treatmentToEdit.treatmentGroup,
@@ -204,9 +204,12 @@ export class TreatmentModalComponent implements OnInit, AfterViewInit {
   private endDateValidator(
     endDateControl: AbstractControl
   ): ValidationErrors | null {
-    return moment(endDateControl.value).isBefore(
-      moment(endDateControl.parent?.controls['treatmentStartDate'].value)
-    )
+    const endDate = DateTime.fromISO(endDateControl.value);
+    const trtStartDate = DateTime.fromISO(
+      endDateControl.parent?.controls['treatmentStartDate'].value
+    );
+
+    return Math.ceil(endDate.diff(trtStartDate, 'days').days) < 0
       ? { treatmentEndDate: true }
       : null;
   }

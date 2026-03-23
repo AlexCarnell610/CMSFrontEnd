@@ -23,7 +23,7 @@
                   <option
                     value="{{ weight.id }}"
                     >
-                    {{ weight.weightDate | date: "dd/MM/yyyy" }} -
+                    {{ weight.weightDate.toJSDate()| date: "dd/MM/yyyy" }} -
                     {{ weight.weight }} Kg
                   </option>
                 }

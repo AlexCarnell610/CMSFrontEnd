@@ -28,7 +28,7 @@ import {
 import { breedValidator, dateValidator } from '@cms-validators';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { select, Store } from '@ngrx/store';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import {
   BehaviorSubject,
@@ -287,7 +287,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
       managementTag: this.managementTag.value.toUpperCase(),
       damTag: this.animal.tagNumber,
       sire: { tagNumber: this.sire.value },
-      birthDate: moment(this.dob.value),
+      birthDate: DateTime.fromISO(this.dob.value),
       gender: this.gender.value,
       breed: this.breedService.getBreedCode(this.breed.value),
       calvingStat: this.stat,
@@ -334,8 +334,8 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private valuesEdited(calf: IAnimal) {
     return (
-      calf.birthDate.format('DD-MM-YYYY') !==
-        this.selectedCalf?.birthDate.format('DD-MM-YYYY') ||
+      calf.birthDate.toISODate() !==
+        this.selectedCalf?.birthDate.toISODate() ||
       calf.breed !== this.selectedCalf?.breed ||
       calf.sire.tagNumber !== this.selectedCalf?.sire.tagNumber ||
       calf.gender !== this.selectedCalf?.gender ||
@@ -383,7 +383,7 @@ export class BirthModalComponent implements OnInit, AfterViewInit, OnDestroy {
               this.calfSelected = true;
               this.selectedCalf = selectedCalf;
               this.calfTag.setValue(selectedCalf.tagNumber);
-              this.dob.setValue(selectedCalf.birthDate.format('YYYY-MM-DD'));
+              this.dob.setValue(selectedCalf.birthDate.toFormat('yyyy-MM-dd'));
               this.breed.setValue(
                 this.breedService.getBreedFromCode(selectedCalf.breed)
               );

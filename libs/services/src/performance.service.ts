@@ -17,7 +17,7 @@ export class PerformanceService {
       const dateDiff = lastWeight.weightDate.diff(
         initialWeight.weightDate,
         'days'
-      );
+      ).days;
       return (weightGain / dateDiff); 
   }
 }

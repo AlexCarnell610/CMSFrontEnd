@@ -39,7 +39,7 @@ import { map, mergeMap, startWith, takeWhile } from 'rxjs/operators';
     standalone: false
 })
 export class AnimalListComponent implements OnInit, OnDestroy {
-  @Output() add: EventEmitter<IAnimal> = new EventEmitter();
+  @Output() add: EventEmitter<Animal> = new EventEmitter();
   @Output() edit: EventEmitter<any> = new EventEmitter();
   @Output() animalSelected: EventEmitter<Animal> = new EventEmitter();
   @Output() mutiAnimalsSelected: EventEmitter<Animal[]> = new EventEmitter();
@@ -73,7 +73,11 @@ export class AnimalListComponent implements OnInit, OnDestroy {
     this.trackSearch();
   }
 
-  public openAddModal(animal: IAnimal) {
+  isAnimal(animal: Animal){
+    return isAnimal(animal)
+  }
+
+  public openAddModal(animal: Animal) {
     this.add.emit(animal);
   }
 
@@ -121,7 +125,7 @@ export class AnimalListComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getCSSForButton(animal: IAnimal): 'active' | '' {
+  public getCSSForButton(animal: Animal): 'active' | '' {
     if (!this.multiSelect) {
       return animal.tagNumber === this.currentAnimal?.tagNumber ? 'active' : '';
     } else {
@@ -179,12 +183,14 @@ export class AnimalListComponent implements OnInit, OnDestroy {
   ): IAnimal[] {
     if (filterDob) {
       return animals.filter((animal) =>
-        animal.birthDate.isBetween(dateRange.from, dateRange.to, 'day', '[]')
+        // animal.birthDate.isBetween(dateRange.from, dateRange.to, 'day', '[]')
+      animal.birthDate.toMillis() >= dateRange.from.toMillis() || animal.birthDate.toMillis() <= dateRange.to.toMillis()
       );
     } else if (!filterDob) {
       return animals.filter((animal) =>
         animal.weightData.some((data) =>
-          data.weightDate.isBetween(dateRange.from, dateRange.to, 'day', '[]')
+          data.weightDate.toMillis() >= dateRange.from.toMillis() && data.weightDate.toMillis() <= dateRange.to.toMillis()
+          // data.weightDate.isBetween(dateRange.from, dateRange.to, 'day', '[]')
         )
       );
     }

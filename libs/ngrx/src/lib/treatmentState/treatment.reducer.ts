@@ -12,7 +12,7 @@ export const treatmentFeatureKey = 'treatment';
 export interface TreatmentState extends EntityState<ITreatment> {}
 
 function sortByCreatedDate(a: ITreatment, b: ITreatment): number {
-  return a.createdAt.isAfter(b.createdAt) ? -1 : b.createdAt.isAfter(a.createdAt) ? 1 : 0
+  return a.createdAt.toMillis() > b.createdAt.toMillis() ? -1 : b.createdAt.toMillis() > a.createdAt.toMillis() ? 1 : 0
 }
 
 export const adapter: EntityAdapter<ITreatment> =

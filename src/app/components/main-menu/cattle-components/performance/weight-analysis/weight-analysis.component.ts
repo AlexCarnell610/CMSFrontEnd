@@ -26,7 +26,7 @@ import {
 } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import { BehaviorSubject, Observable, zip } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
@@ -84,7 +84,7 @@ export class WeightAnalysisComponent implements OnInit {
       x: {
         ticks: {
           callback: function (_, index) {
-            return moment(this.getLabelForValue(index)).format('L');
+            return DateTime.fromMillis(+this.getLabelForValue(index)).toLocaleString();
           },
         },
       },
@@ -271,7 +271,7 @@ export class WeightAnalysisComponent implements OnInit {
       filter((animals) => animals.length > 0),
       map((animals) =>
         [...animals].sort((animalA, animalB) =>
-          animalA.birthDate.isSameOrBefore(animalB.birthDate) ? -1 : 1
+          animalA.birthDate.toMillis() <= animalB.birthDate.toMillis() ? -1 : 1
         )
       )
     );
@@ -280,7 +280,7 @@ export class WeightAnalysisComponent implements OnInit {
       map((animals) => this.toNgbDateStruct(animals[0].birthDate))
     );
 
-    this.maxDate = this.toNgbDateStruct(moment());
+    this.maxDate = this.toNgbDateStruct(DateTime.now());
 
     this.performanceForm = new UntypedFormGroup({
       startDate: new UntypedFormControl(null, Validators.required),
@@ -331,7 +331,7 @@ export class WeightAnalysisComponent implements OnInit {
       this.toDateControl.valueChanges.pipe(filter((val) => val !== null))
     ).pipe(
       map((range: [NgbDate, NgbDate]) => {
-        return { from: this.toMoment(range[0]), to: this.toMoment(range[1]) };
+        return { from: this.toDateTime(range[0]), to: this.toDateTime(range[1]) };
       })
     );
   }
@@ -432,20 +432,17 @@ export class WeightAnalysisComponent implements OnInit {
     this.toDateControl.setValue(date);
   }
 
-  private toMoment(date: NgbDate): moment.Moment | null {
+  private toDateTime(date: NgbDate): DateTime | null {
     return date
-      ? moment()
-          .year(date.year)
-          .month(date.month - 1)
-          .date(date.day)
+      ? DateTime.now().set({day: date.day, month: date.month, year: date.year})
       : undefined;
   }
 
-  private toNgbDateStruct(date: moment.Moment): NgbDateStruct {
+  private toNgbDateStruct(date: DateTime): NgbDateStruct {
     return {
-      day: date.date(),
-      month: date.month() + 1,
-      year: date.year(),
+      day: date.day,
+      month: date.month,
+      year: date.year,
     };
   }
 }

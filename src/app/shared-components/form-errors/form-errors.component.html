@@ -1,105 +1,81 @@
 @if (errors && !isRadio) {
-  <div>
-    @if (errors.required) {
-      <span>This field is required. </span>
-    }
-    @if (errors.min) {
-      <span
-        >Value should be more than {{ errors.min.min }}{{minMaxUnits}}.
-      </span>
-    }
-    @if (errors.max) {
-      <span
-        >Value should be less than {{ errors.max.max }}{{minMaxUnits}}.
-      </span>
-    }
-    @if (errors.pattern && !isManagementTag) {
-      <span
-        >Should follow the pattern: "UK" followed by 12 numbers@if (!bulkWeightEdit) {
-        <span>.</span>
-        } @if (bulkWeightEdit) {
-        <span>, or enter the last 3 or 6 digits of the tag</span>
-        }</span
-        >
-      }
-      @if (errors.pattern && isManagementTag) {
-        <span
-          >Should be letter(s) and numbers.</span
-          >
-        }
-        @if (errors.date) {
-          <span>Date can't be in the future.</span>
-        }
-        @if (errors.initialBeforeInter) {
-          <span
-            >Initial date should be before first intermediate date
-            <strong>{{ errors.initialBeforeInter }}</strong></span
-            >
-          }
-          @if (errors.initialBeforeSale) {
-            <span>
-              Initial weight should be before the sale date:
-              <strong>{{ errors.initialBeforeSale }}</strong></span
-              >
-            }
-            @if (errors.intermediateDate) {
-              <span
-                >Intermediate must be <strong>between</strong> initial weigh date
-                <strong>{{ errors.intermediateDate.initialDate }}</strong> and sale date
-                <strong>{{ errors.intermediateDate.saleDate }}</strong></span
-                >
-              }
-              @if (errors.saleAfterInter) {
-                <span>
-                  Sale date should be after last intermediate date:
-                  <strong>{{ errors.saleAfterInter }}</strong></span
-                  >
-                }
-                @if (errors.saleAfterInitial) {
-                  <span>
-                    Sale date should be after initial date:
-                    <strong>{{ errors.saleAfterInitial }}</strong></span
-                    >
-                  }
-                  @if (errors.treatmentEndDate) {
-                    <span>Treatment end date can't be before start date</span>
-                  }
-                  @if (errors.interBeforeInitial) {
-                    <span>
-                      Intermediate dates should be after initial date:
-                      <strong>{{ errors.interBeforeInitial }}</strong>
-                    </span>
-                  }
-                  @if (errors.stats) {
-                    <span>{{ errors.stats }}</span>
-                  }
-                  @if (errors.breed) {
-                    <span>Please choose a breed from the list</span>
-                  }
-                  @if (errors.notSameBreed) {
-                    <span>Please choose the same breed as the calf: {{errors.notSameBreed}}</span>
-                  }
-                  @if (errors.saleWeightNotLast) {
-                    <span>Sale weight must be the final weight</span>
-                  }
-                  @if (errors.newWeightAfterSaleWeight) {
-                    <span>New weight is after the sale weight</span>
-                  }
-                </div>
-              }
-              @if (errors && isRadio) {
-                <div>
-                  @if (errors.noInitial) {
-                    <span> No initial weight set. </span>
-                  }
-                  @if (errors.required) {
-                    <span>Please select one. </span>
-                  }
-                  @if (errors.saleWeightExists) {
-                    <span>Sale weight already set. </span>
-                  }
-                  @if (errors.initialWeightExists) {
-                    <span>Initial weight already set. </span>
-                  }
-                </div>
-              }
+<div>
+  @if (errors.required) {
+  <span>This field is required. </span>
+  } @if (errors.min) {
+  <span>Value should be more than {{ errors.min.min }}{{ minMaxUnits }}. </span>
+  } @if (errors.max) {
+  <span>Value should be less than {{ errors.max.max }}{{ minMaxUnits }}. </span>
+  } @if (errors.pattern && !isManagementTag) {
+  <span
+    >Should follow the pattern: "UK" followed by 12 numbers@if (!bulkWeightEdit)
+    {
+    <span>.</span>
+    } @if (bulkWeightEdit) {
+    <span>, or enter the last 3 or 6 digits of the tag</span>
+    }</span
+  >
+  } @if (errors.pattern && isManagementTag) {
+  <span>Should be letter(s) and numbers.</span>
+  } @if (errors.date) {
+  <span>Date can't be in the future.</span>
+  } @if (errors.initialBeforeInter) {
+  <span
+    >Initial date should be before first intermediate date
+    <strong>{{ errors.initialBeforeInter }}</strong></span
+  >
+  } @if (errors.initialBeforeSale) {
+  <span>
+    Initial weight should be before the sale date:
+    <strong>{{ errors.initialBeforeSale }}</strong></span
+  >
+  } @if (errors.intermediateDate) {
+  <span
+    >Intermediate must be <strong>between</strong> initial weigh date
+    <strong>{{ errors.intermediateDate.initialDate }}</strong> and sale date
+    <strong>{{ errors.intermediateDate.saleDate }}</strong></span
+  >
+  } @if (errors.saleAfterInter) {
+  <span>
+    Sale date should be after last intermediate date:
+    <strong>{{ errors.saleAfterInter }}</strong></span
+  >
+  } @if (errors.saleAfterInitial) {
+  <span>
+    Sale date should be after initial date:
+    <strong>{{ errors.saleAfterInitial }}</strong></span
+  >
+  } @if (errors.treatmentEndDate) {
+  <span>Treatment end date can't be before start date</span>
+  } @if (errors.interBeforeInitial) {
+  <span>
+    Intermediate dates should be after initial date:
+    <strong>{{ errors.interBeforeInitial }}</strong>
+  </span>
+  } @if (errors.stats) {
+  <span>{{ errors.stats }}</span>
+  } @if (errors.breed) {
+  <span>Please choose a breed from the list</span>
+  } @if (errors.notSameBreed) {
+  <span
+    >Please choose the same breed as the calf: {{ errors.notSameBreed }}</span
+  >
+  } @if (errors.saleWeightNotLast) {
+  <span>Sale weight must be the final weight</span>
+  } @if (errors.newWeightAfterSaleWeight) {
+  <span>New weight is after the sale weight</span>
+  }
+</div>
+} @if (errors && isRadio) {
+<div>
+  @if (errors.noInitial) {
+  <span> No initial weight set. </span>
+  } @if (errors.required) {
+  <span>Please select one. </span>
+  } @if (errors.saleWeightExists) {
+  <span>Sale weight already set. </span>
+  } @if (errors.initialWeightExists) {
+  <span>Initial weight already set. </span>
+  }
+</div>
+}

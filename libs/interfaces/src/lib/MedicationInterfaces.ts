@@ -1,24 +1,24 @@
-import { FORM_DATE_FORMAT } from '@cms-enums';
-import moment from 'moment';
+import { DATE_SHORT, YEAR_MONTH } from '@cms-enums';
+import { DateTime } from 'luxon';
 import { Observable } from 'rxjs';
 
 export interface IMedication {
   id?: string;
   name: string;
   withdrawalPeriod: number;
-  expiryDate: moment.Moment;
+  expiryDate: DateTime;
   batchNumber: string;
-  createdAt?:moment.Moment
+  createdAt?:DateTime
 }
 
 export interface ITreatment {
   id?: string;
   administerer: string;
-  treatmentStartDate: moment.Moment;
-  treatmentEndDate?:moment.Moment;
+  treatmentStartDate: DateTime;
+  treatmentEndDate?:DateTime;
   treatmentGroup: string;
   medication: string;
-  createdAt?: moment.Moment
+  createdAt?: DateTime
 }
 
 export interface IMedDisplayDataType {
@@ -65,7 +65,7 @@ export class MedDisplayDataType implements IMedDisplayDataType {
         name: this.firstRow,
         batchNumber: this.secondRow,
         withdrawalPeriod: +this.thirdRow,
-        expiryDate: moment(this.fifthRow, 'YYYY/MM'),
+        expiryDate: DateTime.fromFormat(this.fifthRow, YEAR_MONTH),
         id: this.id
       }
     }
@@ -73,8 +73,8 @@ export class MedDisplayDataType implements IMedDisplayDataType {
       return {
         treatmentGroup: this.firstRow,
         medication: this.secondRow,
-        treatmentStartDate: moment(this.thirdRow, 'DD/MM/yyyy'),
-        treatmentEndDate: this.fourthRow ? moment(this.fourthRow, 'DD/MM/YYYY') : null,
+        treatmentStartDate: DateTime.fromFormat(this.thirdRow, DATE_SHORT),
+        treatmentEndDate: this.fourthRow ? DateTime.fromFormat(this.fourthRow, DATE_SHORT) : null,
         administerer: this.fifthRow,
         id: this.id
       }

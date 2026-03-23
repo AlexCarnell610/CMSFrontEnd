@@ -37,8 +37,7 @@
 						"allowedCommonJsDependencies": [
 							"chart.js",
 							"overlayscrollbars-ngx.esm.js",
-							"pusher.js",
-							"moment"
+							"pusher.js"
             ],
             "extractLicenses": false,
 						"sourceMap": true,

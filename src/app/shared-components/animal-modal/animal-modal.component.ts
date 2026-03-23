@@ -11,7 +11,7 @@ import {
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
-import { FORM_DATE_FORMAT, Gender, Modals } from '@cms-enums';
+import { Gender, Modals } from '@cms-enums';
 import { IAnimal, IBreedCode, IBull, UNKNOWN_DAM_TAG } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { getDams, selectAnimals } from '@cms-ngrx/animal';
@@ -25,7 +25,7 @@ import {
 import { breedValidator, dateValidator } from '@cms-validators';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { select, Store } from '@ngrx/store';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject, Observable, Subscription, timer } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -373,7 +373,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
   private addDam(tagNumber: string) {
     const newAnimal: IAnimal = {
       ai: [],
-      birthDate: moment(),
+      birthDate: DateTime.now(),
       calvingHistory: [],
       dam: null,
       gender: Gender.Female,
@@ -392,7 +392,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
     return (
       this.animal?.sire.tagNumber !== this.convertSireValue(this.sire.value) ||
       this.animal?.dam.tagNumber !== this.dam.value ||
-      this.animal?.birthDate.format(FORM_DATE_FORMAT) !== this.dob.value ||
+      this.animal?.birthDate.toISODate() !== this.dob.value ||
       this.animal?.gender !== this.gender.value ||
       this.breedChanged() ||
       this.animal?.registered !== this.isRegistered ||
@@ -419,7 +419,7 @@ export class AnimalModalComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private setData() {
     if (!this.isAddMode) {
-      this.dob.setValue(this.animal.birthDate.format(FORM_DATE_FORMAT));
+      this.dob.setValue(this.animal.birthDate.toISODate());
       this.dam.setValue(
         this.animal.dam.tagNumber === UNKNOWN_DAM_TAG
           ? 'UK'

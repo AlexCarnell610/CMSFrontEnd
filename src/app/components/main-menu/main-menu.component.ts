@@ -7,7 +7,7 @@ import { RootState } from '@cms-ngrx';
 import { getMaleOver36Months, getUnregisteredCalves } from '@cms-ngrx/animal';
 import { LoadingPaneService } from '@cms-services';
 import { select, Store } from '@ngrx/store';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -43,7 +43,7 @@ export class MainMenuComponent implements OnInit, AfterViewInit {
     this.$unregCalves = this.store.pipe(select(getUnregisteredCalves)).pipe(
       map((animals) =>
         animals.filter((animal) => {
-          return moment().diff(animal.birthDate, 'days') < 27;
+          return DateTime.now().diff(animal.birthDate,'days').days < 27
         })
       )
     );
@@ -53,7 +53,7 @@ export class MainMenuComponent implements OnInit, AfterViewInit {
       .pipe(
         map((animals) =>
           animals.filter((animal) => {
-            return moment().diff(animal.birthDate, 'days') >= 27;
+            return DateTime.now().diff(animal.birthDate,'days').days >= 27;
           })
         )
       );

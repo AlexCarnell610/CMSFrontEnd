@@ -1,6 +1,5 @@
 import { AssistanceReason, CalvingAssistance, Gender } from '@cms-enums';
 import { IAnimal, CalvingStat } from '@cms-interfaces';
-import moment from 'moment';
 
 export const mockCalvingStat: CalvingStat = {
   alive: true,
@@ -14,7 +13,7 @@ export const mockCalvingStat: CalvingStat = {
 
 export const mockAnimal = {
   tagNumber: 'UK111111222333',
-  birthDate: moment(),
+  // birthDate: DateTime().now,
   breed: 'CalfBreed',
   sire: { tagNumber: 'SireTagNumber' },
   gender: Gender.Male,
@@ -126,60 +125,60 @@ export const rawAnimal = [
   },
 ];
 
-export const convertedAnimal: IAnimal = {
-  tagNumber: 'UK722218079336',
-  managementTag: 'C8',
-  gender: Gender.Female,
-  ai: [
-    {
-      aiDate: moment('2009-06-01', 'YYYY-MM-DD'),
-      bull: { tagNumber: 'UK721770601202' },
-      heatDate: moment('2005-06-21', 'YYYY-MM-DD'),
-      sweeperBull: false,
-      year: 2013,
-      id: 2,
-    },
-  ],
-  birthDate: moment('2007-02-10', 'YYYY-MM-DD'),
-  calvingHistory: [
-    { averageGestation: 274, numberOfCalves: 5 },
-    { averageGestation: 282, numberOfCalves: 6 },
-    { averageGestation: 278, numberOfCalves: 6 },
-    { averageGestation: 290, numberOfCalves: 6 },
-  ],
-  calvingStat: {
-    alive: true,
-    assistance: CalvingAssistance.Vet,
-    damHealth: 4,
-    drinkAssist: true,
-    gettingUp: 5,
-    assistanceReason: [AssistanceReason.BigCalf],
-    calvingNotes: null,
-  },
-  dam: {
-    birthDate: moment('2016-11-07', 'YYYY-MM-DD'),
-    gender: Gender.Female,
-    managementTag: 'E28685810',
-    tagNumber: 'UK722218087840',
-    damTag: 'UK722218202564',
-    sireTag: 'UK798302326666',
-  },
-  sire: { tagNumber: 'null' },
-  weightData: [
-    {
-      id: 9,
-      weightDate: moment('2018-08-15', 'YYYY-MM-DD'),
-      weightType: { isInitial: true, isSale: false },
-      weight: 75,
-    },
-    {
-      id: 4,
-      weightDate: moment('2019-04-12', 'YYYY-MM-DD'),
-      weightType: { isInitial: false, isSale: true },
-      weight: 629,
-    },
-  ],
-  notes: '',
-  breed: 'LIM',
-  registered: true,
-};
+// export const convertedAnimal: IAnimal = {
+//   tagNumber: 'UK722218079336',
+//   managementTag: 'C8',
+//   gender: Gender.Female,
+//   ai: [
+//     {
+//       aiDate: mment('2009-06-01', 'YYYY-MM-DD'),
+//       bull: { tagNumber: 'UK721770601202' },
+//       heatDate: mment('2005-06-21', 'YYYY-MM-DD'),
+//       sweeperBull: false,
+//       year: 2013,
+//       id: 2,
+//     },
+//   ],
+//   birthDate: mment('2007-02-10', 'YYYY-MM-DD'),
+//   calvingHistory: [
+//     { averageGestation: 274, numberOfCalves: 5 },
+//     { averageGestation: 282, numberOfCalves: 6 },
+//     { averageGestation: 278, numberOfCalves: 6 },
+//     { averageGestation: 290, numberOfCalves: 6 },
+//   ],
+//   calvingStat: {
+//     alive: true,
+//     assistance: CalvingAssistance.Vet,
+//     damHealth: 4,
+//     drinkAssist: true,
+//     gettingUp: 5,
+//     assistanceReason: [AssistanceReason.BigCalf],
+//     calvingNotes: null,
+//   },
+//   dam: {
+//     birthDate: mment('2016-11-07', 'YYYY-MM-DD'),
+//     gender: Gender.Female,
+//     managementTag: 'E28685810',
+//     tagNumber: 'UK722218087840',
+//     damTag: 'UK722218202564',
+//     sireTag: 'UK798302326666',
+//   },
+//   sire: { tagNumber: 'null' },
+//   weightData: [
+//     {
+//       id: 9,
+//       weightDate: mment('2018-08-15', 'YYYY-MM-DD'),
+//       weightType: { isInitial: true, isSale: false },
+//       weight: 75,
+//     },
+//     {
+//       id: 4,
+//       weightDate: mment('2019-04-12', 'YYYY-MM-DD'),
+//       weightType: { isInitial: false, isSale: true },
+//       weight: 629,
+//     },
+//   ],
+//   notes: '',
+//   breed: 'LIM',
+//   registered: true,
+// };

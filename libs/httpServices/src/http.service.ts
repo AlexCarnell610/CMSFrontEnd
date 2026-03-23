@@ -6,15 +6,14 @@ import {
   AnimalWeight,
   IBull,
   IBulkWeight,
-  Animal,
   IMedication,
   ITreatment,
 } from '@cms-interfaces';
-import moment from 'moment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../src/environments/environment';
 import { MappingService } from '../../services/src/importData.service';
+import { DateTime} from 'luxon'
 
 @Injectable({
   providedIn: 'root',
@@ -69,7 +68,8 @@ export class HttpService {
     const newAnimal = {
       ...animal,
       dam: animal.damTag ? animal.damTag : animal.dam,
-      birthDate: moment(animal.birthDate).format(FORM_DATE_FORMAT),
+      birthDate: animal.birthDate.toFormat(FORM_DATE_FORMAT)
+
     };
     return this.http
       .post(environment.api + HttpUrls.Animal, newAnimal)
@@ -81,8 +81,10 @@ export class HttpService {
       ...update,
     };
 
-    if (moment.isMoment(update.birthDate)) {
-      newUpdate.birthDate = update.birthDate.format('YYYY-MM-DD');
+    const birthDate = DateTime.fromISO(update.birthDate)
+
+    if (birthDate.isValid) {
+      newUpdate.birthDate = birthDate.toISODate();
     }
 
     return this.http
@@ -115,7 +117,7 @@ export class HttpService {
     const payload = weights.map((weight) => {
       return {
         ...weight,
-        date: moment(weight.date).format('YYYY-MM-DD HH:mm:SS'),
+        date: DateTime.fromJSDate(weight.date).toFormat('yyyy-MM-dd HH:mm:ss'),
       };
     });
     return this.http

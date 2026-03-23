@@ -5,9 +5,9 @@ import {
   ValidationErrors,
   ValidatorFn,
 } from '@angular/forms';
-import { IAnimal, AnimalWeight, Animal } from '@cms-interfaces';
+import { IAnimal, AnimalWeight} from '@cms-interfaces';
 import { AnimalBreedService } from '@cms-services';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 
 export function breedValidator(breedService: AnimalBreedService): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -31,7 +31,8 @@ export const selectValidator: ValidatorFn = (control: UntypedFormControl) => {
 
 export function dateValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
-    if (moment().diff(moment(control.value), 'days', true) < 0) {
+
+    if (DateTime.now().diff(DateTime.fromISO(control.value), "days").days < 0){
       return { date: true };
     } else {
       return null;
@@ -51,7 +52,7 @@ export function saleWeightValidator(isAddMode2: boolean): ValidatorFn {
 
     if (animalControl.value && !dateAlreadyHasErrors(weightDateControl)) {
       let weights = (animalControl.value as IAnimal).weightData;
-      const inputDate = moment(weightDateControl.value);
+      const inputDate = DateTime.fromISO(weightDateControl.value);
       if (!isAddMode) {
         weights = weights.filter((weight) => weight.id !== +selectedWeight);
       }
@@ -60,12 +61,18 @@ export function saleWeightValidator(isAddMode2: boolean): ValidatorFn {
           isSaleWeightControl.setErrors({ saleWeightExists: true });
         } else if (
           weights.length > 0 &&
+          getSaleWeights(weights).length > 0 &&
           !saleWeightIsSameAsLastWeightOrAfter(weights, inputDate)
         ) {
           weightDateControl.setErrors({ saleWeightNotLast: true });
         }
       } else {
-        if (weights.length > 0 && !newWeightBeforeSaleWeight(weights, inputDate) && getSaleWeights(weights).length > 0) {
+
+        if (
+          weights.length > 0 &&
+          getSaleWeights(weights).length > 0 &&
+          !newWeightBeforeSaleWeight(weights, inputDate)
+        ) {
           weightDateControl.setErrors({ newWeightAfterSaleWeight: true });
         }
       }
@@ -75,26 +82,40 @@ export function saleWeightValidator(isAddMode2: boolean): ValidatorFn {
   };
 }
 
+function getSaleWeight(weights : AnimalWeight[]): AnimalWeight {
+  return weights.find((weight) => weight.isSaleWeight)
+}
+
 function newWeightBeforeSaleWeight(
   weights: AnimalWeight[],
-  inputDate: moment.Moment
+  inputDate: DateTime
 ): boolean {
-  let sortedWeights = sortWeightsByDate(weights);
-  return inputDate.isSameOrBefore(
-    sortedWeights[sortedWeights.length - 1].weightDate,
-    'day'
+  return (
+    Math.ceil(
+      inputDate.diff(
+       getSaleWeight(weights).weightDate,
+        'days'
+      ).days
+    ) <= 0
   );
 }
 
 function saleWeightIsSameAsLastWeightOrAfter(
   weights: AnimalWeight[],
-  inputDate: moment.Moment
+  inputDate: DateTime
 ): boolean {
-  let sortedWeights = sortWeightsByDate(weights);
-  return inputDate.isSameOrAfter(
-    sortedWeights[sortedWeights.length - 1].weightDate,
-    'days'
+  return (
+    Math.ceil(
+      inputDate.diff(
+        getSaleWeight(weights).weightDate,
+        'days'
+      ).days
+    ) <= 0
   );
+  // return inputDate.isSameOrAfter(
+  //   sortedWeights[sortedWeights.length - 1].weightDate,
+  //   'days'
+  // );
 }
 
 function getSaleWeights(weights: AnimalWeight[]): AnimalWeight[] {
@@ -109,7 +130,8 @@ function dateAlreadyHasErrors(dateControl: AbstractControl): boolean {
 }
 
 function sortWeightsByDate(weights: AnimalWeight[]): AnimalWeight[] {
-  return [...weights].sort((weightA: AnimalWeight, weightB: AnimalWeight) =>
-    weightA.weightDate.diff(weightB.weightDate)
+  return [...weights].sort(
+    (weightA: AnimalWeight, weightB: AnimalWeight) =>
+      weightA.weightDate.diff(weightB.weightDate).milliseconds
   );
 }

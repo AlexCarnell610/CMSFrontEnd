@@ -62,7 +62,7 @@
                           </li>
                           <li>
                             &nbsp; <strong>Date of Birth - </strong>
-                            {{ calf.birthDate | date : "dd MMM yyyy" }}
+                            {{ calf.birthDate.toJSDate()| date : "dd MMM yyyy" }}
                           </li>
                         </ul>
                       </button>

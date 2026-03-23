@@ -42,7 +42,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
               strictStateImmutability: true,
               strictActionImmutability: true,
               strictStateSerializability: false,
-              strictActionSerializability: true,
+              strictActionSerializability: false,
               strictActionWithinNgZone: true,
               strictActionTypeUniqueness: true,
             },

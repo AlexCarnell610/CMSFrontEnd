@@ -1,9 +1,8 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Animal, IAnimal } from '@cms-interfaces';
 import { HttpService } from '@cms-services/http';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Update } from '@ngrx/entity';
-import moment from 'moment';
 import { of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { LoadingPaneService } from '../../../../services/src/loading-pane.service';

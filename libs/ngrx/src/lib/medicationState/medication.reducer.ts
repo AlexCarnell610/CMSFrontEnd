@@ -12,7 +12,7 @@ export const medicationFeatureKey = 'medication';
 export interface MedicationState extends EntityState<IMedication> {}
 
 function sortByCreatedDate(a: IMedication, b: IMedication): number {
-  return a.createdAt.isAfter(b.createdAt) ? -1 : b.createdAt.isAfter(a.createdAt) ? 1 : 0
+  return a.createdAt.toMillis() > b.createdAt.toMillis() ? -1 : b.createdAt.toMillis() > a.createdAt.toMillis() ? 1 : 0
 }
 
 export const medicationAdapter: EntityAdapter<IMedication> =

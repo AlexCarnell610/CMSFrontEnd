@@ -70,7 +70,7 @@ export class MedicationAddModalComponent implements OnInit, AfterViewInit {
             this.medicationForm.patchValue({
               batchNumber: this.medicationToEdit.batchNumber,
               expiryDate:
-                this.medicationToEdit.expiryDate.format(FORM_DATE_FORMAT),
+                this.medicationToEdit.expiryDate.toFormat(FORM_DATE_FORMAT),
               medicationName: this.medicationToEdit.name,
               withdrawalPeriod: this.medicationToEdit.withdrawalPeriod,
             });

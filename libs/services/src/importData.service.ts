@@ -11,7 +11,7 @@ import {
   IMedication,
   ITreatment,
 } from '@cms-interfaces';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 
 @Injectable({
   providedIn: 'root',
@@ -212,7 +212,7 @@ export class MappingService {
     });
   }
 
-  private convertDate(date: string, format:string = 'YYYY-MM-DD') {
-    return moment(date, format);
+  private convertDate(date: string) {
+    return DateTime.fromISO(date);
   }
 }

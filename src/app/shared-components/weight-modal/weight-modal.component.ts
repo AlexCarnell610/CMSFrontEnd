@@ -23,7 +23,7 @@ import {
 import { dateValidator, saleWeightValidator } from '@cms-validators';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { select, Store } from '@ngrx/store';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject, Observable, Subscription, timer } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -262,10 +262,10 @@ export class EditWeightModalComponent
   }
 
   private weightDateExists(): boolean {
-    const weightDate = moment(this.date.value);
+    const weightDate = DateTime.fromISO(this.date.value);
     return (
       this.animal.weightData.findIndex((weight) => {
-        return weight.weightDate.format('L') === weightDate.format('L');
+        return weight.weightDate.toISODate() === weightDate.toISODate();
       }) !== -1
     );
   }
@@ -322,7 +322,7 @@ export class EditWeightModalComponent
   }
 
   private weightDateDiff(): number {
-    return moment().diff(moment(this.date.value), 'months', true);
+    return DateTime.fromISO(this.date.value).diffNow("months").negate().months
   }
 
   private handlePopover(time: number) {
@@ -381,7 +381,7 @@ export class EditWeightModalComponent
   }
 
   private valuesEdited(): boolean {
-    const initialDate = this.selectedWeight?.weightDate.format('YYYY-MM-DD');
+    const initialDate = this.selectedWeight?.weightDate.toISODate();
 
     return (
       this.selectedWeight?.weight !== this.weight.value ||
@@ -393,7 +393,7 @@ export class EditWeightModalComponent
 
   private updateForm() {
     this.weight.setValue(this.selectedWeight.weight);
-    this.date.setValue(this.selectedWeight.weightDate.format('YYYY-MM-DD'));
+    this.date.setValue(this.selectedWeight.weightDate.toISODate());
     this.isSaleWeightControl.setValue(this.selectedWeight.isSaleWeight);
     this.salePrice.setValue(this.selectedWeight.isSaleWeight ? this.animal.salePrice : null)
   }

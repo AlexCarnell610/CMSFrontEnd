@@ -6,9 +6,8 @@ import { IMedication, ITreatment, MedDisplayDataType } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
 import { selectMedications2 } from '@cms-ngrx/medication';
 import { selectTreatments } from '@cms-ngrx/treatment';
-import { LoadingPaneService } from '@cms-services';
 import { Store } from '@ngrx/store';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import { NgxSmartModalComponent, NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -45,7 +44,7 @@ export class MedicationComponent implements OnInit, OnDestroy {
     const treatmentsOrderedByTreatmentDate = this.treatments$.pipe(
       map((treatments) =>
         treatments.sort((trtA, trtB) =>
-          trtA.treatmentStartDate.isSameOrBefore(trtB.treatmentStartDate) ? 1 : -1
+          trtA.treatmentStartDate.diff(trtB.treatmentStartDate, 'days').days <= 1 ? 1 : -1
         )
       )
     );
@@ -53,14 +52,14 @@ export class MedicationComponent implements OnInit, OnDestroy {
       combineLatest([
         this.treatmentDateFilter.valueChanges.pipe(
           startWith(''),
-          map((value) => moment(value, 'YYYY-MM-DD'))
+          map((value) => DateTime.fromFormat(value, 'YYYY-MM-dd'))
         ),
         treatmentsOrderedByTreatmentDate,
       ]).subscribe(([date, treatments]) => {
-        if (date.isAfter('1900-01-01')) {
+        if (date.toMillis() > DateTime.fromFormat('1900-01-01', 'YYYY-MM-dd').toMillis()) {
           this.filteredTreatments$.next(
             treatments.filter((treatment) =>
-              treatment.treatmentStartDate.isSameOrAfter(date)
+              treatment.treatmentStartDate.diff(date, 'days').days >= 1
             )
           );
         } else {

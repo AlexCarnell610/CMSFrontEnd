@@ -1,7 +1,12 @@
 import { createSelector } from '@ngrx/store';
-import { getMedicationState, medicationAdapter, selectAll, selectAllMedications, selectIds } from './medication.reducer';
-import moment from 'moment';
-
+import {
+  getMedicationState,
+  medicationAdapter,
+  selectAll,
+  selectAllMedications,
+  selectIds,
+} from './medication.reducer';
+import { IMedication } from '@cms-interfaces';
 
 export const selectMedicationName = (medicationID) =>
   createSelector(
@@ -9,16 +14,14 @@ export const selectMedicationName = (medicationID) =>
     (medication) => medication.name
   );
 
-  export const selectMedications2 = () => createSelector(
-    selectAll,
-    (medications) => medications
-  );
+export const selectMedications2 = () =>
+  createSelector(selectAll, (medications) => medications);
 
-  export const selectMedicationBatchNum = (medicationID) =>
-    createSelector(
-      selectMedication(medicationID),
-      (medication) => medication.batchNumber
-    );
+export const selectMedicationBatchNum = (medicationID) =>
+  createSelector(
+    selectMedication(medicationID),
+    (medication) => medication.batchNumber
+  );
 
 export const selectMedication = (medicationID) =>
   createSelector(selectMedications2(), (medications) =>
@@ -32,18 +35,21 @@ export const selectMedicationWithdrawal = (medicationID) =>
   );
 
 export const selectInDateMedications = createSelector(
-  
-  () =>
-    [].filter((medication) =>
-      medication.expiryDate.isSameOrAfter(moment())
-    )
+  selectMedications2(),
+  (medications: IMedication[]) =>
+    medications.filter((medication) => {
+      return Math.ceil(medication.expiryDate.diffNow('days').days) >= 0;
+    })
 );
 
 export const selectOutOfDateMedications = createSelector(
   medicationAdapter.getSelectors(getMedicationState).selectAll,
-  () =>
-  []
-      .filter((medication) => medication.expiryDate.isBefore(moment()))
+  (medication: IMedication[]) =>
+    medication
+      .filter(
+        (medication: IMedication) =>
+          Math.ceil(medication.expiryDate.diffNow('days').days) < 0
+      )
       .map((medication) => {
         return {
           ...medication,

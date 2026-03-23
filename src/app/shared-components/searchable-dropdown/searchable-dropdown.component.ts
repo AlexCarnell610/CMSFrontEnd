@@ -2,7 +2,7 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { IMedication } from '@cms-interfaces';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import { OperatorFunction, Observable, merge, Subject } from 'rxjs';
 import {
   debounceTime,
@@ -17,7 +17,7 @@ import {
     styleUrls: ['./searchable-dropdown.component.scss'],
     standalone: false
 })
-export class SearchableDropdownComponent {
+export class SearchableDropdownComponent  {
   @Input() isRequired = true;
   @Input() inputFormControl: FormControl;
   @Input() data: IMedication[];
@@ -27,19 +27,21 @@ export class SearchableDropdownComponent {
   @ViewChild('instance', { static: true }) instance: NgbTypeahead;
   selected;
 
+
+
   constructor() {}
 
   get dataSorted(): { medication: IMedication; expired: string }[] {
     return this.data.map((datum) => {
       return {
         medication: datum,
-        expired: datum.expiryDate.isBefore(moment()) ? 'Expired' : 'In Date',
+        expired: datum.expiryDate.toMillis() < DateTime.now().toMillis() ? 'Expired' : 'In Date',
       };
     });
   }
 
   isExpired(medication: IMedication): boolean {
-    return medication.expiryDate.isBefore(moment());
+    return medication.expiryDate.toMillis() < DateTime.now().toMillis()
   }
 
   select($event) {
@@ -49,17 +51,20 @@ export class SearchableDropdownComponent {
   search: OperatorFunction<string, readonly IMedication[]> = (
     text$: Observable<string>
   ) => {
+   
     const debouncedText$ = text$.pipe(
       debounceTime(200),
       distinctUntilChanged()
     );
+
+   
     const clicksWithClosedPopup$ = this.click$.pipe(
       filter(() => !this.instance.isPopupOpen())
     );
     const inputFocus$ = this.focus$;
 
     return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
-      map((term) => {
+      map((term) => {        
         const lcTerm = term.toLowerCase()
         return (
           term === ''

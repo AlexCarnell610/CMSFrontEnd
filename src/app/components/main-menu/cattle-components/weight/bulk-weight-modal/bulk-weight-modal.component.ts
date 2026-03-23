@@ -17,7 +17,7 @@ import { WarningService } from '@cms-services';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { Observable, of, Subscription, timer } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
@@ -160,10 +160,10 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
         id,
         tagNumber: currWeight[indexes.id],
         weight: currWeight[indexes.weight],
-        date: moment(
+        date: DateTime.fromFormat(
           `${currWeight[indexes.date]},${currWeight[indexes.time]}`,
-          'DD/MM/yyyy,HH:mm:SS'
-        ).toDate(),
+          'dd/MM/yyyy,HH:mm:SS'
+        ).toJSDate(),
       };
       id++;
       return newWeight;
@@ -194,7 +194,7 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
         this.getAnimalWeightData(weight.tagNumber, animals).findIndex(
           (animalWeight) =>
             animalWeight.weight === +weight.weight &&
-            animalWeight.weightDate.isSame(weight.date, 'day')
+            animalWeight.weightDate.hasSame(DateTime.fromJSDate(weight.date), 'day')
         ) !== -1
       );
     });

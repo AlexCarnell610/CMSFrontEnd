@@ -1,18 +1,15 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { DATE_SHORT } from '@cms-enums';
 import {
   IMedication,
   ITreatment,
   MedDisplayDataType,
-  isMedicationArray,
-  isTreatment,
+  isMedicationArray
 } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
-import { selectMedicationWithdrawal } from '@cms-ngrx/medication';
 import { Store } from '@ngrx/store';
-import { Moment } from 'moment';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 @Component({
     selector: 'cms-medication-list',
@@ -53,7 +50,7 @@ export class MedicationListComponent implements OnInit {
             : data.filter((item) => {
                 const newItem = {
                   ...item,
-                  date: item.treatmentStartDate.format('DD/MM/YYYY'),
+                  date: item.treatmentStartDate.toFormat(DATE_SHORT),
                 };
                 return JSON.stringify(newItem)
                   .toLowerCase()

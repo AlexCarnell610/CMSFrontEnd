@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { DATE_SHORT, YEAR_MONTH } from '@cms-enums';
 import {
-  
   IMedication,
   ITreatment,
   MedDisplayDataType,
@@ -9,17 +9,22 @@ import {
   isTreatmentArray,
 } from '@cms-interfaces';
 import { RootState } from '@cms-ngrx';
-import { selectMedication, selectMedicationBatchNum, selectMedicationName, selectMedicationWithdrawal } from '@cms-ngrx/medication';
+import {
+  selectMedication,
+  selectMedicationBatchNum,
+  selectMedicationName,
+  selectMedicationWithdrawal,
+} from '@cms-ngrx/medication';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Pipe({
-    name: 'convertToGenericDataType',
-    standalone: false
+  name: 'convertToGenericDataType',
+  standalone: false,
 })
 export class ConvertToGenericDataTypePipe implements PipeTransform {
-  constructor(private readonly store: Store<RootState>){}
+  constructor(private readonly store: Store<RootState>) {}
   transform(
     values: IMedication[] | ITreatment[],
     ...args: unknown[]
@@ -32,7 +37,7 @@ export class ConvertToGenericDataTypePipe implements PipeTransform {
             value.batchNumber,
             '' + value.withdrawalPeriod,
             null,
-            value.expiryDate.format('YYYY/MM'),
+            value.expiryDate.toFormat(YEAR_MONTH),
             true,
             value.id
           );
@@ -50,8 +55,8 @@ export class ConvertToGenericDataTypePipe implements PipeTransform {
           return new MedDisplayDataType(
             value.treatmentGroup,
             value.medication,
-            value.treatmentStartDate.format('DD/MM/YYYY'),
-            value.treatmentEndDate?.format('DD/MM/YYYY'),
+            value.treatmentStartDate.toFormat(DATE_SHORT),
+            value.treatmentEndDate?.toFormat(DATE_SHORT),
             value.administerer,
             false,
             value.id,
@@ -67,20 +72,18 @@ export class ConvertToGenericDataTypePipe implements PipeTransform {
   }
 
   private getWithDrawalEndDate(treatment: ITreatment): Observable<string> {
-    
-      return this.store
-        .select(selectMedicationWithdrawal(treatment.medication))
-        .pipe(
-          map((withdrawalLength) =>
-            treatment.treatmentEndDate
-              ? treatment.treatmentEndDate
-                  .add(withdrawalLength, 'days')
-                  .format('DD/MM/YYYY')
-              : treatment.treatmentStartDate
-                  .add(withdrawalLength, 'days')
-                  .format('DD/MM/YYYY')
-          )
-        );
-    
+    return this.store
+      .select(selectMedicationWithdrawal(treatment.medication))
+      .pipe(
+        map((withdrawalLength) =>
+          treatment.treatmentEndDate
+            ? treatment.treatmentEndDate
+                .plus({ days: withdrawalLength })
+                .toFormat(DATE_SHORT)
+            : treatment.treatmentStartDate
+                .plus({ days: withdrawalLength })
+                .toFormat(DATE_SHORT)
+        )
+      );
   }
 }
