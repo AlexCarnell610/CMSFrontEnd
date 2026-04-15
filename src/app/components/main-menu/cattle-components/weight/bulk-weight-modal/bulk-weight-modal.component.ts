@@ -162,7 +162,7 @@ export class BulkWeightModalComponent implements OnInit, AfterViewInit {
         weight: currWeight[indexes.weight],
         date: DateTime.fromFormat(
           `${currWeight[indexes.date]},${currWeight[indexes.time]}`,
-          'dd/MM/yyyy,HH:mm:SS'
+          'dd/MM/yyyy,HH:mm:ss'
         ).toJSDate(),
       };
       id++;
