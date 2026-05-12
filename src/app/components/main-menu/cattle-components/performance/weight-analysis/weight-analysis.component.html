@@ -168,6 +168,7 @@
                         >
                       </canvas>
                     </div>
+                    
                     <div class="row">
                       <canvas
                         id="actualDailyWeightGain"
@@ -179,8 +180,30 @@
                         >
                       </canvas>
                     </div>
+                    @if (maxWeights$|async; as maxWeights) {
+                        <div class="row mx-1">
+                        <table class="table table-striped table-bordered table-sm">
+                          <thead>
+                            <tr>
+                              <th scope="col">Tag number</th>
+                              <th scope="col">Max Weight</th>
+                              <th scope="col">Last Weight</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            @for (maxWeight of maxWeights; track $index) {
+                              <tr>
+                                <td>{{maxWeight.tagNumber}}</td>
+                                <td>{{maxWeight.maxWeight}} (kg)</td>
+                                <td>{{maxWeight.lastWeight}} (kg)</td>
+                              </tr>
+                            }
+                          </tbody>
+                        </table>
+                      </div>
+                      }
                     @if (sortedPPK$ | async; as sortedPPK) {
-                      <div class="row">
+                      <div class="row mx-1">
                         <div class="card">
                           <div class="card-body">
                             <strong>MaxPPK:</strong> {{ getMax(sortedPPK)?.tagNumber }} -
@@ -204,6 +227,8 @@
                         ></canvas>
                       </div>
                     }
+               
+                    
                   </div>
                 </div>
               </div>

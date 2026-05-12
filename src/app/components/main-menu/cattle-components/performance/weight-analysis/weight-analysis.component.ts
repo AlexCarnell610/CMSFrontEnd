@@ -52,6 +52,7 @@ export class WeightAnalysisComponent implements OnInit {
   barChartType: ChartType = 'bar';
   lineChartType: ChartType = 'line';
   actualDailyWeightChartData$: Observable<ChartConfiguration['data']>;
+  maxWeights$: Observable<{tagNumber:string, maxWeight:number, lastWeight: number}[]>
   actualDailyWeightOptions: ChartConfiguration['options'] = {
     plugins: {
       legend: {
@@ -62,6 +63,7 @@ export class WeightAnalysisComponent implements OnInit {
           label: (label) =>
             `${label.dataset.label}: ${label.formattedValue} Kg`,
         },
+        mode: "dataset",
       },
       title: {
         display: true,
@@ -141,6 +143,7 @@ export class WeightAnalysisComponent implements OnInit {
   sortedPPK$: Observable<AnimalPPK[]>;
   minPPK: Observable<AnimalPPK>;
   averagePPK: Observable<string>;
+  isMobile
 
   private selectedAnimals$: BehaviorSubject<Animal[]> = new BehaviorSubject<
     Animal[]
@@ -155,6 +158,7 @@ export class WeightAnalysisComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.isMobile = navigator.userAgent.includes("Mobile");
     this.actualDailyWeightChartData$ = this.selectedAnimals$.pipe(
       map((selectedAnimals) => {
         const filteredAnimals = selectedAnimals.filter(
@@ -171,7 +175,8 @@ export class WeightAnalysisComponent implements OnInit {
                     r: 1,
                   };
                 }),
-                label: animal.tagNumber,
+                label: animal.tagNumber + ` (${animal.managementTag})`,
+                pointHitRadius:this.isMobile? 20 : 5
               };
             }),
             labels: this.createLabels(filteredAnimals),
@@ -188,7 +193,7 @@ export class WeightAnalysisComponent implements OnInit {
           (animal) => isAnimal(animal) && animal.weightData.length > 1
         );
         if (isAnimalArray(filteredAnimals)) {
-          const labels = filteredAnimals.map((animal) => animal.tagNumber);
+          const labels = filteredAnimals.map((animal) => animal.tagNumber + ` (${animal.managementTag})`);
           const avgWeightGains = filteredAnimals.map((animal) =>
             this.perfService.calculateAvgDailyWeightGain(animal)
           );
@@ -225,6 +230,23 @@ export class WeightAnalysisComponent implements OnInit {
         }
       })
     );
+
+    this.maxWeights$ = this.selectedAnimals$.pipe(
+      map((selectedAnimals) => {
+        const filteredAnimals = selectedAnimals.filter(
+          (animal) => isAnimal(animal) && animal.weightData.length > 1
+        );
+        if(isAnimalArray(filteredAnimals)){
+          return filteredAnimals.map(animal => {
+            const tagNumber = animal.tagNumber
+            const maxWeight = Math.max(...(animal.weightData.map(weight => weight.weight)));
+            const lastWeight = animal.weightData[animal.weightData.length-1].weight
+
+            return {tagNumber, maxWeight, lastWeight}
+          })
+        }
+      })
+    )
 
     const soldAnimalSelected$ = this.selectedAnimals$.pipe(
       filter(
