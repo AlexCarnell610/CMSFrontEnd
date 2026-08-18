@@ -10,16 +10,17 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
-    selector: 'cms-birth',
-    templateUrl: './birth.component.html',
-    styleUrls: ['./birth.component.scss'],
-    standalone: false
+  selector: 'cms-birth',
+  templateUrl: './birth.component.html',
+  styleUrls: ['./birth.component.scss'],
+  standalone: false,
 })
 export class BirthComponent {
   public pageName = PageURLs.Births;
   public $selectedAnimal: BehaviorSubject<IAnimal> = new BehaviorSubject(null);
   public $calves: Observable<IAnimal[]>;
   public isAdd: boolean;
+  private calvesSelected: Array<IAnimal> = [];
   constructor(
     private readonly router: Router,
     private readonly modalSerivce: NgxSmartModalService,
@@ -31,9 +32,19 @@ export class BirthComponent {
     this.router.navigate([PageURLs.MainMenu]);
   }
 
+  backToDam() {
+    if (this.calvesSelected.length > 0) {
+      this.animalSelected(this.calvesSelected.pop());
+    }
+  }
+
   public addBirth() {
     this.isAdd = true;
     this.modalSerivce.get(Modals.Birth).open();
+  }
+
+  hasSelectedCalf(){
+    return this.calvesSelected.length > 0
   }
 
   public editBirth() {
@@ -41,11 +52,21 @@ export class BirthComponent {
     this.modalSerivce.get(Modals.Birth).open();
   }
 
+  listAnimalSelected(animal: IAnimal) {
+    this.calvesSelected = []
+    this.animalSelected(animal)
+  }
+
   public animalSelected(animal: IAnimal) {
     this.$selectedAnimal.next(animal);
     if (animal) {
       this.$calves = this.store.select(getCalves(animal.tagNumber));
     }
+  }
+
+  calfSelected(animal: IAnimal) {
+    this.calvesSelected.push(this.$selectedAnimal.value);
+    this.animalSelected(animal);
   }
 
   public getCSS() {
