@@ -101,7 +101,7 @@ export class AnimalListComponent implements OnInit, OnDestroy {
   }
 
   public selectAnimal(animal: Animal) {
-    if (this.page === PageURLs.Animals) {
+    if (this.page === PageURLs.Animals || this.page === PageURLs.Births) {
       this.currentAnimal = animal;
       this.pushNextAnimal(animal);
     } else if (animal.tagNumber !== this.currentAnimal?.tagNumber) {
